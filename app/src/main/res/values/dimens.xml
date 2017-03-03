@@ -1,0 +1,28 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="card_view_height">285dp</dimen>
+    <dimen name="card_view_width">285dp</dimen>
+
+    <dimen name="camera_gallery_touch_height">107dp</dimen>
+    <dimen name="card_margin_top">145dp</dimen>
+    <dimen name="card_view_half_width">125dp</dimen>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <dimen name="single_card_image_view_width">265dp</dimen>
+    <dimen name="single_card_image_view_height">265dp</dimen>
+    <dimen name="single_card_text_view_width">230dp</dimen>
+    <dimen name="single_card_text_view_height">32dp</dimen>
+    <dimen name="single_card_container_width">265dp</dimen>
+    <dimen name="single_card_container_height">328dp</dimen>
+
+    <dimen name="decoration_side_span">110dp</dimen>
+    <dimen name="decoration_item_offset">31.5dp</dimen>
+    <dimen name="item_width">265dp</dimen>
+    <dimen name="padding_item_width">115dp</dimen>
+    <dimen name="camera_frame_pos_x">55dp</dimen>
+    <dimen name="camera_frame_pos_y">145dp</dimen>
+
+    <dimen name="category_width">125dp</dimen>
+    <dimen name="category_height">154dp</dimen>
+</resources>

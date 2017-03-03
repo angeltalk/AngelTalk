@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.percent.PercentRelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/add_card_view_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_centerInParent="true">
+
+    <android.support.percent.PercentRelativeLayout
+        android:layout_centerInParent="true"
+        android:background="@drawable/rectangle_shape"
+        android:elevation="10dp"
+        app:layout_heightPercent="87.5%"
+        app:layout_widthPercent="78%">
+
+        <act.sds.samsung.angelman.presentation.custom.FontTextView
+            android:id="@+id/add_card_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="120dp"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:textSize="23dp"
+            android:text="@string/add_new_card"
+            app:font="@string/font_regular"
+            />
+
+        <ImageView
+            android:id="@+id/plus_icon"
+            android:layout_width="29.5dp"
+            android:layout_height="32dp"
+            android:layout_centerHorizontal="true"
+            android:layout_above="@id/add_card_text"
+            android:layout_marginBottom="60dp"
+            tools:src="@drawable/plus_red"
+            />
+
+    </android.support.percent.PercentRelativeLayout>
+</android.support.percent.PercentRelativeLayout>

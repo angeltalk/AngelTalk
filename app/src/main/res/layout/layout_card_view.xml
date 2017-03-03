@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.percent.PercentRelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_view_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_centerInParent="true">
+
+    <android.support.percent.PercentRelativeLayout
+        android:id="@+id/card_container"
+        android:layout_centerInParent="true"
+        android:background="@drawable/rectangle_shape"
+        android:elevation="10dp"
+        app:layout_heightPercent="87.5%"
+        app:layout_widthPercent="78%">
+
+        <ImageView
+            android:id="@+id/card_image"
+            android:layout_width="match_parent"
+            app:layout_heightPercent="81%" />
+
+        <act.sds.samsung.angelman.presentation.custom.FontTextView
+            android:id="@+id/card_image_title"
+            android:layout_width="match_parent"
+            android:layout_below="@id/card_image"
+            android:gravity="center"
+            android:textColor="@color/black_99"
+            android:textSize="24dp"
+            android:visibility="visible"
+            app:font="@string/font_medium"
+            app:layout_heightPercent="19%" />
+
+        <act.sds.samsung.angelman.presentation.custom.FontEditText
+            android:id="@+id/card_image_title_edit"
+            android:layout_width="match_parent"
+            android:layout_below="@id/card_image"
+            android:textCursorDrawable="@drawable/make_card_cursor_color"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:hint="@string/require_card_name"
+            android:imeOptions="actionDone"
+            android:maxLines="1"
+            android:maxLength="8"
+            android:inputType="text"
+            android:textColor="@color/black_99"
+            android:textColorHint="@color/black_33"
+            android:textSize="22dp"
+            app:font="@string/font_regular"
+            android:visibility="gone"
+            app:layout_heightPercent="19%" />
+    </android.support.percent.PercentRelativeLayout>
+</android.support.percent.PercentRelativeLayout>

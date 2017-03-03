@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <act.sds.samsung.angelman.presentation.custom.FontTextView
+        android:id="@+id/alert_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="15dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginEnd="18dp"
+        tools:text="'홈런볼’ 카드를 삭제하시겠습니까?"
+        android:textSize="16dp"
+        android:textColor="@color/black_99"
+        app:font="@string/font_regular"
+        />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="63dp">
+        <act.sds.samsung.angelman.presentation.custom.FontTextView
+            android:id="@+id/confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            android:paddingStart="19dp"
+            android:paddingEnd="24dp"
+            android:text="@string/confirm"
+            app:font="@string/font_medium"
+            android:textSize="16dp" />
+        <act.sds.samsung.angelman.presentation.custom.FontTextView
+            android:id="@+id/cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/confirm"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            android:paddingStart="19dp"
+            android:paddingEnd="24dp"
+            android:text="@string/cancel"
+            app:font="@string/font_medium"
+            android:textSize="16dp" />
+    </RelativeLayout>
+
+</LinearLayout>

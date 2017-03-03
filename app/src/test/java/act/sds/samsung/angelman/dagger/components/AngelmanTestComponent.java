@@ -1,0 +1,23 @@
+package act.sds.samsung.angelman.dagger.components;
+
+import javax.inject.Singleton;
+
+import act.sds.samsung.angelman.dagger.modules.AngelmanModule;
+import act.sds.samsung.angelman.presentation.activity.CardViewPagerActivityTest;
+import act.sds.samsung.angelman.presentation.activity.CategoryMenuActivityTest;
+import act.sds.samsung.angelman.presentation.activity.MakeCardActivityTest;
+import act.sds.samsung.angelman.presentation.activity.NewCategoryActivityTest;
+import act.sds.samsung.angelman.presentation.custom.CardViewPagerLayoutTest;
+import act.sds.samsung.angelman.presentation.custom.CategoryMenuLayoutTest;
+import dagger.Component;
+
+@Singleton
+@Component(modules = {AngelmanModule.class})
+public interface AngelmanTestComponent extends AngelmanComponent {
+    void inject(MakeCardActivityTest activity);
+    void inject(CategoryMenuActivityTest activity);
+    void inject(CardViewPagerActivityTest activity);
+    void inject(CategoryMenuLayoutTest view);
+    void inject(CardViewPagerLayoutTest view);
+    void inject(NewCategoryActivityTest activity);
+}
