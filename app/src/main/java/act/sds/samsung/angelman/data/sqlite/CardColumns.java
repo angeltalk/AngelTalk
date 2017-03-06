@@ -10,5 +10,5 @@ public class CardColumns implements BaseColumns {
     public static final String VOICE_PATH  = "voice_path";
     public static final String FIRST_TIME  = "first_time";
     public static final String CATEGORY_ID = "category_id";
-    public static final String CARD_INDEX  = "card_index";
+    public static final String CARD_INDEX  = "card_index";dddd
 }
