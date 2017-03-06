@@ -17,6 +17,8 @@ import com.rd.PageIndicatorView;
 import act.sds.samsung.angelman.AngelmanApplication;
 import act.sds.samsung.angelman.R;
 import act.sds.samsung.angelman.presentation.adapter.OnboardingImageAdapter;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class OnboardingActivity extends AbstractActivity{
     public static int[] ONBOARDING_IMAGES = {
@@ -26,8 +28,18 @@ public class OnboardingActivity extends AbstractActivity{
             R.drawable.onboarding_4,
             R.drawable.onboarding_5,
     };
-    private ImageView onboardingFinishButton;
-    private PageIndicatorView onboardingIndicator;
+
+    @BindView(R.id.onboarding_finish)
+    public ImageView onboardingFinishButton;
+
+    @BindView(R.id.onboarding_indicator)
+    public PageIndicatorView onboardingIndicator;
+
+    @BindView(R.id.onboarding_view_pager)
+    public ViewPager onboardingViewPager;
+
+    @BindView(R.id.onboaring_angelee)
+    public ImageView firstView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,16 +48,13 @@ public class OnboardingActivity extends AbstractActivity{
         if(((AngelmanApplication) getApplicationContext()).isFirstLaunched()) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
             setContentView(R.layout.activity_onboarding);
 
-            ViewPager onboardingViewPager = (ViewPager) findViewById(R.id.onboarding_view_pager);
+            ButterKnife.setDebug(true);
+            ButterKnife.bind(this);
 
             onboardingViewPager.setAdapter(new OnboardingImageAdapter(this));
-
-            onboardingFinishButton = (ImageView) findViewById(R.id.onboarding_finish);
-            onboardingIndicator = (PageIndicatorView) findViewById(R.id.onboarding_indicator);
-
-            ImageView firstView = (ImageView) findViewById(R.id.onboaring_angelee);
 
             Glide.with(OnboardingActivity.this)
                     .load(R.drawable.angelee)
