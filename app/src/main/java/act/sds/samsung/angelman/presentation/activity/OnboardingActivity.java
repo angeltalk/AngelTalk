@@ -19,6 +19,10 @@ import act.sds.samsung.angelman.R;
 import act.sds.samsung.angelman.presentation.adapter.OnboardingImageAdapter;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnPageChange;
+
+import static butterknife.OnPageChange.Callback.PAGE_SELECTED;
 
 public class OnboardingActivity extends AbstractActivity{
     public static int[] ONBOARDING_IMAGES = {
@@ -72,32 +76,25 @@ public class OnboardingActivity extends AbstractActivity{
                 }
             }, 4000);
 
-            onboardingFinishButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    moveToCategoryMenuActivity();
-                }
-            });
-
-            onboardingViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-                @Override
-                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-                }
-
-                @Override
-                public void onPageSelected(int position) {
-                    showOrHideDeleteButtonByIndex(position);
-                }
-
-                @Override
-                public void onPageScrollStateChanged(int state) {
-
-                }
-            });
         }else{
             moveToCategoryMenuActivity();
         }
+    }
+
+    @OnClick(R.id.onboarding_finish)
+    public void onClickOnboardingFinishButton (View view) {
+        moveToCategoryMenuActivity();
+    }
+
+    private void moveToCategoryMenuActivity() {
+        Intent intent = new Intent(this, CategoryMenuActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    @OnPageChange(value = R.id.onboarding_view_pager, callback = PAGE_SELECTED)
+    public void onPageSelectedOnboardingViewPager(int position) {
+        showOrHideDeleteButtonByIndex(position);
     }
 
     private void showOrHideDeleteButtonByIndex(int pos) {
@@ -109,12 +106,6 @@ public class OnboardingActivity extends AbstractActivity{
             onboardingFinishButton.setVisibility(View.GONE);
             onboardingIndicator.setVisibility(View.VISIBLE);
         }
-    }
-
-    private void moveToCategoryMenuActivity() {
-        Intent intent = new Intent(this, CategoryMenuActivity.class);
-        startActivity(intent);
-        finish();
     }
 
 }
