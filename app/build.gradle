@@ -46,15 +46,25 @@ android {
         debug {
             testCoverageEnabled = true
             signingConfig signingConfigs.debug
+            applicationVariants.all { variant -> renameAPK(variant) }
         }
         release {
             testCoverageEnabled = true
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            applicationVariants.all { variant -> renameAPK(variant) }
         }
     }
     lintOptions {
         abortOnError false
+    }
+}
+
+def renameAPK(variant) {
+    variant.outputs.each { output ->
+        def file = output.packageApplication.outputFile
+        def fileName = "AngelTalk.apk"
+        output.packageApplication.outputFile = new File(file.parent, fileName)
     }
 }
 
