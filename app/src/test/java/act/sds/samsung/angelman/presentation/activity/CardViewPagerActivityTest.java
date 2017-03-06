@@ -15,6 +15,7 @@ import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
@@ -304,7 +305,7 @@ public class CardViewPagerActivityTest extends UITest {
         assertThat(nextStartedActivity.getComponent().getClassName()).isEqualTo(CameraGallerySelectionActivity.class.getCanonicalName());
     }
 
-    @Test
+    @Test@Ignore
     public void whenLaunchActivity_thenShowWaterCardWithImage() throws Exception {
 
         RequestManager rm = Glide.with(subject.getApplicationContext());

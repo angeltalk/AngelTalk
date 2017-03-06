@@ -4,9 +4,6 @@ buildscript {
     repositories {
         jcenter()
         maven {
-            url "http://70.121.224.52:8081/nexus/content/repositories/public/"
-        }
-        maven {
             url "https://repox.sonarsource.com/sonarsource"
         }
     }
@@ -15,7 +12,6 @@ buildscript {
         // in the individual module build.gradle files
         classpath 'com.android.tools.build:gradle:2.2.2'
         classpath 'org.jacoco:org.jacoco.core:0.7.6.201602180812'
-        classpath "com.samsung.sds.staf:result-maven-plugin:0.4.0"
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
         classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.2"
     }
