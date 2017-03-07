@@ -156,9 +156,10 @@ public class CategoryAdapter extends BaseAdapter {
         RelativeLayout categoryItemLayout = (RelativeLayout) cardViewItem.findViewById(R.id.category_item_layout);
         TextView cardTitle = (TextView) cardViewItem.findViewById(R.id.category_title);
 
-        categoryItemLayout.setBackground(context.getResources().getDrawable(R.drawable.drop_shadow_dashgap));
+        categoryItemLayout.setBackground(ResourcesUtil.getDrawable(context, R.drawable.drop_shadow_dashgap));
         categoryItemLayout.setAlpha(0.7f);
-        categoryIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_add_category));
+        categoryIcon.setImageDrawable(ResourcesUtil.getDrawable(context, R.drawable.ic_add_category));
+
         cardTitle.setText(newCategoryModel.title);
         cardTitle.setTypeface(FontUtil.setFont(context, FontUtil.FONT_DEMILIGHT));
         hideCardViewShadow(cardViewItem);
@@ -218,6 +219,7 @@ public class CategoryAdapter extends BaseAdapter {
     }
 
     private Drawable getResourceDrawable(int id) {
-        return id > 0 ? context.getResources().getDrawable(id) : context.getResources().getDrawable(R.color.white);
+        return id > 0 ? ResourcesUtil.getDrawable(context, id)
+                : ResourcesUtil.getDrawable(context, R.color.white);
     }
 }

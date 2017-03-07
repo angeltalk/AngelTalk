@@ -5,9 +5,11 @@ import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 
+import act.sds.samsung.angelman.presentation.util.ResourcesUtil;
+
 import static act.sds.samsung.angelman.presentation.activity.OnboardingActivity.ONBOARDING_IMAGES;
 
-public class OnboardingImageAdapter extends PagerAdapter{
+public class OnboardingImageAdapter extends PagerAdapter {
 
     private Context context;
 
@@ -28,7 +30,7 @@ public class OnboardingImageAdapter extends PagerAdapter{
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         View view = new View(context);
-        view.setBackground(context.getResources().getDrawable(ONBOARDING_IMAGES[position]));
+        view.setBackground(ResourcesUtil.getDrawable(context, ONBOARDING_IMAGES[position]));
         container.addView(view);
         return view;
     }
