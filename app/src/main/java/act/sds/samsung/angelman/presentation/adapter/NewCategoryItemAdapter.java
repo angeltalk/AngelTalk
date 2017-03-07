@@ -15,11 +15,13 @@ import static act.sds.samsung.angelman.presentation.util.ResourceMapper.IconStat
 
 
 abstract public class NewCategoryItemAdapter extends RecyclerView.Adapter<NewCategoryItemAdapter.NewCategoryItemViewHolder> {
+
     private static final int INITIAL_POSITION = -1;
-    private int selectedPosition = INITIAL_POSITION;
-    private List<CategoryItemModel> categoryItemList;
-    private NewCategoryItemViewHolder selectedHolder;
     private CategoryChangeListener categoryChangeListener;
+
+    protected NewCategoryItemViewHolder selectedHolder;
+    protected int selectedPosition = INITIAL_POSITION;
+    protected List<CategoryItemModel> categoryItemList;
 
     NewCategoryItemAdapter(List<CategoryItemModel> categoryItemList) {
         this.categoryItemList = categoryItemList;
