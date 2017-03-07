@@ -51,7 +51,6 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 import act.sds.samsung.angelman.R;
-import act.sds.samsung.angelman.presentation.custom.AutoFitTextureView;
 import act.sds.samsung.angelman.presentation.util.FontUtil;
 import act.sds.samsung.angelman.presentation.util.ImageUtil;
 import act.sds.samsung.angelman.presentation.util.PlayUtil;
@@ -147,7 +146,7 @@ public class Camera2Activity extends AbstractActivity implements View.OnClickLis
      */
     private String mCameraId;
 
-    /**
+    /*
      * An {@link AutoFitTextureView} for camera preview.
      */
     private TextureView mTextureView;
