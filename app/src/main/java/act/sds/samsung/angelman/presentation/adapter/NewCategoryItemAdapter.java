@@ -72,6 +72,20 @@ abstract public class NewCategoryItemAdapter extends RecyclerView.Adapter<NewCat
         return categoryItemList.get(selectedPosition);
     }
 
+    public class NewCategoryItemViewHolder extends RecyclerView.ViewHolder {
+
+        public ImageView categoryItem;
+
+        NewCategoryItemViewHolder(View itemView) {
+            super(itemView);
+            categoryItem = (ImageView) itemView.findViewById(R.id.category_item_image);
+        }
+    }
+
+    public interface CategoryChangeListener {
+        void categoryChanged();
+    }
+
     abstract protected boolean isUsedItem(int position);
 
     abstract protected void setInitialPosition(NewCategoryItemViewHolder holder);
@@ -88,20 +102,6 @@ abstract public class NewCategoryItemAdapter extends RecyclerView.Adapter<NewCat
         if (selectedPosition > INITIAL_POSITION) {
             categoryItemList.get(selectedPosition).status = IconState.UNSELECT.ordinal();
         }
-    }
-
-    protected class NewCategoryItemViewHolder extends RecyclerView.ViewHolder {
-
-        public ImageView categoryItem;
-
-        NewCategoryItemViewHolder(View itemView) {
-            super(itemView);
-            categoryItem = (ImageView) itemView.findViewById(R.id.category_item_image);
-        }
-    }
-
-    protected interface CategoryChangeListener {
-        void categoryChanged();
     }
 
     private void notifyCategoryChanged() {
