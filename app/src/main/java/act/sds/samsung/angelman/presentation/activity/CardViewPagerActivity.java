@@ -13,7 +13,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -36,9 +35,10 @@ import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 
 public class CardViewPagerActivity extends AbstractActivity {
 
-    public static final String INTENT_KEY_NEW_CARD = "isNewCard";
-
+    public  static final String INTENT_KEY_NEW_CARD = "isNewCard";
+    public  static String CATEGORY_COLOR = "categoryColor";
     private static final int SNACKBAR_DURATION = 3000;
+    int currentCardIndex = 0;
 
     @Inject
     CardRepository cardRepository;
@@ -52,24 +52,19 @@ public class CardViewPagerActivity extends AbstractActivity {
     @BindView(R.id.title_container)
     public CardCategoryTitleRelativeLayout titleLayout;
 
-    public static String CATEGORY_COLOR = "categoryColor";
-    CategoryModel selectedCategoryModel;
-    List<CardModel> allCardListInSelectedCategory;
-
-    int currentCardIndex = 0;
     private CardImageAdapter cardImageAdapter;
-
     private AlertDialog dialog;
     private RequestManager glide;
+    private CategoryModel selectedCategoryModel;
+    private List<CardModel> allCardListInSelectedCategory;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         ((AngelmanApplication) getApplication()).getAngelmanComponent().inject(this);
-
         setContentView(R.layout.activity_card_view);
         ButterKnife.bind(this);
+
         setCategoryBackground(R.id.category_item_container);
 
         glide = Glide.with(this);
@@ -112,7 +107,7 @@ public class CardViewPagerActivity extends AbstractActivity {
             public void onClick(View v) {
                 int currentItem = setCurrentItem();
                 if (deleteSelectedCard(cardIndex)) {
-                    ArrayList<CardModel> cardList = cardRepository.getSingleCardListWithCategoryId(((AngelmanApplication) getApplicationContext()).getCategoryModel().index);
+                    List<CardModel> cardList = cardRepository.getSingleCardListWithCategoryId(((AngelmanApplication) getApplicationContext()).getCategoryModel().index);
                     viewPager.removeAllViews();
                     cardImageAdapter = new CardImageAdapter(CardViewPagerActivity.this, cardList, glide);
                     cardImageAdapter.addNewCardViewAtFirst();

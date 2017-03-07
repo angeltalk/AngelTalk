@@ -16,7 +16,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import act.sds.samsung.angelman.AngelmanApplication;
@@ -199,7 +198,7 @@ public class CategoryAdapter extends BaseAdapter {
         return categoryMenuStatus;
     }
 
-    public void setCategoryList(ArrayList<CategoryModel> categoryList) {
+    public void setCategoryList(List<CategoryModel> categoryList) {
         this.categoryList = categoryList;
         this.notifyDataSetChanged();
     }

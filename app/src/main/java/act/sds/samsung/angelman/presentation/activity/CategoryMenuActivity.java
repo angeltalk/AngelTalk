@@ -19,7 +19,6 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -112,7 +111,7 @@ public class CategoryMenuActivity extends AbstractActivity {
     protected void onResume() {
         super.onResume();
 
-        ArrayList<CategoryModel> categoryAllList = categoryRepository.getCategoryAllList();
+        List<CategoryModel> categoryAllList = categoryRepository.getCategoryAllList();
         categoryAdapter.setCategoryList(categoryAllList);
         setCategoryItemClick(categoryGrid, categoryAllList);
     }
@@ -204,7 +203,7 @@ public class CategoryMenuActivity extends AbstractActivity {
         categoryAdapter.changeCategoryItemsStatus(CategoryMenuStatus.CATEGORY_DEFAULT);
     }
 
-    private void setCategoryItemClick(final GridView gridView, final ArrayList<CategoryModel> categoryList) {
+    private void setCategoryItemClick(final GridView gridView, final List<CategoryModel> categoryList) {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -243,7 +242,7 @@ public class CategoryMenuActivity extends AbstractActivity {
     private View.OnClickListener deleteCategoryClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            ArrayList<CardModel> singleCardList = cardRepository.getSingleCardListWithCategoryId(selectedCategoryId);
+            List<CardModel> singleCardList = cardRepository.getSingleCardListWithCategoryId(selectedCategoryId);
 
             for (CardModel cardModel : singleCardList) {
                 if (cardModel.imagePath.contains(ImageUtil.IMAGE_FOLDER)) {

@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -30,7 +30,7 @@ public class CardViewPagerLayout extends RelativeLayout {
     @Inject
     CardRepository cardRepository;
 
-    ArrayList<CardModel> allCardListInSelectedCategory;
+    List<CardModel> allCardListInSelectedCategory;
     private View subject;
     public CardViewPager mViewPager;
     private Context context;

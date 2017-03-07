@@ -2,7 +2,7 @@ package act.sds.samsung.angelman.data.repository;
 
 import android.content.Context;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import act.sds.samsung.angelman.data.repository.datastore.CategoryDataSqliteDataStore;
 import act.sds.samsung.angelman.domain.model.CategoryItemModel;
@@ -18,19 +18,19 @@ public class CategoryDataRepository implements CategoryRepository {
     }
 
     @Override
-    public ArrayList<CategoryModel> getCategoryAllList() {
+    public List<CategoryModel> getCategoryAllList() {
         CategoryDataSqliteDataStore dataStore = new CategoryDataSqliteDataStore(context);
         return dataStore.getCategoryAllList();
     }
 
     @Override
-    public ArrayList<CategoryItemModel> getCategoryAllIconList() {
+    public List<CategoryItemModel> getCategoryAllIconList() {
         CategoryDataSqliteDataStore dataStore = new CategoryDataSqliteDataStore(context);
         return dataStore.getCategoryAllIconList();
     }
 
     @Override
-    public ArrayList<CategoryItemModel> getCategoryAllBackgroundList() {
+    public List<CategoryItemModel> getCategoryAllBackgroundList() {
         CategoryDataSqliteDataStore dataStore = new CategoryDataSqliteDataStore(context);
         return dataStore.getCategoryAllBackgroundList();
     }
