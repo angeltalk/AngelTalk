@@ -99,18 +99,18 @@ public class CardImageAdapter extends PagerAdapter {
             cardView.cardImage.setScaleType(ImageView.ScaleType.FIT_XY);
 
             CardModel singleSectionItems = dataList.get(position);
-            String imgPath = singleSectionItems.imagePath;
+            String imagePath = singleSectionItems.imagePath;
             cardView.cardTitle.setText(singleSectionItems.name);
             cardView.cardTitle.setTypeface(FontUtil.setFont(context, FontUtil.FONT_MEDIUM));
 
-            glide.load(getImageFile(imgPath))
+            glide.load(getImageFile(imagePath))
                  .bitmapTransform(new AngelManGlideTransform(context, 10, 0, AngelManGlideTransform.CornerType.TOP))
                  .override(280, 280)
                  .into(cardView.cardImage);
 
             View cardContainer = cardView.findViewById(R.id.card_container);
-            cardContainer.setOnClickListener(onClickListener);
-            cardContainer.setOnLongClickListener(onLongClickListener);
+            cardContainer.setOnClickListener(cardContainerOnClickListener);
+            cardContainer.setOnLongClickListener(cardContainerOnLongClickListener);
 
             isNotLongClicked = true;
 
@@ -124,8 +124,6 @@ public class CardImageAdapter extends PagerAdapter {
     public void destroyItem(ViewGroup container, int position, Object object) {
         container.removeView((View) object);
         viewCollection.remove(position);
-        // FIXME : 나중에 수정할것 Kate
-        object = null;
     }
 
     @Override
@@ -140,17 +138,17 @@ public class CardImageAdapter extends PagerAdapter {
     }
 
     @NonNull
-    private File getImageFile(String imgPath) {
+    private File getImageFile(String imagePath) {
         File file;
-        if (imgPath.contains("DCIM")) {
-            file = new File(imgPath);
+        if (imagePath.contains("DCIM")) {
+            file = new File(imagePath);
         } else {
-            file = new File(imageUtil.makeImagePathForAsset(imgPath));
+            file = new File(imageUtil.makeImagePathForAsset(imagePath));
         }
         return file;
     }
 
-    private View.OnClickListener onClickListener = new View.OnClickListener() {
+    private View.OnClickListener cardContainerOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             if (v.getParent().getParent() instanceof CardView) {
@@ -164,7 +162,7 @@ public class CardImageAdapter extends PagerAdapter {
         }
     };
 
-    private View.OnLongClickListener onLongClickListener = new View.OnLongClickListener() {
+    private View.OnLongClickListener cardContainerOnLongClickListener = new View.OnLongClickListener() {
         @Override
         public boolean onLongClick(View v) {
             if (v.getParent().getParent() instanceof CardView) {

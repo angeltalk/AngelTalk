@@ -54,11 +54,7 @@ public class CategoryAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        if (addCategoryVisible()) {
-            return categoryList.size() + 1;
-        } else {
-            return categoryList.size();
-        }
+        return  addCategoryVisible() ? categoryList.size() + 1 : categoryList.size();
     }
 
     @Override
@@ -211,9 +207,10 @@ public class CategoryAdapter extends BaseAdapter {
     private int getCardViewHeightSize() {
         int dmH = ((AngelmanApplication) context.getApplicationContext()).getScreenHeightPixel();
 
-        if (dmH > 2000)
+        // TODO : 해상도 관련
+        if (dmH > 2000) {
             return 600;
-        else if (dmH < 1300) {
+        } else if (dmH < 1300) {
             return 300;
         } else {
             return 440;
@@ -221,10 +218,6 @@ public class CategoryAdapter extends BaseAdapter {
     }
 
     private Drawable getResourceDrawable(int id) {
-        if (id > 0) {
-            return context.getResources().getDrawable(id);
-        } else {
-            return context.getResources().getDrawable(R.color.white);
-        }
+        return id > 0 ? context.getResources().getDrawable(id) : context.getResources().getDrawable(R.color.white);
     }
 }
