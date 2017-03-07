@@ -56,7 +56,7 @@ public class CardViewPagerActivity extends AbstractActivity {
     private AlertDialog dialog;
     private RequestManager glide;
     private CategoryModel selectedCategoryModel;
-    private List<CardModel> allCardListInSelectedCategory;
+    List<CardModel> allCardListInSelectedCategory;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
