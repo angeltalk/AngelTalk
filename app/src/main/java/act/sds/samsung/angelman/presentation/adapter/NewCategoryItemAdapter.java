@@ -16,9 +16,9 @@ import static act.sds.samsung.angelman.presentation.util.ResourceMapper.IconStat
 
 abstract public class NewCategoryItemAdapter extends RecyclerView.Adapter<NewCategoryItemAdapter.NewCategoryItemViewHolder> {
     private static final int INITIAL_POSITION = -1;
-    List<CategoryItemModel> categoryItemList;
-    int selectedPosition = INITIAL_POSITION;
-    NewCategoryItemViewHolder selectedHolder;
+    private int selectedPosition = INITIAL_POSITION;
+    private List<CategoryItemModel> categoryItemList;
+    private NewCategoryItemViewHolder selectedHolder;
     private CategoryChangeListener categoryChangeListener;
 
     NewCategoryItemAdapter(List<CategoryItemModel> categoryItemList) {
@@ -57,10 +57,17 @@ abstract public class NewCategoryItemAdapter extends RecyclerView.Adapter<NewCat
         }
     }
 
-    private void notifyCategoryChanged() {
-        if(categoryChangeListener != null) {
-            categoryChangeListener.categoryChanged();
-        }
+    @Override
+    public int getItemCount() {
+        return categoryItemList.size();
+    }
+
+    public void setCategoryChangeListener(CategoryChangeListener categoryChangeListener){
+        this.categoryChangeListener = categoryChangeListener;
+    }
+
+    public CategoryItemModel getSelectedItem() {
+        return categoryItemList.get(selectedPosition);
     }
 
     abstract protected boolean isUsedItem(int position);
@@ -70,15 +77,6 @@ abstract public class NewCategoryItemAdapter extends RecyclerView.Adapter<NewCat
     abstract protected void changeItem(NewCategoryItemViewHolder holder);
 
     abstract protected void setImageResourceByTypeAndStatus(NewCategoryItemViewHolder holder, int position);
-
-    private void changeSelected(NewCategoryItemViewHolder holder) {
-        int currentPosition = holder.getAdapterPosition();
-        if (currentPosition != selectedPosition) {
-            changeItem(holder);
-            selectedPosition = currentPosition;
-            selectedHolder = holder;
-        }
-    }
 
     protected void selectItem(NewCategoryItemViewHolder holder, int categoryIconResourceId, int selectedPosition) {
         holder.categoryItem.setImageResource(categoryIconResourceId);
@@ -90,12 +88,7 @@ abstract public class NewCategoryItemAdapter extends RecyclerView.Adapter<NewCat
         }
     }
 
-    @Override
-    public int getItemCount() {
-        return categoryItemList.size();
-    }
-
-    public class NewCategoryItemViewHolder extends RecyclerView.ViewHolder {
+    protected class NewCategoryItemViewHolder extends RecyclerView.ViewHolder {
 
         public ImageView categoryItem;
 
@@ -105,15 +98,22 @@ abstract public class NewCategoryItemAdapter extends RecyclerView.Adapter<NewCat
         }
     }
 
-    public void setCategoryChangeListener(CategoryChangeListener categoryChangeListener){
-        this.categoryChangeListener = categoryChangeListener;
-    }
-
-    public CategoryItemModel getSelectedItem() {
-        return categoryItemList.get(selectedPosition);
-    }
-
-    public interface CategoryChangeListener {
+    protected interface CategoryChangeListener {
         void categoryChanged();
+    }
+
+    private void notifyCategoryChanged() {
+        if(categoryChangeListener != null) {
+            categoryChangeListener.categoryChanged();
+        }
+    }
+
+    private void changeSelected(NewCategoryItemViewHolder holder) {
+        int currentPosition = holder.getAdapterPosition();
+        if (currentPosition != selectedPosition) {
+            changeItem(holder);
+            selectedPosition = currentPosition;
+            selectedHolder = holder;
+        }
     }
 }
