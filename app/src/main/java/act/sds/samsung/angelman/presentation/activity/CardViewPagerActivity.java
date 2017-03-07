@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -28,118 +28,76 @@ import act.sds.samsung.angelman.presentation.custom.CardView;
 import act.sds.samsung.angelman.presentation.custom.CardViewPager;
 import act.sds.samsung.angelman.presentation.custom.SnackBar;
 import act.sds.samsung.angelman.presentation.util.DialogUtil;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 
 public class CardViewPagerActivity extends AbstractActivity {
 
-    public static final String INTENT_KEY_NEW_CARD = "isNewCard";
-
+    public  static final String INTENT_KEY_NEW_CARD = "isNewCard";
+    public  static String CATEGORY_COLOR = "categoryColor";
     private static final int SNACKBAR_DURATION = 3000;
+    int currentCardIndex = 0;
 
     @Inject
     CardRepository cardRepository;
 
-    public static String CATEGORY_COLOR = "categoryColor";
-    CategoryModel selectedCategoryModel;
-    ArrayList<CardModel> allCardListInSelectedCategory;
+    @BindView(R.id.view_pager)
+    public CardViewPager viewPager;
 
-    int currentCardIndex = 0;
-    protected CardViewPager mViewPager;
-    private CardImageAdapter adapter;
+    @BindView(R.id.card_delete_button)
+    public ImageButton deleteButton;
 
-    private ImageButton deleteButton;
+    @BindView(R.id.title_container)
+    public CardCategoryTitleRelativeLayout titleLayout;
 
-    CardCategoryTitleRelativeLayout titleLayout;
+    private CardImageAdapter cardImageAdapter;
     private AlertDialog dialog;
     private RequestManager glide;
-
-
-    private View.OnClickListener onClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.card_delete_button:
-                    deleteCard();
-                    break;
-                default:
-                    break;
-            }
-        }
-    };
+    private CategoryModel selectedCategoryModel;
+    List<CardModel> allCardListInSelectedCategory;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         ((AngelmanApplication) getApplication()).getAngelmanComponent().inject(this);
-
         setContentView(R.layout.activity_card_view);
+        ButterKnife.bind(this);
+
         setCategoryBackground(R.id.category_item_container);
 
         glide = Glide.with(this);
 
         Intent intent = getIntent();
 
-        titleLayout = (CardCategoryTitleRelativeLayout) findViewById(R.id.title_container);
-
         selectedCategoryModel = ((AngelmanApplication) getApplicationContext()).getCategoryModel();
 
         allCardListInSelectedCategory = cardRepository.getSingleCardListWithCategoryId(selectedCategoryModel.index);
         titleLayout.refreshCardCountText(0, allCardListInSelectedCategory.size() + 1);
 
-        deleteButton = (ImageButton) findViewById(R.id.card_delete_button);
-        deleteButton.setOnClickListener(onClickListener);
+        cardImageAdapter = new CardImageAdapter(this, allCardListInSelectedCategory, glide);
+        cardImageAdapter.addNewCardViewAtFirst();
+        viewPager.setAdapter(cardImageAdapter);
+        OverScrollDecoratorHelper.setUpOverScroll(viewPager);
 
-        mViewPager = (CardViewPager) findViewById(R.id.view_pager);
-
-        adapter = new CardImageAdapter(this, allCardListInSelectedCategory, glide);
-        adapter.addNewCardViewAtFirst();
-        mViewPager.setAdapter(adapter);
-        OverScrollDecoratorHelper.setUpOverScroll(mViewPager);
-
-        mViewPager.addOnPageChangeListener(pageChangeListener);
+        viewPager.addOnPageChangeListener(pageChangeListener);
 
         TextView categoryTitle = (TextView) findViewById(R.id.category_item_title);
         categoryTitle.setText(selectedCategoryModel.title);
 
         titleLayout.refreshCardCountText(0, allCardListInSelectedCategory.size());
-        deleteButton.setOnClickListener(onClickListener);
 
         if (intent.getBooleanExtra(INTENT_KEY_NEW_CARD, false)) {
             showAddNewCardSuccessMessage();
-            mViewPager.setCurrentItem(1);
+            viewPager.setCurrentItem(1);
         }
     }
 
-    private ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
-        @Override
-        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        }
+    @OnClick(R.id.card_delete_button)
+    public void onClickDeleteButton(View v){
 
-        @Override
-        public void onPageSelected(int pos) {
-            showOrHideDeleteButtonByIndex(pos);
-            currentCardIndex = pos;
-            titleLayout.refreshCardCountText(pos, mViewPager.getAdapter().getCount());
-        }
-
-        @Override
-        public void onPageScrollStateChanged(int state) {
-        }
-    };
-
-    private void showOrHideDeleteButtonByIndex(int pos) {
-        if(pos == 0){
-            deleteButton.setVisibility(View.GONE);
-            titleLayout.setAddCardTextButtonVisible(View.GONE);
-        }else{
-            deleteButton.setVisibility(View.VISIBLE);
-            titleLayout.setAddCardTextButtonVisible(View.VISIBLE);
-        }
-    }
-
-    private void deleteCard() {
-        final CardView card = (CardView) adapter.viewCollection.get(mViewPager.getCurrentItem());
+        final CardView card = (CardView) cardImageAdapter.viewCollection.get(viewPager.getCurrentItem());
         String cardTitle = card.cardTitle.getText().toString();
         final int cardIndex = card.dataModel.cardIndex;
         String message = getResources().getString(R.string.delete_alert_message, cardTitle);
@@ -149,14 +107,14 @@ public class CardViewPagerActivity extends AbstractActivity {
             public void onClick(View v) {
                 int currentItem = setCurrentItem();
                 if (deleteSelectedCard(cardIndex)) {
-                    ArrayList<CardModel> cardList = cardRepository.getSingleCardListWithCategoryId(((AngelmanApplication) getApplicationContext()).getCategoryModel().index);
-                    mViewPager.removeAllViews();
-                    adapter = new CardImageAdapter(CardViewPagerActivity.this, cardList, glide);
-                    adapter.addNewCardViewAtFirst();
-                    mViewPager.setAdapter(adapter);
-                    mViewPager.setCurrentItem(currentItem);
+                    List<CardModel> cardList = cardRepository.getSingleCardListWithCategoryId(((AngelmanApplication) getApplicationContext()).getCategoryModel().index);
+                    viewPager.removeAllViews();
+                    cardImageAdapter = new CardImageAdapter(CardViewPagerActivity.this, cardList, glide);
+                    cardImageAdapter.addNewCardViewAtFirst();
+                    viewPager.setAdapter(cardImageAdapter);
+                    viewPager.setCurrentItem(currentItem);
                     showOrHideDeleteButtonByIndex(currentItem);
-                    titleLayout.refreshCardCountText(mViewPager.getCurrentItem(), adapter.getCount());
+                    titleLayout.refreshCardCountText(viewPager.getCurrentItem(), cardImageAdapter.getCount());
                 }
                 dialog.dismiss();
             }
@@ -177,9 +135,37 @@ public class CardViewPagerActivity extends AbstractActivity {
         dialog.show();
     }
 
+    private ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        }
+
+        @Override
+        public void onPageSelected(int pos) {
+            showOrHideDeleteButtonByIndex(pos);
+            currentCardIndex = pos;
+            titleLayout.refreshCardCountText(pos, viewPager.getAdapter().getCount());
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+        }
+    };
+
+    private void showOrHideDeleteButtonByIndex(int pos) {
+        if(pos == 0){
+            deleteButton.setVisibility(View.GONE);
+            titleLayout.setAddCardTextButtonVisible(View.GONE);
+        }else{
+            deleteButton.setVisibility(View.VISIBLE);
+            titleLayout.setAddCardTextButtonVisible(View.VISIBLE);
+        }
+    }
+
+
     private int setCurrentItem() {
-        int currentItem = mViewPager.getCurrentItem();
-        if(currentItem == adapter.getCount() - 1){
+        int currentItem = viewPager.getCurrentItem();
+        if(currentItem == cardImageAdapter.getCount() - 1){
             currentItem--;
         }
         return currentItem;

@@ -16,7 +16,7 @@ import android.widget.LinearLayout;
 import com.bumptech.glide.RequestManager;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.util.List;
 
 import act.sds.samsung.angelman.R;
 import act.sds.samsung.angelman.domain.model.CardModel;
@@ -37,14 +37,14 @@ public class CardImageAdapter extends PagerAdapter {
     private final RequestManager glide;
 
     private boolean hasNewCardView;
-    private ArrayList<CardModel> dataList;
+    private List<CardModel> dataList;
     public SparseArray<View> viewCollection = new SparseArray<>();
 
     private PlayUtil playUtil;
     private ImageUtil imageUtil;
     private boolean isNotLongClicked;
 
-    public CardImageAdapter(Context context, ArrayList<CardModel> dataList, RequestManager glide) {
+    public CardImageAdapter(Context context, List<CardModel> dataList, RequestManager glide) {
         this.context = context;
         this.dataList = dataList;
         this.glide = glide;
