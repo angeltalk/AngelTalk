@@ -17,6 +17,7 @@ import act.sds.samsung.angelman.BuildConfig;
 import act.sds.samsung.angelman.data.sqlite.AngelmanDbHelper;
 import act.sds.samsung.angelman.data.sqlite.CardColumns;
 import act.sds.samsung.angelman.domain.model.CardModel;
+import lombok.Cleanup;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -29,7 +30,7 @@ public class SingleCardSqliteDataStoreTest {
     private SQLiteDatabase mockDb;
 
     private String SQL_CREATE_SINGLECARD_LIST = AngelmanDbHelper.SQL_CREATE_CARD_LIST;
-    String[] columns = {CardColumns.NAME, CardColumns.IMAGE_PATH, CardColumns.FIRST_TIME};
+    private String[] columns = {CardColumns.NAME, CardColumns.IMAGE_PATH, CardColumns.FIRST_TIME};
 
     @Before
     public void setUp() throws Exception {
@@ -47,6 +48,7 @@ public class SingleCardSqliteDataStoreTest {
 
         mockDb.execSQL(SQL_CREATE_SINGLECARD_LIST);
         insertData(mockDb);
+        @Cleanup
         Cursor c = mockDb.query(CardColumns.TABLE_NAME, columns, null,null, null, null, CardColumns.CARD_INDEX + " desc");
         ArrayList<CardModel> list = dataStore.getAllCardList();
 
@@ -70,6 +72,7 @@ public class SingleCardSqliteDataStoreTest {
         mockDb.execSQL(SQL_CREATE_SINGLECARD_LIST);
         insertData(mockDb);
 
+        @Cleanup
         Cursor c = mockDb.query(CardColumns.TABLE_NAME, columns, null,null, null, null, CardColumns.FIRST_TIME + " desc");
 
         int initialCount = c.getCount();
@@ -77,6 +80,7 @@ public class SingleCardSqliteDataStoreTest {
         CardModel cardModel = new CardModel("치킨", "chicken.png", "20161012_133600");
         long result = dataStore.createSingleCardModel(cardModel);
 
+        @Cleanup
         Cursor resultCursor = mockDb.query(CardColumns.TABLE_NAME, columns, null,null, null, null, CardColumns.CARD_INDEX + " desc");
         resultCursor.moveToFirst();
         assertThat(resultCursor.getString(resultCursor.getColumnIndex(CardColumns.NAME))).isEqualTo("치킨");

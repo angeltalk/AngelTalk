@@ -3,6 +3,7 @@ package act.sds.samsung.angelman.presentation.adapter;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Vibrator;
+import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.util.SparseArray;
 import android.view.View;
@@ -17,6 +18,7 @@ import com.bumptech.glide.RequestManager;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import act.sds.samsung.angelman.R;
 import act.sds.samsung.angelman.domain.model.CardModel;
@@ -32,14 +34,12 @@ import act.sds.samsung.angelman.presentation.util.ResourcesUtil;
 import static act.sds.samsung.angelman.presentation.custom.CardView.MODE_VIEW_CARD;
 
 public class CardImageAdapter extends PagerAdapter {
+
     private Context context;
-
     private final RequestManager glide;
-
     private boolean hasNewCardView;
-    private ArrayList<CardModel> dataList;
+    private List<CardModel> dataList;
     public SparseArray<View> viewCollection = new SparseArray<>();
-
     private PlayUtil playUtil;
     private ImageUtil imageUtil;
     private boolean isNotLongClicked;
@@ -63,13 +63,16 @@ public class CardImageAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        if (dataList == null) return 0;
-        else return dataList.size();
+        if (dataList == null) {
+            return 0;
+        } else {
+            return dataList.size();
+        }
     }
 
     @Override
     public int getItemPosition(Object object) {
-        if(object instanceof AddCardView){
+        if (object instanceof AddCardView) {
             return 0;
         }
         CardView cardView = (CardView) object;
@@ -83,19 +86,16 @@ public class CardImageAdapter extends PagerAdapter {
             AddCardView cardView = new AddCardView(context);
             container.addView(cardView, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
             viewCollection.put(position, cardView);
-
-            ImageView plusIcon = (ImageView)cardView.findViewById(R.id.plus_icon);
+            ImageView plusIcon = (ImageView) cardView.findViewById(R.id.plus_icon);
 
             @ResourcesUtil.BackgroundColors
             int categoryColor = ((AbstractActivity) context).getCategoryColor();
 
             plusIcon.setImageResource(ResourcesUtil.getPlusIconBy(categoryColor));
-
             return cardView;
         } else {
             final CardView cardView = new CardView(context);
             cardView.setDataModel(dataList.get(position));
-
             cardView.cardImage.setScaleType(ImageView.ScaleType.FIT_XY);
 
             CardModel singleSectionItems = dataList.get(position);
@@ -103,21 +103,10 @@ public class CardImageAdapter extends PagerAdapter {
             cardView.cardTitle.setText(singleSectionItems.name);
             cardView.cardTitle.setTypeface(FontUtil.setFont(context, FontUtil.FONT_MEDIUM));
 
-            boolean isStorage = imgPath.contains("DCIM");
-
-            if (isStorage) {
-                glide
-                        .load(new File(imgPath))
-                        .override(280, 280)
-                        .bitmapTransform(new AngelManGlideTransform(context, 10, 0, AngelManGlideTransform.CornerType.TOP))
-                        .into(cardView.cardImage);
-            } else {
-                glide
-                        .load(imageUtil.makeImagePathForAsset(imgPath))
-                        .bitmapTransform(new AngelManGlideTransform(context, 10, 0, AngelManGlideTransform.CornerType.TOP))
-                        .override(280, 280)
-                        .into(cardView.cardImage);
-            }
+            glide.load(getImageFile(imgPath))
+                 .bitmapTransform(new AngelManGlideTransform(context, 10, 0, AngelManGlideTransform.CornerType.TOP))
+                 .override(280, 280)
+                 .into(cardView.cardImage);
 
             View cardContainer = cardView.findViewById(R.id.card_container);
             cardContainer.setOnClickListener(onClickListener);
@@ -135,6 +124,7 @@ public class CardImageAdapter extends PagerAdapter {
     public void destroyItem(ViewGroup container, int position, Object object) {
         container.removeView((View) object);
         viewCollection.remove(position);
+        // FIXME : 나중에 수정할것 Kate
         object = null;
     }
 
@@ -149,7 +139,46 @@ public class CardImageAdapter extends PagerAdapter {
         dataList.add(0, emptyModel);
     }
 
-    private void startAnimationAndVibrator(CardView cardView) {
+    @NonNull
+    private File getImageFile(String imgPath) {
+        File file;
+        if (imgPath.contains("DCIM")) {
+            file = new File(imgPath);
+        } else {
+            file = new File(imageUtil.makeImagePathForAsset(imgPath));
+        }
+        return file;
+    }
+
+    private View.OnClickListener onClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (v.getParent().getParent() instanceof CardView) {
+                if (isNotLongClicked) {
+                    CardView cardView = (CardView) v.getParent().getParent();
+                    startCardSelectionEffect(cardView);
+                } else {
+                    isNotLongClicked = true;
+                }
+            }
+        }
+    };
+
+    private View.OnLongClickListener onLongClickListener = new View.OnLongClickListener() {
+        @Override
+        public boolean onLongClick(View v) {
+            if (v.getParent().getParent() instanceof CardView) {
+                isNotLongClicked = false;
+                CardView cardView = (CardView) v.getParent().getParent();
+                startCardSelectionEffect(cardView);
+                return false;
+            } else {
+                return true;
+            }
+        }
+    };
+
+    private void startCardSelectionEffect(CardView cardView) {
         if (cardView.mode == MODE_VIEW_CARD) {
             cardView.bringToFront();
 
@@ -179,31 +208,4 @@ public class CardImageAdapter extends PagerAdapter {
             }
         }, 500);
     }
-
-    private View.OnClickListener onClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if (v.getParent().getParent() instanceof CardView) {
-                if (isNotLongClicked) {
-                    CardView cardView = (CardView) v.getParent().getParent();
-                    startAnimationAndVibrator(cardView);
-                } else {
-                    isNotLongClicked = true;
-                }
-            }
-        }
-    };
-
-    private View.OnLongClickListener onLongClickListener = new View.OnLongClickListener() {
-        @Override
-        public boolean onLongClick(View v) {
-            if (v.getParent().getParent() instanceof CardView) {
-                isNotLongClicked = false;
-                CardView cardView = (CardView) v.getParent().getParent();
-                startAnimationAndVibrator(cardView);
-                return false;
-            }
-            return true;
-        }
-    };
 }
