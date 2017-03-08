@@ -70,7 +70,7 @@ public class CardViewPagerLayoutTest extends UITest{
         when(repository.getSingleCardListWithCategoryId(anyInt())).thenReturn(getCardListWithCategoryId());
         subject.setCategoryData(setDefaultCategoryModel());
 
-        CardViewPager viewPager = subject.mViewPager;
+        CardViewPager viewPager = subject.cardViewPager;
 
         assertThat(viewPager.getAdapter()).isNotNull();
         assertThat(viewPager.getAdapter().getCount()).isNotEqualTo(0);
@@ -85,31 +85,31 @@ public class CardViewPagerLayoutTest extends UITest{
 
         assertThat(((CardView) ((CardImageAdapter) viewPager.getAdapter()).getItemAt(0)).getCardTitleTextView().getText()).isEqualTo("물");
 
-        if (viewPager != null) {
-            ImageView cardImageView = ((CardView) ((CardImageAdapter) viewPager.getAdapter()).getItemAt(0)).getCardImage();
 
-            if (cardImageView.getDrawable() != null) {
+        ImageView cardImageView = ((CardView) ((CardImageAdapter) viewPager.getAdapter()).getItemAt(0)).getCardImage();
 
-                Bitmap actualImage = ((GlideBitmapDrawable) cardImageView.getDrawable()).getBitmap();
+        if (cardImageView.getDrawable() != null) {
 
-                try {
-                    ImageView expectedImageView = new ImageView(RuntimeEnvironment.application);
-                    expectedImageView.setLayoutParams(cardImageView.getLayoutParams());
+            Bitmap actualImage = ((GlideBitmapDrawable) cardImageView.getDrawable()).getBitmap();
 
-                    Glide.with(RuntimeEnvironment.application)
-                            .load("file:///android_asset/water.png")
-                            .bitmapTransform(new AngelManGlideTransform(RuntimeEnvironment.application, 10, 0, AngelManGlideTransform.CornerType.TOP))
-                            .override(280, 280)
-                            .into(expectedImageView);
+            try {
+                ImageView expectedImageView = new ImageView(RuntimeEnvironment.application);
+                expectedImageView.setLayoutParams(cardImageView.getLayoutParams());
 
-                    Bitmap expectedImage = ((GlideBitmapDrawable) expectedImageView.getDrawable()).getBitmap();
-                    assertThat(equals(actualImage, expectedImage)).isTrue();
+                Glide.with(RuntimeEnvironment.application)
+                        .load("file:///android_asset/water.png")
+                        .bitmapTransform(new AngelManGlideTransform(RuntimeEnvironment.application, 10, 0, AngelManGlideTransform.CornerType.TOP))
+                        .override(280, 280)
+                        .into(expectedImageView);
 
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
+                Bitmap expectedImage = ((GlideBitmapDrawable) expectedImageView.getDrawable()).getBitmap();
+                assertThat(equals(actualImage, expectedImage)).isTrue();
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
         }
+
     }
 
     @Test
