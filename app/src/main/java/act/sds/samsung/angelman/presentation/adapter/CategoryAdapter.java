@@ -39,13 +39,13 @@ public class CategoryAdapter extends BaseAdapter {
     private CategoryMenuActivity.CategoryMenuStatus categoryMenuStatus;
     private boolean isMotherMode = false;
 
-    public CategoryAdapter(Context context, ArrayList<CategoryModel> categoryList) {
+    public CategoryAdapter(Context context, List<CategoryModel> categoryList) {
         this.context = context;
         this.categoryList = categoryList;
         categoryMenuStatus = CategoryMenuActivity.CategoryMenuStatus.NONE;
     }
 
-    public CategoryAdapter(Context context, ArrayList<CategoryModel> categoryList, boolean isMotherMode) {
+    public CategoryAdapter(Context context, List<CategoryModel> categoryList, boolean isMotherMode) {
         this.context = context;
         this.categoryList = categoryList;
         categoryMenuStatus = CategoryMenuActivity.CategoryMenuStatus.CATEGORY_DEFAULT;
@@ -200,7 +200,7 @@ public class CategoryAdapter extends BaseAdapter {
         return categoryMenuStatus;
     }
 
-    public void setCategoryList(ArrayList<CategoryModel> categoryList) {
+    public void setCategoryList(List<CategoryModel> categoryList) {
         this.categoryList = categoryList;
         this.notifyDataSetChanged();
     }

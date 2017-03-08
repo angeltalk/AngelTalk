@@ -18,7 +18,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import com.google.common.collect.Lists;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -33,81 +34,64 @@ import act.sds.samsung.angelman.presentation.adapter.NewCategoryItemColorAdapter
 import act.sds.samsung.angelman.presentation.adapter.NewCategoryItemIconAdapter;
 import act.sds.samsung.angelman.presentation.util.DialogUtil;
 import act.sds.samsung.angelman.presentation.util.FontUtil;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnEditorAction;
 
 import static act.sds.samsung.angelman.presentation.util.ResourceMapper.ColorState;
 import static act.sds.samsung.angelman.presentation.util.ResourceMapper.IconState;
 
-public class NewCategoryActivity extends AbstractActivity{
-
-    private RecyclerView iconListView;
-    private RecyclerView backgroundListView;
+public class NewCategoryActivity extends AbstractActivity {
 
     private boolean dataChanged = false;
 
     @Inject
     CategoryRepository repository;
-    private TextView categoryTitleTextView;
-    private EditText editCategoryTitle;
-    private Button saveButton;
-    private ImageView cancelButton;
-    NewCategoryItemAdapter iconAdapter;
-    NewCategoryItemAdapter backgroundAdapter;
-    private RelativeLayout categoryHeader;
+
+    @BindView(R.id.category_title)
+    public TextView categoryTitleTextView;
+
+    @BindView(R.id.edit_category_title)
+    public EditText editCategoryTitle;
+
+    @BindView(R.id.new_category_save_button)
+    public Button saveButton;
+
+    @BindView(R.id.category_title_cancel)
+    public ImageView cancelButton;
+
+    @BindView(R.id.icon_list)
+    public RecyclerView iconListView;
+
+    @BindView(R.id.color_list)
+    public RecyclerView backgroundListView;
+
+    @BindView(R.id.new_category_header)
+    public RelativeLayout categoryHeader;
+
     private AlertDialog alertDialog;
+    private NewCategoryItemAdapter iconAdapter;
+    private NewCategoryItemAdapter backgroundAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_category);
+        ButterKnife.bind(this);
 
         ((AngelmanApplication) getApplication()).getAngelmanComponent().inject(this);
 
-        cancelButton = (ImageView) findViewById(R.id.category_title_cancel);
-        iconListView = (RecyclerView) findViewById(R.id.icon_list);
-        backgroundListView = (RecyclerView) findViewById(R.id.color_list);
-        ImageView categoryImage = (ImageView) findViewById(R.id.category_icon);
-        RelativeLayout categoryColor = (RelativeLayout) findViewById(R.id.new_category_color);
-        categoryHeader = (RelativeLayout) findViewById(R.id.new_category_header);
-
-        LinearLayoutManager iconListLayoutManager = new LinearLayoutManager(this);
-        iconListLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-
-        LinearLayoutManager backgroundListLayoutManager = new LinearLayoutManager(this);
-        backgroundListLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-
-        iconListView.setLayoutManager(iconListLayoutManager);
-        backgroundListView.setLayoutManager(backgroundListLayoutManager);
-
-        List<CategoryItemModel> iconList = repository.getCategoryAllIconList();
-        List<CategoryItemModel> backgroundList = repository.getCategoryAllBackgroundList();
-
-        iconAdapter = new NewCategoryItemIconAdapter(categoryImage, sortIconListByStatus(iconList, IconState.USED.ordinal()));
-        backgroundAdapter = new NewCategoryItemColorAdapter(categoryColor, sortIconListByStatus(backgroundList, ColorState.USED.ordinal()));
-
+        iconAdapter = createIconAdapter();
         iconAdapter.setCategoryChangeListener(categoryChangeListener);
-        backgroundAdapter.setCategoryChangeListener(categoryChangeListener);
-
         iconListView.setAdapter(iconAdapter);
+
+        backgroundAdapter = createBackgroundAdapter();
+        backgroundAdapter.setCategoryChangeListener(categoryChangeListener);
         backgroundListView.setAdapter(backgroundAdapter);
 
-        categoryTitleTextView = (TextView) findViewById(R.id.category_title);
-        saveButton = (Button)findViewById(R.id.new_category_save_button);
         categoryTitleTextView.setText(R.string.new_category_name);
-
-        setFont();
-
-        editCategoryTitle = (EditText) findViewById(R.id.edit_category_title);
-        editCategoryTitle.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
-                if(actionId == EditorInfo.IME_ACTION_DONE){
-                    categoryHeader.requestFocus();
-                    ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(categoryHeader.getWindowToken(), 0);
-
-                }
-                return false;
-            }
-        });
+        setRegularFont();
 
         editCategoryTitle.addTextChangedListener(textChangeWatcher);
 
@@ -119,52 +103,36 @@ public class NewCategoryActivity extends AbstractActivity{
             }
         });
 
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CategoryModel model = new CategoryModel();
-                model.title = categoryTitleTextView.getText().toString();
-                model.icon = iconAdapter.getSelectedItem().type;
-                model.color = backgroundAdapter.getSelectedItem().type;
-                int id = repository.saveNewCategoryItemAndReturnId(model);
-
-                model.index = id;
-                moveToNextActivity(model);
-                finish();
-            }
-        });
 
         saveButton.setEnabled(false);
         saveButton.setTypeface(FontUtil.setFont(this, FontUtil.FONT_REGULAR));
 
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                editCategoryTitle.setText("");
-                categoryTitleTextView.setText(R.string.new_category_name);
-            }
-        });
     }
 
-    private void setFont() {
+    private NewCategoryItemColorAdapter createBackgroundAdapter() {
+        RelativeLayout categoryColor = (RelativeLayout) findViewById(R.id.new_category_color);
+        LinearLayoutManager backgroundListLayoutManager = new LinearLayoutManager(this);
+        backgroundListLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        backgroundListView.setLayoutManager(backgroundListLayoutManager);
+        List<CategoryItemModel> backgroundList = repository.getCategoryAllBackgroundList();
+        return new NewCategoryItemColorAdapter(categoryColor, sortIconListByStatus(backgroundList, ColorState.USED.ordinal()));
+    }
+
+    private NewCategoryItemIconAdapter createIconAdapter() {
+        ImageView categoryImage = (ImageView) findViewById(R.id.category_icon);
+        LinearLayoutManager iconListLayoutManager = new LinearLayoutManager(this);
+        iconListLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        iconListView.setLayoutManager(iconListLayoutManager);
+        List<CategoryItemModel> iconList = repository.getCategoryAllIconList();
+        return new NewCategoryItemIconAdapter(categoryImage, sortIconListByStatus(iconList, IconState.USED.ordinal()));
+
+    }
+
+    private void setRegularFont() {
         FontUtil.setGlobalFont(getWindow().getDecorView(), FontUtil.FONT_REGULAR);
         categoryTitleTextView.setTypeface(FontUtil.setFont(this, FontUtil.FONT_MEDIUM));
     }
 
-    @Override
-    public void onBackPressed() {
-        ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(editCategoryTitle.getWindowToken(), 0);
-        if(dataChanged) {
-            View innerView = getLayoutInflater().inflate(R.layout.dialog_layout, null);
-            TextView alertMessage = (TextView) innerView.findViewById(R.id.alert_message);
-            alertMessage.setText(getString(R.string.inform_not_saved));
-
-            alertDialog = DialogUtil.buildCustomDialog(NewCategoryActivity.this, innerView, positiveListener, negativeListener);
-            alertDialog.show();
-        } else {
-            finish();
-        }
-    }
 
     private View.OnClickListener positiveListener = new View.OnClickListener() {
         @Override
@@ -174,6 +142,50 @@ public class NewCategoryActivity extends AbstractActivity{
         }
     };
 
+
+    @Override
+    public void onBackPressed() {
+        ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(editCategoryTitle.getWindowToken(), 0);
+        if (dataChanged) {
+            View innerView = getLayoutInflater().inflate(R.layout.dialog_layout, null);
+            TextView alertMessage = (TextView) innerView.findViewById(R.id.alert_message);
+            alertMessage.setText(getString(R.string.inform_not_saved));
+            alertDialog = DialogUtil.buildCustomDialog(NewCategoryActivity.this, innerView, positiveListener, negativeListener);
+            alertDialog.show();
+        } else {
+            finish();
+        }
+    }
+
+
+    @OnEditorAction(R.id.edit_category_title)
+    public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
+        if (actionId == EditorInfo.IME_ACTION_DONE) {
+            categoryHeader.requestFocus();
+            ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(categoryHeader.getWindowToken(), 0);
+        }
+        return false;
+    }
+
+    @OnClick(R.id.new_category_save_button)
+    public void onClickSaveButton(View v) {
+        CategoryModel model = new CategoryModel();
+        model.title = categoryTitleTextView.getText().toString();
+        model.icon = iconAdapter.getSelectedItem().type;
+        model.color = backgroundAdapter.getSelectedItem().type;
+        int id = repository.saveNewCategoryItemAndReturnId(model);
+        model.index = id;
+        moveToNextActivity(model);
+        finish();
+    }
+
+    @OnClick(R.id.category_title_cancel)
+    public void onClickCancelButton(View v) {
+        editCategoryTitle.setText("");
+        categoryTitleTextView.setText(R.string.new_category_name);
+    }
+
+
     private View.OnClickListener negativeListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -181,11 +193,9 @@ public class NewCategoryActivity extends AbstractActivity{
         }
     };
 
-
     private TextWatcher textChangeWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
         }
 
         @Override
@@ -196,18 +206,15 @@ public class NewCategoryActivity extends AbstractActivity{
         @Override
         public void afterTextChanged(Editable s) {
             if (editCategoryTitle.getText().length() > 0) {
-                categoryTitleTextView.setText(editCategoryTitle.getText() + "");
-
+                categoryTitleTextView.setText(editCategoryTitle.getText().toString());
                 saveButton.setEnabled(true);
                 saveButton.setTextColor(getResources().getColor(R.color.white));
                 cancelButton.setVisibility(View.VISIBLE);
             } else {
                 categoryTitleTextView.setText(R.string.new_category_name);
-
                 saveButton.setEnabled(false);
                 saveButton.setTextColor(getResources().getColor(R.color.white_32));
                 cancelButton.setVisibility(View.INVISIBLE);
-
                 ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(categoryHeader.getWindowToken(), 0);
             }
         }
@@ -228,20 +235,18 @@ public class NewCategoryActivity extends AbstractActivity{
         getApplicationContext().startActivity(intent);
     }
 
-    private ArrayList<CategoryItemModel> sortIconListByStatus(List<CategoryItemModel> list, int usedStateByType){
-        ArrayList<CategoryItemModel> usedItem = new ArrayList<>();
-        ArrayList<CategoryItemModel> unusedItem = new ArrayList<>();
-
-        for(int i = 0 ; i < list.size() ; i++){
-            if(list.get(i).status == usedStateByType){
+    private List<CategoryItemModel> sortIconListByStatus(List<CategoryItemModel> list, int usedStateByType) {
+        List<CategoryItemModel> usedItem = Lists.newArrayList();
+        List<CategoryItemModel> unUsedItem = Lists.newArrayList();
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).status == usedStateByType) {
                 usedItem.add(list.get(i));
             } else {
-                unusedItem.add(list.get(i));
+                unUsedItem.add(list.get(i));
             }
         }
-        unusedItem.addAll(usedItem);
-
-        return unusedItem;
+        unUsedItem.addAll(usedItem);
+        return unUsedItem;
 
     }
 }

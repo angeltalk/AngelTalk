@@ -1,6 +1,5 @@
 package act.sds.samsung.angelman.presentation.activity;
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,10 +9,8 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-
 import com.bumptech.glide.Glide;
 import com.rd.PageIndicatorView;
-
 import act.sds.samsung.angelman.AngelmanApplication;
 import act.sds.samsung.angelman.R;
 import act.sds.samsung.angelman.presentation.adapter.OnboardingImageAdapter;
@@ -24,7 +21,8 @@ import butterknife.OnPageChange;
 
 import static butterknife.OnPageChange.Callback.PAGE_SELECTED;
 
-public class OnboardingActivity extends AbstractActivity{
+public class OnboardingActivity extends AbstractActivity {
+
     public static int[] ONBOARDING_IMAGES = {
             R.drawable.onboarding_1,
             R.drawable.onboarding_2,
@@ -49,7 +47,7 @@ public class OnboardingActivity extends AbstractActivity{
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(((AngelmanApplication) getApplicationContext()).isFirstLaunched()) {
+        if (((AngelmanApplication) getApplicationContext()).isFirstLaunched()) {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
@@ -76,13 +74,13 @@ public class OnboardingActivity extends AbstractActivity{
                 }
             }, 4000);
 
-        }else{
+        } else {
             moveToCategoryMenuActivity();
         }
     }
 
     @OnClick(R.id.onboarding_finish)
-    public void onClickOnboardingFinishButton (View view) {
+    public void onClickOnboardingFinishButton(View view) {
         moveToCategoryMenuActivity();
     }
 
@@ -98,14 +96,12 @@ public class OnboardingActivity extends AbstractActivity{
     }
 
     private void showOrHideDeleteButtonByIndex(int pos) {
-        if(pos == ONBOARDING_IMAGES.length - 1){
+        if (pos == ONBOARDING_IMAGES.length - 1) {
             onboardingFinishButton.setVisibility(View.VISIBLE);
             onboardingIndicator.setVisibility(View.GONE);
-
-        }else{
+        } else {
             onboardingFinishButton.setVisibility(View.GONE);
             onboardingIndicator.setVisibility(View.VISIBLE);
         }
     }
-
 }

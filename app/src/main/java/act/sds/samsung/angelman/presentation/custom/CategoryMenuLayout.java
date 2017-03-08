@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -67,7 +67,7 @@ public class CategoryMenuLayout extends LinearLayout {
     private void getAllCategoryList(final Context context) {
         final GridView categoryList = (GridView) findViewById(R.id.category_list);
 
-        ArrayList<CategoryModel> categoryAllList = categoryRepository.getCategoryAllList();
+        List<CategoryModel> categoryAllList = categoryRepository.getCategoryAllList();
         final CategoryAdapter categoryAdapter = new CategoryAdapter(context, categoryAllList);
         categoryList.setAdapter(categoryAdapter);
 

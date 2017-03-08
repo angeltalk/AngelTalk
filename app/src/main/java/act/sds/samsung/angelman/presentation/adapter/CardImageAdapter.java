@@ -3,7 +3,6 @@ package act.sds.samsung.angelman.presentation.adapter;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Vibrator;
-import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.util.SparseArray;
 import android.view.View;
@@ -44,7 +43,7 @@ public class CardImageAdapter extends PagerAdapter {
     private ImageUtil imageUtil;
     private boolean isNotLongClicked;
 
-    public CardImageAdapter(Context context, ArrayList<CardModel> dataList, RequestManager glide) {
+    public CardImageAdapter(Context context, List<CardModel> dataList, RequestManager glide) {
         this.context = context;
         this.dataList = dataList;
         this.glide = glide;

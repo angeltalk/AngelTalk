@@ -12,7 +12,6 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -29,12 +28,17 @@ import act.sds.samsung.angelman.R;
 import act.sds.samsung.angelman.domain.model.CardModel;
 import act.sds.samsung.angelman.domain.repository.CardRepository;
 import act.sds.samsung.angelman.presentation.custom.CardView;
+import act.sds.samsung.angelman.presentation.custom.FontEditText;
 import act.sds.samsung.angelman.presentation.custom.FontTextView;
 import act.sds.samsung.angelman.presentation.util.AngelManGlideTransform;
 import act.sds.samsung.angelman.presentation.util.FontUtil;
 import act.sds.samsung.angelman.presentation.util.ImageUtil;
 import act.sds.samsung.angelman.presentation.util.PlayUtil;
 import act.sds.samsung.angelman.presentation.util.RecordUtil;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnEditorAction;
 
 public class MakeCardActivity extends AbstractActivity implements RecordUtil.RecordCallback {
 
@@ -48,22 +52,35 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
 
     private String imagePath;
 
-    CardView cardView;
     protected InputMethodManager imm;
+
     private int selectedCategoryId;
 
-    private FontTextView waitCount;
     private int mCountDown = INIT_COUNT;
-    private Handler countHandler = new Handler();
 
+    private Handler countHandler = new Handler();
     RecordUtil recordUtil = RecordUtil.getInstance();
+
     PlayUtil playUtil;
     private String voiceFile;
-    private RelativeLayout.LayoutParams params;
 
-    Button recordStopBtn;
-    private Button micButton;
-    private PercentRelativeLayout countScene;
+    @BindView(R.id.card_view_layout)
+    public CardView cardView;
+
+    @BindView(R.id.waiting_count)
+    public FontTextView waitCountTextView;
+
+    @BindView(R.id.record_stop_btn)
+    public Button recordStopButton;
+
+    @BindView(R.id.mic_btn)
+    public Button micButton;
+
+    @BindView(R.id.counting_scene)
+    public PercentRelativeLayout countSceneLayout;
+
+    @BindView(R.id.card_image_title_edit)
+    public FontEditText imageTitleEdit;
 
     @Inject
     CardRepository cardRepository;
@@ -72,7 +89,7 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_make_card);
-
+        ButterKnife.bind(this);
         ((AngelmanApplication) getApplication()).getAngelmanComponent().inject(this);
 
         setCategoryBackground(R.id.show_card_layout);
@@ -85,62 +102,8 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
         playUtil = PlayUtil.getInstance();
         imagePath = intent.getStringExtra(ImageUtil.IMAGE_PATH);
 
-        cardView = (CardView) findViewById(R.id.card_view_layout);
         cardView.setCardViewLayoutMode(CardView.MODE_MAKE_CARD);
         Glide.with(getApplicationContext()).load(new File(imagePath)).override(280, 280).bitmapTransform(new AngelManGlideTransform(this, 10, 0, AngelManGlideTransform.CornerType.TOP)).into(cardView.cardImage);
-
-        cardView.cardTitleEdit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (event == null && actionId == EditorInfo.IME_ACTION_DONE) {
-                    if (checkValidationForText()) {
-                        cardView.changeCardViewStatus();
-                        hideKeyboard();
-                        showRecodingGuideAndMicButton();
-                    }
-                } else if (event != null) {
-                    switch (event.getKeyCode()) {
-                        case KeyEvent.KEYCODE_ENTER:
-                            if (event.getAction() == KeyEvent.ACTION_UP) {
-                                if (checkValidationForText()) {
-                                    cardView.changeCardViewStatus();
-                                    hideKeyboard();
-                                    showRecodingGuideAndMicButton();
-                                }
-                            }
-                            break;
-                        default:
-                            return false;
-                    }
-                }
-                return true;
-            }
-        });
-
-        waitCount = (FontTextView) findViewById(R.id.waiting_count);
-        micButton = (Button) findViewById(R.id.mic_btn);
-        countScene = (PercentRelativeLayout) findViewById(R.id.counting_scene);
-
-        micButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                countScene.setVisibility(View.VISIBLE);
-                micButton.setEnabled(false);
-                countHandler.postDelayed(countAction, COUNT_INTERVAL);
-            }
-        });
-
-        recordStopBtn = (Button) findViewById(R.id.record_stop_btn);
-        recordStopBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (state == STATE_RECORD_NOT_COMPLETE) {
-                    recordUtil.stopRecord();
-                    playRecordVoiceFile();
-                }
-                else saveCardAndMoveToNextActivity();
-            }
-        });
 
         Handler handler = new Handler();
 
@@ -154,15 +117,12 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
                 showKeyboard();
             }
         }, 500);
-
-        params = (RelativeLayout.LayoutParams) cardView.getLayoutParams();
-
     }
 
     private void playRecordVoiceFile() {
-        waitCount.setText(R.string.check_recorded_voice);
-        waitCount.setFontType(FontUtil.FONT_REGULAR);
-        recordStopBtn.setBackground(getResources().getDrawable(R.drawable.ic_check_button));
+        waitCountTextView.setText(R.string.check_recorded_voice);
+        waitCountTextView.setFontType(FontUtil.FONT_REGULAR);
+        recordStopButton.setBackground(getResources().getDrawable(R.drawable.ic_check_button));
         playUtil.play(voiceFile);
         state = STATE_RECORD_COMPLETE;
     }
@@ -173,27 +133,27 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
     }
 
     private void hideKeyboard() {
-        imm.hideSoftInputFromWindow(findViewById(R.id.card_image_title_edit).getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(imageTitleEdit.getWindowToken(), 0);
 
     }
 
+
     private void showKeyboard() {
-        imm.showSoftInput(findViewById(R.id.card_image_title_edit), InputMethodManager.SHOW_FORCED);
+        imm.showSoftInput(imageTitleEdit, InputMethodManager.SHOW_FORCED);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         hideKeyboard();
-
         recordUtil.stopRecord();
         playUtil.playStop();
     }
 
     @Override
     public void onBackPressed() {
-        if(countScene.getVisibility() == View.GONE){
-            switch(cardView.status){
+        if (countSceneLayout.getVisibility() == View.GONE) {
+            switch (cardView.status) {
                 case CARD_TITLE_SHOWN:
                     cardView.changeCardViewStatus();
                     showKeyboard();
@@ -212,20 +172,63 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
 
             mCountDown = INIT_COUNT;
 
-            waitCount.setTextSize(TypedValue.COMPLEX_UNIT_DIP, COUNT_TEXT_SIZE);
-            waitCount.setText(String.valueOf(INIT_COUNT));
+            waitCountTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, COUNT_TEXT_SIZE);
+            waitCountTextView.setText(String.valueOf(INIT_COUNT));
 
-            if(state == STATE_RECORD_COMPLETE)
+            if (state == STATE_RECORD_COMPLETE) {
                 state = STATE_RECORD_NOT_COMPLETE;
+            }
 
-            countScene.setVisibility(View.GONE);
+            countSceneLayout.setVisibility(View.GONE);
             micButton.setEnabled(true);
-            recordStopBtn.setBackground(getResources().getDrawable(R.drawable.record_stop));
-            recordStopBtn.setVisibility(View.GONE);
+            recordStopButton.setBackground(getResources().getDrawable(R.drawable.record_stop));
+            recordStopButton.setVisibility(View.GONE);
 
         }
 
     }
+
+    @OnClick(R.id.mic_btn)
+    public void onClickMicButton(View v) {
+        countSceneLayout.setVisibility(View.VISIBLE);
+        micButton.setEnabled(false);
+        countHandler.postDelayed(countAction, COUNT_INTERVAL);
+    }
+
+    @OnClick(R.id.record_stop_btn)
+    public void onClickRecordStopButton(View v) {
+        if (state == STATE_RECORD_NOT_COMPLETE) {
+            recordUtil.stopRecord();
+            playRecordVoiceFile();
+        } else saveCardAndMoveToNextActivity();
+    }
+
+    @OnEditorAction(R.id.card_image_title_edit)
+    public boolean onEditorActionImageTitleEdit(TextView v, int actionId, KeyEvent event) {
+        if (event == null && actionId == EditorInfo.IME_ACTION_DONE) {
+            if (checkValidationForText()) {
+                cardView.changeCardViewStatus();
+                hideKeyboard();
+                showRecodingGuideAndMicButton();
+            }
+        } else if (event != null) {
+            switch (event.getKeyCode()) {
+                case KeyEvent.KEYCODE_ENTER:
+                    if (event.getAction() == KeyEvent.ACTION_UP) {
+                        if (checkValidationForText()) {
+                            cardView.changeCardViewStatus();
+                            hideKeyboard();
+                            showRecodingGuideAndMicButton();
+                        }
+                    }
+                    break;
+                default:
+                    return false;
+            }
+        }
+        return true;
+    }
+
 
     private boolean checkValidationForText() {
         String cardTitle = ((EditText) cardView.findViewById(R.id.card_image_title_edit)).getText().toString();
@@ -256,23 +259,20 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
 
     private void startVoiceRecording() {
         voiceFile = RecordUtil.getMediaFilePath(this);
-
-        waitCount.setText(R.string.talk_now);
-        waitCount.setFontType(FontUtil.FONT_REGULAR);
-        waitCount.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 30);
-
-        recordStopBtn.setVisibility(View.VISIBLE);
+        waitCountTextView.setText(R.string.talk_now);
+        waitCountTextView.setFontType(FontUtil.FONT_REGULAR);
+        waitCountTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 30);
+        recordStopButton.setVisibility(View.VISIBLE);
         recordUtil.record(voiceFile, this);
     }
 
     private Runnable countAction = new Runnable() {
         @Override
         public void run() {
-            if(--mCountDown == 0){
+            if (--mCountDown == 0) {
                 startVoiceRecording();
-            }
-            else {
-                waitCount.setText(Integer.toString(mCountDown));
+            } else {
+                waitCountTextView.setText(Integer.toString(mCountDown));
                 countHandler.postDelayed(this, COUNT_INTERVAL);
             }
         }
