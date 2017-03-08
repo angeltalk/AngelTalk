@@ -3,6 +3,7 @@ package act.sds.samsung.angelman.presentation.adapter;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Vibrator;
+import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.util.SparseArray;
 import android.view.View;
@@ -16,7 +17,6 @@ import android.widget.LinearLayout;
 import com.bumptech.glide.RequestManager;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 import act.sds.samsung.angelman.R;
