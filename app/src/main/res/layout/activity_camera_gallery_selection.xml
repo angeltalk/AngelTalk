@@ -8,7 +8,7 @@
     android:background="@drawable/rectangle"
     tools:context=".presentation.activity.CameraGallerySelectionActivity">
 
-    <act.sds.samsung.angelman.presentation.custom.CardCategoryTitleRelativeLayout
+    <act.sds.samsung.angelman.presentation.custom.CardCategoryLayout
         android:id="@+id/title_container"
         android:layout_width="match_parent"
         app:layout_heightPercent="18.75%"/>

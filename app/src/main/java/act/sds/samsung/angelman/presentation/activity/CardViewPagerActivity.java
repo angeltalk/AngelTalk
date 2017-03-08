@@ -23,7 +23,7 @@ import act.sds.samsung.angelman.domain.model.CardModel;
 import act.sds.samsung.angelman.domain.model.CategoryModel;
 import act.sds.samsung.angelman.domain.repository.CardRepository;
 import act.sds.samsung.angelman.presentation.adapter.CardImageAdapter;
-import act.sds.samsung.angelman.presentation.custom.CardCategoryTitleRelativeLayout;
+import act.sds.samsung.angelman.presentation.custom.CardCategoryLayout;
 import act.sds.samsung.angelman.presentation.custom.CardView;
 import act.sds.samsung.angelman.presentation.custom.CardViewPager;
 import act.sds.samsung.angelman.presentation.custom.SnackBar;
@@ -50,7 +50,7 @@ public class CardViewPagerActivity extends AbstractActivity {
     public ImageButton deleteButton;
 
     @BindView(R.id.title_container)
-    public CardCategoryTitleRelativeLayout titleLayout;
+    public CardCategoryLayout titleLayout;
 
     private CardImageAdapter cardImageAdapter;
     private AlertDialog dialog;
@@ -74,7 +74,7 @@ public class CardViewPagerActivity extends AbstractActivity {
         selectedCategoryModel = ((AngelmanApplication) getApplicationContext()).getCategoryModel();
 
         allCardListInSelectedCategory = cardRepository.getSingleCardListWithCategoryId(selectedCategoryModel.index);
-        titleLayout.refreshCardCountText(0, allCardListInSelectedCategory.size() + 1);
+        titleLayout.refreshCategoryItemCount(0, allCardListInSelectedCategory.size() + 1);
 
         cardImageAdapter = new CardImageAdapter(this, allCardListInSelectedCategory, glide);
         cardImageAdapter.addNewCardViewAtFirst();
@@ -86,7 +86,7 @@ public class CardViewPagerActivity extends AbstractActivity {
         TextView categoryTitle = (TextView) findViewById(R.id.category_item_title);
         categoryTitle.setText(selectedCategoryModel.title);
 
-        titleLayout.refreshCardCountText(0, allCardListInSelectedCategory.size());
+        titleLayout.refreshCategoryItemCount(0, allCardListInSelectedCategory.size());
 
         if (intent.getBooleanExtra(INTENT_KEY_NEW_CARD, false)) {
             showAddNewCardSuccessMessage();
@@ -114,7 +114,7 @@ public class CardViewPagerActivity extends AbstractActivity {
                     viewPager.setAdapter(cardImageAdapter);
                     viewPager.setCurrentItem(currentItem);
                     showOrHideDeleteButtonByIndex(currentItem);
-                    titleLayout.refreshCardCountText(viewPager.getCurrentItem(), cardImageAdapter.getCount());
+                    titleLayout.refreshCategoryItemCount(viewPager.getCurrentItem(), cardImageAdapter.getCount());
                 }
                 dialog.dismiss();
             }
@@ -144,7 +144,7 @@ public class CardViewPagerActivity extends AbstractActivity {
         public void onPageSelected(int pos) {
             showOrHideDeleteButtonByIndex(pos);
             currentCardIndex = pos;
-            titleLayout.refreshCardCountText(pos, viewPager.getAdapter().getCount());
+            titleLayout.refreshCategoryItemCount(pos, viewPager.getAdapter().getCount());
         }
 
         @Override
