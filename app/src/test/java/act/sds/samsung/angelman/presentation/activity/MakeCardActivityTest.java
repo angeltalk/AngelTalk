@@ -125,7 +125,7 @@ public class MakeCardActivityTest extends UITest{
     public void givenExistSingleCard_whenClickEnter_thenSaveNewSingleCard() throws Exception {
         EditText cardTitleEdit = (EditText) subject.findViewById(R.id.card_image_title_edit);
         TextView textView = ((TextView) subject.findViewById(R.id.card_image_title));
-        subject.cardView.status = CardView.CardViewStatus.CARD_TITLE_EDITABLE;
+        subject.cardView.setStatus(CardView.CardViewStatus.CARD_TITLE_EDITABLE);
         cardTitleEdit.setText("치킨");
         enterKey(cardTitleEdit);
 
@@ -233,7 +233,7 @@ public class MakeCardActivityTest extends UITest{
     @Test
     public void givenCardTitleEditableMode_whenClickedHardwareBackButton_thenFinishMakeCardActivity() throws Exception {
         EditText cardTitleEdit = (EditText) subject.findViewById(R.id.card_image_title_edit);
-        subject.cardView.status = CardView.CardViewStatus.CARD_TITLE_EDITABLE;
+        subject.cardView.setStatus(CardView.CardViewStatus.CARD_TITLE_EDITABLE);
         cardTitleEdit.setText("치킨");
 
         subject.onBackPressed();
@@ -248,7 +248,7 @@ public class MakeCardActivityTest extends UITest{
         EditText cardTitleEdit = (EditText) subject.findViewById(R.id.card_image_title_edit);
         TextView cardTitle = (TextView) subject.findViewById(R.id.card_image_title);
 
-        subject.cardView.status = CardView.CardViewStatus.CARD_TITLE_EDITABLE;
+        subject.cardView.setStatus(CardView.CardViewStatus.CARD_TITLE_EDITABLE);
         cardTitleEdit.setText("치킨");
         enterKey(cardTitleEdit);
 

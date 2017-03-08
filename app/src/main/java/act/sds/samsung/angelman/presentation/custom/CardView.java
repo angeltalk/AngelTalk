@@ -14,40 +14,63 @@ import act.sds.samsung.angelman.R;
 import act.sds.samsung.angelman.domain.model.CardModel;
 
 public class CardView extends PercentRelativeLayout {
-    public static final int MODE_MAKE_CARD = 0;
-    public static final int MODE_VIEW_CARD = 1;
 
-    public ImageView cardImage;
-    public EditText cardTitleEdit;
-    public TextView cardTitle;
+    private ImageView cardImage;
+    private EditText cardTitleEditText;
+    private TextView cardTitleTextView;
+    private CardViewStatus status;
+    private CardModel dataModel;
+    private CardViewMode cardViewMode;
 
-    public CardModel dataModel;
-    public CardViewStatus status;
-    public int mode = CardView.MODE_VIEW_CARD;
+    public CardView(Context context) {
+        super(context);
+        initLayout();
+        this.cardViewMode = CardViewMode.CARD_VIEW_MODE;
+    }
+
+    public CardView(Context context, AttributeSet attrs) {
+        super(context, attrs, 0);
+        initLayout();
+        this.cardViewMode = CardViewMode.CARD_VIEW_MODE;
+    }
+
+    public ImageView getCardImage() {
+        return cardImage;
+    }
+
+    public EditText getCardTitleEditText() {
+        return cardTitleEditText;
+    }
+
+    public TextView getCardTitleTextView() {
+        return cardTitleTextView;
+    }
+
+    public CardViewStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(CardViewStatus status) {
+        this.status = status;
+    }
+
+    public CardModel getDataModel() {
+        return dataModel;
+    }
+
+    public CardViewMode getCardViewMode() {
+        return cardViewMode;
+    }
 
     public void setDataModel(CardModel dataModel) {
         this.dataModel = dataModel;
     }
 
-    public void setCardViewLayoutMode(int mode) {
-        this.mode = mode;
+    public void setCardViewLayoutMode(CardViewMode mode) {
+        this.cardViewMode = mode;
     }
 
-    public enum CardViewStatus {
-        CARD_TITLE_EDITABLE, CARD_TITLE_SHOWN
-    }
-
-    public CardView(Context context, AttributeSet attrs) {
-        super(context, attrs, 0);
-        initLayout(context);
-    }
-
-    public CardView(Context context) {
-        super(context);
-        initLayout(context);
-    }
-
-    private void initLayout(Context context) {
+    private void initLayout() {
         LayoutInflater mInflater = LayoutInflater.from(getContext());
         mInflater.inflate(R.layout.layout_card_view, this, true);
 
@@ -55,8 +78,8 @@ public class CardView extends PercentRelativeLayout {
 
         cardImage = (ImageView)findViewById(R.id.card_image);
 
-        cardTitle = (TextView) findViewById(R.id.card_image_title);
-        cardTitleEdit = (EditText) findViewById(R.id.card_image_title_edit);
+        cardTitleTextView = (TextView) findViewById(R.id.card_image_title);
+        cardTitleEditText = (EditText) findViewById(R.id.card_image_title_edit);
     }
 
     public void setImageBitmap(Bitmap imageBitmap){
@@ -67,18 +90,26 @@ public class CardView extends PercentRelativeLayout {
         switch(this.status) {
             case CARD_TITLE_EDITABLE:
                 this.status = CardViewStatus.CARD_TITLE_SHOWN;
-                cardTitleEdit.setVisibility(View.GONE);
-                cardTitle.setVisibility(VISIBLE);
-                cardTitle.setText(cardTitleEdit.getText().toString());
+                cardTitleEditText.setVisibility(View.GONE);
+                cardTitleTextView.setVisibility(VISIBLE);
+                cardTitleTextView.setText(cardTitleEditText.getText().toString());
                 break;
             case CARD_TITLE_SHOWN:
                 this.status = CardViewStatus.CARD_TITLE_EDITABLE;
-                cardTitleEdit.setVisibility(VISIBLE);
-                cardTitleEdit.requestFocus();
-                cardTitle.setVisibility(View.GONE);
+                cardTitleEditText.setVisibility(VISIBLE);
+                cardTitleEditText.requestFocus();
+                cardTitleTextView.setVisibility(View.GONE);
                 break;
             default:
                 break;
         }
+    }
+
+    public enum CardViewStatus {
+        CARD_TITLE_EDITABLE, CARD_TITLE_SHOWN
+    }
+
+    public enum CardViewMode {
+        CARD_MAKE_MODE, CARD_VIEW_MODE
     }
 }

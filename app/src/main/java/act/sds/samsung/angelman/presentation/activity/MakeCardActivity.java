@@ -102,8 +102,8 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
         playUtil = PlayUtil.getInstance();
         imagePath = intent.getStringExtra(ImageUtil.IMAGE_PATH);
 
-        cardView.setCardViewLayoutMode(CardView.MODE_MAKE_CARD);
-        Glide.with(getApplicationContext()).load(new File(imagePath)).override(280, 280).bitmapTransform(new AngelManGlideTransform(this, 10, 0, AngelManGlideTransform.CornerType.TOP)).into(cardView.cardImage);
+        cardView.setCardViewLayoutMode(CardView.CardViewMode.CARD_MAKE_MODE);
+        Glide.with(getApplicationContext()).load(new File(imagePath)).override(280, 280).bitmapTransform(new AngelManGlideTransform(this, 10, 0, AngelManGlideTransform.CornerType.TOP)).into(cardView.getCardImage());
 
         Handler handler = new Handler();
 
@@ -153,7 +153,7 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
     @Override
     public void onBackPressed() {
         if (countSceneLayout.getVisibility() == View.GONE) {
-            switch (cardView.status) {
+            switch (cardView.getStatus()) {
                 case CARD_TITLE_SHOWN:
                     cardView.changeCardViewStatus();
                     showKeyboard();
@@ -229,20 +229,16 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
         return true;
     }
 
-
     private boolean checkValidationForText() {
         String cardTitle = ((EditText) cardView.findViewById(R.id.card_image_title_edit)).getText().toString();
-        if (cardTitle.trim().length() > 0) {
-            return true;
-        }
-        return false;
+        return cardTitle.trim().length() > 0;
     }
 
     private void saveCardAndMoveToNextActivity() {
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
 
-        CardModel cardModel = new CardModel(cardView.cardTitleEdit.getText().toString(),
+        CardModel cardModel = new CardModel(cardView.getCardTitleEditText().getText().toString(),
                 imagePath,
                 voiceFile,
                 dateFormat.format(date),

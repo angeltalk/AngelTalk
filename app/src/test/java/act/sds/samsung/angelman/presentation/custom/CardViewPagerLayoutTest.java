@@ -83,10 +83,10 @@ public class CardViewPagerLayoutTest extends UITest{
         viewPager.invalidate();
         viewPager.requestLayout();
 
-        assertThat(((CardView) ((CardImageAdapter) viewPager.getAdapter()).getItemAt(0)).cardTitle.getText()).isEqualTo("물");
+        assertThat(((CardView) ((CardImageAdapter) viewPager.getAdapter()).getItemAt(0)).getCardTitleTextView().getText()).isEqualTo("물");
 
         if (viewPager != null) {
-            ImageView cardImageView = ((CardView) ((CardImageAdapter) viewPager.getAdapter()).getItemAt(0)).cardImage;
+            ImageView cardImageView = ((CardView) ((CardImageAdapter) viewPager.getAdapter()).getItemAt(0)).getCardImage();
 
             if (cardImageView.getDrawable() != null) {
 
@@ -110,7 +110,6 @@ public class CardViewPagerLayoutTest extends UITest{
                 }
             }
         }
-
     }
 
     @Test

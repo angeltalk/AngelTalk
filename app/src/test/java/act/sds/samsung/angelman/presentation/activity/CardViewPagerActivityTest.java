@@ -124,7 +124,7 @@ public class CardViewPagerActivityTest extends UITest {
     @Test
     public void whenClickedDeleteButton_thenShowsCardTitleCorrectly() throws Exception {
         subject.viewPager.setCurrentItem(1);
-        assertThat(((CardView) ((CardImageAdapter) subject.viewPager.getAdapter()).getItemAt(1)).cardTitle.getText()).isEqualTo("물");
+        assertThat(((CardView) ((CardImageAdapter) subject.viewPager.getAdapter()).getItemAt(1)).getCardTitleTextView().getText()).isEqualTo("물");
         ShadowAlertDialog shadowDialog = getShadowAlertDialog();
         assertThat(((TextView) shadowDialog.getView().findViewById(R.id.alert_message)).getText()).contains( "물" );
     }
@@ -135,7 +135,7 @@ public class CardViewPagerActivityTest extends UITest {
         assertThat(viewPager.getAdapter().getCount()).isEqualTo(4);
 
         subject.viewPager.setCurrentItem(2);
-        assertThat(((CardView) ((CardImageAdapter) viewPager.getAdapter()).getItemAt(2)).cardTitle.getText()).isEqualTo("우유");
+        assertThat(((CardView) ((CardImageAdapter) viewPager.getAdapter()).getItemAt(2)).getCardTitleTextView().getText()).isEqualTo("우유");
         assertThat(deleteCardButton.getVisibility()).isEqualTo(View.VISIBLE);
 
         when(repository.deleteSingleCardWithCardIndex(anyInt(), anyInt())).thenReturn(true);
@@ -147,7 +147,7 @@ public class CardViewPagerActivityTest extends UITest {
         shadowDialog.getView().findViewById(R.id.confirm).performClick();
 
         assertThat(viewPager.getAdapter().getCount()).isEqualTo(3);
-        assertThat(((CardView) ((CardImageAdapter) viewPager.getAdapter()).getItemAt(2)).cardTitle.getText()).isEqualTo(cardListWithCategoryId.get(2).name);
+        assertThat(((CardView) ((CardImageAdapter) viewPager.getAdapter()).getItemAt(2)).getCardTitleTextView().getText()).isEqualTo(cardListWithCategoryId.get(2).name);
     }
 
     @Test
@@ -171,9 +171,9 @@ public class CardViewPagerActivityTest extends UITest {
         viewPager.invalidate();
         viewPager.requestLayout();
 
-        assertThat(((CardView) ((CardImageAdapter) viewPager.getAdapter()).getItemAt(1)).cardTitle.getText()).isEqualTo("물");
+        assertThat(((CardView) ((CardImageAdapter) viewPager.getAdapter()).getItemAt(1)).getCardTitleTextView().getText()).isEqualTo("물");
 
-        ImageView cardImageView = ((CardView) ((CardImageAdapter) viewPager.getAdapter()).getItemAt(1)).cardImage;
+        ImageView cardImageView = ((CardView) ((CardImageAdapter) viewPager.getAdapter()).getItemAt(1)).getCardImage();
 
         if (cardImageView.getDrawable() != null) {
 
@@ -315,9 +315,9 @@ public class CardViewPagerActivityTest extends UITest {
         assertThat(viewPager.getAdapter()).isNotNull();
         assertThat(viewPager.getAdapter().getCount()).isNotEqualTo(0);
 
-        assertThat(((CardView) ((CardImageAdapter) viewPager.getAdapter()).getItemAt(1)).cardTitle.getText()).isEqualTo("물");
+        assertThat(((CardView) ((CardImageAdapter) viewPager.getAdapter()).getItemAt(1)).getCardTitleTextView().getText()).isEqualTo("물");
 
-        ImageView cardImageView = ((CardView) ((CardImageAdapter) viewPager.getAdapter()).getItemAt(1)).cardImage;
+        ImageView cardImageView = ((CardView) ((CardImageAdapter) viewPager.getAdapter()).getItemAt(1)).getCardImage();
 
         Bitmap actualImage = null;
 
