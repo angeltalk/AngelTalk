@@ -28,7 +28,7 @@ public class SingleCardSqliteDataStore implements  SingleCardDataStore {
         ArrayList<CardModel> list = new ArrayList<>();
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        String[] columns = {CardColumns.NAME, CardColumns.IMAGE_PATH, CardColumns.VOICE_PATH, CardColumns.FIRST_TIME};
+        String[] columns = {CardColumns._ID ,CardColumns.NAME, CardColumns.IMAGE_PATH, CardColumns.VOICE_PATH, CardColumns.FIRST_TIME};
         String orderby = CardColumns.CATEGORY_ID + " asc, " + CardColumns.CARD_INDEX + " desc";
 
         Cursor c = db.query(CardColumns.TABLE_NAME, columns, null,null, null, null, orderby);
@@ -36,6 +36,7 @@ public class SingleCardSqliteDataStore implements  SingleCardDataStore {
         c.moveToFirst();
         do{
             CardModel cardModel = new CardModel();
+            cardModel._id       = c.getString(c.getColumnIndex(CardColumns._ID));
             cardModel.name      = c.getString(c.getColumnIndex(CardColumns.NAME));
             cardModel.imagePath = c.getString(c.getColumnIndex(CardColumns.IMAGE_PATH));
             cardModel.voicePath = c.getString(c.getColumnIndex(CardColumns.VOICE_PATH));
@@ -77,6 +78,7 @@ public class SingleCardSqliteDataStore implements  SingleCardDataStore {
         if (c.moveToFirst()) {
             do {
                 CardModel cardModel = new CardModel();
+                cardModel._id       = c.getString(c.getColumnIndex(CardColumns._ID));
                 cardModel.name      = c.getString(c.getColumnIndex(CardColumns.NAME));
                 cardModel.imagePath = c.getString(c.getColumnIndex(CardColumns.IMAGE_PATH));
                 cardModel.voicePath = c.getString(c.getColumnIndex(CardColumns.VOICE_PATH));
@@ -122,7 +124,9 @@ public class SingleCardSqliteDataStore implements  SingleCardDataStore {
 
         c.moveToFirst();
 
-        CardModel cardModel = new CardModel(c.getString(c.getColumnIndex(CardColumns.NAME)),
+        CardModel cardModel = new CardModel(
+                                            c.getString(c.getColumnIndex(CardColumns._ID)),
+                                            c.getString(c.getColumnIndex(CardColumns.NAME)),
                                                               c.getString(c.getColumnIndex(CardColumns.IMAGE_PATH)),
                                                               c.getString(c.getColumnIndex(CardColumns.FIRST_TIME)),
                                                               c.getInt(c.getColumnIndex(CardColumns.CATEGORY_ID)),

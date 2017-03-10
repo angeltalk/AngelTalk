@@ -4,7 +4,7 @@ import android.provider.BaseColumns;
 
 public class CardColumns implements BaseColumns {
     public static final String TABLE_NAME  = "cardlist";
-
+    public static final String _ID         = "_id";
     public static final String NAME        = "name";
     public static final String IMAGE_PATH  = "image_path";
     public static final String VOICE_PATH  = "voice_path";

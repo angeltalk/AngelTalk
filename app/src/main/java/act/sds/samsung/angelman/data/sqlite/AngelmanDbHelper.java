@@ -11,7 +11,7 @@ public class AngelmanDbHelper extends SQLiteOpenHelper {
 
     public static final String SQL_CREATE_CARD_LIST =
             "CREATE TABLE " + CardColumns.TABLE_NAME + "(" +
-                    CardColumns._ID + " INTEGER_PRIMARY_KEY," +
+                    CardColumns._ID + " INTEGER PRIMARY KEY," +
                     CardColumns.CATEGORY_ID + " INTEGER," +
                     CardColumns.NAME + " TEXT," +
                     CardColumns.IMAGE_PATH + " TEXT," +
@@ -21,7 +21,7 @@ public class AngelmanDbHelper extends SQLiteOpenHelper {
 
     public static final String SQL_CREATE_CATEGORY_LIST =
             "CREATE TABLE " + CategoryColumns.TABLE_NAME + "(" +
-                    CategoryColumns._ID + " INTEGER_PRIMARY_KEY," +
+                    CategoryColumns._ID + " INTEGER PRIMARY KEY," +
                     CategoryColumns.TITLE + " TEXT," +
                     CategoryColumns.ICON + " INTEGER," +
                     CategoryColumns.COLOR + " INTEGER," +

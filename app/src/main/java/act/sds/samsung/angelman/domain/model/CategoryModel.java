@@ -1,6 +1,13 @@
 package act.sds.samsung.angelman.domain.model;
 
-public class CategoryModel {
+
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
+@AllArgsConstructor
+public class CategoryModel{
+    public String _id;
     public String title;
     public int index;
     public int icon;

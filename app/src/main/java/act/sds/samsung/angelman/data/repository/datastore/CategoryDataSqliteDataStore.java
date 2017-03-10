@@ -33,13 +33,14 @@ public class CategoryDataSqliteDataStore implements CategoryDataStore{
         ArrayList<CategoryModel> list = new ArrayList<>();
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        String[] columns = {CategoryColumns.TITLE, CategoryColumns.ICON, CategoryColumns.INDEX, CategoryColumns.COLOR};
+        String[] columns = {CategoryColumns._ID, CategoryColumns.TITLE, CategoryColumns.ICON, CategoryColumns.INDEX, CategoryColumns.COLOR};
         Cursor c = db.query(true, CategoryColumns.TABLE_NAME, columns, null,null, null, null, CategoryColumns.INDEX, null);
         c.moveToFirst();
 
         if(c.getCount() != 0) {
             do {
                 CategoryModel categoryModel = new CategoryModel();
+                categoryModel._id   = c.getString(c.getColumnIndex(CategoryColumns._ID));
                 categoryModel.title = c.getString(c.getColumnIndex(CategoryColumns.TITLE));
                 categoryModel.icon = c.getInt(c.getColumnIndex(CategoryColumns.ICON));
                 categoryModel.index = c.getInt(c.getColumnIndex(CategoryColumns.INDEX));
