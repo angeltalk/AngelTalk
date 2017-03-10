@@ -111,7 +111,8 @@ public class CategoryMenuActivity extends AbstractActivity {
         categoryGrid.setAdapter(categoryAdapter);
 
         changeToDefault();
-        syncWithServer();
+
+        //syncWithServer();
     }
 
     @Override
