@@ -98,8 +98,8 @@ public class CardViewPagerActivity extends AbstractActivity {
     public void onClickDeleteButton(View v){
 
         final CardView card = (CardView) cardImageAdapter.viewCollection.get(viewPager.getCurrentItem());
-        String cardTitle = card.cardTitle.getText().toString();
-        final int cardIndex = card.dataModel.cardIndex;
+        String cardTitle = card.getCardTitleTextView().getText().toString();
+        final int cardIndex = card.getDataModel().cardIndex;
         String message = getResources().getString(R.string.delete_alert_message, cardTitle);
 
         View.OnClickListener positiveListener = new View.OnClickListener() {

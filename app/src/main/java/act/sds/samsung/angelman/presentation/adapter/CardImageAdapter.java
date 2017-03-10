@@ -30,8 +30,6 @@ import act.sds.samsung.angelman.presentation.util.ImageUtil;
 import act.sds.samsung.angelman.presentation.util.PlayUtil;
 import act.sds.samsung.angelman.presentation.util.ResourcesUtil;
 
-import static act.sds.samsung.angelman.presentation.custom.CardView.MODE_VIEW_CARD;
-
 public class CardImageAdapter extends PagerAdapter {
 
     private Context context;
@@ -75,7 +73,7 @@ public class CardImageAdapter extends PagerAdapter {
             return 0;
         }
         CardView cardView = (CardView) object;
-        int position = dataList.indexOf(cardView.dataModel);
+        int position = dataList.indexOf(cardView.getDataModel());
         return position == -1 ? POSITION_NONE : position;
     }
 
@@ -95,17 +93,17 @@ public class CardImageAdapter extends PagerAdapter {
         } else {
             final CardView cardView = new CardView(context);
             cardView.setDataModel(dataList.get(position));
-            cardView.cardImage.setScaleType(ImageView.ScaleType.FIT_XY);
+            cardView.getCardImage().setScaleType(ImageView.ScaleType.FIT_XY);
 
             CardModel singleSectionItems = dataList.get(position);
             String imagePath = singleSectionItems.imagePath;
-            cardView.cardTitle.setText(singleSectionItems.name);
-            cardView.cardTitle.setTypeface(FontUtil.setFont(context, FontUtil.FONT_MEDIUM));
+            cardView.getCardTitleTextView().setText(singleSectionItems.name);
+            cardView.getCardTitleTextView().setTypeface(FontUtil.setFont(context, FontUtil.FONT_MEDIUM));
 
             glide.load(getImageFile(imagePath))
                  .bitmapTransform(new AngelManGlideTransform(context, 10, 0, AngelManGlideTransform.CornerType.TOP))
                  .override(280, 280)
-                 .into(cardView.cardImage);
+                 .into(cardView.getCardImage());
 
             View cardContainer = cardView.findViewById(R.id.card_container);
             cardContainer.setOnClickListener(cardContainerOnClickListener);
@@ -176,10 +174,10 @@ public class CardImageAdapter extends PagerAdapter {
     };
 
     private void startCardSelectionEffect(CardView cardView) {
-        if (cardView.mode == MODE_VIEW_CARD) {
+        if (cardView.getCardViewMode() == CardView.CardViewMode.CARD_VIEW_MODE) {
             cardView.bringToFront();
 
-            if (cardView.status == CardView.CardViewStatus.CARD_TITLE_SHOWN) {
+            if (cardView.getStatus() == CardView.CardViewStatus.CARD_TITLE_SHOWN) {
                 Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
                 vibrator.vibrate(500);
             }
@@ -197,10 +195,10 @@ public class CardImageAdapter extends PagerAdapter {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (cardView.dataModel == null || cardView.dataModel.voicePath == null || cardView.dataModel.voicePath.length() < 1) {
-                    playUtil.ttsSpeak(cardView.cardTitle.getText().toString());
+                if (cardView.getDataModel() == null || cardView.getDataModel().voicePath == null || cardView.getDataModel().voicePath.length() < 1) {
+                    playUtil.ttsSpeak(cardView.getCardTitleTextView().getText().toString());
                 } else {
-                    playUtil.play(cardView.dataModel.voicePath);
+                    playUtil.play(cardView.getDataModel().voicePath);
                 }
             }
         }, 500);
