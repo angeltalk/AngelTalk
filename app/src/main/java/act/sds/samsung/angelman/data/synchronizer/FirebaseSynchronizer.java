@@ -1,4 +1,4 @@
-package act.sds.samsung.angelman.data.firebase;
+package act.sds.samsung.angelman.data.synchronizer;
 
 import android.content.Context;
 
@@ -20,9 +20,7 @@ public class FirebaseSynchronizer {
     private Context context;
 
     public FirebaseSynchronizer(Context context) {
-
         this.context = context;
-
     }
 
 
@@ -35,9 +33,6 @@ public class FirebaseSynchronizer {
         String userId = "MILO";
 
         uploadData(categoryModelList, cardModelList, userId);
-
-
-
     }
 
     private void uploadData(List<CategoryModel> categoryModelList, List<CardModel> cardModelList, String userId) {
