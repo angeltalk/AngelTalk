@@ -35,7 +35,7 @@ public class AngelmanModule {
     @Provides
     @Singleton
     FirebaseSynchronizer providesFirebaseSynchronizer() {
-        return  FirebaseSynchronizer.getInstance();
+        return  new FirebaseSynchronizer(context.getApplicationContext());
     }
 
 
