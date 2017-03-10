@@ -1,5 +1,7 @@
 package act.sds.samsung.angelman.data.firebase;
 
+import android.content.Context;
+
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -11,48 +13,41 @@ import act.sds.samsung.angelman.domain.model.CategoryModel;
 public class FirebaseSynchronizer {
 
 
-    private DatabaseReference categoryDatabase ;
-    private DatabaseReference cardDatabase ;
+    private DatabaseReference categoryDatabase;
+    private DatabaseReference cardDatabase;
 
-    private static FirebaseSynchronizer instance;
 
-    private FirebaseSynchronizer () {
+    private Context context;
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        categoryDatabase = database.getReference("Category");
-        cardDatabase = database.getReference("Card");
+    public FirebaseSynchronizer(Context context) {
 
-    }
-
-    public static FirebaseSynchronizer getInstance () {
-
-        if(instance == null){
-            instance = new FirebaseSynchronizer();
-            return instance;
-        }
-        return instance;
+        this.context = context;
 
     }
 
-    public void uploadDataToFirebase(List<CategoryModel> categoryModelList , List<CardModel> cardModelList){
 
-        //String userId = sharedPreferences.get("USER_ID"); // 이런식으로 동작이 이루어져야함
+    private FirebaseSynchronizer() {
+        categoryDatabase = FirebaseDatabase.getInstance().getReference("Category");
+        cardDatabase = FirebaseDatabase.getInstance().getReference("Card" );
+    }
+
+    public void uploadDataToFirebase(List<CategoryModel> categoryModelList, List<CardModel> cardModelList) {
         String userId = "MILO";
 
+        uploadData(categoryModelList, cardModelList, userId);
 
-        //upload category
-        for( CategoryModel categoryModel : categoryModelList){
+
+
+    }
+
+    private void uploadData(List<CategoryModel> categoryModelList, List<CardModel> cardModelList, String userId) {
+        for (CategoryModel categoryModel : categoryModelList) {
             categoryDatabase.child(userId).child(categoryModel._id).setValue(categoryModel);
         }
-
-        //upload card
-        for( CardModel cardModel : cardModelList){
+        for (CardModel cardModel : cardModelList) {
             cardDatabase.child(userId).child(cardModel._id).setValue(cardModel);
         }
     }
-
-
-
 
 
 }
