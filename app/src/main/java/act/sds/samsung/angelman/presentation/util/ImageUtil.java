@@ -16,8 +16,6 @@ public class ImageUtil {
 
     public static final String IMAGE_FOLDER = "DCIM";
     public static String IMAGE_PATH = "image path";
-
-
     private static ImageUtil instance = null;
 
     private ImageUtil() {}

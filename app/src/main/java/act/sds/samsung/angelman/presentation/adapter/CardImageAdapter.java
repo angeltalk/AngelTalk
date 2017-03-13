@@ -19,6 +19,7 @@ import com.bumptech.glide.RequestManager;
 import java.io.File;
 import java.util.List;
 
+import act.sds.samsung.angelman.AngelmanApplication;
 import act.sds.samsung.angelman.R;
 import act.sds.samsung.angelman.domain.model.CardModel;
 import act.sds.samsung.angelman.presentation.activity.AbstractActivity;
@@ -140,7 +141,7 @@ public class CardImageAdapter extends PagerAdapter {
         if (imagePath.contains("DCIM")) {
             file = new File(imagePath);
         } else {
-            file = new File(imageUtil.makeImagePathForAsset(imagePath));
+            file = new File(((AngelmanApplication)context.getApplicationContext()).getImageFolder() + File.separator + imagePath);
         }
         return file;
     }
