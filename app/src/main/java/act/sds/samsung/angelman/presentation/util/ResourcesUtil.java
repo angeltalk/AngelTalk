@@ -1,7 +1,6 @@
 package act.sds.samsung.angelman.presentation.util;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.IntDef;
 import android.support.v4.content.res.ResourcesCompat;
 import android.view.View;
@@ -127,9 +126,5 @@ public class ResourcesUtil {
                         context.getTheme()
                 )
         );
-    }
-
-    public static Drawable getDrawable(Context context, int resourceId) {
-        return ResourcesCompat.getDrawable(context.getResources(), resourceId, null);
     }
 }

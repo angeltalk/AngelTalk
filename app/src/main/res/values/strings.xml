@@ -1,18 +1,10 @@
 <resources>
     <string name="app_name">Angelman</string>
     <string name="add_picture">카드에 사진을 추가해주세요</string>
-    <string name="action_drag_out">자물쇠를 원 밖으로 움직이세요</string>
-    <string name="alert_long_click">자물쇠를 길게 눌러주세요</string>
     <string name="camera">카메라</string>
     <string name="gallery">갤러리</string>
     <string name="inform_inside_card_view">카드 틀 안에 맞춰 사진을 찍어주세요</string>
-    <string name="inform_add_card_view">카드에 사진이 추가되었습니다</string>
-    <string name="is_add_in_lockscreen">카드 만들기를 성공했습니다!\n이 카드를 잠금화면에 추가하시겠습니까?</string>
-    <string name="not_add_in_lockscreen">추가 안함</string>
-    <string name="add_in_lockscreen">잠금화면에 추가</string>
-    <string name="add_in_lockscreen_completed">카드를 잠금화면에 추가하였습니다.</string>
     <string name="require_card_name">카드 이름을 작성해주세요</string>
-    <string name="card_count">개 카드</string>
     <string name="choose_picture">Select Picture</string>
     <string name="inform_editing_picture">카드에 보여질 사진의 크기에 맞춰\n사진을 이동하거나 확대/축소 해주세요.</string>
     <string name="talk_now">지금 말해주세요!</string>
@@ -47,5 +39,9 @@
     <string name="bug_report">사용성 개선에 많은 도움이 됩니다.</string>
     <string name="inform_show_child_mode">잠금화면에 엔젤톡이 나타납니다</string>
     <string name="inform_hide_child_mode">잠금화면에 엔젤톡이 사라집니다</string>
-
+    <string name="format_day">MM월 dd일 E요일</string>
+    <string name="noti_privacy">개인정보취급방침</string>
+    <string name="noti_usages">이용 약관</string>
+    <string name="noti_oss">오픈소스 라이선스 고지</string>
+    <string name="noti_voc">의견 보내기</string>
 </resources>

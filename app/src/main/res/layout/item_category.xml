@@ -22,7 +22,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="20dp"
         android:textColor="@color/white"
-        android:textSize="22.5dp"
+        android:textSize="18dp"
         app:font="@string/font_medium"
         tools:text="TEST" />
 </LinearLayout>

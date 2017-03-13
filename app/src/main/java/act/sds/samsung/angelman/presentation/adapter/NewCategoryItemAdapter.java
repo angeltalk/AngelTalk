@@ -15,13 +15,11 @@ import static act.sds.samsung.angelman.presentation.util.ResourceMapper.IconStat
 
 
 abstract public class NewCategoryItemAdapter extends RecyclerView.Adapter<NewCategoryItemAdapter.NewCategoryItemViewHolder> {
-
     private static final int INITIAL_POSITION = -1;
+    List<CategoryItemModel> categoryItemList;
+    int selectedPosition = INITIAL_POSITION;
+    NewCategoryItemViewHolder selectedHolder;
     private CategoryChangeListener categoryChangeListener;
-
-    protected NewCategoryItemViewHolder selectedHolder;
-    protected int selectedPosition = INITIAL_POSITION;
-    protected List<CategoryItemModel> categoryItemList;
 
     NewCategoryItemAdapter(List<CategoryItemModel> categoryItemList) {
         this.categoryItemList = categoryItemList;
@@ -59,17 +57,42 @@ abstract public class NewCategoryItemAdapter extends RecyclerView.Adapter<NewCat
         }
     }
 
+    private void notifyCategoryChanged() {
+        if(categoryChangeListener != null) {
+            categoryChangeListener.categoryChanged();
+        }
+    }
+
+    abstract protected boolean isUsedItem(int position);
+
+    abstract protected void setInitialPosition(NewCategoryItemViewHolder holder);
+
+    abstract protected void changeItem(NewCategoryItemViewHolder holder);
+
+    abstract protected void setImageResourceByTypeAndStatus(NewCategoryItemViewHolder holder, int position);
+
+    private void changeSelected(NewCategoryItemViewHolder holder) {
+        int currentPosition = holder.getAdapterPosition();
+        if (currentPosition != selectedPosition) {
+            changeItem(holder);
+            selectedPosition = currentPosition;
+            selectedHolder = holder;
+        }
+    }
+
+    protected void selectItem(NewCategoryItemViewHolder holder, int categoryIconResourceId, int selectedPosition) {
+        holder.categoryItem.setImageResource(categoryIconResourceId);
+    }
+
+    protected void unselectItem(int categoryIconResourceId) {
+        if (selectedPosition > INITIAL_POSITION) {
+            categoryItemList.get(selectedPosition).status = IconState.UNSELECT.ordinal();
+        }
+    }
+
     @Override
     public int getItemCount() {
         return categoryItemList.size();
-    }
-
-    public void setCategoryChangeListener(CategoryChangeListener categoryChangeListener){
-        this.categoryChangeListener = categoryChangeListener;
-    }
-
-    public CategoryItemModel getSelectedItem() {
-        return categoryItemList.get(selectedPosition);
     }
 
     public class NewCategoryItemViewHolder extends RecyclerView.ViewHolder {
@@ -82,40 +105,15 @@ abstract public class NewCategoryItemAdapter extends RecyclerView.Adapter<NewCat
         }
     }
 
+    public void setCategoryChangeListener(CategoryChangeListener categoryChangeListener){
+        this.categoryChangeListener = categoryChangeListener;
+    }
+
+    public CategoryItemModel getSelectedItem() {
+        return categoryItemList.get(selectedPosition);
+    }
+
     public interface CategoryChangeListener {
         void categoryChanged();
-    }
-
-    abstract protected boolean isUsedItem(int position);
-
-    abstract protected void setInitialPosition(NewCategoryItemViewHolder holder);
-
-    abstract protected void changeItem(NewCategoryItemViewHolder holder);
-
-    abstract protected void setImageResourceByTypeAndStatus(NewCategoryItemViewHolder holder, int position);
-
-    protected void selectItem(NewCategoryItemViewHolder holder, int categoryIconResourceId, int selectedPosition) {
-        holder.categoryItem.setImageResource(categoryIconResourceId);
-    }
-
-    protected void unselectItem(int categoryIconResourceId) {
-        if (selectedPosition > INITIAL_POSITION) {
-            categoryItemList.get(selectedPosition).status = IconState.UNSELECT.ordinal();
-        }
-    }
-
-    private void notifyCategoryChanged() {
-        if(categoryChangeListener != null) {
-            categoryChangeListener.categoryChanged();
-        }
-    }
-
-    private void changeSelected(NewCategoryItemViewHolder holder) {
-        int currentPosition = holder.getAdapterPosition();
-        if (currentPosition != selectedPosition) {
-            changeItem(holder);
-            selectedPosition = currentPosition;
-            selectedHolder = holder;
-        }
     }
 }

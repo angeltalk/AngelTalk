@@ -17,7 +17,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import act.sds.samsung.angelman.AngelmanApplication;
 import act.sds.samsung.angelman.R;
@@ -32,20 +31,22 @@ import static act.sds.samsung.angelman.presentation.util.ResourceMapper.IconStat
 
 public class CategoryAdapter extends BaseAdapter {
 
-    private static final int CARD_MAX_SIZE = 6;
     private static CategoryModel newCategoryModel = null;
+    private ArrayList<CategoryModel> categoryList;
     private Context context;
-    private List<CategoryModel> categoryList;
     private CategoryMenuActivity.CategoryMenuStatus categoryMenuStatus;
+
+    private static final int CARD_MAX_SIZE = 6;
+
     private boolean isMotherMode = false;
 
-    public CategoryAdapter(Context context, List<CategoryModel> categoryList) {
+    public CategoryAdapter(Context context, ArrayList<CategoryModel> categoryList) {
         this.context = context;
         this.categoryList = categoryList;
         categoryMenuStatus = CategoryMenuActivity.CategoryMenuStatus.NONE;
     }
 
-    public CategoryAdapter(Context context, List<CategoryModel> categoryList, boolean isMotherMode) {
+    public CategoryAdapter(Context context, ArrayList<CategoryModel> categoryList, boolean isMotherMode) {
         this.context = context;
         this.categoryList = categoryList;
         categoryMenuStatus = CategoryMenuActivity.CategoryMenuStatus.CATEGORY_DEFAULT;
@@ -54,16 +55,17 @@ public class CategoryAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return  addCategoryVisible() ? categoryList.size() + 1 : categoryList.size();
+        if (addCategoryVisible())
+            return categoryList.size() + 1;
+        return categoryList.size();
     }
 
     @Override
     public CategoryModel getItem(int position) {
-        if (addCategoryVisible() && position == categoryList.size()) {
+        if (addCategoryVisible() && position == categoryList.size())
             return newCategoryModel;
-        } else {
-            return categoryList.get(position);
-        }
+
+        return categoryList.get(position);
     }
 
     @Override
@@ -76,18 +78,29 @@ public class CategoryAdapter extends BaseAdapter {
         final CardView cardViewItem;
 
         if (categoryMenuStatus == CategoryMenuActivity.CategoryMenuStatus.CATEGORY_DELETABLE) {
-            cardViewItem = getCardView(position, parent);
-            startDeletableCardAnimation(cardViewItem);
+            cardViewItem = makeCard(position, parent);
+            Handler handler = new Handler(Looper.getMainLooper());
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    cardViewItem.startAnimation(AnimationUtils.loadAnimation(context, R.anim.shake_anim));
+                }
+            }, 1);
+
         } else {
+
             if (isAddNewCategoryInPosition(position)) {
                 cardViewItem = (CardView) LayoutInflater.from(context).inflate(R.layout.category_card, parent, false);
                 addNewCategoryModel(cardViewItem);
-            } else {
-                if (view == null || isNotSameCardWithPosition(view, position)) {
-                    cardViewItem = getCardView(position, parent);
+            }else{
+                if (view == null) {
+                    cardViewItem = makeCard(position, parent);
+                } else if (isNotSameCardWithPosition(view, position)) {
+                    cardViewItem = makeCard(position, parent);
                 } else {
                     cardViewItem = (CardView) view;
                 }
+
             }
             cardViewItem.getLayoutParams().height = cardViewItem.getLayoutParams().width = getCardViewHeightSize();
             cardViewItem.clearAnimation();
@@ -96,24 +109,13 @@ public class CategoryAdapter extends BaseAdapter {
         return cardViewItem;
     }
 
-    private void startDeletableCardAnimation(final CardView cardViewItem) {
-        Handler handler = new Handler(Looper.getMainLooper());
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                cardViewItem.startAnimation(AnimationUtils.loadAnimation(context, R.anim.shake_anim));
-            }
-        }, 1);
-    }
-
     private boolean isNotSameCardWithPosition(View view, int position) {
         CardView cardView = (CardView) view;
         TextView categoryTitle = (TextView) cardView.findViewById(R.id.category_title);
         if (categoryList.size() < position) {
             return false;
         }
-        return categoryTitle.getText().toString().equals(context.getResources().getString(R.string.new_category))
-                || !categoryList.get(position).title.equals(categoryTitle.getText().toString());
+        return categoryTitle.getText().toString().equals(context.getResources().getString(R.string.new_category)) || !categoryList.get(position).title.equals(categoryTitle.getText().toString());
     }
 
     public void removeItem(int category) {
@@ -126,7 +128,7 @@ public class CategoryAdapter extends BaseAdapter {
         this.notifyDataSetChanged();
     }
 
-    private CardView getCardView(int position, ViewGroup parent) {
+    private CardView makeCard(int position, ViewGroup parent) {
         CardView cardViewItem = (CardView) LayoutInflater.from(context).inflate(R.layout.category_card, parent, false);
         TextView categoryTitle = (TextView) cardViewItem.findViewById(R.id.category_title);
         categoryTitle.setTypeface(FontUtil.setFont(context, FontUtil.FONT_MEDIUM));
@@ -156,20 +158,16 @@ public class CategoryAdapter extends BaseAdapter {
         RelativeLayout categoryItemLayout = (RelativeLayout) cardViewItem.findViewById(R.id.category_item_layout);
         TextView cardTitle = (TextView) cardViewItem.findViewById(R.id.category_title);
 
-        categoryItemLayout.setBackground(ResourcesUtil.getDrawable(context, R.drawable.drop_shadow_dashgap));
+        categoryItemLayout.setBackground(context.getResources().getDrawable(R.drawable.drop_shadow_dashgap));
         categoryItemLayout.setAlpha(0.7f);
-        categoryIcon.setImageDrawable(ResourcesUtil.getDrawable(context, R.drawable.ic_add_category));
-
+        categoryIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_add_category));
         cardTitle.setText(newCategoryModel.title);
         cardTitle.setTypeface(FontUtil.setFont(context, FontUtil.FONT_DEMILIGHT));
-        hideCardViewShadow(cardViewItem);
-        return newCategoryModel;
-    }
 
-    private void hideCardViewShadow(CardView cardViewItem) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             cardViewItem.setElevation(0f);
         }
+        return newCategoryModel;
     }
 
     private void setRemovableButtonVisible(CardView cardViewItem) {
@@ -200,7 +198,7 @@ public class CategoryAdapter extends BaseAdapter {
         return categoryMenuStatus;
     }
 
-    public void setCategoryList(List<CategoryModel> categoryList) {
+    public void setCategoryList(ArrayList<CategoryModel> categoryList) {
         this.categoryList = categoryList;
         this.notifyDataSetChanged();
     }
@@ -208,18 +206,18 @@ public class CategoryAdapter extends BaseAdapter {
     private int getCardViewHeightSize() {
         int dmH = ((AngelmanApplication) context.getApplicationContext()).getScreenHeightPixel();
 
-        // TODO : 해상도 관련
-        if (dmH > 2000) {
+        if (dmH > 2000)
             return 600;
-        } else if (dmH < 1300) {
+        else if(dmH < 1300){
             return 300;
-        } else {
-            return 440;
         }
+        return 440;
     }
 
     private Drawable getResourceDrawable(int id) {
-        return id > 0 ? ResourcesUtil.getDrawable(context, id)
-                : ResourcesUtil.getDrawable(context, R.color.white);
+        if (id > 0)
+            return context.getResources().getDrawable(id);
+        else
+            return context.getResources().getDrawable(R.color.white);
     }
 }

@@ -11,7 +11,7 @@ import android.widget.RelativeLayout;
 
 import act.sds.samsung.angelman.AngelmanApplication;
 import act.sds.samsung.angelman.R;
-import act.sds.samsung.angelman.presentation.custom.CardCategoryLayout;
+import act.sds.samsung.angelman.presentation.custom.CardCategoryTitleRelativeLayout;
 import act.sds.samsung.angelman.presentation.service.ScreenService;
 import act.sds.samsung.angelman.presentation.util.ResourcesUtil;
 
@@ -24,7 +24,7 @@ public class CameraGallerySelectionActivity extends AbstractActivity {
     public static String SCREEN_SERVICE_NAME = "ScreenService";
     private static final int SELECT_PICTURE = 1;
 
-    CardCategoryLayout titleLayout;
+    CardCategoryTitleRelativeLayout titleLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +32,7 @@ public class CameraGallerySelectionActivity extends AbstractActivity {
         setContentView(R.layout.activity_camera_gallery_selection);
         setCategoryBackground(R.id.camera_gallery_selection_container);
 
-        titleLayout = (CardCategoryLayout) findViewById(R.id.title_container);
+        titleLayout = (CardCategoryTitleRelativeLayout) findViewById(R.id.title_container);
         titleLayout.setCardCountVisible(View.GONE);
 
         setCameraGalleryIconColor();

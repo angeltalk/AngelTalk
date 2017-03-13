@@ -15,7 +15,6 @@ import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
@@ -76,7 +75,7 @@ public class CardViewPagerActivityTest extends UITest {
         when(repository.getSingleCardListWithCategoryId(anyInt())).thenReturn(getCardListWithCategoryId());
         initialSetupCategoryModel();
         subject = setupActivity(CardViewPagerActivity.class);
-        subject.viewPager.setCurrentItem(1);
+        subject.mViewPager.setCurrentItem(1);
 
         deleteCardButton = (ImageButton) subject.findViewById(R.id.card_delete_button);
         addCardText = (TextView) subject.findViewById(R.id.add_card_button_text);
@@ -95,11 +94,11 @@ public class CardViewPagerActivityTest extends UITest {
 
     @Test
     public void whenLaunchedCardViewPager_thenShowsAddNewCardPageOnViewPager() throws Exception {
-        subject.viewPager.setCurrentItem(0);
+        subject.mViewPager.setCurrentItem(0);
 
         assertThat(deleteCardButton).isGone();
         assertThat(addCardText).isGone();
-        assertThat(((CardImageAdapter) subject.viewPager.getAdapter()).getItemAt(0)).isInstanceOf(AddCardView.class);
+        assertThat(((CardImageAdapter) subject.mViewPager.getAdapter()).getItemAt(0)).isInstanceOf(AddCardView.class);
     }
 
     @Test
@@ -123,19 +122,19 @@ public class CardViewPagerActivityTest extends UITest {
 
     @Test
     public void whenClickedDeleteButton_thenShowsCardTitleCorrectly() throws Exception {
-        subject.viewPager.setCurrentItem(1);
-        assertThat(((CardView) ((CardImageAdapter) subject.viewPager.getAdapter()).getItemAt(1)).getCardTitleTextView().getText()).isEqualTo("물");
+        subject.mViewPager.setCurrentItem(1);
+        assertThat(((CardView) ((CardImageAdapter) subject.mViewPager.getAdapter()).getItemAt(1)).cardTitle.getText()).isEqualTo("물");
         ShadowAlertDialog shadowDialog = getShadowAlertDialog();
         assertThat(((TextView) shadowDialog.getView().findViewById(R.id.alert_message)).getText()).contains( "물" );
     }
 
     @Test
     public void givenClickedDeleteButton_whenClickedConfirmButton_thenDeleteSelectedCardViewInViewPager() throws Exception {
-        CardViewPager viewPager = subject.viewPager;
+        CardViewPager viewPager = subject.mViewPager;
         assertThat(viewPager.getAdapter().getCount()).isEqualTo(4);
 
-        subject.viewPager.setCurrentItem(2);
-        assertThat(((CardView) ((CardImageAdapter) viewPager.getAdapter()).getItemAt(2)).getCardTitleTextView().getText()).isEqualTo("우유");
+        subject.mViewPager.setCurrentItem(2);
+        assertThat(((CardView) ((CardImageAdapter) viewPager.getAdapter()).getItemAt(2)).cardTitle.getText()).isEqualTo("우유");
         assertThat(deleteCardButton.getVisibility()).isEqualTo(View.VISIBLE);
 
         when(repository.deleteSingleCardWithCardIndex(anyInt(), anyInt())).thenReturn(true);
@@ -147,7 +146,7 @@ public class CardViewPagerActivityTest extends UITest {
         shadowDialog.getView().findViewById(R.id.confirm).performClick();
 
         assertThat(viewPager.getAdapter().getCount()).isEqualTo(3);
-        assertThat(((CardView) ((CardImageAdapter) viewPager.getAdapter()).getItemAt(2)).getCardTitleTextView().getText()).isEqualTo(cardListWithCategoryId.get(2).name);
+        assertThat(((CardView) ((CardImageAdapter) viewPager.getAdapter()).getItemAt(2)).cardTitle.getText()).isEqualTo(cardListWithCategoryId.get(2).name);
     }
 
     @Test
@@ -163,7 +162,7 @@ public class CardViewPagerActivityTest extends UITest {
 
     @Test
     public void whenCardViewPagerActivityLaunched_thenShowCardsRelatedInCategory() throws Exception {
-        CardViewPager viewPager = subject.viewPager;
+        CardViewPager viewPager = subject.mViewPager;
 
         assertThat(viewPager.getAdapter()).isNotNull();
         assertThat(viewPager.getAdapter().getCount()).isNotEqualTo(0);
@@ -171,9 +170,9 @@ public class CardViewPagerActivityTest extends UITest {
         viewPager.invalidate();
         viewPager.requestLayout();
 
-        assertThat(((CardView) ((CardImageAdapter) viewPager.getAdapter()).getItemAt(1)).getCardTitleTextView().getText()).isEqualTo("물");
+        assertThat(((CardView) ((CardImageAdapter) viewPager.getAdapter()).getItemAt(1)).cardTitle.getText()).isEqualTo("물");
 
-        ImageView cardImageView = ((CardView) ((CardImageAdapter) viewPager.getAdapter()).getItemAt(1)).getCardImage();
+        ImageView cardImageView = ((CardView) ((CardImageAdapter) viewPager.getAdapter()).getItemAt(1)).cardImage;
 
         if (cardImageView.getDrawable() != null) {
 
@@ -201,7 +200,7 @@ public class CardViewPagerActivityTest extends UITest {
 
     @Test
     public void givenSetTextToTitleView_whenClickCardView_thenPlayBackTitle() throws Exception {
-        CardViewPager viewPager = subject.viewPager;
+        CardViewPager viewPager = subject.mViewPager;
 
         assertThat(viewPager.getAdapter()).isNotNull();
         assertThat(viewPager.getAdapter().getCount()).isNotEqualTo(0);
@@ -213,11 +212,11 @@ public class CardViewPagerActivityTest extends UITest {
 
         Field declaredField = CardImageAdapter.class.getDeclaredField("playUtil");
         declaredField.setAccessible(true);
-        CardImageAdapter cardImageAdapter = (CardImageAdapter) subject.viewPager.getAdapter();
+        CardImageAdapter cardImageAdapter = (CardImageAdapter) subject.mViewPager.getAdapter();
         declaredField.set(cardImageAdapter, ttsMock);
 
         doNothing().when(ttsMock).ttsSpeak("물");
-        (((CardImageAdapter) subject.viewPager.getAdapter()).getItemAt(1)).findViewById(R.id.card_container).performClick();
+        (((CardImageAdapter) subject.mViewPager.getAdapter()).getItemAt(1)).findViewById(R.id.card_container).performClick();
         ShadowLooper.runUiThreadTasksIncludingDelayedTasks();
         verify(ttsMock).ttsSpeak("물");
 
@@ -226,7 +225,7 @@ public class CardViewPagerActivityTest extends UITest {
 
     @Test
     public void givenSetTextToTitleView_whenLongClickCardView_thenPlayBackTitle() throws Exception {
-        CardViewPager viewPager = subject.viewPager;
+        CardViewPager viewPager = subject.mViewPager;
 
         viewPager.invalidate();
         viewPager.requestLayout();
@@ -235,11 +234,11 @@ public class CardViewPagerActivityTest extends UITest {
 
         Field declaredField = CardImageAdapter.class.getDeclaredField("playUtil");
         declaredField.setAccessible(true);
-        CardImageAdapter cardImageAdapter = (CardImageAdapter) subject.viewPager.getAdapter();
+        CardImageAdapter cardImageAdapter = (CardImageAdapter) subject.mViewPager.getAdapter();
         declaredField.set(cardImageAdapter, ttsMock);
 
         doNothing().when(ttsMock).ttsSpeak("물");
-        (((CardImageAdapter) subject.viewPager.getAdapter()).getItemAt(1)).findViewById(R.id.card_container).performLongClick();
+        (((CardImageAdapter) subject.mViewPager.getAdapter()).getItemAt(1)).findViewById(R.id.card_container).performLongClick();
         ShadowLooper.runUiThreadTasksIncludingDelayedTasks();
         verify(ttsMock).ttsSpeak("물");
 
@@ -248,7 +247,7 @@ public class CardViewPagerActivityTest extends UITest {
 
     @Test
     public void givenShownSingleCardOnScreen_whenClickCardView_thenVibrate500ms() throws Exception {
-        CardViewPager viewPager = subject.viewPager;
+        CardViewPager viewPager = subject.mViewPager;
 
         assertThat(viewPager.getAdapter()).isNotNull();
         assertThat(viewPager.getAdapter().getCount()).isNotEqualTo(0);
@@ -257,12 +256,12 @@ public class CardViewPagerActivityTest extends UITest {
         viewPager.requestLayout();
         @SuppressLint("ServiceCast")
         RoboVibrator vibrator = (RoboVibrator) RuntimeEnvironment.application.getSystemService(Context.VIBRATOR_SERVICE);
-        (((CardImageAdapter) subject.viewPager.getAdapter()).getItemAt(1)).findViewById(R.id.card_container).performClick();
+        (((CardImageAdapter) subject.mViewPager.getAdapter()).getItemAt(1)).findViewById(R.id.card_container).performClick();
 
         assertThat(vibrator.isVibrating()).isTrue();
         assertThat(vibrator.getMilliseconds()).isEqualTo(500);
 
-        (((CardImageAdapter) subject.viewPager.getAdapter()).getItemAt(1)).findViewById(R.id.card_container).performLongClick();
+        (((CardImageAdapter) subject.mViewPager.getAdapter()).getItemAt(1)).findViewById(R.id.card_container).performLongClick();
 
         assertThat(vibrator.isVibrating()).isTrue();
         assertThat(vibrator.getMilliseconds()).isEqualTo(500);
@@ -279,9 +278,9 @@ public class CardViewPagerActivityTest extends UITest {
 
     @Test
     public void whenSetCardDataCompleted_firstCardIsAddCardView() throws Exception {
-        assertThat(subject.viewPager.getChildAt(0)).isInstanceOf(AddCardView.class);
-        assertThat(subject.viewPager.getChildAt(0)).isNotInstanceOf(CardView.class);
-        assertThat(subject.viewPager.getChildAt(1)).isInstanceOf(CardView.class);
+        assertThat(subject.mViewPager.getChildAt(0)).isInstanceOf(AddCardView.class);
+        assertThat(subject.mViewPager.getChildAt(0)).isNotInstanceOf(CardView.class);
+        assertThat(subject.mViewPager.getChildAt(1)).isInstanceOf(CardView.class);
     }
 
     @Test
@@ -305,7 +304,7 @@ public class CardViewPagerActivityTest extends UITest {
         assertThat(nextStartedActivity.getComponent().getClassName()).isEqualTo(CameraGallerySelectionActivity.class.getCanonicalName());
     }
 
-    @Test@Ignore
+    @Test
     public void whenLaunchActivity_thenShowWaterCardWithImage() throws Exception {
 
         RequestManager rm = Glide.with(subject.getApplicationContext());
@@ -315,9 +314,9 @@ public class CardViewPagerActivityTest extends UITest {
         assertThat(viewPager.getAdapter()).isNotNull();
         assertThat(viewPager.getAdapter().getCount()).isNotEqualTo(0);
 
-        assertThat(((CardView) ((CardImageAdapter) viewPager.getAdapter()).getItemAt(1)).getCardTitleTextView().getText()).isEqualTo("물");
+        assertThat(((CardView) ((CardImageAdapter) viewPager.getAdapter()).getItemAt(1)).cardTitle.getText()).isEqualTo("물");
 
-        ImageView cardImageView = ((CardView) ((CardImageAdapter) viewPager.getAdapter()).getItemAt(1)).getCardImage();
+        ImageView cardImageView = ((CardView) ((CardImageAdapter) viewPager.getAdapter()).getItemAt(1)).cardImage;
 
         Bitmap actualImage = null;
 
@@ -361,8 +360,8 @@ public class CardViewPagerActivityTest extends UITest {
 
         subject = setupActivityWithIntent(CardViewPagerActivity.class, intent);
 
-        assertThat(subject.viewPager.getCurrentItem()).isNotEqualTo(0);
-        assertThat(subject.viewPager.getCurrentItem()).isEqualTo(1);
+        assertThat(subject.mViewPager.getCurrentItem()).isNotEqualTo(0);
+        assertThat(subject.mViewPager.getCurrentItem()).isEqualTo(1);
 
     }
 

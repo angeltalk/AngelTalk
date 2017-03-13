@@ -1,0 +1,36 @@
+Applications Memory Usage (kB):
+Uptime: 246239956 Realtime: 1067872775
+
+** MEMINFO in pid 18475 [act.sds.samsung.angelman] **
+                   Pss  Private  Private  Swapped     Heap     Heap     Heap
+                 Total    Dirty    Clean    Dirty     Size    Alloc     Free
+                ------   ------   ------   ------   ------   ------   ------
+  Native Heap     8900     8884        0     2352    16384    12758     3625
+  Dalvik Heap    30187    30172        0     1164    30083    29503      580
+ Dalvik Other      508      508        0        0                           
+        Stack      532      532        0        0                           
+    Other dev        4        0        4        0                           
+     .so mmap     1958      980       16     2068                           
+    .apk mmap      150        0       48        0                           
+    .ttf mmap      194        0      156        0                           
+    .dex mmap     4188        0     4084        0                           
+    .oat mmap     2100        0      656        0                           
+    .art mmap     6686      904     4856      456                           
+   Other mmap       25        4        8        0                           
+   EGL mtrack    43236    43236        0        0                           
+    GL mtrack    50603    50603        0        0                           
+      Unknown      224      224        0       96                           
+        TOTAL   149495   136047     9828     6136    46467    42261     4205
+ 
+ Objects
+               Views:       59         ViewRootImpl:        2
+         AppContexts:        5           Activities:        2
+              Assets:        3        AssetManagers:        3
+       Local Binders:       15        Proxy Binders:       29
+       Parcel memory:        8         Parcel count:       32
+    Death Recipients:        1      OpenSSL Sockets:        0
+ 
+ SQL
+         MEMORY_USED:      446
+  PAGECACHE_OVERFLOW:      112          MALLOC_SIZE:       62
+ 

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/privacy"
+            android:title="@string/noti_privacy" />
+        <item
+            android:id="@+id/usages"
+            android:title="@string/noti_usages" />
+        <item
+            android:id="@+id/oss"
+            android:title="@string/noti_oss" />
+        <item
+            android:id="@+id/voc"
+            android:title="@string/noti_voc" />
+    </group>
+</menu>

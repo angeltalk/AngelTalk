@@ -16,28 +16,30 @@ public class ImageUtil {
 
     public static final String IMAGE_FOLDER = "DCIM";
     public static String IMAGE_PATH = "image path";
+
+
     private static ImageUtil instance = null;
 
-    private ImageUtil() {
-    }
+    private ImageUtil() {}
 
     public static ImageUtil getInstance() {
-        if (instance == null) {
+        if (instance == null)
             instance = new ImageUtil();
-        }
+
         return instance;
     }
 
-    public String getImagePath(Context context) {
-        return ((AngelmanApplication) context.getApplicationContext()).getImageFolder() + File.separator + DateUtil.getDateNow() + ".jpg";
+    public String getImagePath(Context context){
+        return ((AngelmanApplication)context.getApplicationContext()).getImageFolder() + File.separator + DateUtil.getDateNow() +".jpg";
     }
 
-    public String makeImagePathForAsset(String imgFileName) {
+    public String makeImagePathForAsset(String imgFileName){
         return "file:///android_asset/" + imgFileName;
     }
 
-    public void saveImage(View decorView, String fileName) {
+    public void saveImage(View decorView, String fileName){
         Bitmap bitmap = screenShot(decorView);
+
         saveImage(bitmap, fileName, 490, 112);
     }
 
@@ -60,7 +62,7 @@ public class ImageUtil {
                 try {
                     output.close();
                 } catch (IOException e) {
-                    Log.e("IOException", e.getMessage());
+                    e.printStackTrace();
                 }
             }
         }
@@ -73,19 +75,20 @@ public class ImageUtil {
         Bitmap drawingCache = decorView.getDrawingCache();
 
         Matrix matrix = new Matrix();
-        float scaleX = 1080 / (float) width;
-        float scaleY = 1920 / (float) height;
+        float scaleX = 1080 / (float)width;
+        float scaleY = 1920 / (float)height;
         matrix.postScale(scaleX, scaleY);
         matrix.postRotate(-90);
 
-        return Bitmap.createBitmap(drawingCache, 0, 0, width, height, matrix, false);
+        return Bitmap.createBitmap(
+                drawingCache, 0, 0, width, height, matrix, false);
     }
 
-    public void removeFile(String path) {
+    public void removeFile(String path){
         try {
             File file = new File(path);
             file.delete();
-        } catch (NullPointerException e) {
+        }catch (NullPointerException e){
             Log.e("Exception", "Not found file " + path);
         }
     }

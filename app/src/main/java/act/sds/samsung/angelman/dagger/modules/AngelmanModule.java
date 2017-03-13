@@ -4,7 +4,6 @@ import android.content.Context;
 
 import javax.inject.Singleton;
 
-import act.sds.samsung.angelman.data.firebase.FirebaseSynchronizer;
 import act.sds.samsung.angelman.data.repository.CardDataRepository;
 import act.sds.samsung.angelman.data.repository.CategoryDataRepository;
 import act.sds.samsung.angelman.domain.repository.CategoryRepository;
@@ -31,12 +30,4 @@ public class AngelmanModule {
     CategoryRepository providesCategoryRepository() {
         return new CategoryDataRepository(context.getApplicationContext());
     }
-
-    @Provides
-    @Singleton
-    FirebaseSynchronizer providesFirebaseSynchronizer() {
-        return  FirebaseSynchronizer.getInstance();
-    }
-
-
 }

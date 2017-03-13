@@ -1,16 +1,16 @@
 package act.sds.samsung.angelman.domain.repository;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import act.sds.samsung.angelman.domain.model.CategoryItemModel;
 import act.sds.samsung.angelman.domain.model.CategoryModel;
 
 public interface CategoryRepository {
-    List<CategoryModel> getCategoryAllList();
+    ArrayList<CategoryModel> getCategoryAllList();
     boolean deleteCategory(int category);
 
-    List<CategoryItemModel> getCategoryAllIconList();
-    List<CategoryItemModel> getCategoryAllBackgroundList();
+    ArrayList<CategoryItemModel> getCategoryAllIconList();
+    ArrayList<CategoryItemModel> getCategoryAllBackgroundList();
 
     int saveNewCategoryItemAndReturnId(CategoryModel model);
 }

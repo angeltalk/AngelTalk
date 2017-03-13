@@ -36,7 +36,7 @@ public class AngelManGlideTransform implements Transformation<Bitmap> {
         this(Glide.get(context).getBitmapPool(), radius, margin, cornerType);
     }
 
-    private AngelManGlideTransform(BitmapPool pool, int radius, int margin,
+    public AngelManGlideTransform(BitmapPool pool, int radius, int margin,
                                   CornerType cornerType) {
         mBitmapPool = pool;
         mRadius = radius;
@@ -226,8 +226,7 @@ public class AngelManGlideTransform implements Transformation<Bitmap> {
         canvas.drawRect(new RectF(mMargin + mRadius, mMargin + mRadius, right, bottom), paint);
     }
 
-    @Override
-    public String getId() {
+    @Override public String getId() {
         return "RoundedTransformation(radius=" + mRadius + ", margin=" + mMargin + ", diameter="
                 + mDiameter + ", cornerType=" + mCornerType.name() + ")";
     }

@@ -3,7 +3,6 @@ package act.sds.samsung.angelman.data.repository;
 import android.content.Context;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import act.sds.samsung.angelman.data.repository.datastore.SingleCardDataStore;
 import act.sds.samsung.angelman.data.repository.datastore.SingleCardSqliteDataStore;
@@ -13,13 +12,11 @@ import act.sds.samsung.angelman.domain.repository.CardRepository;
 public class CardDataRepository implements CardRepository {
 
     private Context context;
-
     public CardDataRepository(Context context) {
         this.context = context;
     }
-
     @Override
-    public List<CardModel> getSingleCardAllList() {
+    public ArrayList<CardModel> getSingleCardAllList() {
         SingleCardDataStore dataStore = new SingleCardSqliteDataStore(context);
         return getDataModels(dataStore.getAllCardList());
     }
@@ -31,7 +28,7 @@ public class CardDataRepository implements CardRepository {
     }
 
     @Override
-    public List<CardModel> getSingleCardListWithCategoryId(int selectedCategoryId) {
+    public ArrayList<CardModel> getSingleCardListWithCategoryId(int selectedCategoryId) {
         SingleCardDataStore dataStore = new SingleCardSqliteDataStore(context);
         return getDataModels(dataStore.getCardListWithCategoryId(selectedCategoryId));
     }
@@ -48,7 +45,7 @@ public class CardDataRepository implements CardRepository {
         return dataStore.removeSingleCardModel(categoryId, cardIndex);
     }
 
-    private List<CardModel> getDataModels(ArrayList<CardModel> cardModels){
+    private ArrayList<CardModel> getDataModels(ArrayList<CardModel> cardModels){
         if(cardModels == null){
             return new ArrayList<>();
         }else{
