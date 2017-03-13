@@ -26,30 +26,43 @@ public class FirebaseSynchronizer {
     private Context context;
 
     public FirebaseSynchronizer(Context context) {
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        categoryDatabase = firebaseDatabase.getReference("Category");
+        cardDatabase = firebaseDatabase.getReference("Card");
+        storageReference = FirebaseStorage.getInstance().getReference();
         this.context = context;
     }
 
+    public void uploadDataToFirebase(List<CategoryModel> categoryModelList, List<CardModel> cardModelList) {
 
-    private FirebaseSynchronizer() {
-        categoryDatabase = FirebaseDatabase.getInstance().getReference("Category");
-        cardDatabase = FirebaseDatabase.getInstance().getReference("Card");
-        storageReference = FirebaseStorage.getInstance().getReference();
+        String userId = "MILO";
+        uploadData(categoryModelList, cardModelList, userId);
+        uploadFile(userId);
+
     }
 
-    public void uploadDataToFirebase(List<CategoryModel> categoryModelList, List<CardModel> cardModelList) {
-        String userId = "MILO";
-
-        uploadData(categoryModelList, cardModelList, userId);
-
-        //File upload
+    private void uploadFile(String userId) {
         String voicesFolderPath = ((AngelmanApplication) context.getApplicationContext()).getVoiceFolder();
-        String imagesFolderPath = ((AngelmanApplication) context.getApplicationContext()).getImageFolder();
-
-        Uri folder = Uri.fromFile(new File());
         StorageReference voiceReference = storageReference.child(userId).child("voice/");
-        voiceReference.putFile(Uri.parse(voicesFolderPath));
+        File voicesFolder = new File(voicesFolderPath);
+        for (File f : voicesFolder.listFiles()) {
+            if (f.isFile())
+            {
+                voiceReference.child(f.getName()).putFile(Uri.fromFile(f));
+            }
+
+        }
 
 
+        String imagesFolderPath = ((AngelmanApplication) context.getApplicationContext()).getImageFolder();
+        StorageReference imagesReference = storageReference.child(userId).child("image/");
+        File imagesFolder = new File(imagesFolderPath);
+        for (File f : imagesFolder.listFiles()) {
+            if (f.isFile())
+            {
+                imagesReference.child(f.getName()).putFile(Uri.fromFile(f));
+            }
+        }
 
     }
 

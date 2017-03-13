@@ -25,7 +25,6 @@ import javax.inject.Inject;
 
 import act.sds.samsung.angelman.AngelmanApplication;
 import act.sds.samsung.angelman.R;
-import act.sds.samsung.angelman.data.firebase.FirebaseSynchronizer;
 import act.sds.samsung.angelman.domain.model.CardModel;
 import act.sds.samsung.angelman.domain.model.CategoryModel;
 import act.sds.samsung.angelman.domain.repository.CardRepository;
@@ -52,8 +51,8 @@ public class CategoryMenuActivity extends AbstractActivity {
     CardRepository cardRepository;
 
 
-    @Inject
-    FirebaseSynchronizer firebaseSynchronizer;
+    /*@Inject
+    //FirebaseSynchronizer firebaseSynchronizer;*/
 
 
     @BindView(R.id.category_list)
@@ -301,6 +300,6 @@ public class CategoryMenuActivity extends AbstractActivity {
         List<CardModel> singleCardAllList = cardRepository.getSingleCardAllList();
         List<CategoryModel> categoryAllList = categoryRepository.getCategoryAllList();
 
-        firebaseSynchronizer.uploadDataToFirebase(categoryAllList ,singleCardAllList);
+        //firebaseSynchronizer.uploadDataToFirebase(categoryAllList ,singleCardAllList);
     }
 }
