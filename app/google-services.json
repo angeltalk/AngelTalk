@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "264663053439",
+    "firebase_url": "https://angeltalk-app.firebaseio.com",
+    "project_id": "angeltalk-app",
+    "storage_bucket": "angeltalk-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:264663053439:android:b7a28bd9922fdee3",
+        "android_client_info": {
+          "package_name": "act.sds.samsung.angelman"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "264663053439-mgktdprusibo5hqc6nm9csg3j077t6qi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "act.sds.samsung.angelman",
+            "certificate_hash": "bcb818317cbc3dc91d3b0a36d5fe8630a583ad27"
+          }
+        },
+        {
+          "client_id": "264663053439-vdpoms5h7qnulrjfl2po9k49p3oesjgg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAUTGWfIcZ1P0zJq5_Q3KCDKmKWmbdnllY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "264663053439-vdpoms5h7qnulrjfl2po9k49p3oesjgg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

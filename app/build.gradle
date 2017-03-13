@@ -7,7 +7,7 @@ apply from: 'sonarqube.gradle'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+    buildToolsVersion '25.0.2'
     useLibrary 'org.apache.http.legacy'
 
     signingConfigs {
@@ -19,13 +19,16 @@ android {
         }
     }
 
+
+
     defaultConfig {
-        applicationId "act.angelman"
+        applicationId "act.sds.samsung.angelman"
         minSdkVersion 21
         targetSdkVersion 22
-        versionCode 7
-        versionName "1.1.1"
+        versionCode 1
+        versionName "1.0"
         multiDexEnabled true
+        //testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
     }
     testOptions {
@@ -35,18 +38,21 @@ android {
             jacoco {
                 includeNoLocationClasses = true
             }
+
         }
     }
 
     buildTypes {
         debug {
-            testCoverageEnabled = true
-            debuggable true
+            testCoverageEnabled = false
+            signingConfig signingConfigs.debug
+            applicationVariants.all { variant -> renameAPK(variant) }
         }
         release {
+            testCoverageEnabled = false
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            debuggable false
+            applicationVariants.all { variant -> renameAPK(variant) }
         }
     }
     lintOptions {
@@ -54,43 +60,58 @@ android {
     }
 }
 
-def robolectricVersion="3.1.4"
+def renameAPK(variant) {
+    variant.outputs.each { output ->
+        def file = output.packageApplication.outputFile
+        def fileName = "AngelTalk.apk"
+        output.packageApplication.outputFile = new File(file.parent, fileName)
+    }
+}
+
+def robolectricVersion = "3.1.4"
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile "com.android.support:appcompat-v7:23.3.0"
-    compile 'com.android.support:design:23.3.0'
-    compile "com.android.support:recyclerview-v7:23.0.0"
-    compile "com.android.support:cardview-v7:23.0.0"
-    compile "me.everything:overscroll-decor-android:1.0.3"
-    compile 'jp.wasabeef:blurry:2.0.3'
-    compile 'com.github.bumptech.glide:glide:3.7.0'
-    compile 'com.android.support:support-v4:23.0.0'
-    compile 'com.android.support:percent:23+'
-    compile 'com.romandanylyk:pageindicatorview:0.0.7'
-    compile 'ch.acra:acra:4.9.0'
+    compile fileTree(include: ['*.jar'], dir: 'libs')
 
-    apt 'com.google.dagger:dagger-compiler:2.7'
-    compile 'com.google.dagger:dagger:2.7'
-    provided 'javax.annotation:jsr250-api:1.0'
-    androidTestApt 'com.google.dagger:dagger-compiler:2.7'
-    compile "org.projectlombok:lombok:1.16.10"
-    compile 'com.jakewharton:butterknife:8.4.0'
-    compile 'com.google.guava:guava:19.0'
-
-    apt 'com.jakewharton:butterknife-compiler:8.4.0'
-    testCompile 'junit:junit:4.12'
-    testCompile 'com.google.dagger:dagger-compiler:2.7'
     testCompile('com.squareup.assertj:assertj-android:1.1.1') {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
-    testCompile 'org.mockito:mockito-core:1.10.19'
     testCompile "org.robolectric:robolectric:$robolectricVersion"
     testCompile "org.robolectric:shadows-support-v4:$robolectricVersion"
     testCompile "org.robolectric:robolectric-annotations:$robolectricVersion"
     testCompile "org.robolectric:shadows-core:$robolectricVersion"
-    testCompile 'org.khronos:opengl-api:gl1.1-android-2.1_r1'
+
+
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
+    compile 'com.google.guava:guava:19.0'
+    compile 'com.google.guava:guava:19.0'
+    compile 'com.android.support:appcompat-v7:23.4.0'
+    compile 'com.android.support:design:23.4.0'
+    compile 'com.android.support:recyclerview-v7:23.4.0'
+    compile 'com.android.support:cardview-v7:23.4.0'
+    compile 'me.everything:overscroll-decor-android:1.0.3'
+    compile 'jp.wasabeef:blurry:2.0.3'
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'com.android.support:support-v4:23.4.0'
+    compile 'com.android.support:percent:23.4.0'
+    compile 'com.romandanylyk:pageindicatorview:0.0.7'
+    compile 'ch.acra:acra:4.9.0'
+    compile 'com.google.dagger:dagger:2.7'
+    compile 'org.projectlombok:lombok:1.16.10'
+    compile 'com.jakewharton:butterknife:8.4.0'
+    compile 'com.google.firebase:firebase-database:10.2.0'
+    compile 'com.google.firebase:firebase-storage:10.2.0'
+    compile 'com.google.firebase:firebase-auth:10.2.0'
+    testCompile 'junit:junit:4.12'
+    testCompile 'com.google.dagger:dagger-compiler:2.7'
+    testCompile 'org.mockito:mockito-core:1.10.19'
+    testCompile 'org.khronos:opengl-api:gl1.1-android-2.1_r1'
+    androidTestApt 'com.google.dagger:dagger-compiler:2.7'
+    apt 'com.google.dagger:dagger-compiler:2.7'
+    apt 'com.jakewharton:butterknife-compiler:8.4.0'
+    provided 'javax.annotation:jsr250-api:1.0'
 }
+
+apply plugin: 'com.google.gms.google-services'
