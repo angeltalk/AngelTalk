@@ -7,13 +7,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.CardView;
 import android.view.GestureDetector;
 import android.view.Gravity;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,15 +19,13 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
-
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
 import act.sds.samsung.angelman.AngelmanApplication;
 import act.sds.samsung.angelman.R;
+import act.sds.samsung.angelman.data.synchronizer.FirebaseSynchronizer;
 import act.sds.samsung.angelman.domain.model.CardModel;
 import act.sds.samsung.angelman.domain.model.CategoryModel;
 import act.sds.samsung.angelman.domain.repository.CardRepository;
@@ -40,17 +34,16 @@ import act.sds.samsung.angelman.presentation.adapter.CategoryAdapter;
 import act.sds.samsung.angelman.presentation.util.DialogUtil;
 import act.sds.samsung.angelman.presentation.util.FontUtil;
 import act.sds.samsung.angelman.presentation.util.ImageUtil;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static act.sds.samsung.angelman.R.string.delete_category;
 
-public class CategoryMenuActivity extends AbstractActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class CategoryMenuActivity extends AbstractActivity {
 
     public static String SCREEN_SERVICE_NAME = "act.sds.samsung.angelman.presentation.service.ScreenService";
     private static final String VOC_WEB_URL = "https://docs.google.com/forms/d/1N8sSXRWc0HHVIQSXgtcO60bj_U_3cXh7Hfl5Nlxp1OE/edit";
-    private static final String PRIVACY_POLICY="https://docs.google.com/document/d/14AnlKoswSa_5b1ThWbEKU-HlDWE4Z34TgnzccVqjEB8/edit#heading=h.1nrbepsiaovj";
-    private static final String TERMS_OF_SERVICE="https://docs.google.com/document/d/18Z1y7jHtTVuDSMK7X82eblYUEEePihhqMDCJQ6KI988/edit#heading=h.q1s8qq8d9h44";
-    private static final String OSS_LICENSE="https://docs.google.com/document/d/1fRievNVqIlK3QovqmoETGSBhISivNeGiAa7rGQfE3nU/edit?usp=sharing";
 
     @Inject
     CategoryRepository categoryRepository;
@@ -58,13 +51,25 @@ public class CategoryMenuActivity extends AbstractActivity
     @Inject
     CardRepository cardRepository;
 
+
+    @Inject
+    FirebaseSynchronizer firebaseSynchronizer;
+
+
+    @BindView(R.id.category_list)
+    public GridView categoryGrid;
+
+    @BindView(R.id.logo_angeltalk)
+    public ImageView logoButton;
+
+    @BindView(R.id.category_delete_button)
+    public TextView deleteButton;
+
     protected CategoryAdapter categoryAdapter;
     private ImageUtil imageUtil;
     private AlertDialog dialog;
-    private GridView categoryGrid;
-    private ImageView logoButton;
+
     private PopupWindow easterEggPopup;
-    private DrawerLayout drawer;
 
     public enum CategoryMenuStatus {
         NONE, CATEGORY_DEFAULT, CATEGORY_DELETABLE
@@ -76,13 +81,10 @@ public class CategoryMenuActivity extends AbstractActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
-
+        ButterKnife.bind(this);
         ((AngelmanApplication) getApplication()).getAngelmanComponent().inject(this);
 
-        TextView deleteButton = (TextView) findViewById(R.id.category_delete_button);
         deleteButton.setTypeface(FontUtil.setFont(this, FontUtil.FONT_REGULAR));
-        deleteButton.setOnClickListener(deletableClickListener);
-        logoButton = (ImageView) findViewById(R.id.logo_angeltalk);
 
         final GestureDetector logoGestureDetector = getGestureDetector();
 
@@ -103,34 +105,60 @@ public class CategoryMenuActivity extends AbstractActivity
 
         imageUtil = ImageUtil.getInstance();
 
-
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-        ImageView sendVoc = ((ImageView) findViewById(R.id
-                .send_voc));
-        sendVoc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                drawer.openDrawer(GravityCompat.START);
-            }
-        });
-
-        categoryGrid = (GridView) findViewById(R.id.category_list);
-        ArrayList<CategoryModel> categoryAllList = categoryRepository.getCategoryAllList();
+        List<CategoryModel> categoryAllList = categoryRepository.getCategoryAllList();
 
         categoryAdapter = new CategoryAdapter(getApplicationContext(), categoryAllList, true);
         categoryGrid.setAdapter(categoryAdapter);
 
         changeToDefault();
 
-        ImageView imageView = (ImageView)navigationView.getHeaderView(0).findViewById(R.id.slide_menu_angel);
+        //syncWithServer();
+    }
 
-        GlideDrawableImageViewTarget imageViewTarget = new GlideDrawableImageViewTarget(imageView);
-        Glide.with(this).load(R.drawable.angelee).into(imageViewTarget);
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        List<CategoryModel> categoryAllList = categoryRepository.getCategoryAllList();
+        categoryAdapter.setCategoryList(categoryAllList);
+        setCategoryItemClick(categoryGrid, categoryAllList);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (categoryAdapter.getCategoryMenuStatus() == CategoryMenuStatus.CATEGORY_DELETABLE) {
+            categoryAdapter.changeCategoryItemsStatus(CategoryMenuStatus.CATEGORY_DEFAULT);
+        } else if (easterEggPopup != null) {
+            easterEggPopup.dismiss();
+            easterEggPopup = null;
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @OnClick(R.id.send_voc)
+    public void onClickSendVoc(View v) {
+        Uri webpage = Uri.parse(VOC_WEB_URL);
+        Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }
+    }
+
+    @OnClick(R.id.category_delete_button)
+    public void onClickCategoryDeleteButton(View v) {
+        CategoryMenuStatus status = CategoryMenuStatus.CATEGORY_DEFAULT;
+        switch (categoryAdapter.getCategoryMenuStatus()) {
+            case CATEGORY_DEFAULT:
+                status = CategoryMenuStatus.CATEGORY_DELETABLE;
+                ((TextView) findViewById(R.id.category_delete_button)).setText(R.string.complete);
+                break;
+            case CATEGORY_DELETABLE:
+                status = CategoryMenuStatus.CATEGORY_DEFAULT;
+                ((TextView) findViewById(R.id.category_delete_button)).setText(R.string.delete);
+                break;
+        }
+        categoryAdapter.changeCategoryItemsStatus(status);
     }
 
     @NonNull
@@ -141,6 +169,7 @@ public class CategoryMenuActivity extends AbstractActivity
                 showEasterEggPopup();
                 return super.onDoubleTap(e);
             }
+
             @Override
             public boolean onDown(MotionEvent e) {
                 return true;
@@ -154,89 +183,21 @@ public class CategoryMenuActivity extends AbstractActivity
         View view = getLayoutInflater().inflate(R.layout.easter_egg, null);
         ImageView easterEggClose = (ImageView) view.findViewById(R.id.easter_egg_close);
 
-        easterEggClose.setOnClickListener(easterEggCloseListener);
-
+        easterEggClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                easterEggPopup.dismiss();
+            }
+        });
         easterEggPopup = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         easterEggPopup.showAtLocation(view, Gravity.CENTER, 0, 0);
     }
-
-    private View.OnClickListener easterEggCloseListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            easterEggPopup.dismiss();
-        }
-    };
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        ArrayList<CategoryModel> categoryAllList = categoryRepository.getCategoryAllList();
-        categoryAdapter.setCategoryList(categoryAllList);
-        setCategoryItemClick(categoryGrid, categoryAllList);
-    }
-
-    private View.OnClickListener deletableClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            CategoryMenuStatus status = CategoryMenuStatus.CATEGORY_DEFAULT;
-            switch (categoryAdapter.getCategoryMenuStatus()) {
-                case CATEGORY_DEFAULT:
-                    status = CategoryMenuStatus.CATEGORY_DELETABLE;
-                    ((TextView) findViewById(R.id.category_delete_button)).setText(R.string.complete);
-                    break;
-                case CATEGORY_DELETABLE:
-                    status = CategoryMenuStatus.CATEGORY_DEFAULT;
-                    ((TextView) findViewById(R.id.category_delete_button)).setText(R.string.delete);
-                    break;
-            }
-            categoryAdapter.changeCategoryItemsStatus(status);
-        }
-    };
 
     void removeSavedResourceFiles(String imagePath, String voicePath) {
         imageUtil.removeFile(imagePath);
         imageUtil.removeFile(voicePath);
     }
 
-    @Override
-    public void onBackPressed() {
-        if(categoryAdapter.getCategoryMenuStatus() == CategoryMenuStatus.CATEGORY_DELETABLE){
-            categoryAdapter.changeCategoryItemsStatus(CategoryMenuStatus.CATEGORY_DEFAULT);
-        } else if(easterEggPopup != null) {
-            easterEggPopup.dismiss();
-            easterEggPopup = null;
-        } else if(drawer.isDrawerOpen(GravityCompat.START)){
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    private View.OnClickListener deleteCategoryClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            ArrayList<CardModel> singleCardList = cardRepository.getSingleCardListWithCategoryId(selectedCategoryId);
-
-            for (CardModel cardModel : singleCardList) {
-                if (cardModel.imagePath.contains(ImageUtil.IMAGE_FOLDER)) {
-                    removeSavedResourceFiles(cardModel.imagePath, cardModel.voicePath);
-                }
-            }
-
-            cardRepository.deleteSingleCardsWithCategory(selectedCategoryId);
-            categoryRepository.deleteCategory(selectedCategoryId);
-            categoryAdapter.removeItem(selectedCategoryId);
-
-            dialog.dismiss();
-
-            if (categoryAdapter.getCount() == 0) {
-                changeToDefault();
-                moveToNewCategoryActivity();
-            }
-
-        }
-    };
 
     private View.OnClickListener cancelClickListener = new View.OnClickListener() {
         @Override
@@ -250,7 +211,7 @@ public class CategoryMenuActivity extends AbstractActivity
         categoryAdapter.changeCategoryItemsStatus(CategoryMenuStatus.CATEGORY_DEFAULT);
     }
 
-    private void setCategoryItemClick(final GridView gridView, final ArrayList<CategoryModel> categoryList) {
+    private void setCategoryItemClick(final GridView gridView, final List<CategoryModel> categoryList) {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -286,6 +247,31 @@ public class CategoryMenuActivity extends AbstractActivity
         getApplicationContext().startActivity(intent);
     }
 
+    private View.OnClickListener deleteCategoryClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            List<CardModel> singleCardList = cardRepository.getSingleCardListWithCategoryId(selectedCategoryId);
+
+            for (CardModel cardModel : singleCardList) {
+                if (cardModel.imagePath.contains(ImageUtil.IMAGE_FOLDER)) {
+                    removeSavedResourceFiles(cardModel.imagePath, cardModel.voicePath);
+                }
+            }
+
+            cardRepository.deleteSingleCardsWithCategory(selectedCategoryId);
+            categoryRepository.deleteCategory(selectedCategoryId);
+            categoryAdapter.removeItem(selectedCategoryId);
+
+            dialog.dismiss();
+
+            if (categoryAdapter.getCount() == 0) {
+                changeToDefault();
+                moveToNewCategoryActivity();
+            }
+
+        }
+    };
+
     private void showDeleteAlertDialog(String categoryName) {
         String message;
         if (categoryAdapter.getCount() == 1) {
@@ -311,32 +297,11 @@ public class CategoryMenuActivity extends AbstractActivity
         return false;
     }
 
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-        Uri webpage = Uri.parse(VOC_WEB_URL);
 
-        if (id == R.id.privacy) {
-            webpage = Uri.parse(PRIVACY_POLICY);
-        } else if (id == R.id.usages) {
-            webpage = Uri.parse(TERMS_OF_SERVICE);
-        } else if (id == R.id.oss) {
-            webpage = Uri.parse(OSS_LICENSE);
-        } else if (id == R.id.voc) {
-            webpage = Uri.parse(VOC_WEB_URL);
-        }
+    private void syncWithServer(){
+        List<CardModel> singleCardAllList = cardRepository.getSingleCardAllList();
+        List<CategoryModel> categoryAllList = categoryRepository.getCategoryAllList();
 
-        Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivity(intent);
-        }
-
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
+        firebaseSynchronizer.uploadDataToFirebase(categoryAllList ,singleCardAllList);
     }
-
-
 }
