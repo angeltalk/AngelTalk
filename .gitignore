@@ -1,12 +1,10 @@
-*.apk
-*.ap_
-*.dex
-*.class
 bin/
 gen/
 
 .gradle/
 build/
+captures/
+
 
 local.properties
 
