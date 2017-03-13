@@ -16,7 +16,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import act.sds.samsung.angelman.AngelmanApplication;
 import act.sds.samsung.angelman.R;
@@ -32,7 +32,7 @@ import static act.sds.samsung.angelman.presentation.util.ResourceMapper.IconStat
 public class CategoryAdapter extends BaseAdapter {
 
     private static CategoryModel newCategoryModel = null;
-    private ArrayList<CategoryModel> categoryList;
+    private List<CategoryModel> categoryList;
     private Context context;
     private CategoryMenuActivity.CategoryMenuStatus categoryMenuStatus;
 
@@ -40,13 +40,13 @@ public class CategoryAdapter extends BaseAdapter {
 
     private boolean isMotherMode = false;
 
-    public CategoryAdapter(Context context, ArrayList<CategoryModel> categoryList) {
+    public CategoryAdapter(Context context, List<CategoryModel> categoryList) {
         this.context = context;
         this.categoryList = categoryList;
         categoryMenuStatus = CategoryMenuActivity.CategoryMenuStatus.NONE;
     }
 
-    public CategoryAdapter(Context context, ArrayList<CategoryModel> categoryList, boolean isMotherMode) {
+    public CategoryAdapter(Context context, List<CategoryModel> categoryList, boolean isMotherMode) {
         this.context = context;
         this.categoryList = categoryList;
         categoryMenuStatus = CategoryMenuActivity.CategoryMenuStatus.CATEGORY_DEFAULT;
@@ -198,7 +198,7 @@ public class CategoryAdapter extends BaseAdapter {
         return categoryMenuStatus;
     }
 
-    public void setCategoryList(ArrayList<CategoryModel> categoryList) {
+    public void setCategoryList(List<CategoryModel> categoryList) {
         this.categoryList = categoryList;
         this.notifyDataSetChanged();
     }

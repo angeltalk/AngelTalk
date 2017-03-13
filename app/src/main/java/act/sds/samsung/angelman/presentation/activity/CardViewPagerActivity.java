@@ -85,7 +85,7 @@ public class CardViewPagerActivity extends AbstractActivity {
         selectedCategoryModel = ((AngelmanApplication) getApplicationContext()).getCategoryModel();
 
         allCardListInSelectedCategory = cardRepository.getSingleCardListWithCategoryId(selectedCategoryModel.index);
-        titleLayout.refreshCategoryItemCount(0, allCardListInSelectedCategory.size() + 1);
+        titleLayout.refreshCardCountText(0, allCardListInSelectedCategory.size() + 1);
 
         deleteButton = (ImageButton) findViewById(R.id.card_delete_button);
         deleteButton.setOnClickListener(onClickListener);
@@ -102,7 +102,7 @@ public class CardViewPagerActivity extends AbstractActivity {
         TextView categoryTitle = (TextView) findViewById(R.id.category_item_title);
         categoryTitle.setText(selectedCategoryModel.title);
 
-        titleLayout.refreshCategoryItemCount(0, allCardListInSelectedCategory.size());
+        titleLayout.refreshCardCountText(0, allCardListInSelectedCategory.size());
         deleteButton.setOnClickListener(onClickListener);
 
         if (intent.getBooleanExtra(INTENT_KEY_NEW_CARD, false)) {
@@ -120,7 +120,7 @@ public class CardViewPagerActivity extends AbstractActivity {
         public void onPageSelected(int pos) {
             showOrHideDeleteButtonByIndex(pos);
             currentCardIndex = pos;
-            titleLayout.refreshCategoryItemCount(pos, mViewPager.getAdapter().getCount());
+            titleLayout.refreshCardCountText(pos, mViewPager.getAdapter().getCount());
         }
 
         @Override
@@ -140,8 +140,8 @@ public class CardViewPagerActivity extends AbstractActivity {
 
     private void deleteCard() {
         final CardView card = (CardView) adapter.viewCollection.get(mViewPager.getCurrentItem());
-        String cardTitle = card.getCardTitleTextView().getText().toString();
-        final int cardIndex = card.getDataModel().cardIndex;
+        String cardTitle = card.cardTitle.getText().toString();
+        final int cardIndex = card.dataModel.cardIndex;
         String message = getResources().getString(R.string.delete_alert_message, cardTitle);
 
         View.OnClickListener positiveListener = new View.OnClickListener() {
@@ -156,7 +156,7 @@ public class CardViewPagerActivity extends AbstractActivity {
                     mViewPager.setAdapter(adapter);
                     mViewPager.setCurrentItem(currentItem);
                     showOrHideDeleteButtonByIndex(currentItem);
-                    titleLayout.refreshCategoryItemCount(mViewPager.getCurrentItem(), adapter.getCount());
+                    titleLayout.refreshCardCountText(mViewPager.getCurrentItem(), adapter.getCount());
                 }
                 dialog.dismiss();
             }

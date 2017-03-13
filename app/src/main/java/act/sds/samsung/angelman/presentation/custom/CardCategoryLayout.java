@@ -13,7 +13,7 @@ import act.sds.samsung.angelman.AngelmanApplication;
 import act.sds.samsung.angelman.R;
 import act.sds.samsung.angelman.presentation.activity.CameraGallerySelectionActivity;
 
-public class CardCategoryTitleRelativeLayout extends RelativeLayout {
+public class CardCategoryLayout extends RelativeLayout {
     private TextView addCardText;
     private TextView cardCount;
 
@@ -35,12 +35,12 @@ public class CardCategoryTitleRelativeLayout extends RelativeLayout {
         }
     };
 
-    public CardCategoryTitleRelativeLayout(Context context) {
+    public CardCategoryLayout(Context context) {
         super(context);
         initUI();
     }
 
-    public CardCategoryTitleRelativeLayout(Context context, AttributeSet attrs) {
+    public CardCategoryLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
         initUI();
     }
@@ -63,7 +63,7 @@ public class CardCategoryTitleRelativeLayout extends RelativeLayout {
         findViewById(R.id.back_button).setOnClickListener(onClickListener);
     }
 
-    public CardCategoryTitleRelativeLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+    public CardCategoryLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initUI();
     }
