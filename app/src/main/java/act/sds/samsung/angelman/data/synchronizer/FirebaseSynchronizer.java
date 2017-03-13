@@ -13,7 +13,7 @@ import act.sds.samsung.angelman.domain.model.CategoryModel;
 public class FirebaseSynchronizer {
 
 
-    private DatabaseReference categoryDatabase;
+    private DatabaseRgieference categoryDatabase;
     private DatabaseReference cardDatabase;
 
 
