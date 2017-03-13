@@ -33,7 +33,9 @@ public class OnboardingActivity extends AbstractActivity{
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(((AngelmanApplication) getApplicationContext()).isFirstLaunched()) {
+        AngelmanApplication angelmanApplication = (AngelmanApplication) getApplicationContext();
+        if(angelmanApplication.isFirstLaunched()) {
+            angelmanApplication.copyAssetImagesToImageFolder();
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
             setContentView(R.layout.activity_onboarding);

@@ -9,10 +9,12 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.AssetManager;
 import android.os.Environment;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.VisibleForTesting;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
@@ -21,6 +23,10 @@ import org.acra.ReportingInteractionMode;
 import org.acra.annotation.ReportsCrashes;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import act.sds.samsung.angelman.dagger.components.AngelmanComponent;
 import act.sds.samsung.angelman.dagger.components.DaggerAngelmanComponent;
@@ -97,13 +103,60 @@ public class AngelmanApplication extends Application {
 
         File imageFolder = new File(getImageFolder());
 
-        if (!imageFolder.exists())
+        if (!imageFolder.exists()) {
             imageFolder.mkdir();
+        }
 
         File voiceFolder = new File(getVoiceFolder());
 
         if (!voiceFolder.exists())
             voiceFolder.mkdir();
+    }
+
+    public void copyAssetImagesToImageFolder() {
+        AssetManager assetManager = getAssets();
+        String[] files = null;
+        try {
+            files = assetManager.list("images");
+        } catch (IOException e) {
+            Log.e("AngelmanApplication", "Failed to get asset file list.", e);
+        }
+        if (files != null) for (String filename : files) {
+            InputStream in = null;
+            OutputStream out = null;
+            try {
+                in = assetManager.open("images" + File.separator + filename);
+                File outFile = new File(getImageFolder(), filename);
+                out = new FileOutputStream(outFile);
+                copyFile(in, out);
+            } catch(IOException e) {
+                Log.e("AngelmanApplication", "Failed to copy asset file: " + filename, e);
+            }
+            finally {
+                if (in != null) {
+                    try {
+                        in.close();
+                    } catch (IOException e) {
+                        Log.e("AngelmanApplication", "Failed to close image input file.", e);
+                    }
+                }
+                if (out != null) {
+                    try {
+                        out.close();
+                    } catch (IOException e) {
+                        Log.e("AngelmanApplication", "Failed to close image output file.", e);
+                    }
+                }
+            }
+        }
+    }
+
+    private void copyFile(InputStream in, OutputStream out) throws IOException {
+        byte[] buffer = new byte[1024];
+        int read;
+        while((read = in.read(buffer)) != -1){
+            out.write(buffer, 0, read);
+        }
     }
 
     public int getScreenHeightPixel() {
