@@ -16,4 +16,4 @@ proguard/
 Thumbs.db
 
 .idea/
-/angeltalk-team.iml
+*.iml
