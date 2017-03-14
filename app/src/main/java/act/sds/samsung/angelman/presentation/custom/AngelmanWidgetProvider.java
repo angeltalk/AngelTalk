@@ -24,11 +24,18 @@ public class AngelmanWidgetProvider extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         RemoteViews widgetView = new RemoteViews(context.getPackageName(), R.layout.widget_angelman);
 
-        for(int appWidgetId : appWidgetIds) {
+        for (int appWidgetId : appWidgetIds) {
             Intent intent = new Intent(ACTION_BTN);
             intent.putExtra(TARGET_WIDGET_ID, appWidgetId);
             PendingIntent btnClick = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             widgetView.setOnClickPendingIntent(R.id.angelman_button, btnClick);
+
+            AngelmanApplication angelmanApplication = ((AngelmanApplication) context.getApplicationContext());
+            if (angelmanApplication.isChildMode()) {
+                angelmanApplication.setChildMode();
+            } else {
+                angelmanApplication.setNotChildMode();
+            }
 
             appWidgetManager.updateAppWidget(appWidgetId, widgetView);
         }
@@ -38,11 +45,13 @@ public class AngelmanWidgetProvider extends AppWidgetProvider {
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
-        if(action.equals(ACTION_BTN)){
-            if(((AngelmanApplication) context.getApplicationContext()).isChildMode()){
-                ((AngelmanApplication) context.getApplicationContext()).setNotChildMode();
-            }else{
-                ((AngelmanApplication) context.getApplicationContext()).setChildMode();
+        if (action.equals(ACTION_BTN)) {
+
+            AngelmanApplication angelmanApplication = ((AngelmanApplication) context.getApplicationContext());
+            if (angelmanApplication.isChildMode()) {
+                angelmanApplication.setNotChildMode();
+            } else {
+                angelmanApplication.setChildMode();
             }
         }
         super.onReceive(context, intent);

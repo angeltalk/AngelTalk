@@ -220,7 +220,7 @@ public class AngelmanApplication extends Application {
         childModeManager.createAndAddCategoryMenu();
     }
 
-    private void updateWidgetView(@DrawableRes int drawable) {
+    public void updateWidgetView(@DrawableRes int drawable) {
         RemoteViews views = new RemoteViews(getApplicationContext().getPackageName(), R.layout.widget_angelman);
         views.setImageViewResource(R.id.angelman_button, drawable);
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getApplicationContext());
