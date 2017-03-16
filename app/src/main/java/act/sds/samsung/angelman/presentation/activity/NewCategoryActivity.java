@@ -156,7 +156,7 @@ public class NewCategoryActivity extends AbstractActivity{
     public void onBackPressed() {
         ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(editCategoryTitle.getWindowToken(), 0);
         if(dataChanged) {
-            View innerView = getLayoutInflater().inflate(R.layout.dialog_layout, null);
+            View innerView = getLayoutInflater().inflate(R.layout.custom_confirm_dialog, null);
             TextView alertMessage = (TextView) innerView.findViewById(R.id.alert_message);
             alertMessage.setText(getString(R.string.inform_not_saved));
 

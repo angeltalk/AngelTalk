@@ -32,7 +32,6 @@ import act.sds.samsung.angelman.dagger.components.AngelmanComponent;
 import act.sds.samsung.angelman.dagger.components.DaggerAngelmanComponent;
 import act.sds.samsung.angelman.dagger.modules.AngelmanModule;
 import act.sds.samsung.angelman.domain.model.CategoryModel;
-import act.sds.samsung.angelman.presentation.activity.CategoryMenuActivity;
 import act.sds.samsung.angelman.presentation.custom.AngelmanWidgetProvider;
 import act.sds.samsung.angelman.presentation.custom.ChildModeManager;
 import act.sds.samsung.angelman.presentation.service.ScreenService;
@@ -200,7 +199,7 @@ public class AngelmanApplication extends Application {
         edit.putBoolean(CHILD_MODE, false);
         ActivityManager manager = (ActivityManager) getApplicationContext().getSystemService(Activity.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (service.service.getClassName().contains(CategoryMenuActivity.SCREEN_SERVICE_NAME)) {
+            if (service.service.getClassName().contains(ScreenService.class.getCanonicalName())) {
                 Intent stop = new Intent();
                 stop.setComponent(service.service);
                 stopService(stop);

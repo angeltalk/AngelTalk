@@ -45,14 +45,17 @@ public class OnboardingActivity extends AbstractActivity {
     @BindView(R.id.onboaring_angelee)
     public ImageView onboardingAngeleeImageView;
 
+    private AngelmanApplication angelmanApplication;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        AngelmanApplication angelmanApplication = (AngelmanApplication) getApplicationContext();
+        angelmanApplication = (AngelmanApplication) getApplicationContext();
         if (angelmanApplication.isFirstLaunched()) {
             angelmanApplication.copyAssetImagesToImageFolder();
             showOnboardingView();
+            angelmanApplication.setNotFirstLaunched();
         } else {
             moveToCategoryMenuActivity();
         }
@@ -60,6 +63,7 @@ public class OnboardingActivity extends AbstractActivity {
 
     @OnClick(R.id.onboarding_finish)
     public void onClickOnboardingFinish(View v) {
+        angelmanApplication.setChildMode();
         moveToCategoryMenuActivity();
     }
 
