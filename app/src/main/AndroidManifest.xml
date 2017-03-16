@@ -73,6 +73,8 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_provider"/>
         </receiver>
-    </application>
 
+         <receiver android:name=".presentation.activity.CategoryMenuActivity$widgetButtonListner"/> 
+
+    </application>
 </manifest>

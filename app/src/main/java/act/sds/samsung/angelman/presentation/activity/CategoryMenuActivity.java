@@ -1,9 +1,13 @@
 package act.sds.samsung.angelman.presentation.activity;
 
-import android.app.Activity;
-import android.app.ActivityManager;
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -17,6 +21,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
+import android.widget.RemoteViews;
 import android.widget.TextView;
 
 import java.util.List;
@@ -38,12 +43,16 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static act.sds.samsung.angelman.AngelmanApplication.PRIVATE_PREFERENCE_NAME;
 import static act.sds.samsung.angelman.R.string.delete_category;
 
 public class CategoryMenuActivity extends AbstractActivity {
 
     public static String SCREEN_SERVICE_NAME = "act.sds.samsung.angelman.presentation.service.ScreenService";
     private static final String VOC_WEB_URL = "https://docs.google.com/forms/d/1N8sSXRWc0HHVIQSXgtcO60bj_U_3cXh7Hfl5Nlxp1OE/edit";
+
+    private static Notification notification;
+    private static NotificationManager notificationManager;
 
     @Inject
     CategoryRepository categoryRepository;
@@ -98,7 +107,7 @@ public class CategoryMenuActivity extends AbstractActivity {
         selectedCategoryId = -1;
 
         AngelmanApplication angelmanApplication = (AngelmanApplication) getApplicationContext();
-        if (angelmanApplication.isFirstLaunched() && !isServiceRunningCheck()) {
+        if (angelmanApplication.isFirstLaunched() && !angelmanApplication.isServiceRunningCheck()) {
             angelmanApplication.setNotFirstLaunched();
             angelmanApplication.setChildMode();
         }
@@ -113,6 +122,8 @@ public class CategoryMenuActivity extends AbstractActivity {
         changeToDefault();
 
         //syncWithServer();
+
+        launchWidgetButton();
     }
 
     @Override
@@ -287,21 +298,61 @@ public class CategoryMenuActivity extends AbstractActivity {
         dialog.show();
     }
 
-    public boolean isServiceRunningCheck() {
-        ActivityManager manager = (ActivityManager) this.getSystemService(Activity.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (service.service.getClassName().contains(SCREEN_SERVICE_NAME)) {
-                return true;
-            }
-        }
-        return false;
-    }
+    //XXX
+//    public boolean isServiceRunningCheck() {
+//        ActivityManager manager = (ActivityManager) this.getSystemService(Activity.ACTIVITY_SERVICE);
+//        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+//            if (service.service.getClassName().contains(SCREEN_SERVICE_NAME)) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 
 
     private void syncWithServer(){
         List<CardModel> singleCardAllList = cardRepository.getSingleCardAllList();
         List<CategoryModel> categoryAllList = categoryRepository.getCategoryAllList();
 
-        firebaseSynchronizer.uploadDataToFirebase(categoryAllList ,singleCardAllList);
+        firebaseSynchronizer.uploadDataToFirebase(categoryAllList, singleCardAllList);
+    }
+
+
+    public static class widgetButtonListner extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            SharedPreferences preferences = context.getSharedPreferences(PRIVATE_PREFERENCE_NAME, Context.MODE_PRIVATE);
+            boolean isChildMode = preferences.getBoolean("childMode",false);
+
+            AngelmanApplication.changeChildMode(context,!isChildMode);
+            RemoteViews notificationView = new RemoteViews(context.getPackageName(), isChildMode ? R.layout.layout_widget_off : R.layout.layout_widget) ;
+
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+            notificationView.setOnClickPendingIntent(R.id.btn_change_mode, pendingIntent);
+
+            notification = new Notification(R.drawable.angelee, null, System.currentTimeMillis());
+            notification.contentView = notificationView;
+            notification.flags |= Notification.FLAG_NO_CLEAR;
+            notificationManager.notify(1,notification);
+        }
+    }
+
+
+    private void launchWidgetButton () {
+
+        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        AngelmanApplication angelmanApplication = (AngelmanApplication) getApplicationContext();
+        RemoteViews notificationView = new RemoteViews(getPackageName(), angelmanApplication.isChildMode() ? R.layout.layout_widget: R.layout.layout_widget_off);
+
+        Intent switchIntent = new Intent(this, widgetButtonListner.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, switchIntent, 0);
+        notificationView.setOnClickPendingIntent(R.id.btn_change_mode, pendingIntent);
+
+        notification = new Notification(R.drawable.angelee, null, System.currentTimeMillis());
+        notification.contentView = notificationView;
+        notification.flags |= Notification.FLAG_NO_CLEAR;
+        notificationManager.notify(1, notification);
     }
 }
