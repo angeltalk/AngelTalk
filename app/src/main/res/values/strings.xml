@@ -44,4 +44,5 @@
     <string name="noti_usages">이용 약관</string>
     <string name="noti_oss">오픈소스 라이선스 고지</string>
     <string name="noti_voc">의견 보내기</string>
+    <string name="voc_web_url">https://docs.google.com/forms/d/1N8sSXRWc0HHVIQSXgtcO60bj_U_3cXh7Hfl5Nlxp1OE/edit</string>
 </resources>

@@ -47,8 +47,5 @@ public class ImageUtilTest {
 
         File file = new File(fileName);
         assertThat(file.exists()).isTrue();
-
     }
-
-
 }

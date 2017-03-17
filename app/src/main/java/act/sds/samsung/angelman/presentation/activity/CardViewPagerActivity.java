@@ -169,7 +169,7 @@ public class CardViewPagerActivity extends AbstractActivity {
             }
         };
 
-        View innerView = getLayoutInflater().inflate(R.layout.dialog_layout, null);
+        View innerView = getLayoutInflater().inflate(R.layout.custom_confirm_dialog, null);
         TextView alertMessage = (TextView) innerView.findViewById(R.id.alert_message);
         alertMessage.setText(message);
 

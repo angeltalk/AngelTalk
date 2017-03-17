@@ -3,7 +3,6 @@ package act.sds.samsung.angelman.presentation.util;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
-import android.util.Log;
 import android.view.View;
 
 import java.io.File;
@@ -81,14 +80,4 @@ public class ImageUtil {
         return Bitmap.createBitmap(
                 drawingCache, 0, 0, width, height, matrix, false);
     }
-
-    public void removeFile(String path){
-        try {
-            File file = new File(path);
-            file.delete();
-        }catch (NullPointerException e){
-            Log.e("Exception", "Not found file " + path);
-        }
-    }
-
 }

@@ -1,9 +1,6 @@
 package act.sds.samsung.angelman.presentation.activity;
 
 import android.content.Intent;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -12,10 +9,8 @@ import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowActivity;
-import org.robolectric.shadows.ShadowLooper;
-
+import java.util.concurrent.TimeUnit;
 import act.sds.samsung.angelman.BuildConfig;
-import act.sds.samsung.angelman.R;
 import act.sds.samsung.angelman.UITest;
 
 import static org.assertj.android.api.Assertions.assertThat;
@@ -27,60 +22,51 @@ import static org.robolectric.Shadows.shadowOf;
 public class OnboardingActivityTest extends UITest{
 
     private OnboardingActivity subject;
-    private ImageView finishButton;
 
     @Before
     public void setUp() throws Exception {
         subject = setupActivity(OnboardingActivity.class);
-
-        finishButton = (ImageView) subject.findViewById(R.id.onboarding_finish);
     }
 
     @Test
     public void whenFirstLaunched_thenShowOnBoardingPage() throws Exception {
-        assertThat(((RelativeLayout) subject.findViewById(R.id.onboarding_first_page))).isNotNull();
+        assertThat(subject.onboardingFirstPageLayout).isShown();
     }
 
     @Test
-    public void whenAfter4SecondsOnOnboardingFirstPage_thenShowNextOnBoaringPage() throws Exception {
-        advanceInSchedule();
+    public void givenFirstLaunched_whenAfter4SecondsOnOnboardingFirstPage_thenShowNextOnBoaringPage() throws Exception {
+        advance4Seconds();
 
-        RelativeLayout onboardingFirstPage = (RelativeLayout) subject.findViewById(R.id.onboarding_first_page);
-
-        assertThat(onboardingFirstPage).isGone();
+        assertThat(subject.onboardingFirstPageLayout).isGone();
     }
 
     @Test
-    public void whenFinishButtonClicked_thenShowCategoryMenu() throws Exception {
-        advanceInSchedule();
+    public void givenFirstLaunched_whenFinishButtonClicked_thenMoveToCategoryMenuActivity() throws Exception {
+        advance4Seconds();
 
-        finishButton.performClick();
+        subject.onboardingFinishButton.performClick();
 
         ShadowActivity shadowActivity = shadowOf(subject);
         Intent nextStartedActivity = shadowActivity.getNextStartedActivity();
 
-        assertThat(nextStartedActivity.getComponent().getClassName()).contains("CategoryMenuActivity");
-
+        assertThat(nextStartedActivity.getComponent().getClassName()).contains(CategoryMenuActivity.class.getCanonicalName());
     }
 
     @Test
-    public void givenOnBoardingHadFinished_whenAppIsLaunchedAgain_thenDirectlyShowCategoryMenu() throws Exception {
-        advanceInSchedule();
+    public void givenWhenNotFirstLaunched_thenDirectlyMoveToCategoryMenuActivity() throws Exception {
+        advance4Seconds();
 
-        finishButton.performClick();
+        subject.onboardingFinishButton.performClick();
 
-        subject = setupActivity(OnboardingActivity.class);
+        OnboardingActivity newSubject = setupActivity(OnboardingActivity.class);
 
-        ShadowActivity shadowActivity = shadowOf(subject);
+        ShadowActivity shadowActivity = shadowOf(newSubject);
         Intent nextStartedActivity = shadowActivity.getNextStartedActivity();
 
-        assertThat(nextStartedActivity.getComponent().getClassName()).contains("CategoryMenuActivity");
+        assertThat(nextStartedActivity.getComponent().getClassName()).contains(CategoryMenuActivity.class.getCanonicalName());
     }
 
-    private void advanceInSchedule() {
-        Robolectric.flushForegroundThreadScheduler();
-        Robolectric.flushForegroundThreadScheduler();
-        Robolectric.flushForegroundThreadScheduler();
-        Robolectric.flushForegroundThreadScheduler();
+    private void advance4Seconds() {
+        Robolectric.getForegroundThreadScheduler().advanceBy(4000, TimeUnit.MILLISECONDS);
     }
 }

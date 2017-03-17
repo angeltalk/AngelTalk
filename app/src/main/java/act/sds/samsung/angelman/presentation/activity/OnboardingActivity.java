@@ -1,6 +1,5 @@
 package act.sds.samsung.angelman.presentation.activity;
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,8 +16,12 @@ import com.rd.PageIndicatorView;
 import act.sds.samsung.angelman.AngelmanApplication;
 import act.sds.samsung.angelman.R;
 import act.sds.samsung.angelman.presentation.adapter.OnboardingImageAdapter;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnPageChange;
 
-public class OnboardingActivity extends AbstractActivity{
+public class OnboardingActivity extends AbstractActivity {
     public static int[] ONBOARDING_IMAGES = {
             R.drawable.onboarding_1,
             R.drawable.onboarding_2,
@@ -26,82 +29,83 @@ public class OnboardingActivity extends AbstractActivity{
             R.drawable.onboarding_4,
             R.drawable.onboarding_5,
     };
-    private ImageView onboardingFinishButton;
-    private PageIndicatorView onboardingIndicator;
+
+    @BindView(R.id.onboarding_view_pager)
+    public ViewPager onboardingViewPager;
+
+    @BindView(R.id.onboarding_finish)
+    public ImageView onboardingFinishButton;
+
+    @BindView(R.id.onboarding_indicator)
+    public PageIndicatorView onboardingIndicatorView;
+
+    @BindView(R.id.onboarding_first_page)
+    public RelativeLayout onboardingFirstPageLayout;
+
+    @BindView(R.id.onboaring_angelee)
+    public ImageView onboardingAngeleeImageView;
+
+    private AngelmanApplication angelmanApplication;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        AngelmanApplication angelmanApplication = (AngelmanApplication) getApplicationContext();
-        if(angelmanApplication.isFirstLaunched()) {
+        angelmanApplication = (AngelmanApplication) getApplicationContext();
+        if (angelmanApplication.isFirstLaunched()) {
             angelmanApplication.copyAssetImagesToImageFolder();
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            setContentView(R.layout.activity_onboarding);
-
-            ViewPager onboardingViewPager = (ViewPager) findViewById(R.id.onboarding_view_pager);
-
-            onboardingViewPager.setAdapter(new OnboardingImageAdapter(this));
-
-            onboardingFinishButton = (ImageView) findViewById(R.id.onboarding_finish);
-            onboardingIndicator = (PageIndicatorView) findViewById(R.id.onboarding_indicator);
-
-            ImageView firstView = (ImageView) findViewById(R.id.onboaring_angelee);
-
-            Glide.with(OnboardingActivity.this)
-                    .load(R.drawable.angelee)
-                    .asGif()
-                    .crossFade()
-                    .into(firstView);
-
-            Handler handler = new Handler();
-
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    RelativeLayout onboardingFirstPage = (RelativeLayout) findViewById(R.id.onboarding_first_page);
-                    onboardingFirstPage.setVisibility(View.GONE);
-                }
-            }, 4000);
-
-            onboardingFinishButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    moveToCategoryMenuActivity();
-                }
-            });
-
-            onboardingViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-                @Override
-                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-                }
-
-                @Override
-                public void onPageSelected(int position) {
-                    showOrHideDeleteButtonByIndex(position);
-                }
-
-                @Override
-                public void onPageScrollStateChanged(int state) {
-
-                }
-            });
-        }else{
+            showOnboardingView();
+            angelmanApplication.setNotFirstLaunched();
+        } else {
             moveToCategoryMenuActivity();
         }
     }
 
-    private void showOrHideDeleteButtonByIndex(int pos) {
-        if(pos == ONBOARDING_IMAGES.length - 1){
-            onboardingFinishButton.setVisibility(View.VISIBLE);
-            onboardingIndicator.setVisibility(View.GONE);
+    @OnClick(R.id.onboarding_finish)
+    public void onClickOnboardingFinish(View v) {
+        angelmanApplication.setChildMode();
+        moveToCategoryMenuActivity();
+    }
 
-        }else{
+    @OnPageChange(R.id.onboarding_view_pager)
+    public void onPageSelectedOnboardingViewPager(int position) {
+        if (isLastPage(position)) {
+            onboardingFinishButton.setVisibility(View.VISIBLE);
+            onboardingIndicatorView.setVisibility(View.GONE);
+
+        } else {
             onboardingFinishButton.setVisibility(View.GONE);
-            onboardingIndicator.setVisibility(View.VISIBLE);
+            onboardingIndicatorView.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void showOnboardingView() {
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        setContentView(R.layout.activity_onboarding);
+        ButterKnife.bind(this);
+        initContentView();
+
+        onboardingViewPager.setAdapter(new OnboardingImageAdapter(this));
+    }
+    private void initContentView() {
+        Glide.with(OnboardingActivity.this)
+                .load(R.drawable.angelee)
+                .asGif()
+                .crossFade()
+                .into(onboardingAngeleeImageView);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                onboardingFirstPageLayout.setVisibility(View.GONE);
+            }
+        }, 4000);
+    }
+
+    private boolean isLastPage(int position) {
+        return position == ONBOARDING_IMAGES.length - 1;
     }
 
     private void moveToCategoryMenuActivity() {
@@ -109,5 +113,4 @@ public class OnboardingActivity extends AbstractActivity{
         startActivity(intent);
         finish();
     }
-
 }
