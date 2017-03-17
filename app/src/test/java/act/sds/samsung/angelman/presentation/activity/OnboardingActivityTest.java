@@ -7,29 +7,43 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowActivity;
+
 import java.util.concurrent.TimeUnit;
+
+import javax.inject.Inject;
+
 import act.sds.samsung.angelman.BuildConfig;
+import act.sds.samsung.angelman.TestAngelmanApplication;
 import act.sds.samsung.angelman.UITest;
+import act.sds.samsung.angelman.presentation.util.ApplicationManager;
 
 import static org.assertj.android.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class)
 public class OnboardingActivityTest extends UITest{
 
+    @Inject
+    ApplicationManager applicationManager;
+
     private OnboardingActivity subject;
 
     @Before
     public void setUp() throws Exception {
+        ((TestAngelmanApplication) RuntimeEnvironment.application).getAngelmanTestComponent().inject(this);
+        when(applicationManager.isFirstLaunched()).thenReturn(true);
         subject = setupActivity(OnboardingActivity.class);
     }
 
     @Test
     public void whenFirstLaunched_thenShowOnBoardingPage() throws Exception {
+
         assertThat(subject.onboardingFirstPageLayout).isShown();
     }
 

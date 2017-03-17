@@ -2,8 +2,8 @@ package act.sds.samsung.angelman.dagger.modules;
 
 import android.content.Context;
 
-import act.sds.samsung.angelman.domain.repository.CategoryRepository;
 import act.sds.samsung.angelman.domain.repository.CardRepository;
+import act.sds.samsung.angelman.domain.repository.CategoryRepository;
 import act.sds.samsung.angelman.presentation.util.ApplicationManager;
 
 import static org.mockito.Mockito.mock;
@@ -28,5 +28,4 @@ public class AngelmanTestModule extends AngelmanModule {
     ApplicationManager providesApplicationManager() {
         return mock(ApplicationManager.class);
     }
-
 }
