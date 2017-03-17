@@ -9,13 +9,14 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import act.sds.samsung.angelman.AngelmanApplication;
 import act.sds.samsung.angelman.R;
 import act.sds.samsung.angelman.presentation.activity.CameraGallerySelectionActivity;
 
 public class CardCategoryLayout extends RelativeLayout {
+
     private TextView addCardText;
     private TextView cardCount;
+    private String categoryModelTitle;
 
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
@@ -45,6 +46,10 @@ public class CardCategoryLayout extends RelativeLayout {
         initUI();
     }
 
+    public void setCategoryModelTitle(String categoryModelTitle) {
+        this.categoryModelTitle = categoryModelTitle;
+    }
+
     private void initUI() {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         inflater.inflate(R.layout.layout_cardcategory_title, this);
@@ -56,8 +61,9 @@ public class CardCategoryLayout extends RelativeLayout {
 
         String title = "";
 
-        if ( !isInEditMode() )
-            title = ((AngelmanApplication) getContext().getApplicationContext()).getCategoryModel().title;
+        if ( !isInEditMode() ) {
+            title = this.categoryModelTitle;
+        }
 
         ((TextView) findViewById(R.id.category_item_title)).setText(title);
         findViewById(R.id.back_button).setOnClickListener(onClickListener);

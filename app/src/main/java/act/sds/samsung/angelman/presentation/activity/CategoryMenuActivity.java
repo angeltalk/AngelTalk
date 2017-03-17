@@ -35,6 +35,7 @@ import act.sds.samsung.angelman.domain.repository.CardRepository;
 import act.sds.samsung.angelman.domain.repository.CategoryRepository;
 import act.sds.samsung.angelman.presentation.adapter.CategoryAdapter;
 import act.sds.samsung.angelman.presentation.custom.CustomConfirmDialog;
+import act.sds.samsung.angelman.presentation.util.ApplicationManager;
 import act.sds.samsung.angelman.presentation.util.FileUtil;
 import act.sds.samsung.angelman.presentation.util.ImageUtil;
 import butterknife.BindString;
@@ -56,6 +57,9 @@ public class CategoryMenuActivity extends AbstractActivity {
 
     @Inject
     FirebaseSynchronizer firebaseSynchronizer;
+
+    @Inject
+    ApplicationManager applicationManager;
 
     @BindView(R.id.category_list)
     public GridView categoryGridView;
@@ -227,7 +231,7 @@ public class CategoryMenuActivity extends AbstractActivity {
 
     private void moveToCategoryViewPagerActivity(CategoryModel categoryModel) {
         Intent intent = new Intent(getApplicationContext(), CardViewPagerActivity.class);
-        ((AngelmanApplication) getApplicationContext()).setCategoryModel(categoryModel);
+        applicationManager.setCategoryModel(categoryModel);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(CardViewPagerActivity.CATEGORY_COLOR, categoryModel.color);
         getApplicationContext().startActivity(intent);

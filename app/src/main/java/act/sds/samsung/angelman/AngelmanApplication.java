@@ -31,8 +31,6 @@ import java.io.OutputStream;
 import act.sds.samsung.angelman.dagger.components.AngelmanComponent;
 import act.sds.samsung.angelman.dagger.components.DaggerAngelmanComponent;
 import act.sds.samsung.angelman.dagger.modules.AngelmanModule;
-import act.sds.samsung.angelman.domain.model.CategoryModel;
-import act.sds.samsung.angelman.presentation.activity.CategoryMenuActivity;
 import act.sds.samsung.angelman.presentation.custom.AngelmanWidgetProvider;
 import act.sds.samsung.angelman.presentation.custom.ChildModeManager;
 import act.sds.samsung.angelman.presentation.service.ScreenService;
@@ -50,10 +48,7 @@ import act.sds.samsung.angelman.presentation.util.ImageUtil;
 public class AngelmanApplication extends Application {
 
     public static final String PRIVATE_PREFERENCE_NAME = "act.sds.samsung.angelman";
-    private static final String CATEGORY_MODEL_TITLE = "categoryModelTitle";
-    private static final String CATEGORY_MODEL_ICON = "categoryModelIcon";
-    private static final String CATEGORY_MODEL_COLOR = "categoryModelColor";
-    private static final String CATEGORY_MODEL_INDEX = "categoryModelIndex";
+
     private static final String CHILD_MODE = "childMode";
     public static final String SCREEN_SERVICE_NAME = "act.sds.samsung.angelman.presentation.service.ScreenService";
     private static final String FIRST_LAUNCH = "firstLaunch";
@@ -165,23 +160,7 @@ public class AngelmanApplication extends Application {
     }
 
 
-    public void setCategoryModel(CategoryModel categoryModel){
-        SharedPreferences.Editor edit = preferences.edit();
-        edit.putString(CATEGORY_MODEL_TITLE, categoryModel.title);
-        edit.putInt(CATEGORY_MODEL_INDEX, categoryModel.index);
-        edit.putInt(CATEGORY_MODEL_ICON, categoryModel.icon);
-        edit.putInt(CATEGORY_MODEL_COLOR, categoryModel.color);
-        edit.commit();
-    }
 
-    public CategoryModel getCategoryModel(){
-        CategoryModel categoryModel = new CategoryModel();
-        categoryModel.title = preferences.getString(CATEGORY_MODEL_TITLE, null);
-        categoryModel.index = preferences.getInt(CATEGORY_MODEL_INDEX, -1);
-        categoryModel.icon = preferences.getInt(CATEGORY_MODEL_ICON, -1);
-        categoryModel.color = preferences.getInt(CATEGORY_MODEL_COLOR, -1);
-        return categoryModel;
-    }
 
     public static void changeChildMode(Context context, boolean mode) {
 

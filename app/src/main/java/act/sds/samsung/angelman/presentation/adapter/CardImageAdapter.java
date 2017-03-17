@@ -22,10 +22,10 @@ import java.util.List;
 import act.sds.samsung.angelman.AngelmanApplication;
 import act.sds.samsung.angelman.R;
 import act.sds.samsung.angelman.domain.model.CardModel;
-import act.sds.samsung.angelman.presentation.activity.AbstractActivity;
 import act.sds.samsung.angelman.presentation.custom.AddCardView;
 import act.sds.samsung.angelman.presentation.custom.CardView;
 import act.sds.samsung.angelman.presentation.util.AngelManGlideTransform;
+import act.sds.samsung.angelman.presentation.util.ApplicationManager;
 import act.sds.samsung.angelman.presentation.util.FontUtil;
 import act.sds.samsung.angelman.presentation.util.ImageUtil;
 import act.sds.samsung.angelman.presentation.util.PlayUtil;
@@ -42,7 +42,10 @@ public class CardImageAdapter extends PagerAdapter {
     private ImageUtil imageUtil;
     private boolean isNotLongClicked;
 
-    public CardImageAdapter(Context context, List<CardModel> dataList, RequestManager glide) {
+    ApplicationManager applicationManager;
+
+
+    public CardImageAdapter(Context context, List<CardModel> dataList, RequestManager glide, ApplicationManager applicationManager) {
         this.context = context;
         this.dataList = dataList;
         this.glide = glide;
@@ -53,6 +56,7 @@ public class CardImageAdapter extends PagerAdapter {
         playUtil.initTts(context.getApplicationContext());
 
         imageUtil = ImageUtil.getInstance();
+        this.applicationManager = applicationManager;
     }
 
     public View getItemAt(int index) {
@@ -87,7 +91,7 @@ public class CardImageAdapter extends PagerAdapter {
             ImageView plusIcon = (ImageView) cardView.findViewById(R.id.plus_icon);
 
             @ResourcesUtil.BackgroundColors
-            int categoryColor = ((AbstractActivity) context).getCategoryColor();
+            int categoryColor = applicationManager.getCategoryModel().color;
 
             plusIcon.setImageResource(ResourcesUtil.getPlusIconBy(categoryColor));
             return cardView;

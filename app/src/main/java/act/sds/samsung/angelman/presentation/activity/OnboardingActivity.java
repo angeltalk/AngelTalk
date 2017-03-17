@@ -51,6 +51,8 @@ public class OnboardingActivity extends AbstractActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+
         angelmanApplication = (AngelmanApplication) getApplicationContext();
         if (angelmanApplication.isFirstLaunched()) {
             angelmanApplication.copyAssetImagesToImageFolder();

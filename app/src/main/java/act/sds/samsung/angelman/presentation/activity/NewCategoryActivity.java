@@ -32,6 +32,7 @@ import act.sds.samsung.angelman.domain.repository.CategoryRepository;
 import act.sds.samsung.angelman.presentation.adapter.NewCategoryItemAdapter;
 import act.sds.samsung.angelman.presentation.adapter.NewCategoryItemColorAdapter;
 import act.sds.samsung.angelman.presentation.adapter.NewCategoryItemIconAdapter;
+import act.sds.samsung.angelman.presentation.util.ApplicationManager;
 import act.sds.samsung.angelman.presentation.util.DialogUtil;
 import act.sds.samsung.angelman.presentation.util.FontUtil;
 
@@ -47,6 +48,10 @@ public class NewCategoryActivity extends AbstractActivity{
 
     @Inject
     CategoryRepository repository;
+
+    @Inject
+    ApplicationManager applicationManager;
+
     private TextView categoryTitleTextView;
     private EditText editCategoryTitle;
     private Button saveButton;
@@ -231,7 +236,7 @@ public class NewCategoryActivity extends AbstractActivity{
 
     private void moveToNextActivity(CategoryModel categoryModel) {
         Intent intent = new Intent(getApplicationContext(), CardViewPagerActivity.class);
-        ((AngelmanApplication) getApplicationContext()).setCategoryModel(categoryModel);
+        applicationManager.setCategoryModel(categoryModel);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(CardViewPagerActivity.CATEGORY_COLOR, categoryModel.color);
         getApplicationContext().startActivity(intent);

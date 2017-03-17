@@ -31,6 +31,7 @@ import act.sds.samsung.angelman.domain.repository.CardRepository;
 import act.sds.samsung.angelman.presentation.custom.CardView;
 import act.sds.samsung.angelman.presentation.custom.FontTextView;
 import act.sds.samsung.angelman.presentation.util.AngelManGlideTransform;
+import act.sds.samsung.angelman.presentation.util.ApplicationManager;
 import act.sds.samsung.angelman.presentation.util.FontUtil;
 import act.sds.samsung.angelman.presentation.util.ImageUtil;
 import act.sds.samsung.angelman.presentation.util.PlayUtil;
@@ -68,6 +69,9 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
     @Inject
     CardRepository cardRepository;
 
+    @Inject
+    ApplicationManager applicationManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,12 +79,16 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
 
         ((AngelmanApplication) getApplication()).getAngelmanComponent().inject(this);
 
-        setCategoryBackground(R.id.show_card_layout);
+        applicationManager.setCategoryBackground(
+                this,
+                findViewById(R.id.show_card_layout),
+                applicationManager.getCategoryModelColor()
+        );
 
         imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
         Intent intent = getIntent();
-        selectedCategoryId = ((AngelmanApplication) getApplicationContext()).getCategoryModel().index;
+        selectedCategoryId = applicationManager.getCategoryModel().index;
 
         playUtil = PlayUtil.getInstance();
         imagePath = intent.getStringExtra(ImageUtil.IMAGE_PATH);

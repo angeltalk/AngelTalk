@@ -10,10 +10,13 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
-import act.sds.samsung.angelman.AngelmanApplication;
+import javax.inject.Inject;
+
 import act.sds.samsung.angelman.BuildConfig;
+import act.sds.samsung.angelman.TestAngelmanApplication;
 import act.sds.samsung.angelman.domain.model.CategoryModel;
 import act.sds.samsung.angelman.presentation.activity.CameraGallerySelectionActivity;
+import act.sds.samsung.angelman.presentation.util.ApplicationManager;
 import act.sds.samsung.angelman.presentation.util.ResourcesUtil;
 
 import static org.mockito.Matchers.any;
@@ -21,11 +24,16 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.robolectric.Robolectric.setupActivity;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class)
 public class AngelmanDbHelperTest {
+
+    @Inject
+    ApplicationManager applicationManager;
+
     private CameraGallerySelectionActivity subject;
 
     private static final String SQL_CREATE_SINGLECARD_LIST = AngelmanDbHelper.SQL_CREATE_CARD_LIST;
@@ -33,7 +41,8 @@ public class AngelmanDbHelperTest {
 
     @Before
     public void setUp() throws Exception {
-        initialSetupCategoryModel();
+        ((TestAngelmanApplication) RuntimeEnvironment.application).getAngelmanTestComponent().inject(this);
+        when(applicationManager.getCategoryModel()).thenReturn(getSetupCategoryModel());
         subject = setupActivity(CameraGallerySelectionActivity.class);
     }
 
@@ -78,11 +87,12 @@ public class AngelmanDbHelperTest {
         verify(mockDb, atLeastOnce()).insert(anyString(), anyString(), any(ContentValues.class));
     }
 
-    private void initialSetupCategoryModel() {
+    private CategoryModel getSetupCategoryModel() {
         CategoryModel categoryModel = new CategoryModel();
         categoryModel.index = 0;
         categoryModel.title = "먹을 것";
         categoryModel.color = ResourcesUtil.RED;
-        ((AngelmanApplication) RuntimeEnvironment.application).setCategoryModel(categoryModel);
+        return categoryModel;
+
     }
 }
