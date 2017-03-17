@@ -17,6 +17,8 @@ public class ChildModeManager {
     protected TelephonyManager telephonyManager;
     protected static MyPhoneStateListener phoneListener;
 
+
+
     private CategoryMenuLayout categoryMenuLayout;
     private CardViewPagerLayout cardViewPagerLayout;
     private Context context;
@@ -83,7 +85,7 @@ public class ChildModeManager {
         }
 
         private synchronized void processByPhoneStatus(int state) {
-            if(((AngelmanApplication) context.getApplicationContext()).isChildMode()) {
+            if(context.getSharedPreferences(AngelmanApplication.PRIVATE_PREFERENCE_NAME,Context.MODE_PRIVATE).getBoolean("childMode", true)) {
                 if (state == TelephonyManager.CALL_STATE_RINGING) {
                     isCalled = true;
                     removeAllView();
@@ -122,4 +124,9 @@ public class ChildModeManager {
             WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED,
             PixelFormat.TRANSLUCENT
     );
+
+    public CategoryMenuLayout getCategoryMenuLayout() {
+        return categoryMenuLayout;
+    }
+
 }

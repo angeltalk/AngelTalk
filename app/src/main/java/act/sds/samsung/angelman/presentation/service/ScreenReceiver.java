@@ -4,16 +4,20 @@ import android.app.KeyguardManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.VisibleForTesting;
 
-import act.sds.samsung.angelman.AngelmanApplication;
+import act.sds.samsung.angelman.presentation.util.ApplicationManager;
 
 
 public class ScreenReceiver extends BroadcastReceiver {
 
     private KeyguardManager km;
     protected KeyguardManager.KeyguardLock keyLock;
+    ApplicationManager applicationManager;
 
     public void onReceive(final Context context, Intent intent) {
+
+        applicationManager = new ApplicationManager(context);
 
         if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
 
@@ -22,11 +26,16 @@ public class ScreenReceiver extends BroadcastReceiver {
             if (keyLock == null) keyLock = km.newKeyguardLock(Context.KEYGUARD_SERVICE);
 
             disableKeyguard();
-
-            ((AngelmanApplication) context.getApplicationContext()).makeChildView();
+            applicationManager.makeChildView();
         }
     }
+
     public void disableKeyguard() {
         keyLock.disableKeyguard();
+    }
+
+    @VisibleForTesting
+    public ApplicationManager getApplicationManager() {
+        return applicationManager;
     }
 }

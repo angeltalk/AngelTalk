@@ -80,7 +80,6 @@ public class CardViewPagerActivity extends AbstractActivity {
         setContentView(R.layout.activity_card_view);
 
         applicationManager.setCategoryBackground(
-                this,
                 findViewById(R.id.category_item_container),
                 applicationManager.getCategoryModelColor()
         );

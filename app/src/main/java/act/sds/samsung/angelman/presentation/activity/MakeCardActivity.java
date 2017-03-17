@@ -80,7 +80,6 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
         ((AngelmanApplication) getApplication()).getAngelmanComponent().inject(this);
 
         applicationManager.setCategoryBackground(
-                this,
                 findViewById(R.id.show_card_layout),
                 applicationManager.getCategoryModelColor()
         );

@@ -35,7 +35,6 @@ public class CameraGallerySelectionActivity extends AbstractActivity {
         setContentView(R.layout.activity_camera_gallery_selection);
 
         applicationManager.setCategoryBackground(
-                this,
                 findViewById(R.id.camera_gallery_selection_container),
                 applicationManager.getCategoryModelColor()
         );
