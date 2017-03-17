@@ -32,7 +32,6 @@ import java.util.Arrays;
 
 import javax.inject.Inject;
 
-import act.sds.samsung.angelman.AngelmanApplication;
 import act.sds.samsung.angelman.BuildConfig;
 import act.sds.samsung.angelman.R;
 import act.sds.samsung.angelman.TestAngelmanApplication;
@@ -45,6 +44,7 @@ import act.sds.samsung.angelman.presentation.custom.AddCardView;
 import act.sds.samsung.angelman.presentation.custom.CardView;
 import act.sds.samsung.angelman.presentation.custom.CardViewPager;
 import act.sds.samsung.angelman.presentation.util.AngelManGlideTransform;
+import act.sds.samsung.angelman.presentation.util.ApplicationManager;
 import act.sds.samsung.angelman.presentation.util.PlayUtil;
 import act.sds.samsung.angelman.presentation.util.ResourcesUtil;
 
@@ -65,6 +65,9 @@ public class CardViewPagerActivityTest extends UITest {
     @Inject
     CardRepository repository;
 
+    @Inject
+    ApplicationManager applicationManager;
+
     private CardViewPagerActivity subject;
     private ImageButton deleteCardButton;
     private TextView addCardText;
@@ -73,7 +76,8 @@ public class CardViewPagerActivityTest extends UITest {
     public void setUp() throws Exception {
         ((TestAngelmanApplication) RuntimeEnvironment.application).getAngelmanTestComponent().inject(this);
         when(repository.getSingleCardListWithCategoryId(anyInt())).thenReturn(getCardListWithCategoryId());
-        initialSetupCategoryModel();
+        when(applicationManager.getCategoryModel()).thenReturn(getCategoryModel());
+        when(applicationManager.getCategoryModelColor()).thenReturn(getCategoryModelColor());
         subject = setupActivity(CardViewPagerActivity.class);
         subject.mViewPager.setCurrentItem(1);
 
@@ -83,7 +87,7 @@ public class CardViewPagerActivityTest extends UITest {
 
     @Test
     public void whenLaunchedApp_thenSetBackgroundColorChangedToRelatedInCategory() throws Exception {
-        assertThat(shadowOf(subject.findViewById(R.id.category_item_container).getBackground()).getCreatedFromResId()).isEqualTo(R.drawable.background_gradient_red);
+        assertThat(applicationManager.getCategoryModelColor()).isEqualTo(R.drawable.background_gradient_red);
     }
 
     @Test
@@ -385,12 +389,16 @@ public class CardViewPagerActivityTest extends UITest {
         return shadowOf(alert);
     }
 
-    private void initialSetupCategoryModel() {
+    private CategoryModel getCategoryModel() {
         CategoryModel categoryModel = new CategoryModel();
         categoryModel.index = 0;
         categoryModel.title = "먹을 것";
         categoryModel.color = ResourcesUtil.RED;
-        ((AngelmanApplication) RuntimeEnvironment.application).setCategoryModel(categoryModel);
+        return categoryModel;
+    }
+
+    private int getCategoryModelColor() {
+        return ResourcesUtil.getCardViewLayoutBackgroundBy(getCategoryModel().color);
     }
 
 }

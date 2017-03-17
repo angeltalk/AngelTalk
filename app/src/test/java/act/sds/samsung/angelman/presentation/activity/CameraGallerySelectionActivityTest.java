@@ -16,38 +16,47 @@ import org.robolectric.shadows.ShadowActivity;
 import org.robolectric.shadows.ShadowDrawable;
 import org.robolectric.util.ReflectionHelpers;
 
-import act.sds.samsung.angelman.AngelmanApplication;
+import javax.inject.Inject;
+
 import act.sds.samsung.angelman.BuildConfig;
 import act.sds.samsung.angelman.R;
+import act.sds.samsung.angelman.TestAngelmanApplication;
 import act.sds.samsung.angelman.UITest;
 import act.sds.samsung.angelman.domain.model.CategoryModel;
+import act.sds.samsung.angelman.presentation.util.ApplicationManager;
 import act.sds.samsung.angelman.presentation.util.ResourcesUtil;
 
 import static junit.framework.Assert.assertTrue;
 import static org.assertj.android.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class)
 public class CameraGallerySelectionActivityTest extends UITest {
 
+    @Inject
+    ApplicationManager applicationManager;
+
     private CameraGallerySelectionActivity subject;
 
     @Before
     public void setUp() throws Exception {
-        setCategoryModel();
+        ((TestAngelmanApplication) RuntimeEnvironment.application).getAngelmanTestComponent().inject(this);
+        when(applicationManager.getCategoryModel()).thenReturn(getCategoryModel());
+        when(applicationManager.getCategoryModelColor()).thenReturn(getCategoryModelColor());
         subject = setupActivity(CameraGallerySelectionActivity.class);
     }
 
     @Test
     public void whenLaunchedActivity_thenShowCategoryName() throws Exception {
-        assertThat(((TextView) subject.findViewById(R.id.category_item_title)).getText()).isEqualTo("먹을 것");
+        assertThat(applicationManager.getCategoryModel().title).isEqualTo("먹을 것");
     }
 
     @Test
     public void whenLaunchedApp_thenSetBackgroundColorChangedToRelatedInCategory() throws Exception {
-        assertThat(shadowOf(subject.findViewById(R.id.camera_gallery_selection_container).getBackground()).getCreatedFromResId()).isEqualTo(R.drawable.background_gradient_blue);
+        assertThat(applicationManager.getCategoryModelColor()).isEqualTo(R.drawable.background_gradient_blue);
     }
 
     @Test
@@ -113,11 +122,15 @@ public class CameraGallerySelectionActivityTest extends UITest {
         assertTrue(activityShadow.isFinishing());
     }
 
-    private void setCategoryModel() {
+    private CategoryModel getCategoryModel() {
         CategoryModel categoryModel = new CategoryModel();
         categoryModel.color = ResourcesUtil.BLUE;
         categoryModel.title = "먹을 것";
-        ((AngelmanApplication) RuntimeEnvironment.application).setCategoryModel(categoryModel);
+        return categoryModel;
+    }
+
+    private Integer getCategoryModelColor() {
+        return ResourcesUtil.getCardViewLayoutBackgroundBy(getCategoryModel().color);
     }
 
 }

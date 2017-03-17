@@ -7,12 +7,18 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import javax.inject.Inject;
+
 import act.sds.samsung.angelman.AngelmanApplication;
 import act.sds.samsung.angelman.R;
 import act.sds.samsung.angelman.presentation.custom.CardCategoryLayout;
+import act.sds.samsung.angelman.presentation.util.ApplicationManager;
 import act.sds.samsung.angelman.presentation.util.ResourcesUtil;
 
 public class CameraGallerySelectionActivity extends AbstractActivity {
+
+    @Inject
+    ApplicationManager applicationManager;
 
     private RelativeLayout cameraCard;
     private RelativeLayout galleryCard;
@@ -24,10 +30,17 @@ public class CameraGallerySelectionActivity extends AbstractActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ((AngelmanApplication) getApplication()).getAngelmanComponent().inject(this);
+
         setContentView(R.layout.activity_camera_gallery_selection);
-        setCategoryBackground(R.id.camera_gallery_selection_container);
+
+        applicationManager.setCategoryBackground(
+                findViewById(R.id.camera_gallery_selection_container),
+                applicationManager.getCategoryModelColor()
+        );
 
         titleLayout = (CardCategoryLayout) findViewById(R.id.title_container);
+        titleLayout.setCategoryModelTitle(applicationManager.getCategoryModel().title);
         titleLayout.setCardCountVisible(View.GONE);
 
         setCameraGalleryIconColor();
@@ -42,7 +55,7 @@ public class CameraGallerySelectionActivity extends AbstractActivity {
 
     private void setCameraGalleryIconColor() {
         @ResourcesUtil.BackgroundColors
-        int color = ((AngelmanApplication) getApplicationContext()).getCategoryModel().color;
+        int color = applicationManager.getCategoryModel().color;
 
         ImageView cameraIcon = (ImageView) findViewById(R.id.camera_start_icon);
         cameraIcon.setImageDrawable(ContextCompat.getDrawable(this, ResourcesUtil.getCameraIconBy(color)));
@@ -69,7 +82,7 @@ public class CameraGallerySelectionActivity extends AbstractActivity {
         }
     };
 
-    private void startNextActivity(Class nextClass){
+    private void startNextActivity(Class nextClass) {
         Intent intent = new Intent(CameraGallerySelectionActivity.this, nextClass);
         startActivity(intent);
     }

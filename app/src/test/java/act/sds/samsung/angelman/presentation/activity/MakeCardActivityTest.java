@@ -23,7 +23,6 @@ import org.robolectric.shadows.ShadowInputMethodManager;
 
 import javax.inject.Inject;
 
-import act.sds.samsung.angelman.AngelmanApplication;
 import act.sds.samsung.angelman.BuildConfig;
 import act.sds.samsung.angelman.R;
 import act.sds.samsung.angelman.TestAngelmanApplication;
@@ -32,6 +31,7 @@ import act.sds.samsung.angelman.domain.model.CardModel;
 import act.sds.samsung.angelman.domain.model.CategoryModel;
 import act.sds.samsung.angelman.domain.repository.CardRepository;
 import act.sds.samsung.angelman.presentation.custom.CardView;
+import act.sds.samsung.angelman.presentation.util.ApplicationManager;
 import act.sds.samsung.angelman.presentation.util.ImageUtil;
 import act.sds.samsung.angelman.presentation.util.PlayUtil;
 import act.sds.samsung.angelman.presentation.util.RecordUtil;
@@ -46,6 +46,7 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.robolectric.Shadows.shadowOf;
 
 
@@ -55,6 +56,9 @@ public class MakeCardActivityTest extends UITest{
 
     @Inject
     CardRepository cardRepository;
+
+    @Inject
+    ApplicationManager applicationManager;
 
     private MakeCardActivity subject;
 
@@ -66,14 +70,17 @@ public class MakeCardActivityTest extends UITest{
 
         intent.putExtra(ImageUtil.IMAGE_PATH, "/Users/ssa009/workspace/angelman/app/src/main/assets/bus.jpg");
 
-        setCategoryModel();
+        when(applicationManager.getCategoryModel()).thenReturn(getCategoryModel());
+        when(applicationManager.getCategoryModelColor()).thenReturn(getCategoryModelColor());
 
         subject = setupActivityWithIntent(MakeCardActivity.class, intent);
     }
 
+
+
     @Test
     public void whenLaunchedApp_thenSetBackgroundColorChangedToRelatedInCategory() throws Exception {
-        assertThat(shadowOf(subject.findViewById(R.id.show_card_layout).getBackground()).getCreatedFromResId()).isEqualTo(R.drawable.background_gradient_blue);
+        assertThat(applicationManager.getCategoryModelColor()).isEqualTo(R.drawable.background_gradient_blue);
     }
 
     @Test
@@ -323,11 +330,13 @@ public class MakeCardActivityTest extends UITest{
         cardTitleEdit.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_ENTER));
     }
 
-    private void setCategoryModel() {
+    private CategoryModel getCategoryModel() {
         CategoryModel categoryModel = new CategoryModel();
         categoryModel.color =  ResourcesUtil.BLUE;
-        ((AngelmanApplication) RuntimeEnvironment.application).setCategoryModel(categoryModel);
+        return categoryModel;
     }
 
-
+    private Integer getCategoryModelColor() {
+        return ResourcesUtil.getCardViewLayoutBackgroundBy(getCategoryModel().color);
+    }
 }
