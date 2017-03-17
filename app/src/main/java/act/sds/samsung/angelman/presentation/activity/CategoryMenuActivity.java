@@ -104,7 +104,7 @@ public class CategoryMenuActivity extends AbstractActivity {
     @Override
     public void onBackPressed() {
         if (categoryAdapter.getCategoryMenuStatus() == CategoryMenuStatus.CATEGORY_DELETABLE) {
-            categoryAdapter.changeCategoryItemsStatus(CategoryMenuStatus.CATEGORY_DEFAULT);
+            changeCategoryMenuStatus(CategoryMenuStatus.CATEGORY_DEFAULT);
         } else if (easterEggPopup != null) {
             easterEggPopup.dismiss();
             easterEggPopup = null;

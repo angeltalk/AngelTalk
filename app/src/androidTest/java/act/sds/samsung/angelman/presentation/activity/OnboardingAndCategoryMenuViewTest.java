@@ -1,6 +1,7 @@
 package act.sds.samsung.angelman.presentation.activity;
 
 
+import android.content.res.Resources;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -12,7 +13,6 @@ import android.view.ViewParent;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
-import org.hamcrest.core.IsInstanceOf;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,15 +39,16 @@ public class OnboardingAndCategoryMenuViewTest {
     @Test
     public void onboardingAndCategoryMenuViewTest() throws InterruptedException {
 
-        Thread.sleep(2000);
+        Resources resources = mActivityTestRule.getActivity().getResources();
 
-        ViewInteraction appCompatImageButton = onView(
-                allOf(withId(R.id.onboarding_start),
-                        withParent(withId(R.id.onboarding_first_page)),
-                        isDisplayed()));
-        appCompatImageButton.check(matches(isDisplayed()));
-        appCompatImageButton.perform(click());
+        onView(
+                allOf(
+                        withId(R.id.onboarding_start),
+                        withParent(withId(R.id.onboarding_first_page))
+                )
+        ).check(matches(isDisplayed()));
 
+        Thread.sleep(4000);
 
         onView(allOf(withId(R.id.onboarding_view_pager)))
                 .perform(swipeLeft())
@@ -55,32 +56,40 @@ public class OnboardingAndCategoryMenuViewTest {
                 .perform(swipeLeft())
                 .perform(swipeLeft());
 
-        ViewInteraction appCompatImageView = onView(
-                allOf(withId(R.id.onboarding_finish), isDisplayed()));
-        appCompatImageView.check(matches(isDisplayed()));
-        appCompatImageView.perform(click());
+        ViewInteraction onBoardingFinishButton = onView(allOf(withId(R.id.onboarding_finish)));
+        onBoardingFinishButton.check(matches(isDisplayed()));
+        onBoardingFinishButton.perform(click());
 
-        ViewInteraction textView = onView(
-                allOf(withId(R.id.category_delete_button),
-                        withParent(withId(R.id.clock_layout)),
-                        isDisplayed()));
-        textView.check(matches(withText("삭제")));
+        ViewInteraction sendVocButton = onView(
+                allOf(
+                        withId(R.id.send_voc),
+                        withParent(withId(R.id.clock_layout))
+                )
+        );
+        sendVocButton.check(matches(isDisplayed()));
 
-        ViewInteraction imageView2 = onView(
-                allOf(withId(R.id.send_voc),
-                        withParent(withId(R.id.clock_layout)),
-                        isDisplayed()));
-        imageView2.check(matches(isDisplayed()));
+        ViewInteraction categoryDeleteButton = onView(
+                allOf(
+                        withId(R.id.category_delete_button),
+                        withParent(withId(R.id.clock_layout))
+                )
+        );
+        categoryDeleteButton.check(matches(isDisplayed()));
+        categoryDeleteButton.check(matches(withText(resources.getString(R.string.delete))));
 
-        ViewInteraction textView2 = onView(
-                allOf(withId(R.id.category_title),
+        ViewInteraction newCategoryItemView = onView(
+                allOf(
+                        withId(R.id.category_title),
                         childAtPosition(childAtPosition(childAtPosition(childAtPosition(
                                 childAtPosition(
-                                        IsInstanceOf.<View>instanceOf(android.widget.GridView.class),
+                                        withId(R.id.category_list),
                                         5),
-                                0),0),1),1),
-                        isDisplayed()));
-        textView2.check(matches(withText("새 카테고리")));
+                                0),0),1),1
+                        )
+                )
+        );
+        newCategoryItemView.check(matches(isDisplayed()));
+        newCategoryItemView.check(matches(withText(resources.getString(R.string.new_category))));
     }
 
     private static Matcher<View> childAtPosition(

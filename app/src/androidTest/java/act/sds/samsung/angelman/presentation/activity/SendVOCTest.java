@@ -1,6 +1,5 @@
 package act.sds.samsung.angelman.presentation.activity;
 
-
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -38,20 +37,30 @@ public class SendVOCTest {
     public void sendVOCTest() {
 
         ViewInteraction imageView = onView(
-                allOf(withId(R.id.send_voc),
+                allOf(
+                        withId(R.id.send_voc),
                         childAtPosition(
-                                allOf(withId(R.id.clock_layout),
+                                allOf(
+                                        withId(R.id.clock_layout),
                                         childAtPosition(
                                                 IsInstanceOf.<View>instanceOf(android.widget.RelativeLayout.class),
-                                                0)),
-                                0),
-                        isDisplayed()));
+                                                0
+                                        )
+                                ),
+                                0
+                        ),
+                        isDisplayed()
+                )
+        );
         imageView.check(matches(isDisplayed()));
 
         ViewInteraction appCompatImageView2 = onView(
-                allOf(withId(R.id.send_voc),
+                allOf(
+                        withId(R.id.send_voc),
                         withParent(withId(R.id.clock_layout)),
-                        isDisplayed()));
+                        isDisplayed()
+                )
+        );
         appCompatImageView2.perform(click());
 
     }
