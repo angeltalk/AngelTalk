@@ -32,6 +32,7 @@ import act.sds.samsung.angelman.dagger.components.AngelmanComponent;
 import act.sds.samsung.angelman.dagger.components.DaggerAngelmanComponent;
 import act.sds.samsung.angelman.dagger.modules.AngelmanModule;
 import act.sds.samsung.angelman.domain.model.CategoryModel;
+import act.sds.samsung.angelman.presentation.activity.CategoryMenuActivity;
 import act.sds.samsung.angelman.presentation.custom.AngelmanWidgetProvider;
 import act.sds.samsung.angelman.presentation.custom.ChildModeManager;
 import act.sds.samsung.angelman.presentation.service.ScreenService;
@@ -182,6 +183,38 @@ public class AngelmanApplication extends Application {
         return categoryModel;
     }
 
+    public static void changeChildMode(Context context, boolean mode) {
+
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PRIVATE_PREFERENCE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = sharedPreferences.edit();
+
+        if (mode) {
+            /* Set Child Mode */
+            edit.putBoolean(CHILD_MODE, true);
+            if (!isServiceRunningCheck(context)) {
+                Intent screenService = new Intent(context, ScreenService.class);
+                context.startService(screenService);
+            }
+            edit.commit();
+            Toast.makeText(context, R.string.inform_show_child_mode, Toast.LENGTH_LONG).show();
+
+        } else {
+            /* Set NOT Child Mode */
+            edit.putBoolean(CHILD_MODE, false);
+            ActivityManager manager = (ActivityManager) context.getSystemService(Activity.ACTIVITY_SERVICE);
+            for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+                if (service.service.getClassName().contains(SCREEN_SERVICE_NAME)) {
+                    Intent stop = new Intent();
+                    stop.setComponent(service.service);
+                    context.stopService(stop);
+                }
+            }
+            edit.commit();
+            Toast.makeText(context, R.string.inform_hide_child_mode, Toast.LENGTH_LONG).show();
+        }
+    }
+
+
     public void setChildMode(){
         SharedPreferences.Editor edit = preferences.edit();
         edit.putBoolean(CHILD_MODE, true);
@@ -248,8 +281,12 @@ public class AngelmanApplication extends Application {
         return preferences.getBoolean(FIRST_LAUNCH, true);
     }
 
-    private boolean isServiceRunningCheck() {
-        ActivityManager manager = (ActivityManager) this.getSystemService(Activity.ACTIVITY_SERVICE);
+    public boolean isServiceRunningCheck() {
+        return isServiceRunningCheck(this);
+    }
+
+    public static boolean isServiceRunningCheck(Context context) {
+        ActivityManager manager = (ActivityManager) context.getSystemService(Activity.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
             if (service.service.getClassName().contains(SCREEN_SERVICE_NAME)) {
                 return true;

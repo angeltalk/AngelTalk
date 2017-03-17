@@ -1,6 +1,12 @@
 package act.sds.samsung.angelman.presentation.activity;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
+import android.widget.RemoteViews;
 import android.widget.TextView;
 
 import java.util.List;
@@ -36,6 +43,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTouch;
 
+import static act.sds.samsung.angelman.AngelmanApplication.PRIVATE_PREFERENCE_NAME;
 import static act.sds.samsung.angelman.R.string.delete_category;
 
 public class CategoryMenuActivity extends AbstractActivity {
@@ -77,6 +85,9 @@ public class CategoryMenuActivity extends AbstractActivity {
     private PopupWindow easterEggPopup;
     private GestureDetector logoGestureDetector;
 
+    private static NotificationManager notificationManager;
+    private static Notification notification;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,7 +97,7 @@ public class CategoryMenuActivity extends AbstractActivity {
 
         initEasterEggPopup();
         initCategoryGridView();
-
+        launchWidgetButton();
         //syncWithServer();
     }
 
@@ -113,7 +124,7 @@ public class CategoryMenuActivity extends AbstractActivity {
 
     @OnClick(R.id.category_delete_button)
     public void onClickCategoryDeleteButton(View v) {
-        if(categoryAdapter.getCategoryMenuStatus().equals(CategoryMenuStatus.CATEGORY_DEFAULT)) {
+        if (categoryAdapter.getCategoryMenuStatus().equals(CategoryMenuStatus.CATEGORY_DEFAULT)) {
             changeCategoryMenuStatus(CategoryMenuStatus.CATEGORY_DELETABLE);
         } else {
             changeCategoryMenuStatus(CategoryMenuStatus.CATEGORY_DEFAULT);
@@ -254,10 +265,48 @@ public class CategoryMenuActivity extends AbstractActivity {
         }
     };
 
-    private void syncWithServer(){
+    private void syncWithServer() {
         List<CardModel> singleCardAllList = cardRepository.getSingleCardAllList();
         List<CategoryModel> categoryAllList = categoryRepository.getCategoryAllList();
 
-        firebaseSynchronizer.uploadDataToFirebase(categoryAllList ,singleCardAllList);
+        firebaseSynchronizer.uploadDataToFirebase(categoryAllList, singleCardAllList);
+    }
+
+
+    public static class widgetButtonListner extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            SharedPreferences preferences = context.getSharedPreferences(PRIVATE_PREFERENCE_NAME, Context.MODE_PRIVATE);
+            boolean isChildMode = preferences.getBoolean("childMode", false);
+
+            AngelmanApplication.changeChildMode(context, !isChildMode);
+            RemoteViews notificationView = new RemoteViews(context.getPackageName(), isChildMode ? R.layout.layout_widget_off : R.layout.layout_widget);
+
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+            notificationView.setOnClickPendingIntent(R.id.btn_change_mode, pendingIntent);
+
+            notification = new Notification(R.drawable.angelee, null, System.currentTimeMillis());
+            notification.contentView = notificationView;
+            notification.flags |= Notification.FLAG_NO_CLEAR;
+            notificationManager.notify(1, notification);
+        }
+    }
+
+    private void launchWidgetButton() {
+
+        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        AngelmanApplication angelmanApplication = (AngelmanApplication) getApplicationContext();
+        RemoteViews notificationView = new RemoteViews(getPackageName(), angelmanApplication.isChildMode() ? R.layout.layout_widget : R.layout.layout_widget_off);
+
+        Intent switchIntent = new Intent(this, widgetButtonListner.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, switchIntent, 0);
+        notificationView.setOnClickPendingIntent(R.id.btn_change_mode, pendingIntent);
+
+        notification = new Notification(R.drawable.angelee, null, System.currentTimeMillis());
+        notification.contentView = notificationView;
+        notification.flags |= Notification.FLAG_NO_CLEAR;
+        notificationManager.notify(1, notification);
     }
 }

@@ -1,7 +1,5 @@
 package act.sds.samsung.angelman.presentation.activity;
 
-import android.app.Activity;
-import android.app.ActivityManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -12,16 +10,13 @@ import android.widget.RelativeLayout;
 import act.sds.samsung.angelman.AngelmanApplication;
 import act.sds.samsung.angelman.R;
 import act.sds.samsung.angelman.presentation.custom.CardCategoryLayout;
-import act.sds.samsung.angelman.presentation.service.ScreenService;
 import act.sds.samsung.angelman.presentation.util.ResourcesUtil;
 
 public class CameraGallerySelectionActivity extends AbstractActivity {
 
-    private Intent screenService;
     private RelativeLayout cameraCard;
     private RelativeLayout galleryCard;
 
-    public static String SCREEN_SERVICE_NAME = "ScreenService";
     private static final int SELECT_PICTURE = 1;
 
     CardCategoryLayout titleLayout;
@@ -43,10 +38,6 @@ public class CameraGallerySelectionActivity extends AbstractActivity {
         cameraCard.setOnClickListener(onClickListener);
         galleryCard.setOnClickListener(onClickListener);
 
-        screenService = new Intent(getApplicationContext(), ScreenService.class);
-        if(!isServiceRunningCheck()) {
-            startService(screenService);
-        }
     }
 
     private void setCameraGalleryIconColor() {
@@ -58,16 +49,6 @@ public class CameraGallerySelectionActivity extends AbstractActivity {
 
         ImageView galleryIcon = (ImageView) findViewById(R.id.gallery_start_icon);
         galleryIcon.setImageDrawable(ContextCompat.getDrawable(this, ResourcesUtil.getGalleryIconBy(color)));
-    }
-
-    public boolean isServiceRunningCheck() {
-        ActivityManager manager = (ActivityManager) this.getSystemService(Activity.ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (SCREEN_SERVICE_NAME.equals(service.service.getClassName())) {
-                return true;
-            }
-        }
-        return false;
     }
 
     private View.OnClickListener onClickListener = new View.OnClickListener() {

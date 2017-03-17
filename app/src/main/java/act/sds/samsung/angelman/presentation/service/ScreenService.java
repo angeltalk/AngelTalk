@@ -1,16 +1,15 @@
 package act.sds.samsung.angelman.presentation.service;
 
-import android.app.Notification;
 import android.app.Service;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.support.v4.app.NotificationCompat;
 
 public class ScreenService extends Service{
 
     private ScreenReceiver mReceiver;
+    private static final String TOGGLE_ACTION = "TOGGLE";
 
     @Nullable
     @Override
@@ -40,10 +39,6 @@ public class ScreenService extends Service{
                 }
             }
         }
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(getApplicationContext());
-
-        Notification notification = notificationBuilder.build();
-        startForeground(1, notification);
 
         return START_REDELIVER_INTENT;
     }
