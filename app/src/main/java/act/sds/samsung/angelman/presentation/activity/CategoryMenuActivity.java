@@ -48,7 +48,6 @@ import static act.sds.samsung.angelman.R.string.delete_category;
 
 public class CategoryMenuActivity extends AbstractActivity {
 
-    public static String SCREEN_SERVICE_NAME = "act.sds.samsung.angelman.presentation.service.ScreenService";
     private static final String VOC_WEB_URL = "https://docs.google.com/forms/d/1N8sSXRWc0HHVIQSXgtcO60bj_U_3cXh7Hfl5Nlxp1OE/edit";
 
     private static Notification notification;
@@ -297,18 +296,6 @@ public class CategoryMenuActivity extends AbstractActivity {
         dialog = DialogUtil.buildCustomDialog(CategoryMenuActivity.this, innerView, deleteCategoryClickListener, cancelClickListener);
         dialog.show();
     }
-
-    //XXX
-//    public boolean isServiceRunningCheck() {
-//        ActivityManager manager = (ActivityManager) this.getSystemService(Activity.ACTIVITY_SERVICE);
-//        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-//            if (service.service.getClassName().contains(SCREEN_SERVICE_NAME)) {
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
-
 
     private void syncWithServer(){
         List<CardModel> singleCardAllList = cardRepository.getSingleCardAllList();
