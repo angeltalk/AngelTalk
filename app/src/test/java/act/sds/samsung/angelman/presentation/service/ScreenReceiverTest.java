@@ -11,15 +11,11 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
-import act.sds.samsung.angelman.AngelmanApplication;
 import act.sds.samsung.angelman.BuildConfig;
 import act.sds.samsung.angelman.UITest;
 
 import static android.content.Context.KEYGUARD_SERVICE;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static org.robolectric.Shadows.shadowOf;
 
 
@@ -52,14 +48,8 @@ public class ScreenReceiverTest extends UITest{
 
     @Test
     public void whenActionScreenOffThenMakeChildView() throws Exception {
-        context = mock(AngelmanApplication.class);
-        when(context.getApplicationContext()).thenReturn(mock(AngelmanApplication.class));
-
-        subject.keyLock = mock(KeyguardManager.KeyguardLock.class);
-
         receiveTheActionScreenOff();
-
-        verify((AngelmanApplication) context.getApplicationContext()).makeChildView();
+        assertThat(subject.getApplicationManager().getChildModeManager().getCategoryMenuLayout()).isNotNull();
     }
 
     private void receiveTheActionScreenOff() {
@@ -67,5 +57,4 @@ public class ScreenReceiverTest extends UITest{
         it.setAction(Intent.ACTION_SCREEN_OFF);
         subject.onReceive(context, it);
     }
-
 }

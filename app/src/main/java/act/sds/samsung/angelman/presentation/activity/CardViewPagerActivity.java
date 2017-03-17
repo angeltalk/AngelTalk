@@ -27,6 +27,7 @@ import act.sds.samsung.angelman.presentation.custom.CardCategoryLayout;
 import act.sds.samsung.angelman.presentation.custom.CardView;
 import act.sds.samsung.angelman.presentation.custom.CardViewPager;
 import act.sds.samsung.angelman.presentation.custom.SnackBar;
+import act.sds.samsung.angelman.presentation.util.ApplicationManager;
 import act.sds.samsung.angelman.presentation.util.DialogUtil;
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 
@@ -38,6 +39,9 @@ public class CardViewPagerActivity extends AbstractActivity {
 
     @Inject
     CardRepository cardRepository;
+
+    @Inject
+    ApplicationManager applicationManager;
 
     public static String CATEGORY_COLOR = "categoryColor";
     CategoryModel selectedCategoryModel;
@@ -74,7 +78,11 @@ public class CardViewPagerActivity extends AbstractActivity {
         ((AngelmanApplication) getApplication()).getAngelmanComponent().inject(this);
 
         setContentView(R.layout.activity_card_view);
-        setCategoryBackground(R.id.category_item_container);
+
+        applicationManager.setCategoryBackground(
+                findViewById(R.id.category_item_container),
+                applicationManager.getCategoryModelColor()
+        );
 
         glide = Glide.with(this);
 
@@ -82,9 +90,10 @@ public class CardViewPagerActivity extends AbstractActivity {
 
         titleLayout = (CardCategoryLayout) findViewById(R.id.title_container);
 
-        selectedCategoryModel = ((AngelmanApplication) getApplicationContext()).getCategoryModel();
+        selectedCategoryModel = applicationManager.getCategoryModel();
 
         allCardListInSelectedCategory = cardRepository.getSingleCardListWithCategoryId(selectedCategoryModel.index);
+        titleLayout.setCategoryModelTitle(applicationManager.getCategoryModel().title);
         titleLayout.refreshCardCountText(0, allCardListInSelectedCategory.size() + 1);
 
         deleteButton = (ImageButton) findViewById(R.id.card_delete_button);
@@ -92,7 +101,7 @@ public class CardViewPagerActivity extends AbstractActivity {
 
         mViewPager = (CardViewPager) findViewById(R.id.view_pager);
 
-        adapter = new CardImageAdapter(this, allCardListInSelectedCategory, glide);
+        adapter = new CardImageAdapter(this, allCardListInSelectedCategory, glide, applicationManager);
         adapter.addNewCardViewAtFirst();
         mViewPager.setAdapter(adapter);
         OverScrollDecoratorHelper.setUpOverScroll(mViewPager);
@@ -149,9 +158,9 @@ public class CardViewPagerActivity extends AbstractActivity {
             public void onClick(View v) {
                 int currentItem = setCurrentItem();
                 if (deleteSelectedCard(cardIndex)) {
-                    List<CardModel> cardList = cardRepository.getSingleCardListWithCategoryId(((AngelmanApplication) getApplicationContext()).getCategoryModel().index);
+                    List<CardModel> cardList = cardRepository.getSingleCardListWithCategoryId((applicationManager.getCategoryModel().index));
                     mViewPager.removeAllViews();
-                    adapter = new CardImageAdapter(CardViewPagerActivity.this, cardList, glide);
+                    adapter = new CardImageAdapter(CardViewPagerActivity.this, cardList, glide, applicationManager);
                     adapter.addNewCardViewAtFirst();
                     mViewPager.setAdapter(adapter);
                     mViewPager.setCurrentItem(currentItem);

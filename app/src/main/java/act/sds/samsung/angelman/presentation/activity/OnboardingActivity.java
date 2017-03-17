@@ -13,9 +13,12 @@ import android.widget.RelativeLayout;
 import com.bumptech.glide.Glide;
 import com.rd.PageIndicatorView;
 
+import javax.inject.Inject;
+
 import act.sds.samsung.angelman.AngelmanApplication;
 import act.sds.samsung.angelman.R;
 import act.sds.samsung.angelman.presentation.adapter.OnboardingImageAdapter;
+import act.sds.samsung.angelman.presentation.util.ApplicationManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -29,6 +32,9 @@ public class OnboardingActivity extends AbstractActivity {
             R.drawable.onboarding_4,
             R.drawable.onboarding_5,
     };
+
+    @Inject
+    ApplicationManager applicationManager;
 
     @BindView(R.id.onboarding_view_pager)
     public ViewPager onboardingViewPager;
@@ -50,12 +56,13 @@ public class OnboardingActivity extends AbstractActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ((AngelmanApplication) getApplication()).getAngelmanComponent().inject(this);
 
         angelmanApplication = (AngelmanApplication) getApplicationContext();
-        if (angelmanApplication.isFirstLaunched()) {
+        if (applicationManager.isFirstLaunched()) {
             angelmanApplication.copyAssetImagesToImageFolder();
             showOnboardingView();
-            angelmanApplication.setNotFirstLaunched();
+            applicationManager.setNotFirstLaunched();
         } else {
             moveToCategoryMenuActivity();
         }
@@ -63,7 +70,7 @@ public class OnboardingActivity extends AbstractActivity {
 
     @OnClick(R.id.onboarding_finish)
     public void onClickOnboardingFinish(View v) {
-        angelmanApplication.setChildMode();
+        applicationManager.setChildMode();
         moveToCategoryMenuActivity();
     }
 
