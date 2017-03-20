@@ -28,14 +28,6 @@ allprojects {
         maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
         maven { url "https://jitpack.io" }
     }
-
-    apply plugin: 'jacoco'
-
-    jacoco {
-        toolVersion = "0.7.6.201602180812"
-        reportsDir = file("$buildDir/jacoco/report")
-    }
-
 }
 
 task clean(type: Delete) {

@@ -8,6 +8,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextClock;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RuntimeEnvironment;
@@ -41,6 +42,7 @@ import static org.robolectric.Shadows.shadowOf;
 @RunWith(AngelmanTestRunner.WithKorean.class)
 //@RunWith(RobolectricGradleTestRunner.class)
 @Config(constants = BuildConfig.class)
+@Ignore
 public class CategoryMenuLayoutTest extends UITest {
 
     @Inject
