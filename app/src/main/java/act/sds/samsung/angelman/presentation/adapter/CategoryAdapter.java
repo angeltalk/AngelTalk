@@ -18,7 +18,6 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import act.sds.samsung.angelman.AngelmanApplication;
 import act.sds.samsung.angelman.R;
 import act.sds.samsung.angelman.domain.model.CategoryModel;
 import act.sds.samsung.angelman.presentation.activity.CategoryMenuActivity;
@@ -204,14 +203,14 @@ public class CategoryAdapter extends BaseAdapter {
     }
 
     private int getCardViewHeightSize() {
-        int dmH = ((AngelmanApplication) context.getApplicationContext()).getScreenHeightPixel();
-
+        int dmH = context.getResources().getDisplayMetrics().heightPixels;
         if (dmH > 2000)
             return 600;
-        else if(dmH < 1300){
+        else if (dmH < 1300) {
             return 300;
+        } else {
+            return 440;
         }
-        return 440;
     }
 
     private Drawable getResourceDrawable(int id) {

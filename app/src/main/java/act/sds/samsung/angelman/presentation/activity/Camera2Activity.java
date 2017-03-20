@@ -400,7 +400,7 @@ public class Camera2Activity extends AbstractActivity implements View.OnClickLis
 
         imageUtil = ImageUtil.getInstance();
 
-        fileName = imageUtil.getImagePath(Camera2Activity.this);
+        fileName = imageUtil.getImagePath();
         playUtil = PlayUtil.getInstance();
     }
 

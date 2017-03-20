@@ -1,13 +1,10 @@
 package act.sds.samsung.angelman.presentation.util;
 
-import android.content.Context;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Handler;
 
 import java.io.File;
-
-import act.sds.samsung.angelman.AngelmanApplication;
 
 public class RecordUtil {
 
@@ -34,8 +31,8 @@ public class RecordUtil {
     private MediaPlayer mediaPlayer;
     private MediaRecorder mediaRecorder;
 
-    public static String getMediaFilePath(Context context){
-        return ((AngelmanApplication)context.getApplicationContext()).getVoiceFolder() + File.separator + DateUtil.getDateNow() +".3gdp";
+    public static String getMediaFilePath(){
+        return FileUtil.getVoiceFolder() + File.separator + DateUtil.getDateNow() +".3gdp";
     }
 
     public void stopRecord() {

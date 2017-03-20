@@ -12,7 +12,7 @@ import android.widget.RemoteViews;
 import act.sds.samsung.angelman.R;
 import act.sds.samsung.angelman.presentation.util.ApplicationManager;
 
-import static act.sds.samsung.angelman.AngelmanApplication.PRIVATE_PREFERENCE_NAME;
+import static act.sds.samsung.angelman.presentation.util.ApplicationManager.PRIVATE_PREFERENCE_NAME;
 
 public class WidgetButtonListener extends BroadcastReceiver {
 

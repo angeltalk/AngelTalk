@@ -262,7 +262,7 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
     }
 
     private void startVoiceRecording() {
-        voiceFile = RecordUtil.getMediaFilePath(this);
+        voiceFile = RecordUtil.getMediaFilePath();
 
         waitCount.setText(R.string.talk_now);
         waitCount.setFontType(FontUtil.FONT_REGULAR);

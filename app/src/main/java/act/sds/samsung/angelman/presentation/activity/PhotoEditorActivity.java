@@ -85,7 +85,7 @@ public class PhotoEditorActivity extends AbstractActivity {
     }
 
     public String saveEditedImage() {
-        String fileName = imageUtil.getImagePath(PhotoEditorActivity.this);
+        String fileName = imageUtil.getImagePath();
         imageUtil.saveImage(getWindow().getDecorView(), fileName);
         return fileName;
     }
