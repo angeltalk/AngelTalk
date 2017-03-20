@@ -1,6 +1,5 @@
 package act.sds.samsung.angelman.presentation.util;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.view.View;
@@ -8,8 +7,6 @@ import android.view.View;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
-import act.sds.samsung.angelman.AngelmanApplication;
 
 public class ImageUtil {
 
@@ -26,8 +23,8 @@ public class ImageUtil {
         return instance;
     }
 
-    public String getImagePath(Context context){
-        return ((AngelmanApplication)context.getApplicationContext()).getImageFolder() + File.separator + DateUtil.getDateNow() +".jpg";
+    public String getImagePath(){
+        return FileUtil.getImageFolder() + File.separator + DateUtil.getDateNow() +".jpg";
     }
 
     public String makeImagePathForAsset(String imgFileName){

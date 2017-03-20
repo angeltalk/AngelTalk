@@ -6,18 +6,16 @@ import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.view.WindowManager;
 
-import act.sds.samsung.angelman.AngelmanApplication;
 import act.sds.samsung.angelman.domain.model.CategoryModel;
 
+import static act.sds.samsung.angelman.presentation.util.ApplicationManager.PRIVATE_PREFERENCE_NAME;
 import static android.content.Context.WINDOW_SERVICE;
 
 public class ChildModeManager {
     private WindowManager mWindowManager;
 
-    protected TelephonyManager telephonyManager;
-    protected static MyPhoneStateListener phoneListener;
-
-
+    private TelephonyManager telephonyManager;
+    private static MyPhoneStateListener phoneListener;
 
     private CategoryMenuLayout categoryMenuLayout;
     private CardViewPagerLayout cardViewPagerLayout;
@@ -85,7 +83,7 @@ public class ChildModeManager {
         }
 
         private synchronized void processByPhoneStatus(int state) {
-            if(context.getSharedPreferences(AngelmanApplication.PRIVATE_PREFERENCE_NAME,Context.MODE_PRIVATE).getBoolean("childMode", true)) {
+            if(context.getSharedPreferences(PRIVATE_PREFERENCE_NAME, Context.MODE_PRIVATE).getBoolean("childMode", true)) {
                 if (state == TelephonyManager.CALL_STATE_RINGING) {
                     isCalled = true;
                     removeAllView();
@@ -119,7 +117,7 @@ public class ChildModeManager {
         }
     };
 
-    final WindowManager.LayoutParams params = new WindowManager.LayoutParams(
+    private final WindowManager.LayoutParams params = new WindowManager.LayoutParams(
             WindowManager.LayoutParams.TYPE_SYSTEM_ERROR,
             WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED,
             PixelFormat.TRANSLUCENT

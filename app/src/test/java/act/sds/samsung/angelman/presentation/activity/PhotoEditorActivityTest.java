@@ -99,7 +99,7 @@ public class PhotoEditorActivityTest extends UITest{
         imageUtilField.setAccessible(true);
         imageUtilField.set(subject, mockUtil);
 
-        when(mockUtil.getImagePath(subject)).thenReturn("test file name");
+        when(mockUtil.getImagePath()).thenReturn("test file name");
 
         subject.findViewById(R.id.photo_edit_confirm).performClick();
 

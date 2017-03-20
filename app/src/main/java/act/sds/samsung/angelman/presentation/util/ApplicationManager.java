@@ -19,11 +19,9 @@ import act.sds.samsung.angelman.presentation.custom.AngelmanWidgetProvider;
 import act.sds.samsung.angelman.presentation.custom.ChildModeManager;
 import act.sds.samsung.angelman.presentation.service.ScreenService;
 
-import static act.sds.samsung.angelman.AngelmanApplication.PRIVATE_PREFERENCE_NAME;
-import static act.sds.samsung.angelman.AngelmanApplication.SCREEN_SERVICE_NAME;
-
 public class ApplicationManager {
 
+    public static final String PRIVATE_PREFERENCE_NAME = "act.sds.samsung.angelman";
     private static final String CATEGORY_MODEL_TITLE = "categoryModelTitle";
     private static final String CATEGORY_MODEL_ICON = "categoryModelIcon";
     private static final String CATEGORY_MODEL_COLOR = "categoryModelColor";
@@ -109,7 +107,7 @@ public class ApplicationManager {
     public boolean isServiceRunningCheck() {
         ActivityManager manager = (ActivityManager) context.getSystemService(Activity.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (service.service.getClassName().contains(SCREEN_SERVICE_NAME)) {
+            if (service.service.getClassName().contains(ScreenService.class.getCanonicalName())) {
                 return true;
             }
         }
@@ -140,7 +138,7 @@ public class ApplicationManager {
             edit.putBoolean(CHILD_MODE, false);
             ActivityManager manager = (ActivityManager) context.getSystemService(Activity.ACTIVITY_SERVICE);
             for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-                if (service.service.getClassName().contains(SCREEN_SERVICE_NAME)) {
+                if (service.service.getClassName().contains(ScreenService.class.getCanonicalName())) {
                     Intent stop = new Intent();
                     stop.setComponent(service.service);
                     context.stopService(stop);

@@ -1,6 +1,5 @@
 package act.sds.samsung.angelman.presentation.util;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.Display;
 import android.view.View;
@@ -10,7 +9,6 @@ import android.view.WindowManager;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
 import java.io.File;
@@ -29,9 +27,8 @@ public class ImageUtilTest {
     public void givenFileNameAndBitMapExists_whenCallImageSave_thenSaveImage() throws Exception {
         ImageUtil subject = ImageUtil.getInstance();
 
-        String fileName = subject.getImagePath(RuntimeEnvironment.application);
+        String fileName = subject.getImagePath();
         Bitmap fakeBitmap = Bitmap.createBitmap(1440, 2560, Bitmap.Config.ARGB_8888);//mock(Bitmap.class);
-        Context context = RuntimeEnvironment.application.getApplicationContext();
         Window window = mock(Window.class);
         WindowManager windowManager = mock(WindowManager.class);
         Display display = mock(Display.class);

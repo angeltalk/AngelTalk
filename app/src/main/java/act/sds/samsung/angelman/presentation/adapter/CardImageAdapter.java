@@ -19,15 +19,14 @@ import com.bumptech.glide.RequestManager;
 import java.io.File;
 import java.util.List;
 
-import act.sds.samsung.angelman.AngelmanApplication;
 import act.sds.samsung.angelman.R;
 import act.sds.samsung.angelman.domain.model.CardModel;
 import act.sds.samsung.angelman.presentation.custom.AddCardView;
 import act.sds.samsung.angelman.presentation.custom.CardView;
 import act.sds.samsung.angelman.presentation.util.AngelManGlideTransform;
 import act.sds.samsung.angelman.presentation.util.ApplicationManager;
+import act.sds.samsung.angelman.presentation.util.FileUtil;
 import act.sds.samsung.angelman.presentation.util.FontUtil;
-import act.sds.samsung.angelman.presentation.util.ImageUtil;
 import act.sds.samsung.angelman.presentation.util.PlayUtil;
 import act.sds.samsung.angelman.presentation.util.ResourcesUtil;
 
@@ -39,10 +38,8 @@ public class CardImageAdapter extends PagerAdapter {
     private List<CardModel> dataList;
     public SparseArray<View> viewCollection = new SparseArray<>();
     private PlayUtil playUtil;
-    private ImageUtil imageUtil;
     private boolean isNotLongClicked;
-
-    ApplicationManager applicationManager;
+    private ApplicationManager applicationManager;
 
 
     public CardImageAdapter(Context context, List<CardModel> dataList, RequestManager glide, ApplicationManager applicationManager) {
@@ -55,7 +52,6 @@ public class CardImageAdapter extends PagerAdapter {
         playUtil = PlayUtil.getInstance();
         playUtil.initTts(context.getApplicationContext());
 
-        imageUtil = ImageUtil.getInstance();
         this.applicationManager = applicationManager;
     }
 
@@ -145,7 +141,7 @@ public class CardImageAdapter extends PagerAdapter {
         if (imagePath.contains("DCIM")) {
             file = new File(imagePath);
         } else {
-            file = new File(((AngelmanApplication)context.getApplicationContext()).getImageFolder() + File.separator + imagePath);
+            file = new File(FileUtil.getImageFolder() + File.separator + imagePath);
         }
         return file;
     }
