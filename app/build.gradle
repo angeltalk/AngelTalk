@@ -31,16 +31,16 @@ android {
         //testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
     }
-    testOptions {
-        unitTests.returnDefaultValues = true
-        unitTests.all {
-            jvmArgs '-Xmx2g', '-XX:MaxPermSize=1024m', '-XX:+HeapDumpOnOutOfMemoryError'
-            jacoco {
-                includeNoLocationClasses = true
-            }
-
-        }
-    }
+//    testOptions {
+//        unitTests.returnDefaultValues = true
+//        unitTests.all {
+//            jvmArgs '-Xmx2g', '-XX:MaxPermSize=1024m', '-XX:+HeapDumpOnOutOfMemoryError'
+//            jacoco {
+//                includeNoLocationClasses = true
+//            }
+//
+//        }
+//    }
 
     buildTypes {
         debug {
