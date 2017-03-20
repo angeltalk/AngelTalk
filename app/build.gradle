@@ -19,13 +19,11 @@ android {
         }
     }
 
-
-
     defaultConfig {
         applicationId "act.sds.samsung.angelman"
         minSdkVersion 21
         targetSdkVersion 22
-        versionCode 1
+        versionCode 8
         versionName "1.0"
         multiDexEnabled true
         //testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
