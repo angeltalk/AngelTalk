@@ -63,16 +63,16 @@
                 <action android:name="android.intent.action.PHONE_STATE" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".presentation.custom.AngelmanWidgetProvider"
-            android:label="엔젤톡">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
-                <action android:name="android.action.BUTTON_CLICK"/>
-            </intent-filter>
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/widget_provider"/>
-        </receiver>
+        <!--<receiver android:name=".presentation.custom.AngelmanWidgetProvider"-->
+            <!--android:label="엔젤톡">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>-->
+                <!--<action android:name="android.action.BUTTON_CLICK"/>-->
+            <!--</intent-filter>-->
+            <!--<meta-data-->
+                <!--android:name="android.appwidget.provider"-->
+                <!--android:resource="@xml/widget_provider"/>-->
+        <!--</receiver>-->
 
          <receiver android:name=".presentation.listener.WidgetButtonListener"/> 
 
