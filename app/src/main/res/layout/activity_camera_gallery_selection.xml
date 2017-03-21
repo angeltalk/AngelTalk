@@ -15,19 +15,18 @@
         />
 
     <android.support.percent.PercentRelativeLayout
-        app:layout_heightPercent="62.75%"
+        app:layout_heightPercent="54.75%"
         app:layout_widthPercent="78%"
         android:layout_width="284dp"
         android:layout_gravity="center"
         android:background="@drawable/rectangle_shape"
-        android:elevation="5dp"
-        android:layout_marginTop="27.8dp"
+        android:elevation="10dp"
         >
 
         <RelativeLayout
             android:id="@+id/text_instruction"
             android:layout_width="match_parent"
-            android:layout_height="100dp">
+            android:layout_height="80dp">
 
             <act.sds.samsung.angelman.presentation.custom.FontTextView
                 android:id="@+id/camera_start_text"
