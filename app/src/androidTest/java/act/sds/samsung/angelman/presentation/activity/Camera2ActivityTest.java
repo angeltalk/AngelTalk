@@ -58,7 +58,7 @@ public class Camera2ActivityTest {
         addCardView.perform(click());
 
         ViewInteraction relativeLayout = onView(
-                allOf(withId(R.id.camera_start_card), isDisplayed()));
+                allOf(withId(R.id.layout_camera), isDisplayed()));
         relativeLayout.perform(click());
 
         Thread.sleep(2000);

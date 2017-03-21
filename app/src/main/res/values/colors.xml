@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="default_border">#d7d7d7</color>
+    <color name="gray_border">#efefef</color>
     <color name="not_add_in_lockscreen">#66000000</color>
     <color name="add_in_lockscreen">#da5e61</color>
     <color name="make_category_cursor_color">#979797</color>
@@ -17,6 +18,7 @@
     <color name="black_99">#99000000</color>
     <color name="black_cc">#cc000000</color>
     <color name="black_33">#33000000</color>
+    <color name="black_00">#000000</color>
 
     <color name="background_red">#e43939</color>
     <color name="background_orange">#f69b19</color>

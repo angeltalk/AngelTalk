@@ -48,6 +48,7 @@ public class CardCategoryLayout extends RelativeLayout {
 
     public void setCategoryModelTitle(String categoryModelTitle) {
         this.categoryModelTitle = categoryModelTitle;
+        ((TextView) findViewById(R.id.category_item_title)).setText(categoryModelTitle);
     }
 
     private void initUI() {

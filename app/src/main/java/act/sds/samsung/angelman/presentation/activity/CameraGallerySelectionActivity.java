@@ -2,7 +2,9 @@ package act.sds.samsung.angelman.presentation.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -14,16 +16,26 @@ import act.sds.samsung.angelman.R;
 import act.sds.samsung.angelman.presentation.custom.CardCategoryLayout;
 import act.sds.samsung.angelman.presentation.util.ApplicationManager;
 import act.sds.samsung.angelman.presentation.util.ResourcesUtil;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class CameraGallerySelectionActivity extends AbstractActivity {
 
     @Inject
     ApplicationManager applicationManager;
 
-    private RelativeLayout cameraCard;
-    private RelativeLayout galleryCard;
+    @BindView(R.id.layout_camera)
+    public RelativeLayout cameraCard;
+
+    @BindView(R.id.layout_gallery)
+    public RelativeLayout galleryCard;
+
+    @BindView(R.id.layout_video)
+    public RelativeLayout videoCard;
 
     private static final int SELECT_PICTURE = 1;
+    static final int REQUEST_VIDEO_CAPTURE = 1;
 
     CardCategoryLayout titleLayout;
 
@@ -31,8 +43,9 @@ public class CameraGallerySelectionActivity extends AbstractActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((AngelmanApplication) getApplication()).getAngelmanComponent().inject(this);
-
         setContentView(R.layout.activity_camera_gallery_selection);
+        ButterKnife.bind(this);
+
 
         applicationManager.setCategoryBackground(
                 findViewById(R.id.camera_gallery_selection_container),
@@ -43,13 +56,9 @@ public class CameraGallerySelectionActivity extends AbstractActivity {
         titleLayout.setCategoryModelTitle(applicationManager.getCategoryModel().title);
         titleLayout.setCardCountVisible(View.GONE);
 
+
+
         setCameraGalleryIconColor();
-
-        cameraCard = (RelativeLayout) findViewById(R.id.camera_start_card);
-        galleryCard = (RelativeLayout) findViewById(R.id.gallery_start_card);
-
-        cameraCard.setOnClickListener(onClickListener);
-        galleryCard.setOnClickListener(onClickListener);
 
     }
 
@@ -57,30 +66,37 @@ public class CameraGallerySelectionActivity extends AbstractActivity {
         @ResourcesUtil.BackgroundColors
         int color = applicationManager.getCategoryModel().color;
 
-        ImageView cameraIcon = (ImageView) findViewById(R.id.camera_start_icon);
+        ImageView cameraIcon = (ImageView) findViewById(R.id.image_camera);
         cameraIcon.setImageDrawable(ContextCompat.getDrawable(this, ResourcesUtil.getCameraIconBy(color)));
 
-        ImageView galleryIcon = (ImageView) findViewById(R.id.gallery_start_icon);
+        ImageView galleryIcon = (ImageView) findViewById(R.id.image_gallery);
         galleryIcon.setImageDrawable(ContextCompat.getDrawable(this, ResourcesUtil.getGalleryIconBy(color)));
+
+        ImageView videoIcon = (ImageView) findViewById(R.id.image_video);
+        videoIcon.setImageDrawable(ContextCompat.getDrawable(this, ResourcesUtil.getVideoIconBy(color)));
     }
 
-    private View.OnClickListener onClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            switch (view.getId()) {
-                case R.id.camera_start_card:
-                    startNextActivity(Camera2Activity.class);
-                    break;
-                case R.id.gallery_start_card:
-                    Intent intent = new Intent();
-                    intent.setType("image/*");
-                    intent.setAction(Intent.ACTION_GET_CONTENT);
-                    startActivityForResult(Intent.createChooser(intent, getString(R.string.choose_picture)), SELECT_PICTURE);
-                default:
-                    break;
-            }
+    @OnClick({R.id.layout_camera})
+    public void onClickCamera(View view){
+        startNextActivity(Camera2Activity.class);
+    }
+
+    @OnClick({R.id.layout_gallery})
+    public void onClickGallery(View view){
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, getString(R.string.choose_picture)), SELECT_PICTURE);
+    }
+
+    @OnClick({R.id.layout_video})
+    public void onClickVideo(View view){
+        Log.d("#Videdo Activity : ", "Start Video Activity");
+        Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+        if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takeVideoIntent, REQUEST_VIDEO_CAPTURE);
         }
-    };
+    }
 
     private void startNextActivity(Class nextClass) {
         Intent intent = new Intent(CameraGallerySelectionActivity.this, nextClass);

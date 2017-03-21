@@ -79,7 +79,7 @@ public class MakeNewCardWithCameraTest {
         addCardView.perform(click());
 
         ViewInteraction relativeLayout2 = onView(
-                allOf(withId(R.id.camera_start_card),
+                allOf(withId(R.id.layout_camera),
                         childAtPosition(
                                 childAtPosition(
                                         IsInstanceOf.<View>instanceOf(android.widget.RelativeLayout.class),
@@ -89,9 +89,9 @@ public class MakeNewCardWithCameraTest {
         relativeLayout2.check(matches(isDisplayed()));
 
         ViewInteraction textView2 = onView(
-                allOf(withId(R.id.camera_text),
+                allOf(withId(R.id.text_take_picture),
                         childAtPosition(
-                                allOf(withId(R.id.camera_start_card),
+                                allOf(withId(R.id.layout_camera),
                                         childAtPosition(
                                                 IsInstanceOf.<View>instanceOf(android.widget.RelativeLayout.class),
                                                 0)),
@@ -100,7 +100,7 @@ public class MakeNewCardWithCameraTest {
         textView2.check(matches(withText("카메라")));
 
         ViewInteraction relativeLayout3 = onView(
-                allOf(withId(R.id.camera_start_card), isDisplayed()));
+                allOf(withId(R.id.layout_camera), isDisplayed()));
         relativeLayout3.perform(click());
 
         Thread.sleep(2000);

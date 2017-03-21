@@ -3,7 +3,6 @@ package act.sds.samsung.angelman.presentation.activity;
 import android.content.Intent;
 import android.os.Build;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.junit.Before;
@@ -61,63 +60,63 @@ public class CameraGallerySelectionActivityTest extends UITest {
 
     @Test
     public void whenCameraGallerySelectionViewLaunched_thenShowsCameraStartingCard() throws Exception {
-        RelativeLayout cameraCard = (RelativeLayout) subject.findViewById(R.id.camera_start_card);
-        ImageView cameraIcon = (ImageView) subject.findViewById(R.id.camera_start_icon);
+        ImageView cameraIcon = (ImageView) subject.findViewById(R.id.image_camera);
         TextView cameraStartText = (TextView) subject.findViewById(R.id.camera_start_text);
-        TextView cameraText = (TextView) subject.findViewById(R.id.camera_text);
-        TextView galleryText = (TextView) subject.findViewById(R.id.gallery_text);
+        TextView cameraText = (TextView) subject.findViewById(R.id.text_take_picture);
+        TextView galleryText = (TextView) subject.findViewById(R.id.text_select_gallery);
+        TextView videoText = (TextView) subject.findViewById(R.id.text_take_video);
 
-        assertThat(cameraCard).isVisible();
+        assertThat(subject.cameraCard).isVisible();
         assertThat(cameraIcon).isVisible();
-        assertThat(cameraStartText).hasText("카드에 사진을 추가해주세요");
-        assertThat(cameraText).hasText("카메라");
-        assertThat(galleryText).hasText("갤러리");
+        assertThat(cameraStartText).hasText("카드에 사진이나 영상을\n 추가해주세요");
+        assertThat(cameraText).hasText("사진 찍기");
+        assertThat(galleryText).hasText("사진 선택");
+        assertThat(videoText).hasText("동영상 촬영");
     }
 
     @Test
     public void whenCameraGallerySelectionViewLaunched_thenShowCameraAndGalleryIconRelatedCategoryColor() throws Exception {
-        ImageView cameraIcon = (ImageView) subject.findViewById(R.id.camera_start_icon);
-        ImageView galleryIcon = (ImageView) subject.findViewById(R.id.gallery_start_icon);
+        ImageView cameraIcon = (ImageView) subject.findViewById(R.id.image_camera);
+        ImageView galleryIcon = (ImageView) subject.findViewById(R.id.image_gallery);
+        ImageView videoIcon = (ImageView) subject.findViewById(R.id.image_video);
 
         ShadowDrawable shadowCameraDrawable = shadowOf(cameraIcon.getDrawable());
         ShadowDrawable shadowGalleryDrawable = shadowOf(galleryIcon.getDrawable());
+        ShadowDrawable shadowVideoDrawable = shadowOf(videoIcon.getDrawable());
 
         assertThat(shadowCameraDrawable.getCreatedFromResId()).isEqualTo(R.drawable.ic_camera_blue);
         assertThat(shadowGalleryDrawable.getCreatedFromResId()).isEqualTo(R.drawable.ic_gallery_blue);
+        assertThat(shadowVideoDrawable.getCreatedFromResId()).isEqualTo(R.drawable.ic_video_blue);
     }
 
     @Test
-    public void givenAndroidVersionAboveLollipop_whenClickedCameraCard_thenStartCameraTwoActivity() throws Exception {
+    public void whenClickedCameraCard_thenStartCameraActivity() throws Exception {
         ReflectionHelpers.setStaticField(Build.VERSION.class, "SDK_INT", 23);
         setupActivity(CameraGallerySelectionActivity.class);
-
-        RelativeLayout cameraCard = (RelativeLayout) subject.findViewById(R.id.camera_start_card);
-        cameraCard.performClick();
-
+        subject.cameraCard.performClick();
         ShadowActivity shadowMainActivity = shadowOf(subject);
         Intent nextStartedActivity = shadowMainActivity.getNextStartedActivity();
-
         assertThat(nextStartedActivity.getComponent().getClassName()).isEqualTo(Camera2Activity.class.getCanonicalName());
-
     }
 
     @Test
     public void whenClickedGalleryCard_thenStartDefaultGallery() throws Exception {
-        subject.findViewById(R.id.gallery_start_card).performClick();
-
+        subject.galleryCard.performClick();
         ShadowActivity shadowActivity = shadowOf(subject);
         ShadowActivity.IntentForResult nextIntentResult = shadowActivity.getNextStartedActivityForResult();
-
         assertThat(nextIntentResult.intent.getAction()).isEqualTo(Intent.ACTION_CHOOSER);
+    }
+
+    @Test
+    public void whenClickedVideoCard_thenStartVideoActivity() throws  Exception {
+        //TODO: Next Story
     }
 
     @Test
     public void whenClickedBackButton_thenFinishesCardViewPagerActivity() throws Exception {
         ImageView backButton = (ImageView) subject.findViewById(R.id.back_button);
-
         assertThat(backButton).isVisible();
         backButton.performClick();
-
         ShadowActivity activityShadow = shadowOf(subject);
         assertTrue(activityShadow.isFinishing());
     }
