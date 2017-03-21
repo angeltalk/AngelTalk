@@ -11,93 +11,150 @@
     <act.sds.samsung.angelman.presentation.custom.CardCategoryLayout
         android:id="@+id/title_container"
         android:layout_width="match_parent"
-        app:layout_heightPercent="18.75%"/>
+        app:layout_heightPercent="18.75%"
+        />
 
     <android.support.percent.PercentRelativeLayout
-        android:layout_width="250dp"
+        app:layout_heightPercent="62.75%"
+        app:layout_widthPercent="78%"
+        android:layout_width="284dp"
         android:layout_gravity="center"
         android:background="@drawable/rectangle_shape"
-        android:elevation="10dp"
-        app:layout_heightPercent="54.75%"
-        app:layout_widthPercent="78%">
+        android:elevation="5dp"
+        android:layout_marginTop="27.8dp"
+        >
 
-        <act.sds.samsung.angelman.presentation.custom.FontTextView
-            android:id="@+id/camera_start_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="32.3dp"
-            android:textColor="@color/black_99"
-            app:font="@string/font_medium"
-            android:textSize="15dp"
-            android:text="@string/add_picture"/>
-        <android.support.percent.PercentRelativeLayout
+        <RelativeLayout
+            android:id="@+id/text_instruction"
             android:layout_width="match_parent"
-            android:layout_centerVertical="true"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:paddingTop="15dp"
-            app:layout_heightPercent="46%">
+            android:layout_height="100dp">
 
-            <RelativeLayout
-                android:id="@+id/camera_start_card"
-                android:layout_height="match_parent"
-                android:layout_alignParentLeft="true"
-                android:gravity="center"
-                app:layout_widthPercent="50%">
-
-                <ImageView
-                    android:id="@+id/camera_start_icon"
-                    android:layout_width="30dp"
-                    android:layout_height="27dp"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="17dp"
-                    android:src="@drawable/ic_camera" />
-                <act.sds.samsung.angelman.presentation.custom.FontTextView
-                    android:id="@+id/camera_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/camera_start_icon"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="22.3dp"
-                    android:textColor="@color/black_99"
-                    app:font="@string/font_regular"
-                    android:text="@string/camera"
-                    android:textSize="16dp" />
-            </RelativeLayout>
-
-            <View
-                android:layout_width="0.5dp"
-                android:layout_height="200dp"
+            <act.sds.samsung.angelman.presentation.custom.FontTextView
+                android:id="@+id/camera_start_text"
+                android:layout_width="173.8dp"
+                android:layout_height="50dp"
                 android:layout_centerHorizontal="true"
-                android:background="@color/default_border" />
+                android:layout_centerVertical="true"
+                android:textColor="@color/black_99"
+                android:textAlignment="center"
+                app:font="@string/font_regular"
+                android:textSize="18sp"
+                android:text="@string/add_picture"/>
+        </RelativeLayout>
 
-            <RelativeLayout
-                android:id="@+id/gallery_start_card"
-                android:layout_height="match_parent"
-                android:layout_alignParentRight="true"
-                android:gravity="center"
-                app:layout_widthPercent="50%">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/text_instruction"
+            android:background="@color/gray_border" />
 
-                <ImageView
-                    android:id="@+id/gallery_start_icon"
-                    android:layout_width="30dp"
-                    android:layout_height="27dp"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="17dp"
-                    android:src="@drawable/ic_gallery"/>
-                <act.sds.samsung.angelman.presentation.custom.FontTextView
-                    android:id="@+id/gallery_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/gallery_start_icon"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="22.3dp"
-                    android:textColor="@color/black_99"
-                    app:font="@string/font_regular"
-                    android:text="@string/gallery"
-                    android:textSize="16dp" />
-            </RelativeLayout>
-        </android.support.percent.PercentRelativeLayout>
+        <RelativeLayout
+            android:id="@+id/layout_camera"
+            android:layout_width="match_parent"
+            android:layout_height="74dp"
+            android:layout_below="@id/text_instruction"
+            >
+            <ImageView
+                android:id="@+id/image_camera"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/btn_camera"
+                android:layout_marginLeft="33dp"
+                android:layout_centerVertical="true" />
+            <act.sds.samsung.angelman.presentation.custom.FontTextView
+                android:id="@+id/text_take_picture"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:textColor="@color/black_cc"
+                app:font="@string/font_regular"
+                android:textSize="18sp"
+                android:text="@string/take_picture"
+                android:layout_marginLeft="25.5dp"
+                android:layout_toRightOf="@id/image_camera"/>
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/layout_camera"
+            android:background="@color/gray_border" />
+
+        <RelativeLayout
+            android:id="@+id/layout_gallery"
+            android:layout_width="match_parent"
+            android:layout_height="74dp"
+            android:layout_below="@id/layout_camera"
+            >
+            <ImageView
+                android:id="@+id/image_gallery"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/btn_gallery"
+                android:layout_marginLeft="33dp"
+                android:layout_centerVertical="true" />
+            <act.sds.samsung.angelman.presentation.custom.FontTextView
+                android:id="@+id/text_select_gallery"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:textColor="@color/black_cc"
+                app:font="@string/font_regular"
+                android:textSize="18sp"
+                android:text="@string/select_gallery"
+                android:layout_marginLeft="25.5dp"
+                android:layout_toRightOf="@id/image_gallery"/>
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/layout_gallery"
+            android:background="@color/gray_border" />
+
+        <RelativeLayout
+            android:id="@+id/layout_video"
+            android:layout_width="match_parent"
+            android:layout_height="74dp"
+            android:layout_below="@id/layout_gallery"
+            >
+            <ImageView
+                android:id="@+id/image_video"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/btn_video"
+                android:layout_marginLeft="33dp"
+                android:layout_centerVertical="true" />
+            <act.sds.samsung.angelman.presentation.custom.FontTextView
+                android:id="@+id/text_take_video"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:textColor="@color/black_cc"
+                app:font="@string/font_regular"
+                android:textSize="18sp"
+                android:text="@string/take_video"
+                android:layout_marginLeft="25.5dp"
+                android:layout_toRightOf="@id/image_video"/>
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/layout_video"
+            android:background="@color/gray_border" />
+
     </android.support.percent.PercentRelativeLayout>
+
+
+
+
+
 </android.support.percent.PercentFrameLayout>

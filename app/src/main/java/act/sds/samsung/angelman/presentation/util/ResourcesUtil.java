@@ -118,6 +118,31 @@ public class ResourcesUtil {
         return drawable;
     }
 
+    public static int getVideoIconBy(@BackgroundColors int color) {
+        int drawable=-1;
+        switch (color){
+            case RED:
+                drawable = R.drawable.ic_video_red;
+                break;
+            case ORANGE:
+                drawable = R.drawable.ic_video_orange;
+                break;
+            case YELLOW:
+                drawable = R.drawable.ic_video_yellow;
+                break;
+            case GREEN:
+                drawable = R.drawable.ic_video_green;
+                break;
+            case BLUE:
+                drawable = R.drawable.ic_video_blue;
+                break;
+            case PURPLE:
+                drawable = R.drawable.ic_video_purple;
+                break;
+        }
+        return drawable;
+    }
+
     public static void setViewBackground(View view, @BackgroundColors int color, Context context){
         view.setBackground(
                 ResourcesCompat.getDrawable(

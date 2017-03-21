@@ -60,7 +60,7 @@ public class Camera2PerformanceTest {
             Log.d("camera2PerformanceTest", "i = " + i);
 
             ViewInteraction relativeLayout = onView(
-                    allOf(withId(R.id.camera_start_card), isDisplayed()));
+                    allOf(withId(R.id.layout_camera), isDisplayed()));
             relativeLayout.perform(click());
 
             Thread.sleep(2000);
