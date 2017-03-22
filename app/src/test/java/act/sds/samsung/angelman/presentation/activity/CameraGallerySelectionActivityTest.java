@@ -109,7 +109,12 @@ public class CameraGallerySelectionActivityTest extends UITest {
 
     @Test
     public void whenClickedVideoCard_thenStartVideoActivity() throws  Exception {
-        //TODO: Next Story
+        ReflectionHelpers.setStaticField(Build.VERSION.class, "SDK_INT", 23);
+        setupActivity(CameraGallerySelectionActivity.class);
+        subject.videoCard.performClick();
+        ShadowActivity shadowMainActivity = shadowOf(subject);
+        Intent nextStartedActivity = shadowMainActivity.getNextStartedActivity();
+        assertThat(nextStartedActivity.getComponent().getClassName()).isEqualTo(VideoActivity.class.getCanonicalName());
     }
 
     @Test
