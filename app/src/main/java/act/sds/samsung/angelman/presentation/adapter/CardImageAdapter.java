@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import act.sds.samsung.angelman.R;
 import act.sds.samsung.angelman.domain.model.CardModel;
 import act.sds.samsung.angelman.presentation.custom.AddCardView;
 import act.sds.samsung.angelman.presentation.custom.CardView;
+import act.sds.samsung.angelman.presentation.custom.VideoCardTextureView;
 import act.sds.samsung.angelman.presentation.util.AngelManGlideTransform;
 import act.sds.samsung.angelman.presentation.util.ApplicationManager;
 import act.sds.samsung.angelman.presentation.util.FileUtil;
@@ -97,16 +99,27 @@ public class CardImageAdapter extends PagerAdapter {
             cardView.cardImage.setScaleType(ImageView.ScaleType.FIT_XY);
 
             CardModel singleSectionItems = dataList.get(position);
-            String imagePath = singleSectionItems.imagePath;
+
             cardView.cardTitle.setText(singleSectionItems.name);
             cardView.cardTitle.setTypeface(FontUtil.setFont(context, FontUtil.FONT_MEDIUM));
-
-            glide.load(getImageFile(imagePath))
-                 .bitmapTransform(new AngelManGlideTransform(context, 10, 0, AngelManGlideTransform.CornerType.TOP))
-                 .override(280, 280)
-                 .into(cardView.cardImage);
-
             View cardContainer = cardView.findViewById(R.id.card_container);
+
+            if(singleSectionItems.cardType == CardModel.CardType.PHOTO_CARD) {
+                cardView.findViewById(R.id.card_image).setVisibility(View.VISIBLE);
+                cardView.findViewById(R.id.card_video).setVisibility(View.GONE);
+                String imagePath = singleSectionItems.contentPath;
+                glide.load(getImageFile(imagePath))
+                        .bitmapTransform(new AngelManGlideTransform(context, 10, 0, AngelManGlideTransform.CornerType.TOP))
+                        .override(280, 280)
+                        .into(cardView.cardImage);
+            } else if (singleSectionItems.cardType == CardModel.CardType.VIDEO_CARD) {
+                cardView.findViewById(R.id.card_image).setVisibility(View.GONE);
+                VideoCardTextureView cardVideoView = ((VideoCardTextureView) cardView.findViewById(R.id.card_video));
+                cardVideoView.setVisibility(View.VISIBLE);
+                cardVideoView.setScaleType(VideoCardTextureView.ScaleType.CENTER_CROP);
+                cardVideoView.setDataSource(FileUtil.getImageFolder() + File.separator + singleSectionItems.contentPath);
+            }
+
             cardContainer.setOnClickListener(cardContainerOnClickListener);
             cardContainer.setOnLongClickListener(cardContainerOnLongClickListener);
 
@@ -182,16 +195,25 @@ public class CardImageAdapter extends PagerAdapter {
                 Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
                 vibrator.vibrate(500);
             }
+
             AnimationSet animSet = new AnimationSet(true);
             Animation zoomOutAnimation = AnimationUtils.loadAnimation(context, R.anim.zoom_out);
             animSet.addAnimation(zoomOutAnimation);
             cardView.startAnimation(animSet);
 
-            startSpeakCardName(cardView);
+            if(cardView.dataModel.cardType == CardModel.CardType.VIDEO_CARD) {
+                VideoCardTextureView cardVideoView = ((VideoCardTextureView) cardView.findViewById(R.id.card_video));
+                if(cardVideoView != null) {
+                    cardVideoView.play();
+                }
+                startSpeakCardName(cardView, 3500);
+            } else {
+                startSpeakCardName(cardView, 500);
+            }
         }
     }
 
-    private void startSpeakCardName(final CardView cardView) {
+    private void startSpeakCardName(final CardView cardView, int delayMillis) {
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -202,6 +224,6 @@ public class CardImageAdapter extends PagerAdapter {
                     playUtil.play(cardView.dataModel.voicePath);
                 }
             }
-        }, 500);
+        }, delayMillis);
     }
 }

@@ -5,21 +5,22 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class AngelmanDbHelper extends SQLiteOpenHelper {
-    public static final int DATABASE_VERSION = 8;
+    private static final int DATABASE_VERSION = 9;
 
-    final static String DATABASE_NAME = "AngelmanDatabase";
+    private static final String DATABASE_NAME = "AngelmanDatabase";
 
-    public static final String SQL_CREATE_CARD_LIST =
+    private static final String SQL_CREATE_CARD_LIST =
             "CREATE TABLE " + CardColumns.TABLE_NAME + "(" +
                     CardColumns._ID + " INTEGER_PRIMARY_KEY," +
                     CardColumns.CATEGORY_ID + " INTEGER," +
                     CardColumns.NAME + " TEXT," +
-                    CardColumns.IMAGE_PATH + " TEXT," +
+                    CardColumns.CONTENT_PATH + " TEXT," +
                     CardColumns.VOICE_PATH + " TEXT," +
                     CardColumns.FIRST_TIME + " TEXT," +
+                    CardColumns.CARD_TYPE + " TEXT," +
                     CardColumns.CARD_INDEX + " INTEGER)";
 
-    public static final String SQL_CREATE_CATEGORY_LIST =
+    private static final String SQL_CREATE_CATEGORY_LIST =
             "CREATE TABLE " + CategoryColumns.TABLE_NAME + "(" +
                     CategoryColumns._ID + " INTEGER_PRIMARY_KEY," +
                     CategoryColumns.TITLE + " TEXT," +

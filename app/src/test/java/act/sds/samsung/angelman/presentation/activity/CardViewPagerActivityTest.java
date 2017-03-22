@@ -371,14 +371,14 @@ public class CardViewPagerActivityTest extends UITest {
 
     private ArrayList<CardModel> getCardListWithCategoryId() {
         ArrayList<CardModel> ret = new ArrayList<>();
-        addSingleCardModel(ret, "물", "water.png", "20010928_120020", 0, 0);
-        addSingleCardModel(ret, "우유", "milk.png", "20010928_120019", 0, 1);
-        addSingleCardModel(ret, "쥬스", "juice.png", "20010928_120015", 0, 2);
+        addSingleCardModel(ret, "물", "water.png", "20010928_120020", 0, 0, CardModel.CardType.PHOTO_CARD);
+        addSingleCardModel(ret, "우유", "milk.png", "20010928_120019", 0, 1, CardModel.CardType.PHOTO_CARD);
+        addSingleCardModel(ret, "쥬스", "juice.png", "20010928_120015", 0, 2, CardModel.CardType.PHOTO_CARD);
         return ret;
     }
 
-    public void addSingleCardModel(ArrayList<CardModel> list, String name, String path, String time, int categoryId, int cardIndex) {
-        CardModel model = new CardModel(name, path, time, categoryId, cardIndex);
+    public void addSingleCardModel(ArrayList<CardModel> list, String name, String path, String time, int categoryId, int cardIndex, CardModel.CardType cardType) {
+        CardModel model = new CardModel(name, path, time, categoryId, cardIndex, cardType);
         list.add(model);
     }
 

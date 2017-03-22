@@ -7,9 +7,6 @@ import java.lang.reflect.Field;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * Created by ssa009 on 9/28/16.
- */
 public class CardModelTest {
 
     @Test
@@ -35,18 +32,18 @@ public class CardModelTest {
     public void getImagePath() throws Exception {
         //Given
         CardModel cardModel = new CardModel();
-        inject(cardModel, "imagePath", "www.daum.net");
+        inject(cardModel, "contentPath", "www.daum.net");
 
         //When & Then
-        assertThat(cardModel.imagePath.equals("www.daum.net")).isTrue();
+        assertThat(cardModel.contentPath.equals("www.daum.net")).isTrue();
     }
 
     @Test
     public void setImagePath() throws Exception {
         CardModel cardModel = new CardModel();
-        cardModel.imagePath = "www.google.com";
+        cardModel.contentPath = "www.google.com";
 
-        Object objValue = getFieldValue(cardModel, "imagePath");
+        Object objValue = getFieldValue(cardModel, "contentPath");
 
         assertThat(objValue.equals("www.google.com")).isTrue();
     }
