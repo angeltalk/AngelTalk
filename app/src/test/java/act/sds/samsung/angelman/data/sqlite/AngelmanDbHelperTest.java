@@ -36,8 +36,21 @@ public class AngelmanDbHelperTest {
 
     private CameraGallerySelectionActivity subject;
 
-    private static final String SQL_CREATE_SINGLECARD_LIST = AngelmanDbHelper.SQL_CREATE_CARD_LIST;
-    private static final String SQL_CREATE_CATEGORY_LIST = AngelmanDbHelper.SQL_CREATE_CATEGORY_LIST;
+    private static final String SQL_CREATE_SINGLECARD_LIST =  "CREATE TABLE " + CardColumns.TABLE_NAME + "(" +
+            CardColumns._ID + " INTEGER_PRIMARY_KEY," +
+            CardColumns.CATEGORY_ID + " INTEGER," +
+            CardColumns.NAME + " TEXT," +
+            CardColumns.CONTENT_PATH + " TEXT," +
+            CardColumns.VOICE_PATH + " TEXT," +
+            CardColumns.FIRST_TIME + " TEXT," +
+            CardColumns.CARD_TYPE + " TEXT," +
+            CardColumns.CARD_INDEX + " INTEGER)";
+    private static final String SQL_CREATE_CATEGORY_LIST = "CREATE TABLE " + CategoryColumns.TABLE_NAME + "(" +
+            CategoryColumns._ID + " INTEGER_PRIMARY_KEY," +
+            CategoryColumns.TITLE + " TEXT," +
+            CategoryColumns.ICON + " INTEGER," +
+            CategoryColumns.COLOR + " INTEGER," +
+            CategoryColumns.INDEX + " INTEGER)";
 
     @Before
     public void setUp() throws Exception {

@@ -51,6 +51,7 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 import act.sds.samsung.angelman.R;
+import act.sds.samsung.angelman.domain.model.CardModel;
 import act.sds.samsung.angelman.presentation.custom.AutoFitTextureView;
 import act.sds.samsung.angelman.presentation.util.FontUtil;
 import act.sds.samsung.angelman.presentation.util.ImageUtil;
@@ -752,7 +753,8 @@ public class Camera2Activity extends AbstractActivity implements View.OnClickLis
                         unlockFocus();
                         mState = STATE_PICTURE_FINISHED;
                         Intent intent = new Intent(Camera2Activity.this, MakeCardActivity.class);
-                        intent.putExtra(ImageUtil.IMAGE_PATH, fileName);
+                        intent.putExtra(ImageUtil.CONTENT_PATH, fileName);
+                        intent.putExtra(ImageUtil.CARD_TYPE, CardModel.CardType.PHOTO_CARD.getValue());
                         startActivity(intent);
                         finish();
                     }

@@ -11,7 +11,8 @@ import java.io.IOException;
 public class ImageUtil {
 
     public static final String IMAGE_FOLDER = "DCIM";
-    public static String IMAGE_PATH = "image path";
+    public static String CONTENT_PATH = "content path";
+    public static String CARD_TYPE = "card type";
     private static ImageUtil instance = null;
 
     private ImageUtil() {}
@@ -23,8 +24,12 @@ public class ImageUtil {
         return instance;
     }
 
-    public String getImagePath(){
+    public String getImagePath() {
         return FileUtil.getImageFolder() + File.separator + DateUtil.getDateNow() +".jpg";
+    }
+
+    public String getVideoPath() {
+        return FileUtil.getImageFolder() + File.separator + DateUtil.getDateNow() +".mp4";
     }
 
     public String makeImagePathForAsset(String imgFileName){

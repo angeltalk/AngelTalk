@@ -11,15 +11,14 @@ import java.util.ArrayList;
 import act.sds.samsung.angelman.data.sqlite.AngelmanDbHelper;
 import act.sds.samsung.angelman.data.sqlite.CardColumns;
 import act.sds.samsung.angelman.domain.model.CardModel;
+import lombok.Cleanup;
 
 
 public class SingleCardSqliteDataStore implements  SingleCardDataStore {
 
-    private Context context;
-    protected AngelmanDbHelper dbHelper;
+    AngelmanDbHelper dbHelper;
 
     public SingleCardSqliteDataStore(@NonNull Context context) {
-        this.context = context.getApplicationContext();
         dbHelper = AngelmanDbHelper.getInstance(context);
     }
 
@@ -28,16 +27,17 @@ public class SingleCardSqliteDataStore implements  SingleCardDataStore {
         ArrayList<CardModel> list = new ArrayList<>();
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        String[] columns = {CardColumns.NAME, CardColumns.IMAGE_PATH, CardColumns.VOICE_PATH, CardColumns.FIRST_TIME};
+        String[] columns = {CardColumns.NAME, CardColumns.CONTENT_PATH, CardColumns.VOICE_PATH, CardColumns.FIRST_TIME};
         String orderby = CardColumns.CATEGORY_ID + " asc, " + CardColumns.CARD_INDEX + " desc";
 
+        @Cleanup
         Cursor c = db.query(CardColumns.TABLE_NAME, columns, null,null, null, null, orderby);
 
         c.moveToFirst();
         do{
             CardModel cardModel = new CardModel();
             cardModel.name      = c.getString(c.getColumnIndex(CardColumns.NAME));
-            cardModel.imagePath = c.getString(c.getColumnIndex(CardColumns.IMAGE_PATH));
+            cardModel.contentPath = c.getString(c.getColumnIndex(CardColumns.CONTENT_PATH));
             cardModel.voicePath = c.getString(c.getColumnIndex(CardColumns.VOICE_PATH));
             cardModel.firstTime = c.getString(c.getColumnIndex(CardColumns.FIRST_TIME));
 
@@ -53,11 +53,12 @@ public class SingleCardSqliteDataStore implements  SingleCardDataStore {
 
         ContentValues values = new ContentValues();
         values.put(CardColumns.NAME, cardModel.name);
-        values.put(CardColumns.IMAGE_PATH, cardModel.imagePath);
+        values.put(CardColumns.CONTENT_PATH, cardModel.contentPath);
         values.put(CardColumns.VOICE_PATH, cardModel.voicePath);
         values.put(CardColumns.FIRST_TIME, cardModel.firstTime);
         values.put(CardColumns.CARD_INDEX, getNewIndex(cardModel.categoryId));
         values.put(CardColumns.CATEGORY_ID, cardModel.categoryId);
+        values.put(CardColumns.CARD_TYPE, cardModel.cardType.getValue());
 
         return db.insert(CardColumns.TABLE_NAME, null, values);
     }
@@ -68,8 +69,10 @@ public class SingleCardSqliteDataStore implements  SingleCardDataStore {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         String selection = "CATEGORY_ID = ?";
-        String[] selectionArgs = {new Integer(selectedCategoryId).toString()};
+        String[] selectionArgs = {String.valueOf(selectedCategoryId)};
         String orderby = CardColumns.CARD_INDEX + " desc";
+
+        @Cleanup
         Cursor c = db.query(CardColumns.TABLE_NAME, null, selection, selectionArgs, null, null, orderby);
 
         if (c.getCount() == 0) return null;
@@ -78,10 +81,11 @@ public class SingleCardSqliteDataStore implements  SingleCardDataStore {
             do {
                 CardModel cardModel = new CardModel();
                 cardModel.name      = c.getString(c.getColumnIndex(CardColumns.NAME));
-                cardModel.imagePath = c.getString(c.getColumnIndex(CardColumns.IMAGE_PATH));
+                cardModel.contentPath = c.getString(c.getColumnIndex(CardColumns.CONTENT_PATH));
                 cardModel.voicePath = c.getString(c.getColumnIndex(CardColumns.VOICE_PATH));
                 cardModel.firstTime = c.getString(c.getColumnIndex(CardColumns.FIRST_TIME));
                 cardModel.cardIndex = c.getInt(c.getColumnIndex(CardColumns.CARD_INDEX));
+                cardModel.cardType = CardModel.CardType.valueOf(c.getString(c.getColumnIndex(CardColumns.CARD_TYPE)));
                 list.add(cardModel);
             } while (c.moveToNext());
         }
@@ -116,6 +120,8 @@ public class SingleCardSqliteDataStore implements  SingleCardDataStore {
         String selection = "CATEGORY_ID = ?";
         String[] selectionArgs = {String.valueOf(categoryId)};
         String orderby = CardColumns.CARD_INDEX + " desc";
+
+        @Cleanup
         Cursor c = db.query(CardColumns.TABLE_NAME, null, selection, selectionArgs, null, null, orderby, "1");
 
         if (c.getCount() == 0) return null;
@@ -123,11 +129,11 @@ public class SingleCardSqliteDataStore implements  SingleCardDataStore {
         c.moveToFirst();
 
         CardModel cardModel = new CardModel(c.getString(c.getColumnIndex(CardColumns.NAME)),
-                                                              c.getString(c.getColumnIndex(CardColumns.IMAGE_PATH)),
-                                                              c.getString(c.getColumnIndex(CardColumns.FIRST_TIME)),
-                                                              c.getInt(c.getColumnIndex(CardColumns.CATEGORY_ID)),
-                                                              c.getInt(c.getColumnIndex(CardColumns.CARD_INDEX)));
-
+                                  c.getString(c.getColumnIndex(CardColumns.CONTENT_PATH)),
+                                  c.getString(c.getColumnIndex(CardColumns.FIRST_TIME)),
+                                  c.getInt(c.getColumnIndex(CardColumns.CATEGORY_ID)),
+                                  c.getInt(c.getColumnIndex(CardColumns.CARD_INDEX)),
+                                  CardModel.CardType.valueOf(c.getString(c.getColumnIndex(CardColumns.CARD_TYPE))));
         return cardModel;
     }
 }

@@ -57,7 +57,7 @@ public class PhotoEditorActivity extends AbstractActivity {
 
     private void startShowCardActivity(String fileName) {
         Intent intent = new Intent(PhotoEditorActivity.this, MakeCardActivity.class);
-        intent.putExtra(ImageUtil.IMAGE_PATH, fileName);
+        intent.putExtra(ImageUtil.CONTENT_PATH, fileName);
         startActivity(intent);
     }
 
