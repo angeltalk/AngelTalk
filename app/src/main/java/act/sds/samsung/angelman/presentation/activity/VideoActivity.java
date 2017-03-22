@@ -752,7 +752,7 @@ public class VideoActivity extends AbstractActivity implements View.OnClickListe
                         unlockFocus();
                         mState = STATE_PICTURE_FINISHED;
                         Intent intent = new Intent(VideoActivity.this, MakeCardActivity.class);
-                        intent.putExtra(ImageUtil.IMAGE_PATH, fileName);
+                        intent.putExtra(ImageUtil.CONTENT_PATH, fileName);
                         startActivity(intent);
                         finish();
                     }
