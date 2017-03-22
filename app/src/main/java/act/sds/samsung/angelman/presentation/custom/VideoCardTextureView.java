@@ -356,4 +356,11 @@ public class VideoCardTextureView extends TextureView implements TextureView.Sur
     public void onSurfaceTextureUpdated(SurfaceTexture surface) {
 
     }
+
+    public boolean isPlaying() {
+        if(mMediaPlayer != null) {
+            return mMediaPlayer.isPlaying();
+        }
+        return false;
+    }
 }
