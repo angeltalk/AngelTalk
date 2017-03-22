@@ -2,9 +2,7 @@ package act.sds.samsung.angelman.presentation.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -91,11 +89,7 @@ public class CameraGallerySelectionActivity extends AbstractActivity {
 
     @OnClick({R.id.layout_video})
     public void onClickVideo(View view){
-        Log.d("#Videdo Activity : ", "Start Video Activity");
-        Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-        if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(takeVideoIntent, REQUEST_VIDEO_CAPTURE);
-        }
+        startNextActivity(VideoActivity.class);
     }
 
     private void startNextActivity(Class nextClass) {
