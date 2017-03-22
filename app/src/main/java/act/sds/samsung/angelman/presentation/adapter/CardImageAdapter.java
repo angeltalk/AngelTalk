@@ -5,7 +5,6 @@ import android.os.Handler;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
@@ -117,7 +116,9 @@ public class CardImageAdapter extends PagerAdapter {
                 VideoCardTextureView cardVideoView = ((VideoCardTextureView) cardView.findViewById(R.id.card_video));
                 cardVideoView.setVisibility(View.VISIBLE);
                 cardVideoView.setScaleType(VideoCardTextureView.ScaleType.CENTER_CROP);
-                cardVideoView.setDataSource(FileUtil.getImageFolder() + File.separator + singleSectionItems.contentPath);
+                if(new File(FileUtil.getImageFolder() + File.separator + singleSectionItems.contentPath).exists()) {
+                    cardVideoView.setDataSource(FileUtil.getImageFolder() + File.separator + singleSectionItems.contentPath);
+                }
             }
 
             cardContainer.setOnClickListener(cardContainerOnClickListener);

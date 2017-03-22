@@ -77,8 +77,6 @@ public class MakeCardActivityTest extends UITest{
         subject = setupActivityWithIntent(MakeCardActivity.class, intent);
     }
 
-
-
     @Test
     public void whenLaunchedApp_thenSetBackgroundColorChangedToRelatedInCategory() throws Exception {
         assertThat(applicationManager.getCategoryModelColor()).isEqualTo(R.drawable.background_gradient_blue);

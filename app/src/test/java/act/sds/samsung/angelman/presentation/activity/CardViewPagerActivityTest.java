@@ -15,8 +15,10 @@ import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
@@ -29,6 +31,7 @@ import java.lang.reflect.Field;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -43,6 +46,7 @@ import act.sds.samsung.angelman.presentation.adapter.CardImageAdapter;
 import act.sds.samsung.angelman.presentation.custom.AddCardView;
 import act.sds.samsung.angelman.presentation.custom.CardView;
 import act.sds.samsung.angelman.presentation.custom.CardViewPager;
+import act.sds.samsung.angelman.presentation.custom.VideoCardTextureView;
 import act.sds.samsung.angelman.presentation.util.AngelManGlideTransform;
 import act.sds.samsung.angelman.presentation.util.ApplicationManager;
 import act.sds.samsung.angelman.presentation.util.PlayUtil;
@@ -106,6 +110,24 @@ public class CardViewPagerActivityTest extends UITest {
     }
 
     @Test
+    public void givenLaunched_whenMoveToPhotoCard_thenShowTitleCorrectly() throws Exception {
+        subject.mViewPager.setCurrentItem(1);
+
+        View view = ((CardImageAdapter) subject.mViewPager.getAdapter()).getItemAt(1);
+        assertThat(view.findViewById(R.id.card_video)).isGone();
+        assertThat(view.findViewById(R.id.card_image)).isVisible();
+    }
+
+    @Test
+    public void givenLaunched_whenMoveToVideoCard_thenShowTitleCorrectly() throws Exception {
+        subject.mViewPager.setCurrentItem(4);
+
+        View view = ((CardImageAdapter) subject.mViewPager.getAdapter()).getItemAt(4);
+        assertThat(view.findViewById(R.id.card_video)).isVisible();
+        assertThat(view.findViewById(R.id.card_image)).isGone();
+    }
+
+    @Test
     public void whenLaunchedCardViewPagerActivity_thenShowsDeleteButton() throws Exception {
         assertThat(deleteCardButton).isVisible();
     }
@@ -135,7 +157,7 @@ public class CardViewPagerActivityTest extends UITest {
     @Test
     public void givenClickedDeleteButton_whenClickedConfirmButton_thenDeleteSelectedCardViewInViewPager() throws Exception {
         CardViewPager viewPager = subject.mViewPager;
-        assertThat(viewPager.getAdapter().getCount()).isEqualTo(4);
+        assertThat(viewPager.getAdapter().getCount()).isEqualTo(5);
 
         subject.mViewPager.setCurrentItem(2);
         assertThat(((CardView) ((CardImageAdapter) viewPager.getAdapter()).getItemAt(2)).cardTitle.getText()).isEqualTo("우유");
@@ -149,7 +171,7 @@ public class CardViewPagerActivityTest extends UITest {
         ShadowAlertDialog shadowDialog = getShadowAlertDialog();
         shadowDialog.getView().findViewById(R.id.confirm).performClick();
 
-        assertThat(viewPager.getAdapter().getCount()).isEqualTo(3);
+        assertThat(viewPager.getAdapter().getCount()).isEqualTo(4);
         assertThat(((CardView) ((CardImageAdapter) viewPager.getAdapter()).getItemAt(2)).cardTitle.getText()).isEqualTo(cardListWithCategoryId.get(2).name);
     }
 
@@ -272,6 +294,19 @@ public class CardViewPagerActivityTest extends UITest {
     }
 
     @Test
+    @Ignore
+    public void givenShownVideoCardOnScreen_whenClickCardView_thenPlayVideo() throws Exception {
+        subject.mViewPager.setCurrentItem(4);
+
+        View cardView = ((CardImageAdapter) subject.mViewPager.getAdapter()).getItemAt(4);
+        cardView.findViewById(R.id.card_container).performClick();
+
+        Robolectric.getForegroundThreadScheduler().advanceBy(1000, TimeUnit.MILLISECONDS);
+
+        assertThat(((VideoCardTextureView) cardView.findViewById(R.id.card_video)).isPlaying()).isTrue();
+    }
+
+    @Test
     public void whenClickedAddButton_thenMovesToCameraGallerySelectionActivity() throws Exception {
         addCardText.performClick();
 
@@ -289,7 +324,7 @@ public class CardViewPagerActivityTest extends UITest {
 
     @Test
     public void giveClickedCategoryInMainMenuActivity_whenLoadActivity_ShowCategoryTitleAndCardCount() throws Exception {
-        assertThat(subject.allCardListInSelectedCategory.size()).isEqualTo(4);
+        assertThat(subject.allCardListInSelectedCategory.size()).isEqualTo(5);
     }
 
     @Test
@@ -335,9 +370,9 @@ public class CardViewPagerActivityTest extends UITest {
                     .bitmapTransform(new AngelManGlideTransform(subject.getApplicationContext(), 10, 0, AngelManGlideTransform.CornerType.TOP))
                     .override(280, 280)
                     .into(expectedImageView);
-
             Bitmap expectedImage = ((GlideBitmapDrawable)expectedImageView.getDrawable()).getBitmap();
             assertThat(equals(actualImage, expectedImage)).isTrue();
+
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -374,6 +409,8 @@ public class CardViewPagerActivityTest extends UITest {
         addSingleCardModel(ret, "물", "water.png", "20010928_120020", 0, 0, CardModel.CardType.PHOTO_CARD);
         addSingleCardModel(ret, "우유", "milk.png", "20010928_120019", 0, 1, CardModel.CardType.PHOTO_CARD);
         addSingleCardModel(ret, "쥬스", "juice.png", "20010928_120015", 0, 2, CardModel.CardType.PHOTO_CARD);
+        addSingleCardModel(ret, "젤리", "haribo.mp4", "20010928_120015", 0, 3, CardModel.CardType.VIDEO_CARD);
+
         return ret;
     }
 
