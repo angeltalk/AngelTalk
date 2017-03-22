@@ -10,6 +10,7 @@ import act.sds.samsung.angelman.presentation.activity.CategoryMenuActivityTest;
 import act.sds.samsung.angelman.presentation.activity.MakeCardActivityTest;
 import act.sds.samsung.angelman.presentation.activity.NewCategoryActivityTest;
 import act.sds.samsung.angelman.presentation.activity.OnboardingActivityTest;
+import act.sds.samsung.angelman.presentation.adapter.CardImageAdapterTest;
 import act.sds.samsung.angelman.presentation.custom.AddCardViewTest;
 import act.sds.samsung.angelman.presentation.custom.CardViewPagerLayoutTest;
 import act.sds.samsung.angelman.presentation.custom.CategoryMenuLayoutTest;
@@ -28,4 +29,5 @@ public interface AngelmanTestComponent extends AngelmanComponent {
     void inject(AddCardViewTest addCardViewTest);
     void inject(CameraGallerySelectionActivityTest cameraGallerySelectionActivityTest);
     void inject(OnboardingActivityTest onboardingActivityTest);
+    void inject(CardImageAdapterTest cardImageAdapterTest);
 }

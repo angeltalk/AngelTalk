@@ -20,21 +20,29 @@
             android:layout_width="match_parent"
             app:layout_heightPercent="81%" />
 
+        <act.sds.samsung.angelman.presentation.custom.VideoCardTextureView
+            android:id="@+id/card_video"
+            android:layout_width="match_parent"
+            app:layout_heightPercent="81%"
+            android:visibility="gone"
+            />
+
         <act.sds.samsung.angelman.presentation.custom.FontTextView
             android:id="@+id/card_image_title"
             android:layout_width="match_parent"
-            android:layout_below="@id/card_image"
+            android:layout_alignParentBottom="true"
             android:gravity="center"
             android:textColor="@color/black_99"
             android:textSize="24dp"
             android:visibility="visible"
             app:font="@string/font_medium"
-            app:layout_heightPercent="19%" />
+            app:layout_heightPercent="19%"
+            />
 
         <act.sds.samsung.angelman.presentation.custom.FontEditText
             android:id="@+id/card_image_title_edit"
             android:layout_width="match_parent"
-            android:layout_below="@id/card_image"
+            android:layout_alignParentBottom="true"
             android:textCursorDrawable="@drawable/make_card_cursor_color"
             android:background="@android:color/transparent"
             android:gravity="center"

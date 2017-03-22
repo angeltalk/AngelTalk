@@ -68,7 +68,8 @@ public class MakeCardActivityTest extends UITest{
 
         Intent intent = new Intent();
 
-        intent.putExtra(ImageUtil.IMAGE_PATH, "/Users/ssa009/workspace/angelman/app/src/main/assets/bus.jpg");
+        intent.putExtra(ImageUtil.CONTENT_PATH, "/Users/ssa009/workspace/angelman/app/src/main/assets/bus.jpg");
+        intent.putExtra(ImageUtil.CARD_TYPE, CardModel.CardType.PHOTO_CARD.getValue());
 
         when(applicationManager.getCategoryModel()).thenReturn(getCategoryModel());
         when(applicationManager.getCategoryModelColor()).thenReturn(getCategoryModelColor());

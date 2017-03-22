@@ -36,6 +36,7 @@ import act.sds.samsung.angelman.presentation.util.FontUtil;
 import act.sds.samsung.angelman.presentation.util.ImageUtil;
 import act.sds.samsung.angelman.presentation.util.PlayUtil;
 import act.sds.samsung.angelman.presentation.util.RecordUtil;
+import act.sds.samsung.angelman.presentation.util.ResourcesUtil;
 
 public class MakeCardActivity extends AbstractActivity implements RecordUtil.RecordCallback {
 
@@ -47,7 +48,7 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
 
     protected int state = STATE_RECORD_NOT_COMPLETE;
 
-    private String imagePath;
+    private String contentPath;
 
     CardView cardView;
     protected InputMethodManager imm;
@@ -71,6 +72,7 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
 
     @Inject
     ApplicationManager applicationManager;
+    private CardModel.CardType cardType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,11 +92,12 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
         selectedCategoryId = applicationManager.getCategoryModel().index;
 
         playUtil = PlayUtil.getInstance();
-        imagePath = intent.getStringExtra(ImageUtil.IMAGE_PATH);
+        contentPath = intent.getStringExtra(ImageUtil.CONTENT_PATH);
+        cardType = CardModel.CardType.valueOf(intent.getStringExtra(ImageUtil.CARD_TYPE));
 
         cardView = (CardView) findViewById(R.id.card_view_layout);
         cardView.setCardViewLayoutMode(CardView.MODE_MAKE_CARD);
-        Glide.with(getApplicationContext()).load(new File(imagePath)).override(280, 280).bitmapTransform(new AngelManGlideTransform(this, 10, 0, AngelManGlideTransform.CornerType.TOP)).into(cardView.cardImage);
+        Glide.with(getApplicationContext()).load(new File(contentPath)).override(280, 280).bitmapTransform(new AngelManGlideTransform(this, 10, 0, AngelManGlideTransform.CornerType.TOP)).into(cardView.cardImage);
 
         cardView.cardTitleEdit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -169,10 +172,14 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
     private void playRecordVoiceFile() {
         waitCount.setText(R.string.check_recorded_voice);
         waitCount.setFontType(FontUtil.FONT_REGULAR);
-        recordStopBtn.setBackground(getResources().getDrawable(R.drawable.ic_check_button));
+
+        recordStopBtn.setBackground(ResourcesUtil.getDrawable(getApplicationContext(), R.drawable.ic_check_button));
+
         playUtil.play(voiceFile);
         state = STATE_RECORD_COMPLETE;
     }
+
+
 
     private void showRecodingGuideAndMicButton() {
         findViewById(R.id.recoding_guide).setVisibility(View.VISIBLE);
@@ -227,7 +234,7 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
 
             countScene.setVisibility(View.GONE);
             micButton.setEnabled(true);
-            recordStopBtn.setBackground(getResources().getDrawable(R.drawable.record_stop));
+            recordStopBtn.setBackground(ResourcesUtil.getDrawable(getApplicationContext(), R.drawable.record_stop));
             recordStopBtn.setVisibility(View.GONE);
 
         }
@@ -236,10 +243,7 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
 
     private boolean checkValidationForText() {
         String cardTitle = ((EditText) cardView.findViewById(R.id.card_image_title_edit)).getText().toString();
-        if (cardTitle.trim().length() > 0) {
-            return true;
-        }
-        return false;
+        return cardTitle.trim().length() > 0;
     }
 
     private void saveCardAndMoveToNextActivity() {
@@ -247,10 +251,11 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
         DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
 
         CardModel cardModel = new CardModel(cardView.cardTitleEdit.getText().toString(),
-                imagePath,
+                contentPath,
                 voiceFile,
                 dateFormat.format(date),
-                selectedCategoryId);
+                selectedCategoryId,
+                cardType);
 
         cardRepository.createSingleCardModel(cardModel);
 

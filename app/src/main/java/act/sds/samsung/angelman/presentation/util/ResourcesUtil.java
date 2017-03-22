@@ -1,6 +1,7 @@
 package act.sds.samsung.angelman.presentation.util;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.IntDef;
 import android.support.v4.content.res.ResourcesCompat;
 import android.view.View;
@@ -125,6 +126,14 @@ public class ResourcesUtil {
                         getCardViewLayoutBackgroundBy(color),
                         context.getTheme()
                 )
+        );
+    }
+
+    public static Drawable getDrawable(Context context, int drawableId) {
+        return ResourcesCompat.getDrawable(
+                context.getResources(),
+                drawableId,
+                context.getTheme()
         );
     }
 }
