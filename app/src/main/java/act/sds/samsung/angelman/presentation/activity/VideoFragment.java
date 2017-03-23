@@ -659,7 +659,8 @@ public class VideoFragment extends Fragment
 
                 @Override
                 public void run() {
-                    time += 30;
+                    time += 30; //0 ~ 3000 time 1000 2000 3000
+                    textCount.setText("00:0"+(time/1000));
                     progressBar.setProgress((int) time);
                     h.postDelayed(this, 30);
                 }
@@ -800,7 +801,7 @@ public class VideoFragment extends Fragment
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             final Fragment parent = getParentFragment();
             return new AlertDialog.Builder(getActivity())
-                    .setMessage("aew")
+                    .setMessage("")
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
