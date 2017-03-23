@@ -1,10 +1,15 @@
 package act.sds.samsung.angelman.presentation.custom;
 
 import android.content.Context;
+import android.support.percent.PercentRelativeLayout;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.view.DragEvent;
+import android.view.KeyCharacterMap;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -22,6 +27,8 @@ import act.sds.samsung.angelman.domain.model.CategoryModel;
 import act.sds.samsung.angelman.domain.repository.CategoryRepository;
 import act.sds.samsung.angelman.presentation.adapter.CategoryAdapter;
 import jp.wasabeef.blurry.Blurry;
+
+import static act.sds.samsung.angelman.R.id.category_list;
 
 public class CategoryMenuLayout extends LinearLayout {
 
@@ -55,6 +62,9 @@ public class CategoryMenuLayout extends LinearLayout {
         getAllCategoryList(context);
         setLockView(context);
 
+        if(hasNavigationBar(context)) {
+            setSmallerMarginLayout();
+        }
     }
 
     public void setLockAreaVisibleWithGone() {
@@ -65,7 +75,7 @@ public class CategoryMenuLayout extends LinearLayout {
     }
 
     private void getAllCategoryList(final Context context) {
-        final GridView categoryList = (GridView) findViewById(R.id.category_list);
+        final GridView categoryList = (GridView) findViewById(category_list);
 
         List<CategoryModel> categoryAllList = categoryRepository.getCategoryAllList();
         final CategoryAdapter categoryAdapter = new CategoryAdapter(context, categoryAllList);
@@ -80,6 +90,23 @@ public class CategoryMenuLayout extends LinearLayout {
                 }
             }
         });
+    }
+
+    public void setOnCategoryViewChangeListener(OnCategoryViewChangeListener onCategoryViewChangeListener){
+        this.onCategoryViewChangeListener = onCategoryViewChangeListener;
+    }
+
+    public interface OnCategoryViewChangeListener {
+        void onUnLock();
+        void categoryClick(CategoryModel categoryModel);
+    }
+
+    public void changeClickedState(){
+        if(clickState == NON_CLICKED){
+            clickState = CLICKED;
+        } else {
+            clickState = NON_CLICKED;
+        }
     }
 
     private void setLockView(final Context context) {
@@ -140,20 +167,21 @@ public class CategoryMenuLayout extends LinearLayout {
         });
     }
 
-    public void setOnCategoryViewChangeListener(OnCategoryViewChangeListener onCategoryViewChangeListener){
-        this.onCategoryViewChangeListener = onCategoryViewChangeListener;
+    private void setSmallerMarginLayout() {
+        DisplayMetrics dm = getResources().getDisplayMetrics();
+
+        PercentRelativeLayout.LayoutParams lp = ((PercentRelativeLayout.LayoutParams) subject.findViewById(R.id.clock_layout).getLayoutParams());
+        lp.topMargin = Math.round(10 * dm.density);
+        lp.bottomMargin = Math.round(2 * dm.density);
+        subject.findViewById(R.id.clock_layout).setLayoutParams(lp);
+
+        int p = Math.round(4*dm.density);
+        subject.findViewById(R.id.lock_image).setPadding(p,p,p,p);
     }
 
-    public interface OnCategoryViewChangeListener {
-        void onUnLock();
-        void categoryClick(CategoryModel categoryModel);
-    }
-
-    public void changeClickedState(){
-        if(clickState == NON_CLICKED){
-            clickState = CLICKED;
-        } else {
-            clickState = NON_CLICKED;
-        }
+    private boolean hasNavigationBar(Context context) {
+        boolean hasMenuKey = ViewConfiguration.get(context).hasPermanentMenuKey();
+        boolean hasBackKey = KeyCharacterMap.deviceHasKey(KeyEvent.KEYCODE_BACK);
+        return !hasMenuKey && !hasBackKey;
     }
 }
