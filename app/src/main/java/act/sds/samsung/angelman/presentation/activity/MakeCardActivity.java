@@ -97,7 +97,9 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
 
         cardView = (CardView) findViewById(R.id.card_view_layout);
         cardView.setCardViewLayoutMode(CardView.MODE_MAKE_CARD);
-        Glide.with(getApplicationContext()).load(new File(contentPath)).override(280, 280).bitmapTransform(new AngelManGlideTransform(this, 10, 0, AngelManGlideTransform.CornerType.TOP)).into(cardView.cardImage);
+        if(cardType.equals(CardModel.CardType.PHOTO_CARD)) {
+            Glide.with(getApplicationContext()).load(new File(contentPath)).override(280, 280).bitmapTransform(new AngelManGlideTransform(this, 10, 0, AngelManGlideTransform.CornerType.TOP)).into(cardView.cardImage);
+        }
 
         cardView.cardTitleEdit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override

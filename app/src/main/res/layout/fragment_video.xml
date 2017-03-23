@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
     <act.sds.samsung.angelman.presentation.custom.AutoFitTextureView
         android:id="@+id/texture"
         android:layout_width="match_parent"
@@ -15,6 +16,32 @@
         android:layout_height="match_parent"
         android:background="@drawable/combined_shape" />
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:progressDrawable="@drawable/progress_bar"
+        android:layout_width="284dp"
+        android:layout_height="7dp"
+        android:indeterminate="false"
+        android:max="3000"
+        android:progress="0"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="107dp"
+        />
+
+    <TextView
+        android:id="@+id/text_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/init_count_text"
+        android:layout_centerHorizontal="true"
+        android:textSize="15sp"
+        android:textColor="@color/white"
+        android:layout_marginTop="77dp"
+        />
+
+
     <TextView
         android:id="@+id/video_guide"
         android:layout_width="wrap_content"
@@ -23,7 +50,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="160dp"
         android:layout_centerHorizontal="true"
-        android:textSize="18dp"
+        android:textSize="17sp"
         android:textColor="@color/white"/>
     <FrameLayout
         android:id="@+id/video_shutter"
