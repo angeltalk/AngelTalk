@@ -49,4 +49,5 @@
     <string name="noti_voc">의견 보내기</string>
     <string name="voc_web_url">https://docs.google.com/forms/d/1N8sSXRWc0HHVIQSXgtcO60bj_U_3cXh7Hfl5Nlxp1OE/edit</string>
     <string name="video_guide">3초간 영상을 찍어보세요</string>
+    <string name="init_count_text">00:00</string>
 </resources>

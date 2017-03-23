@@ -24,7 +24,9 @@ import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.AssetFileDescriptor;
 import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.graphics.SurfaceTexture;
@@ -36,6 +38,7 @@ import android.hardware.camera2.CameraManager;
 import android.hardware.camera2.CameraMetadata;
 import android.hardware.camera2.CaptureRequest;
 import android.hardware.camera2.params.StreamConfigurationMap;
+import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Handler;
@@ -52,6 +55,8 @@ import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -64,7 +69,9 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 import act.sds.samsung.angelman.R;
+import act.sds.samsung.angelman.domain.model.CardModel;
 import act.sds.samsung.angelman.presentation.custom.AutoFitTextureView;
+import act.sds.samsung.angelman.presentation.util.ImageUtil;
 
 public class VideoFragment extends Fragment
         implements View.OnClickListener, FragmentCompat.OnRequestPermissionsResultCallback {
@@ -77,6 +84,10 @@ public class VideoFragment extends Fragment
     private static final String TAG = "VideoFragment";
     private static final int REQUEST_VIDEO_PERMISSIONS = 1;
     private static final String FRAGMENT_DIALOG = "dialog";
+
+    ProgressBar progressBar;
+    TextView textCount;
+
 
     private static final String[] VIDEO_PERMISSIONS = {
             Manifest.permission.CAMERA,
@@ -222,7 +233,7 @@ public class VideoFragment extends Fragment
     private CaptureRequest.Builder mPreviewBuilder;
     private Surface mRecorderSurface;
 
-    public static VideoFragment newInstance() {
+    public static VideoFragment newInstance(Context context) {
         return new VideoFragment();
     }
 
@@ -256,7 +267,7 @@ public class VideoFragment extends Fragment
      */
     private static Size chooseOptimalSize(Size[] choices, int width, int height, Size aspectRatio) {
         // Collect the supported resolutions that are at least as big as the preview Surface
-        List<Size> bigEnough = new ArrayList<Size>();
+        List<Size> bigEnough = new ArrayList<>();
         int w = aspectRatio.getWidth();
         int h = aspectRatio.getHeight();
         for (Size option : choices) {
@@ -283,6 +294,8 @@ public class VideoFragment extends Fragment
 
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
+        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+        textCount = (TextView) view.findViewById(R.id.text_count);
         mTextureView = (AutoFitTextureView) view.findViewById(R.id.texture);
         mButtonVideo = (ImageView) view.findViewById(R.id.btn_record);
         mButtonVideo.setOnClickListener(this);
@@ -481,7 +494,7 @@ public class VideoFragment extends Fragment
             return;
         }
         try {
-            closePreviewSession();
+            //closePreviewSession();
             SurfaceTexture texture = mTextureView.getSurfaceTexture();
             assert texture != null;
             texture.setDefaultBufferSize(mPreviewSize.getWidth(), mPreviewSize.getHeight());
@@ -571,10 +584,11 @@ public class VideoFragment extends Fragment
             return;
         }
         mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        mMediaRecorder.setMaxDuration(3000);
         mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
         mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
         if (mNextVideoAbsolutePath == null || mNextVideoAbsolutePath.isEmpty()) {
-            mNextVideoAbsolutePath = getVideoFilePath(getActivity());
+            mNextVideoAbsolutePath = getVideoFilePath();
         }
         mMediaRecorder.setOutputFile(mNextVideoAbsolutePath);
         mMediaRecorder.setVideoEncodingBitRate(10000000);
@@ -591,19 +605,67 @@ public class VideoFragment extends Fragment
                 mMediaRecorder.setOrientationHint(INVERSE_ORIENTATIONS.get(rotation));
                 break;
         }
+        mMediaRecorder.setOnInfoListener(new MediaRecorder.OnInfoListener() {
+            @Override
+            public void onInfo(MediaRecorder mr, int what, int extra) {
+                if (what == MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED) {
+                    stopRecordingVideo();
+                }
+            }
+        });
         mMediaRecorder.prepare();
     }
 
-    private String getVideoFilePath(Context context) {
-        return context.getExternalFilesDir(null).getAbsolutePath() + "/"
-                + System.currentTimeMillis() + ".mp4";
+    private String getVideoFilePath() {
+        ImageUtil imageUtil = ImageUtil.getInstance();
+        return imageUtil.getVideoPath();
     }
+
+    public void playBeep(String fileName) {
+        try {
+            MediaPlayer m = new MediaPlayer();
+
+            if (m.isPlaying()) {
+                m.stop();
+                m.release();
+                return;
+            }
+
+            AssetFileDescriptor descriptor = getActivity().getAssets().openFd(fileName);
+            m.setDataSource(descriptor.getFileDescriptor(), descriptor.getStartOffset(), descriptor.getLength());
+            descriptor.close();
+
+            m.prepare();
+            m.setVolume(0.8f, 0.8f);
+            m.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private int progressStatus = 0;
 
     private void startRecordingVideo() {
         if (null == mCameraDevice || !mTextureView.isAvailable() || null == mPreviewSize) {
             return;
         }
         try {
+            mButtonVideo.setImageResource(R.drawable.btn_recording_stop);
+            this.playBeep("sound_record.mp3");
+
+            final Handler h = new Handler();
+            h.postDelayed(new Runnable() {
+                private long time = 0;
+
+                @Override
+                public void run() {
+                    time += 30;
+                    progressBar.setProgress((int) time);
+                    h.postDelayed(this, 30);
+                }
+            }, 30);
+
+
             closePreviewSession();
             setUpMediaRecorder();
             SurfaceTexture texture = mTextureView.getSurfaceTexture();
@@ -635,9 +697,10 @@ public class VideoFragment extends Fragment
                         public void run() {
                             // UI
                             mIsRecordingVideo = true;
-
                             // Start recording
+
                             mMediaRecorder.start();
+
                         }
                     });
                 }
@@ -652,7 +715,8 @@ public class VideoFragment extends Fragment
             }, mBackgroundHandler);
         } catch (CameraAccessException e) {
             e.printStackTrace();
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -666,6 +730,8 @@ public class VideoFragment extends Fragment
     }
 
     private void stopRecordingVideo() {
+        this.playBeep("sound_record.mp3");
+        mButtonVideo.setImageResource(R.drawable.btn_recording_start);
         // UI
         mIsRecordingVideo = false;
         // Stop recording
@@ -679,7 +745,11 @@ public class VideoFragment extends Fragment
             Log.d(TAG, "Video saved: " + mNextVideoAbsolutePath);
         }
         mNextVideoAbsolutePath = null;
-        startPreview();
+
+        Intent intent = new Intent(getActivity(), MakeCardActivity.class);
+        intent.putExtra(ImageUtil.CONTENT_PATH, mNextVideoAbsolutePath);
+        intent.putExtra(ImageUtil.CARD_TYPE, CardModel.CardType.VIDEO_CARD.getValue());
+        startActivity(intent);
     }
 
     /**
