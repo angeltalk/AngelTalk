@@ -13,14 +13,14 @@ import org.robolectric.annotation.Config;
 
 import act.sds.samsung.angelman.BuildConfig;
 import act.sds.samsung.angelman.UITest;
+import act.sds.samsung.angelman.presentation.shadow.ShadowKeyCharacterMap;
 
 import static android.content.Context.KEYGUARD_SERVICE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.robolectric.Shadows.shadowOf;
 
-
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class)
+@Config(constants = BuildConfig.class, shadows = ShadowKeyCharacterMap.class)
 public class ScreenReceiverTest extends UITest{
 
     private Context context;
@@ -33,7 +33,6 @@ public class ScreenReceiverTest extends UITest{
         manager = (KeyguardManager) RuntimeEnvironment.application.getSystemService(KEYGUARD_SERVICE);
         subject = new ScreenReceiver();
     }
-
 
     @Test
     public void whenActionScreenOffThenDisableKeyguard() throws Exception {

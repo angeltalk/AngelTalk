@@ -205,11 +205,11 @@ public class CategoryAdapter extends BaseAdapter {
     private int getCardViewHeightSize() {
         int dmH = context.getResources().getDisplayMetrics().heightPixels;
         if (dmH > 2000)
-            return 600;
-        else if (dmH < 1300) {
-            return 300;
+            return 580;
+        else if (dmH > 1300) {
+            return 426;
         } else {
-            return 440;
+            return 290;
         }
     }
 
