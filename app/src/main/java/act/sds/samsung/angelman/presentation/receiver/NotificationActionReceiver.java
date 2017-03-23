@@ -1,4 +1,4 @@
-package act.sds.samsung.angelman.presentation.listener;
+package act.sds.samsung.angelman.presentation.receiver;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -14,7 +14,7 @@ import act.sds.samsung.angelman.presentation.util.ApplicationManager;
 
 import static act.sds.samsung.angelman.presentation.util.ApplicationManager.PRIVATE_PREFERENCE_NAME;
 
-public class WidgetButtonListener extends BroadcastReceiver {
+public class NotificationActionReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -25,10 +25,11 @@ public class WidgetButtonListener extends BroadcastReceiver {
         NotificationManager notificationManager = ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE));
 
         applicationManager.changeChildMode(!isChildMode);
-        RemoteViews notificationView = new RemoteViews(context.getPackageName(), isChildMode ? R.layout.layout_widget_off : R.layout.layout_widget);
+
+        RemoteViews notificationView = new RemoteViews(context.getPackageName(), isChildMode ? R.layout.layout_notification_off : R.layout.layout_notification_on);
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
-        notificationView.setOnClickPendingIntent(R.id.btn_change_mode, pendingIntent);
+        notificationView.setOnClickPendingIntent(isChildMode ? R.id.btn_on : R.id.btn_off, pendingIntent);
 
         Notification notification = new Notification(R.drawable.angelee, null, System.currentTimeMillis());
         notification.contentView = notificationView;

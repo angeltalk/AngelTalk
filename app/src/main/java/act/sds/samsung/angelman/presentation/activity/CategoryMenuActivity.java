@@ -33,7 +33,7 @@ import act.sds.samsung.angelman.domain.repository.CardRepository;
 import act.sds.samsung.angelman.domain.repository.CategoryRepository;
 import act.sds.samsung.angelman.presentation.adapter.CategoryAdapter;
 import act.sds.samsung.angelman.presentation.custom.CustomConfirmDialog;
-import act.sds.samsung.angelman.presentation.listener.WidgetButtonListener;
+import act.sds.samsung.angelman.presentation.receiver.NotificationActionReceiver;
 import act.sds.samsung.angelman.presentation.util.ApplicationManager;
 import act.sds.samsung.angelman.presentation.util.FileUtil;
 import act.sds.samsung.angelman.presentation.util.ImageUtil;
@@ -279,11 +279,11 @@ public class CategoryMenuActivity extends AbstractActivity {
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         AngelmanApplication angelmanApplication = (AngelmanApplication) getApplicationContext();
-        RemoteViews notificationView = new RemoteViews(getPackageName(), applicationManager.isChildMode() ? R.layout.layout_widget : R.layout.layout_widget_off);
+        RemoteViews notificationView = new RemoteViews(getPackageName(), applicationManager.isChildMode() ? R.layout.layout_notification_on : R.layout.layout_notification_off);
 
-        Intent switchIntent = new Intent(this, WidgetButtonListener.class);
+        Intent switchIntent = new Intent(this, NotificationActionReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, switchIntent, 0);
-        notificationView.setOnClickPendingIntent(R.id.btn_change_mode, pendingIntent);
+        notificationView.setOnClickPendingIntent(R.id.btn_on, pendingIntent);
 
         notification = new Notification(R.drawable.angelee, null, System.currentTimeMillis());
         notification.contentView = notificationView;

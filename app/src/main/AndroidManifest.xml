@@ -79,7 +79,7 @@
                 android:resource="@xml/widget_provider"/>
         </receiver>
 
-         <receiver android:name=".presentation.listener.WidgetButtonListener"/> 
+         <receiver android:name=".presentation.receiver.NotificationActionReceiver"/> 
 
     </application>
 </manifest>
