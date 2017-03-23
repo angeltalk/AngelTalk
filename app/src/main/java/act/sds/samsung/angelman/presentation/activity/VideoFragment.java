@@ -43,6 +43,7 @@ import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.v13.app.FragmentCompat;
 import android.support.v4.app.ActivityCompat;
@@ -84,6 +85,17 @@ public class VideoFragment extends Fragment
     private static final String TAG = "VideoFragment";
     private static final int REQUEST_VIDEO_PERMISSIONS = 1;
     private static final String FRAGMENT_DIALOG = "dialog";
+    public static final int DOUBLE_CLICK_PREVENTING_TIME = 1700;
+
+    private Integer mSensorOrientation;
+    private String mNextVideoAbsolutePath;
+    private CaptureRequest.Builder mPreviewBuilder;
+    private Surface mRecorderSurface;
+    private Handler h;
+    private Runnable timerThread;
+    private boolean allowRefresh = false;
+
+    private long recordingButtonClickTime;
 
     ProgressBar progressBar;
     TextView textCount;
@@ -228,12 +240,6 @@ public class VideoFragment extends Fragment
         }
 
     };
-    private Integer mSensorOrientation;
-    private String mNextVideoAbsolutePath;
-    private CaptureRequest.Builder mPreviewBuilder;
-    private Surface mRecorderSurface;
-    private Handler h;
-    private Runnable timerThread;
 
     public static VideoFragment newInstance(Context context) {
         return new VideoFragment();
@@ -303,7 +309,7 @@ public class VideoFragment extends Fragment
         mButtonVideo.setOnClickListener(this);
     }
 
-    boolean allowRefresh = false;
+
     @Override
     public void onResume() {
         super.onResume();
@@ -342,6 +348,11 @@ public class VideoFragment extends Fragment
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_record: {
+                if (SystemClock.elapsedRealtime() - recordingButtonClickTime < DOUBLE_CLICK_PREVENTING_TIME){
+                    return;
+                }
+                recordingButtonClickTime = SystemClock.elapsedRealtime();
+
                 if (mIsRecordingVideo) {
                     stopRecordingVideo();
                 } else {
@@ -682,9 +693,6 @@ public class VideoFragment extends Fragment
                     textCount.setText("00:0"+(time/1000));
                     progressBar.setProgress((int) time);
                     h.postDelayed(this, 30);
-                    if(time==3000){
-
-                    }
                 }
 
             };
@@ -723,7 +731,6 @@ public class VideoFragment extends Fragment
                             // UI
                             mIsRecordingVideo = true;
                             // Start recording
-
                             mMediaRecorder.start();
 
                         }
