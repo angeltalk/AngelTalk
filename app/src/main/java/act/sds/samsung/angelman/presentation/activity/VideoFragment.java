@@ -232,6 +232,8 @@ public class VideoFragment extends Fragment
     private String mNextVideoAbsolutePath;
     private CaptureRequest.Builder mPreviewBuilder;
     private Surface mRecorderSurface;
+    private Handler h;
+    private Runnable timerThread;
 
     public static VideoFragment newInstance(Context context) {
         return new VideoFragment();
@@ -301,10 +303,17 @@ public class VideoFragment extends Fragment
         mButtonVideo.setOnClickListener(this);
     }
 
+    boolean allowRefresh = false;
     @Override
     public void onResume() {
         super.onResume();
         startBackgroundThread();
+
+        if (allowRefresh){
+            allowRefresh = false;
+            getFragmentManager().beginTransaction().replace(R.id.container, this, VideoActivity.VIDEO_FRAGMENT_TAG).commit();
+        }
+
         if (mTextureView.isAvailable()) {
             openCamera(mTextureView.getWidth(), mTextureView.getHeight());
         } else {
@@ -314,9 +323,19 @@ public class VideoFragment extends Fragment
 
     @Override
     public void onPause() {
+        initCurrentView();
         closeCamera();
         stopBackgroundThread();
         super.onPause();
+        allowRefresh = true;
+    }
+
+    private void initCurrentView() {
+        h.removeCallbacks(timerThread);
+        progressBar.setProgress(0);
+        mButtonVideo.setImageResource(R.drawable.btn_recording_start);
+        mIsRecordingVideo = false;
+        textCount.setText(getActivity().getResources().getText(R.string.init_count_text));
     }
 
     @Override
@@ -653,8 +672,8 @@ public class VideoFragment extends Fragment
             mButtonVideo.setImageResource(R.drawable.btn_recording_stop);
             this.playBeep("sound_record.mp3");
 
-            final Handler h = new Handler();
-            h.postDelayed(new Runnable() {
+            h = new Handler();
+            timerThread = new Runnable() {
                 private long time = 0;
 
                 @Override
@@ -663,9 +682,14 @@ public class VideoFragment extends Fragment
                     textCount.setText("00:0"+(time/1000));
                     progressBar.setProgress((int) time);
                     h.postDelayed(this, 30);
-                }
-            }, 30);
+                    if(time==3000){
 
+                    }
+                }
+
+            };
+
+            h.postDelayed(timerThread, 30);
 
             closePreviewSession();
             setUpMediaRecorder();
@@ -733,6 +757,7 @@ public class VideoFragment extends Fragment
     private void stopRecordingVideo() {
         this.playBeep("sound_record.mp3");
         mButtonVideo.setImageResource(R.drawable.btn_recording_start);
+        h.removeCallbacks(timerThread);
         // UI
         mIsRecordingVideo = false;
         // Stop recording
