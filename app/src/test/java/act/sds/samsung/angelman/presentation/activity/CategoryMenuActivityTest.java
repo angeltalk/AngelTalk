@@ -247,6 +247,16 @@ public class CategoryMenuActivityTest extends UITest {
         verify(categoryRepository).deleteCategory(0);
     }
 
+    @Test
+    public void givenCategoryListIsChangedAfterLaunched_whenOnResume_thenShowCategoryListCorrectly() throws Exception {
+        // given
+        when(categoryRepository.getCategoryAllList()).thenReturn(getCategoryList(6));
+        // when
+        subject.onResume();
+        // then
+        assertThat(categoryList.getChildCount()).isEqualTo(6);
+    }
+
     private void setUpActivityWithCategoryList(int listSize) {
         when(categoryRepository.getCategoryAllList()).thenReturn(getCategoryList(listSize));
         subject = setupActivity(CategoryMenuActivity.class);

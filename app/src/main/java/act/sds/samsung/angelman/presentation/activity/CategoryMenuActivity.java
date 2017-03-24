@@ -1,7 +1,5 @@
 package act.sds.samsung.angelman.presentation.activity;
 
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -85,8 +83,6 @@ public class CategoryMenuActivity extends AbstractActivity {
     private PopupWindow easterEggPopup;
     private GestureDetector logoGestureDetector;
 
-    private static NotificationManager notificationManager;
-    private static Notification notification;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,9 +92,15 @@ public class CategoryMenuActivity extends AbstractActivity {
         ((AngelmanApplication) getApplication()).getAngelmanComponent().inject(this);
 
         initEasterEggPopup();
-        initCategoryGridView();
+        setCategoryGridView();
         launchNotification();
         //syncWithServer();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setCategoryGridView();
     }
 
     @Override
@@ -151,7 +153,7 @@ public class CategoryMenuActivity extends AbstractActivity {
         });
     }
 
-    private void initCategoryGridView() {
+    private void setCategoryGridView() {
         List<CategoryModel> categoryAllList = categoryRepository.getCategoryAllList();
         categoryAdapter = new CategoryAdapter(getApplicationContext(), categoryAllList, true);
         categoryGridView.setAdapter(categoryAdapter);
