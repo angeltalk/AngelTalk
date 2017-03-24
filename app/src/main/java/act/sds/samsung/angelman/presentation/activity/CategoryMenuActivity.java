@@ -2,8 +2,6 @@ package act.sds.samsung.angelman.presentation.activity;
 
 import android.app.Notification;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,7 +15,6 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
-import android.widget.RemoteViews;
 import android.widget.TextView;
 
 import java.util.List;
@@ -33,10 +30,11 @@ import act.sds.samsung.angelman.domain.repository.CardRepository;
 import act.sds.samsung.angelman.domain.repository.CategoryRepository;
 import act.sds.samsung.angelman.presentation.adapter.CategoryAdapter;
 import act.sds.samsung.angelman.presentation.custom.CustomConfirmDialog;
-import act.sds.samsung.angelman.presentation.listener.WidgetButtonListener;
+import act.sds.samsung.angelman.presentation.receiver.NotificationActionReceiver;
 import act.sds.samsung.angelman.presentation.util.ApplicationManager;
 import act.sds.samsung.angelman.presentation.util.FileUtil;
 import act.sds.samsung.angelman.presentation.util.ImageUtil;
+import act.sds.samsung.angelman.presentation.util.NotificationActionManager;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -99,7 +97,7 @@ public class CategoryMenuActivity extends AbstractActivity {
 
         initEasterEggPopup();
         initCategoryGridView();
-        launchWidgetButton();
+        launchNotification();
         //syncWithServer();
     }
 
@@ -274,20 +272,8 @@ public class CategoryMenuActivity extends AbstractActivity {
         firebaseSynchronizer.uploadDataToFirebase(categoryAllList, singleCardAllList);
     }
 
-    private void launchWidgetButton() {
-
-        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-        AngelmanApplication angelmanApplication = (AngelmanApplication) getApplicationContext();
-        RemoteViews notificationView = new RemoteViews(getPackageName(), applicationManager.isChildMode() ? R.layout.layout_widget : R.layout.layout_widget_off);
-
-        Intent switchIntent = new Intent(this, WidgetButtonListener.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, switchIntent, 0);
-        notificationView.setOnClickPendingIntent(R.id.btn_change_mode, pendingIntent);
-
-        notification = new Notification(R.drawable.angelee, null, System.currentTimeMillis());
-        notification.contentView = notificationView;
-        notification.flags |= Notification.FLAG_NO_CLEAR;
-        notificationManager.notify(1, notification);
+    private void launchNotification() {
+        NotificationActionManager notificationActionManager = new NotificationActionManager(getApplicationContext());
+        notificationActionManager.generateNotification(new Intent(this, NotificationActionReceiver.class));//
     }
 }
