@@ -65,25 +65,35 @@ public class MakeCardActivityTest extends UITest{
     @Before
     public void setUp() throws Exception {
         ((TestAngelmanApplication) RuntimeEnvironment.application).getAngelmanTestComponent().inject(this);
+    }
 
+    private void setupPhotoCard() {
         Intent intent = new Intent();
-
         intent.putExtra(ImageUtil.CONTENT_PATH, "/Users/ssa009/workspace/angelman/app/src/main/assets/bus.jpg");
         intent.putExtra(ImageUtil.CARD_TYPE, CardModel.CardType.PHOTO_CARD.getValue());
-
         when(applicationManager.getCategoryModel()).thenReturn(getCategoryModel());
         when(applicationManager.getCategoryModelColor()).thenReturn(getCategoryModelColor());
-
         subject = setupActivityWithIntent(MakeCardActivity.class, intent);
+    }
+    private void setupVideoCard() {
+        Intent intent = new Intent();
+        intent.putExtra(ImageUtil.CONTENT_PATH, "/Users/ssa009/workspace/angelman/app/src/main/assets/bus.jpg");
+        intent.putExtra(ImageUtil.CARD_TYPE ,CardModel.CardType.VIDEO_CARD.getValue());
+        when(applicationManager.getCategoryModel()).thenReturn(getCategoryModel());
+        when(applicationManager.getCategoryModelColor()).thenReturn(getCategoryModelColor());
+        subject = setupActivityWithIntent(MakeCardActivity.class, intent);
+
     }
 
     @Test
     public void whenLaunchedApp_thenSetBackgroundColorChangedToRelatedInCategory() throws Exception {
+        setupPhotoCard();
         assertThat(applicationManager.getCategoryModelColor()).isEqualTo(R.drawable.background_gradient_blue);
     }
 
     @Test
     public void when1SecondAfterLaunched_thenShowKeyboardAndEditTextViewAndHideTextView() throws InterruptedException {
+        setupPhotoCard();
 
         TextView cardImageTitle = (TextView) subject.findViewById(R.id.card_image_title);
         EditText editText = (EditText) subject.findViewById(R.id.card_image_title_edit);
@@ -109,9 +119,8 @@ public class MakeCardActivityTest extends UITest{
 
     @Test
     public void givenEditTextIsFocusedAndKeyboardIsShown_whenInputOneMoreCharacterAndEnterClicked_thenShowCardTitleTextView() throws Exception {
-        //given
+        setupPhotoCard();
 
-        //when
         EditText cardTitleEdit = (EditText) subject.findViewById(R.id.card_image_title_edit);
         TextView textView = ((TextView) subject.findViewById(R.id.card_image_title));
 
@@ -122,13 +131,15 @@ public class MakeCardActivityTest extends UITest{
 
         enterKey(cardTitleEdit);
 
-        //then
         assertThat(textView).isGone();
         assertThat(cardTitleEdit).isVisible();
     }
 
     @Test
     public void givenExistSingleCard_whenClickEnter_thenSaveNewSingleCard() throws Exception {
+        setupPhotoCard();
+
+
         EditText cardTitleEdit = (EditText) subject.findViewById(R.id.card_image_title_edit);
         TextView textView = ((TextView) subject.findViewById(R.id.card_image_title));
         subject.cardView.status = CardView.CardViewStatus.CARD_TITLE_EDITABLE;
@@ -140,6 +151,8 @@ public class MakeCardActivityTest extends UITest{
 
     @Test
     public void whenCompletedCardTitleTyping_thenShowMicButton() throws Exception {
+        setupPhotoCard();
+
         EditText cardTitleEdit = (EditText) subject.findViewById(R.id.card_image_title_edit);
         cardTitleEdit.setText("TEST");
 
@@ -151,6 +164,8 @@ public class MakeCardActivityTest extends UITest{
 
     @Test
     public void givenShowMicButton_whenClickMicButton_thenShowCountingScene() throws Exception {
+        setupPhotoCard();
+
         Button micBtn = (Button) subject.findViewById(R.id.mic_btn);
         micBtn.setVisibility(View.VISIBLE);
 
@@ -161,6 +176,8 @@ public class MakeCardActivityTest extends UITest{
 
     @Test
     public void whenShowCountingScene_thenCountDown3To1() throws Exception {
+        setupPhotoCard();
+
         Button micBtn = (Button) subject.findViewById(R.id.mic_btn);
         micBtn.setVisibility(View.VISIBLE);
         micBtn.performClick();
@@ -175,6 +192,7 @@ public class MakeCardActivityTest extends UITest{
 
     @Test
     public void whenCountDown3To1_thenStartVoiceRecordAndShowRecordStopButton() throws Exception {
+        setupPhotoCard();
         subject.recordUtil = mock(RecordUtil.class);
         subject.playUtil = mock(PlayUtil.class);
 
@@ -203,6 +221,7 @@ public class MakeCardActivityTest extends UITest{
 
     @Test
     public void whenStopRecord_thenShowsCheckRecordButtonAndText() throws Exception {
+        setupPhotoCard();
 
         recordComplete();
         assertThat(((TextView) subject.findViewById(R.id.waiting_count)).getText()).isEqualTo("녹음된 음성을 확인하세요");
@@ -212,12 +231,16 @@ public class MakeCardActivityTest extends UITest{
 
     @Test
     public void whenFinishToTakeAPictureThenShowEditTextOfCardNameAndKeyboardWithKoreanCompleteKey() throws Exception {
+        setupPhotoCard();
+
         EditText cardTitleEdit = (EditText) subject.findViewById(R.id.card_image_title_edit);
         assertThat(cardTitleEdit.getMaxLines()).isEqualTo(1);
     }
 
     @Test
     public void whenStopRecordAndCheckButtonIsClicked_thenCreateNewCard() throws Exception {
+        setupPhotoCard();
+
         recordComplete();
         subject.findViewById(R.id.record_stop_btn).performClick();
         verify(cardRepository).createSingleCardModel((CardModel) anyObject());
@@ -225,6 +248,8 @@ public class MakeCardActivityTest extends UITest{
 
     @Test
     public void whenStopRecordAndCheckButtonIsClicked_thenFinishMakeCardAndShowCardList() throws Exception {
+        setupPhotoCard();
+
         recordComplete();
         subject.findViewById(R.id.record_stop_btn).performClick();
 
@@ -238,6 +263,8 @@ public class MakeCardActivityTest extends UITest{
 
     @Test
     public void givenCardTitleEditableMode_whenClickedHardwareBackButton_thenFinishMakeCardActivity() throws Exception {
+        setupPhotoCard();
+
         EditText cardTitleEdit = (EditText) subject.findViewById(R.id.card_image_title_edit);
         subject.cardView.status = CardView.CardViewStatus.CARD_TITLE_EDITABLE;
         cardTitleEdit.setText("치킨");
@@ -251,6 +278,7 @@ public class MakeCardActivityTest extends UITest{
 
     @Test
     public void givenCardTitleShownMode_whenClickedHardwareBackButton_thenChangeCardStatusAndShowKeyBoard() throws Exception {
+        setupPhotoCard();
         EditText cardTitleEdit = (EditText) subject.findViewById(R.id.card_image_title_edit);
         TextView cardTitle = (TextView) subject.findViewById(R.id.card_image_title);
 
@@ -270,6 +298,7 @@ public class MakeCardActivityTest extends UITest{
 
     @Test
     public void givenClickedMicButtonAndWhenStartedCountDown_whenClickedHardwareBackButton_then() throws Exception {
+        setupPhotoCard();
         Button micBtn = (Button) subject.findViewById(R.id.mic_btn);
         micBtn.setVisibility(View.VISIBLE);
 
@@ -284,6 +313,7 @@ public class MakeCardActivityTest extends UITest{
 
     @Test
     public void givenClickedMicButtonAndFinishedToRecord_whenClickedHardwareBackButton_then() throws Exception {
+        setupPhotoCard();
         subject.recordUtil = mock(RecordUtil.class);
         subject.playUtil = mock(PlayUtil.class);
 
@@ -308,6 +338,21 @@ public class MakeCardActivityTest extends UITest{
         assertThat(shadowOf((subject.findViewById(R.id.record_stop_btn)).getBackground()).getCreatedFromResId()).isEqualTo(R.drawable.record_stop);
     }
 
+    @Test
+    public void whenShowMakeVideoCardActivity_thenShowVideoPreviewAndPlayButton() throws Exception {
+        setupVideoCard();
+        assertThat(subject.findViewById(R.id.card_image)).isGone();
+        assertThat(subject.findViewById(R.id.card_video)).isVisible();
+        assertThat(subject.findViewById(R.id.play_button)).isVisible();
+    }
+
+    @Test
+    public void whenShowMakePhotoCardActivity_thenShowImageView() throws Exception {
+        setupPhotoCard();
+        assertThat(subject.findViewById(R.id.card_image)).isVisible();
+        assertThat(subject.findViewById(R.id.card_video)).isGone();
+        assertThat(subject.findViewById(R.id.play_button)).isGone();
+    }
 
     private void recordComplete() {
         PlayUtil mockPlayUtil = mock(PlayUtil.class);

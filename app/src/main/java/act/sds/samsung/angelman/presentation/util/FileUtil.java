@@ -102,4 +102,9 @@ public class FileUtil {
             out.write(buffer, 0, read);
         }
     }
+
+    public static boolean isContentExist(String contentPath){
+        return  new File(contentPath).exists();
+    }
+
 }

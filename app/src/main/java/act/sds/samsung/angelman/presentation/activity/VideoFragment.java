@@ -777,8 +777,11 @@ public class VideoFragment extends Fragment
                     Toast.LENGTH_SHORT).show();
             Log.d(TAG, "Video saved: " + mNextVideoAbsolutePath);
         }
-        mNextVideoAbsolutePath = null;
 
+        startMakeCardActivity();
+    }
+
+    private void startMakeCardActivity() {
         Intent intent = new Intent(getActivity(), MakeCardActivity.class);
         intent.putExtra(ImageUtil.CONTENT_PATH, mNextVideoAbsolutePath);
         intent.putExtra(ImageUtil.CARD_TYPE, CardModel.CardType.VIDEO_CARD.getValue());

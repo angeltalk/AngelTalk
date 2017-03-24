@@ -2,6 +2,7 @@ package act.sds.samsung.angelman.presentation.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.percent.PercentRelativeLayout;
@@ -30,8 +31,10 @@ import act.sds.samsung.angelman.domain.model.CardModel;
 import act.sds.samsung.angelman.domain.repository.CardRepository;
 import act.sds.samsung.angelman.presentation.custom.CardView;
 import act.sds.samsung.angelman.presentation.custom.FontTextView;
+import act.sds.samsung.angelman.presentation.custom.VideoCardTextureView;
 import act.sds.samsung.angelman.presentation.util.AngelManGlideTransform;
 import act.sds.samsung.angelman.presentation.util.ApplicationManager;
+import act.sds.samsung.angelman.presentation.util.FileUtil;
 import act.sds.samsung.angelman.presentation.util.FontUtil;
 import act.sds.samsung.angelman.presentation.util.ImageUtil;
 import act.sds.samsung.angelman.presentation.util.PlayUtil;
@@ -98,7 +101,32 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
         cardView = (CardView) findViewById(R.id.card_view_layout);
         cardView.setCardViewLayoutMode(CardView.MODE_MAKE_CARD);
         if(cardType.equals(CardModel.CardType.PHOTO_CARD)) {
+            cardView.cardImage.setVisibility(View.VISIBLE);
+            cardView.cardVideo.setVisibility(View.GONE);
+            cardView.playButton.setVisibility(View.GONE);
             Glide.with(getApplicationContext()).load(new File(contentPath)).override(280, 280).bitmapTransform(new AngelManGlideTransform(this, 10, 0, AngelManGlideTransform.CornerType.TOP)).into(cardView.cardImage);
+        } else if (cardType.equals(CardModel.CardType.VIDEO_CARD)) {
+            cardView.cardImage.setVisibility(View.GONE);
+            cardView.cardVideo.setVisibility(View.VISIBLE);
+            cardView.playButton.setVisibility(View.VISIBLE);
+            cardView.playButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    cardView.playButton.setVisibility(View.GONE);
+                    cardView.cardVideo.play(new MediaPlayer.OnCompletionListener() {
+                        @Override
+                        public void onCompletion(MediaPlayer mediaPlayer) {
+                            cardView.playButton.setVisibility(View.VISIBLE);
+                            cardView.cardVideo.resetPlayer();
+                        }
+                    });
+                }
+            });
+
+            cardView.cardVideo.setScaleType(VideoCardTextureView.ScaleType.CENTER_CROP);
+            if(FileUtil.isContentExist(contentPath)) {
+                cardView.cardVideo.setDataSource(contentPath);
+            }
         }
 
         cardView.cardTitleEdit.setOnEditorActionListener(new TextView.OnEditorActionListener() {
