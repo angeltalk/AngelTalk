@@ -17,7 +17,9 @@ public class ScreenReceiver extends BroadcastReceiver {
 
     public void onReceive(final Context context, Intent intent) {
 
-        applicationManager = new ApplicationManager(context);
+        if(applicationManager == null) {
+            applicationManager = new ApplicationManager(context);
+        }
 
         if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
 
