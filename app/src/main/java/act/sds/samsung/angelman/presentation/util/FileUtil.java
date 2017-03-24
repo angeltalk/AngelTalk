@@ -48,24 +48,27 @@ public class FileUtil {
             voiceFolder.mkdir();
     }
 
+
+
+
     public static void copyDefaultAssetImagesToImageFolder(Context context) {
         AssetManager assetManager = context.getAssets();
         String[] files = null;
         try {
-            files = assetManager.list("images");
+            files = assetManager.list("contents");
         } catch (IOException e) {
             Log.e("AngelmanApplication", "Failed to get asset file list.", e);
         }
-        if (files != null) for (String filename : files) {
+        if (files != null) for (String fileName : files) {
             InputStream in = null;
             OutputStream out = null;
             try {
-                in = assetManager.open("images" + File.separator + filename);
-                File outFile = new File(getImageFolder(), filename);
+                in = assetManager.open("contents" + File.separator + fileName);
+                File outFile = new File(getImageFolder(), fileName);
                 out = new FileOutputStream(outFile);
                 copyFile(in, out);
             } catch(IOException e) {
-                Log.e("AngelmanApplication", "Failed to copy asset file: " + filename, e);
+                Log.e("AngelmanApplication", "Failed to copy asset file: " + fileName, e);
             }
             finally {
                 if (in != null) {
