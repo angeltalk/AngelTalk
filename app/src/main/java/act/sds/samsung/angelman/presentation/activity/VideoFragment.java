@@ -91,7 +91,7 @@ public class VideoFragment extends Fragment
     private String mNextVideoAbsolutePath;
     private CaptureRequest.Builder mPreviewBuilder;
     private Surface mRecorderSurface;
-    private Handler h;
+    private Handler h ;
     private Runnable timerThread;
     private boolean allowRefresh = false;
 
@@ -525,6 +525,7 @@ public class VideoFragment extends Fragment
         }
         try {
             //closePreviewSession();
+            h = new Handler();
             SurfaceTexture texture = mTextureView.getSurfaceTexture();
             assert texture != null;
             texture.setDefaultBufferSize(mPreviewSize.getWidth(), mPreviewSize.getHeight());
