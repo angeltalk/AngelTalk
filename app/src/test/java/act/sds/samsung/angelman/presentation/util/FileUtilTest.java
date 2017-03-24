@@ -57,7 +57,7 @@ public class FileUtilTest {
         FileUtil.copyDefaultAssetImagesToImageFolder(context);
 
         File imageFolder = new File(FileUtil.getImageFolder());
-        assertThat(imageFolder.listFiles().length).isEqualTo(context.getAssets().list("images").length);
+        assertThat(imageFolder.listFiles().length).isEqualTo(context.getAssets().list("contents").length);
     }
 
     @Test
