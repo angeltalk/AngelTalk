@@ -118,7 +118,7 @@ public class VideoCardTextureView extends TextureView implements TextureView.Sur
     }
 
     private void initPlayer() {
-        if (mMediaPlayer == null) {
+        if (mMediaPlayer == null ) {
             mMediaPlayer = new MediaPlayer();
         } else {
             mMediaPlayer.reset();
@@ -175,7 +175,7 @@ public class VideoCardTextureView extends TextureView implements TextureView.Sur
                     mIsVideoPrepared = true;
                     if (mIsPlayCalled && mIsViewAvailable) {
                         log("Player is prepared and play() was called.");
-                        play();
+                        play(null);
                     }
 
                     if (mListener != null) {
@@ -199,7 +199,7 @@ public class VideoCardTextureView extends TextureView implements TextureView.Sur
      *
      * If video is stopped or ended and play() method was called, video will start over.
      */
-    public void play() {
+    public void play(MediaPlayer.OnCompletionListener completionListener) {
         if (!mIsDataSourceSet) {
             log("play() was called but data source was not set.");
             return;
@@ -238,6 +238,9 @@ public class VideoCardTextureView extends TextureView implements TextureView.Sur
         }
 
         mState = State.PLAY;
+        if(completionListener != null){
+            mMediaPlayer.setOnCompletionListener(completionListener);
+        }
         mMediaPlayer.start();
     }
 
@@ -338,7 +341,7 @@ public class VideoCardTextureView extends TextureView implements TextureView.Sur
         mIsViewAvailable = true;
         if (mIsDataSourceSet && mIsPlayCalled && mIsVideoPrepared) {
             log("View is available and play() was called.");
-            play();
+            play(null);
         }
     }
 
@@ -363,4 +366,15 @@ public class VideoCardTextureView extends TextureView implements TextureView.Sur
         }
         return false;
     }
+
+    public void resetPlayer(){
+        mMediaPlayer.seekTo(0);
+        mState = State.STOP;
+    }
+
+    public boolean isDataSourceSetup(){
+        return mIsDataSourceSet;
+    }
+
+
 }

@@ -18,8 +18,10 @@ public class CardView extends PercentRelativeLayout {
     public static final int MODE_VIEW_CARD = 1;
 
     public ImageView cardImage;
+    public VideoCardTextureView cardVideo;
     public EditText cardTitleEdit;
     public TextView cardTitle;
+    public ImageView playButton;
 
     public CardModel dataModel;
     public CardViewStatus status;
@@ -54,7 +56,9 @@ public class CardView extends PercentRelativeLayout {
         this.status = CardViewStatus.CARD_TITLE_SHOWN;
 
         cardImage = (ImageView)findViewById(R.id.card_image);
+        cardVideo = (VideoCardTextureView) findViewById(R.id.card_video);
 
+        playButton = (ImageView) findViewById(R.id.play_button);
         cardTitle = (TextView) findViewById(R.id.card_image_title);
         cardTitleEdit = (EditText) findViewById(R.id.card_image_title_edit);
     }

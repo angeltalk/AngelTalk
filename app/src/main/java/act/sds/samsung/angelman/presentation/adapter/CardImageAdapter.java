@@ -1,6 +1,7 @@
 package act.sds.samsung.angelman.presentation.adapter;
 
 import android.content.Context;
+import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
@@ -116,8 +117,9 @@ public class CardImageAdapter extends PagerAdapter {
                 VideoCardTextureView cardVideoView = ((VideoCardTextureView) cardView.findViewById(R.id.card_video));
                 cardVideoView.setVisibility(View.VISIBLE);
                 cardVideoView.setScaleType(VideoCardTextureView.ScaleType.CENTER_CROP);
-                if(new File(FileUtil.getImageFolder() + File.separator + singleSectionItems.contentPath).exists()) {
-                    cardVideoView.setDataSource(FileUtil.getImageFolder() + File.separator + singleSectionItems.contentPath);
+                File video = getImageFile(singleSectionItems.contentPath);
+                if(video.exists()) {
+                    cardVideoView.setDataSource(video.getAbsolutePath());
                 }
             }
 
@@ -203,9 +205,15 @@ public class CardImageAdapter extends PagerAdapter {
             cardView.startAnimation(animSet);
 
             if(cardView.dataModel.cardType == CardModel.CardType.VIDEO_CARD) {
-                VideoCardTextureView cardVideoView = ((VideoCardTextureView) cardView.findViewById(R.id.card_video));
+                final VideoCardTextureView cardVideoView = ((VideoCardTextureView) cardView.findViewById(R.id.card_video));
                 if(cardVideoView != null) {
-                    cardVideoView.play();
+                    cardVideoView.play(new MediaPlayer.OnCompletionListener() {
+                        @Override
+                        public void onCompletion(MediaPlayer mediaPlayer) {
+                            cardVideoView.resetPlayer();
+                        }
+                    });
+
                 }
                 startSpeakCardName(cardView, 3500);
             } else {
