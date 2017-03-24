@@ -30,9 +30,6 @@ public class ApplicationManager {
     private static final String FIRST_LAUNCH = "firstLaunch";
 
     private SharedPreferences preferences;
-
-
-
     private ChildModeManager childModeManager;
     private Context context;
 
