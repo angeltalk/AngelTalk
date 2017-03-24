@@ -35,6 +35,14 @@ public class NotificationActionManager {
         generateNotification(intent);
     }
 
+    public void initNotificationAfterCompletingBoot(Intent intent) {
+        applicationManager.changeChildMode(false);
+        isChildMode = false;
+        RemoteViews remoteViews = this.setNotificationView();
+        this.setOnClickListener(remoteViews, intent);
+        this.notify(remoteViews);
+    }
+
     private void changeChildMode() {
         applicationManager.changeChildMode(!isChildMode);
         isChildMode = !isChildMode;
