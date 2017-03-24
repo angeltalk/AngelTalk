@@ -28,6 +28,7 @@ public class ChildModeManager {
     }
 
     public void createAndAddCategoryMenu() {
+
         if (categoryMenuLayout == null) {
             categoryMenuLayout = new CategoryMenuLayout(context, null);
             mWindowManager.addView(categoryMenuLayout, params);
