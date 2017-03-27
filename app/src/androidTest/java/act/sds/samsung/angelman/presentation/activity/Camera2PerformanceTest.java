@@ -22,7 +22,6 @@ import act.sds.samsung.angelman.R;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
@@ -48,7 +47,6 @@ public class Camera2PerformanceTest {
                         isDisplayed()));
         cardView.perform(click());
 
-
         ViewInteraction addCardView = onView(
                 allOf(withClassName(is("act.sds.samsung.angelman.presentation.custom.AddCardView")),
                         withParent(allOf(withId(R.id.view_pager),
@@ -56,7 +54,8 @@ public class Camera2PerformanceTest {
                         isDisplayed()));
         addCardView.perform(click());
 
-        for (int i = 0; i < 100; i++) {
+
+        for (int i = 0; i < 2; i++) {
             Log.d("camera2PerformanceTest", "i = " + i);
 
             ViewInteraction relativeLayout = onView(
@@ -77,9 +76,11 @@ public class Camera2PerformanceTest {
                             isDisplayed()));
 
             Thread.sleep(1000);
-            appCompatEditText.perform(replaceText("pen"), closeSoftKeyboard());
+            appCompatEditText.perform(replaceText("pen"));
             Thread.sleep(1000);
-            pressBack();
+
+            pressBack(); // To hide softKey
+            pressBack(); // Go Back To CameraGallerySelection Activity
             Thread.sleep(1000);
         }
     }
