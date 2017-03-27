@@ -27,6 +27,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.AssetFileDescriptor;
+import android.content.res.Configuration;
 import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.graphics.SurfaceTexture;
@@ -475,11 +476,11 @@ public class VideoFragment extends Fragment
 
             int orientation = getResources().getConfiguration().orientation;
 
-            //if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            //    mTextureView.setAspectRatio(mPreviewSize.getWidth(), mPreviewSize.getHeight());
-            //} else {
-            //    mTextureView.setAspectRatio(mPreviewSize.getHeight(), mPreviewSize.getWidth());
-            //}
+            if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                mTextureView.setAspectRatio(mPreviewSize.getWidth(), mPreviewSize.getHeight());
+            } else {
+                mTextureView.setAspectRatio(mPreviewSize.getHeight(), mPreviewSize.getWidth());
+            }
 
             configureTransform(width, height);
             mMediaRecorder = new MediaRecorder();
@@ -705,7 +706,7 @@ public class VideoFragment extends Fragment
             SurfaceTexture texture = mTextureView.getSurfaceTexture();
             assert texture != null;
             texture.setDefaultBufferSize(mPreviewSize.getWidth(), mPreviewSize.getHeight());
-            mPreviewBuilder = mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_RECORD);
+            mPreviewBuilder = mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
             List<Surface> surfaces = new ArrayList<>();
 
             // Set up Surface for the camera preview
