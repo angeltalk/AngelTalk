@@ -106,6 +106,7 @@ public class CardViewPagerActivity extends AbstractActivity {
         mViewPager.setAdapter(adapter);
         OverScrollDecoratorHelper.setUpOverScroll(mViewPager);
 
+
         mViewPager.addOnPageChangeListener(pageChangeListener);
 
         TextView categoryTitle = (TextView) findViewById(R.id.category_item_title);

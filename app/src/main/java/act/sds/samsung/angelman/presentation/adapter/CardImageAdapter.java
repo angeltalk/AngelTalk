@@ -1,9 +1,14 @@
 package act.sds.samsung.angelman.presentation.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaPlayer;
+import android.media.ThumbnailUtils;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Vibrator;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.util.SparseArray;
@@ -120,6 +125,11 @@ public class CardImageAdapter extends PagerAdapter {
                 File video = getImageFile(singleSectionItems.contentPath);
                 if(video.exists()) {
                     cardVideoView.setDataSource(video.getAbsolutePath());
+                    if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {
+                        Bitmap thumb = ThumbnailUtils.createVideoThumbnail(video.getAbsolutePath(), MediaStore.Images.Thumbnails.MINI_KIND);
+                        BitmapDrawable bitmapDrawable = new BitmapDrawable(thumb);
+                        cardVideoView.setBackground(bitmapDrawable);
+                    }
                 }
             }
 

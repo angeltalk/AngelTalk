@@ -209,7 +209,7 @@ public class CardViewPagerActivityTest extends UITest {
                 expectedImageView.setLayoutParams(cardImageView.getLayoutParams());
 
                 Glide.with(RuntimeEnvironment.application)
-                        .load("file:///android_asset/water.png")
+                        .load("file:///android_asset/bus.png")
                         .bitmapTransform(new AngelManGlideTransform(RuntimeEnvironment.application, 10, 0, AngelManGlideTransform.CornerType.TOP))
                         .override(280, 280)
                         .into(expectedImageView);
@@ -366,7 +366,7 @@ public class CardViewPagerActivityTest extends UITest {
             ImageView expectedImageView = new ImageView(subject.getApplicationContext());
             expectedImageView.setLayoutParams(cardImageView.getLayoutParams());
 
-            rm.load("file:///android_asset/water.png")
+            rm.load("file:///android_asset/bus.png")
                     .bitmapTransform(new AngelManGlideTransform(subject.getApplicationContext(), 10, 0, AngelManGlideTransform.CornerType.TOP))
                     .override(280, 280)
                     .into(expectedImageView);
