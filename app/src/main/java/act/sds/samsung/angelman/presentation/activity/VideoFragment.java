@@ -73,7 +73,7 @@ import java.util.concurrent.TimeUnit;
 import act.sds.samsung.angelman.R;
 import act.sds.samsung.angelman.domain.model.CardModel;
 import act.sds.samsung.angelman.presentation.custom.AutoFitTextureView;
-import act.sds.samsung.angelman.presentation.util.ImageUtil;
+import act.sds.samsung.angelman.presentation.util.ContentsUtil;
 
 public class VideoFragment extends Fragment
         implements View.OnClickListener, FragmentCompat.OnRequestPermissionsResultCallback {
@@ -649,8 +649,8 @@ public class VideoFragment extends Fragment
     }
 
     private String getVideoFilePath() {
-        ImageUtil imageUtil = ImageUtil.getInstance();
-        return imageUtil.getVideoPath();
+        ContentsUtil contentsUtil = ContentsUtil.getInstance();
+        return contentsUtil.getVideoPath();
     }
 
     public void playBeep(String fileName) {
@@ -783,8 +783,8 @@ public class VideoFragment extends Fragment
 
     private void startMakeCardActivity() {
         Intent intent = new Intent(getActivity(), MakeCardActivity.class);
-        intent.putExtra(ImageUtil.CONTENT_PATH, mNextVideoAbsolutePath);
-        intent.putExtra(ImageUtil.CARD_TYPE, CardModel.CardType.VIDEO_CARD.getValue());
+        intent.putExtra(ContentsUtil.CONTENT_PATH, mNextVideoAbsolutePath);
+        intent.putExtra(ContentsUtil.CARD_TYPE, CardModel.CardType.VIDEO_CARD.getValue());
         startActivity(intent);
     }
 

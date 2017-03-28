@@ -2,34 +2,50 @@ package act.sds.samsung.angelman.presentation.util;
 
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.os.Environment;
 import android.view.View;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class ImageUtil {
+import static act.sds.samsung.angelman.presentation.util.FileUtil.IMAGE_FULL_PATH;
+import static act.sds.samsung.angelman.presentation.util.FileUtil.VOICE_FULL_PATH;
+
+public class ContentsUtil {
 
     public static final String IMAGE_FOLDER = "DCIM";
     public static String CONTENT_PATH = "content path";
     public static String CARD_TYPE = "card type";
-    private static ImageUtil instance = null;
+    private static ContentsUtil instance = null;
 
-    private ImageUtil() {}
+    private ContentsUtil() {}
 
-    public static ImageUtil getInstance() {
+    public static ContentsUtil getInstance() {
         if (instance == null)
-            instance = new ImageUtil();
+            instance = new ContentsUtil();
 
         return instance;
     }
 
+    public static String getImageFolder() {
+        return Environment.getExternalStorageDirectory() + File.separator + IMAGE_FULL_PATH;
+    }
+
+    public static String getVoiceFolder() {
+        return Environment.getExternalStorageDirectory() + File.separator + VOICE_FULL_PATH;
+    }
+
     public String getImagePath() {
-        return FileUtil.getImageFolder() + File.separator + DateUtil.getDateNow() +".jpg";
+        return getImageFolder() + File.separator + DateUtil.getDateNow() +".jpg";
     }
 
     public String getVideoPath() {
-        return FileUtil.getImageFolder() + File.separator + DateUtil.getDateNow() +".mp4";
+        return getImageFolder() + File.separator + DateUtil.getDateNow() +".mp4";
+    }
+
+    public String getThumbnailPath(String videoPath) {
+        return videoPath.replace(".mp4",".jpg");
     }
 
     public String makeImagePathForAsset(String imgFileName){

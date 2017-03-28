@@ -54,7 +54,7 @@ import act.sds.samsung.angelman.R;
 import act.sds.samsung.angelman.domain.model.CardModel;
 import act.sds.samsung.angelman.presentation.custom.AutoFitTextureView;
 import act.sds.samsung.angelman.presentation.util.FontUtil;
-import act.sds.samsung.angelman.presentation.util.ImageUtil;
+import act.sds.samsung.angelman.presentation.util.ContentsUtil;
 import act.sds.samsung.angelman.presentation.util.PlayUtil;
 
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -113,7 +113,7 @@ public class Camera2Activity extends AbstractActivity implements View.OnClickLis
     private static final int MAX_PREVIEW_HEIGHT = 1080;
 
     private PlayUtil playUtil;
-    private ImageUtil imageUtil;
+    private ContentsUtil contentsUtil;
 
     /**
      * {@link TextureView.SurfaceTextureListener} handles several lifecycle events on a
@@ -399,9 +399,9 @@ public class Camera2Activity extends AbstractActivity implements View.OnClickLis
 
         ((TextView) findViewById(R.id.picture_guide)).setTypeface(FontUtil.setFont(this, FontUtil.FONT_DEMILIGHT));
 
-        imageUtil = ImageUtil.getInstance();
+        contentsUtil = ContentsUtil.getInstance();
 
-        fileName = imageUtil.getImagePath();
+        fileName = contentsUtil.getImagePath();
         playUtil = PlayUtil.getInstance();
     }
 
@@ -753,8 +753,8 @@ public class Camera2Activity extends AbstractActivity implements View.OnClickLis
                         unlockFocus();
                         mState = STATE_PICTURE_FINISHED;
                         Intent intent = new Intent(Camera2Activity.this, MakeCardActivity.class);
-                        intent.putExtra(ImageUtil.CONTENT_PATH, fileName);
-                        intent.putExtra(ImageUtil.CARD_TYPE, CardModel.CardType.PHOTO_CARD.getValue());
+                        intent.putExtra(ContentsUtil.CONTENT_PATH, fileName);
+                        intent.putExtra(ContentsUtil.CARD_TYPE, CardModel.CardType.PHOTO_CARD.getValue());
                         startActivity(intent);
                         finish();
                     }
@@ -844,7 +844,7 @@ public class Camera2Activity extends AbstractActivity implements View.OnClickLis
             buffer.get(bytes);
             Bitmap original = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
 
-            imageUtil.saveImage(original, fileName, 444, 112);
+            contentsUtil.saveImage(original, fileName, 444, 112);
             mImage.close();
         }
     }

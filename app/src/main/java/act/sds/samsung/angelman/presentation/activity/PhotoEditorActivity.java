@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import act.sds.samsung.angelman.R;
 import act.sds.samsung.angelman.presentation.util.FontUtil;
-import act.sds.samsung.angelman.presentation.util.ImageUtil;
+import act.sds.samsung.angelman.presentation.util.ContentsUtil;
 
 
 public class PhotoEditorActivity extends AbstractActivity {
@@ -26,7 +26,7 @@ public class PhotoEditorActivity extends AbstractActivity {
     protected ScaleGestureDetector scaleGestureDetector;
     private Float scale = 1f;
     private float px = 0, py = 0;
-    private ImageUtil imageUtil;
+    private ContentsUtil contentsUtil;
 
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
@@ -57,7 +57,7 @@ public class PhotoEditorActivity extends AbstractActivity {
 
     private void startShowCardActivity(String fileName) {
         Intent intent = new Intent(PhotoEditorActivity.this, MakeCardActivity.class);
-        intent.putExtra(ImageUtil.CONTENT_PATH, fileName);
+        intent.putExtra(ContentsUtil.CONTENT_PATH, fileName);
         startActivity(intent);
     }
 
@@ -81,12 +81,12 @@ public class PhotoEditorActivity extends AbstractActivity {
         confirmButton.setOnClickListener(onClickListener);
         rotateButton.setOnClickListener(onClickListener);
 
-        imageUtil = ImageUtil.getInstance();
+        contentsUtil = ContentsUtil.getInstance();
     }
 
     public String saveEditedImage() {
-        String fileName = imageUtil.getImagePath();
-        imageUtil.saveImage(getWindow().getDecorView(), fileName);
+        String fileName = contentsUtil.getImagePath();
+        contentsUtil.saveImage(getWindow().getDecorView(), fileName);
         return fileName;
     }
 

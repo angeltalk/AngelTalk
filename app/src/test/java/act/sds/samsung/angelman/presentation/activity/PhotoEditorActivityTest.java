@@ -23,7 +23,7 @@ import java.lang.reflect.Field;
 import act.sds.samsung.angelman.BuildConfig;
 import act.sds.samsung.angelman.R;
 import act.sds.samsung.angelman.UITest;
-import act.sds.samsung.angelman.presentation.util.ImageUtil;
+import act.sds.samsung.angelman.presentation.util.ContentsUtil;
 
 import static org.assertj.android.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -93,11 +93,11 @@ public class PhotoEditorActivityTest extends UITest{
     @Test
     public void whenClickConfirmButton_thenSaveCroppedImageAndShowCardView() throws Exception {
 
-        ImageUtil mockUtil = mock(ImageUtil.class);
+        ContentsUtil mockUtil = mock(ContentsUtil.class);
 
-        Field imageUtilField = PhotoEditorActivity.class.getDeclaredField("imageUtil");
-        imageUtilField.setAccessible(true);
-        imageUtilField.set(subject, mockUtil);
+        Field contentsUtil = PhotoEditorActivity.class.getDeclaredField("contentsUtil");
+        contentsUtil.setAccessible(true);
+        contentsUtil.set(subject, mockUtil);
 
         when(mockUtil.getImagePath()).thenReturn("test file name");
 
@@ -111,7 +111,7 @@ public class PhotoEditorActivityTest extends UITest{
         assertThat(shadowActivity.isFinishing()).isTrue();
 
 
-        imageUtilField.setAccessible(false);
+        contentsUtil.setAccessible(false);
     }
 
     @Test

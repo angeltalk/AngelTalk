@@ -36,7 +36,7 @@ import act.sds.samsung.angelman.presentation.util.AngelManGlideTransform;
 import act.sds.samsung.angelman.presentation.util.ApplicationManager;
 import act.sds.samsung.angelman.presentation.util.FileUtil;
 import act.sds.samsung.angelman.presentation.util.FontUtil;
-import act.sds.samsung.angelman.presentation.util.ImageUtil;
+import act.sds.samsung.angelman.presentation.util.ContentsUtil;
 import act.sds.samsung.angelman.presentation.util.PlayUtil;
 import act.sds.samsung.angelman.presentation.util.RecordUtil;
 import act.sds.samsung.angelman.presentation.util.ResourcesUtil;
@@ -95,8 +95,8 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
         selectedCategoryId = applicationManager.getCategoryModel().index;
 
         playUtil = PlayUtil.getInstance();
-        contentPath = intent.getStringExtra(ImageUtil.CONTENT_PATH);
-        cardType = CardModel.CardType.valueOf(intent.getStringExtra(ImageUtil.CARD_TYPE));
+        contentPath = intent.getStringExtra(ContentsUtil.CONTENT_PATH);
+        cardType = CardModel.CardType.valueOf(intent.getStringExtra(ContentsUtil.CARD_TYPE));
 
         cardView = (CardView) findViewById(R.id.card_view_layout);
         cardView.setCardViewLayoutMode(CardView.MODE_MAKE_CARD);

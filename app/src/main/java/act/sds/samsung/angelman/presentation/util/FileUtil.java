@@ -11,23 +11,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import static act.sds.samsung.angelman.presentation.util.ContentsUtil.getImageFolder;
+
 public class FileUtil {
 
     public static final String ANGELMAN_FOLDER = "angelman";
     public static final String VOICE_FOLDER = "voice";
 
-    public static final String IMAGE_FULL_PATH = ANGELMAN_FOLDER + File.separator + ImageUtil.IMAGE_FOLDER;
+    public static final String IMAGE_FULL_PATH = ANGELMAN_FOLDER + File.separator + ContentsUtil.IMAGE_FOLDER;
     public static final String VOICE_FULL_PATH = ANGELMAN_FOLDER + File.separator + VOICE_FOLDER;
-
-
-
-    public static String getImageFolder() {
-        return Environment.getExternalStorageDirectory() + File.separator + IMAGE_FULL_PATH;
-    }
-
-    public static String getVoiceFolder() {
-        return Environment.getExternalStorageDirectory() + File.separator + VOICE_FULL_PATH;
-    }
 
     public static void initExternalStorageFolder() {
         File rootFolder = new File(Environment.getExternalStorageDirectory() + File.separator + ANGELMAN_FOLDER);
@@ -36,20 +28,17 @@ public class FileUtil {
             rootFolder.mkdir();
         }
 
-        File imageFolder = new File(getImageFolder());
+        File imageFolder = new File(ContentsUtil.getImageFolder());
 
         if (!imageFolder.exists()) {
             imageFolder.mkdir();
         }
 
-        File voiceFolder = new File(getVoiceFolder());
+        File voiceFolder = new File(ContentsUtil.getVoiceFolder());
 
         if (!voiceFolder.exists())
             voiceFolder.mkdir();
     }
-
-
-
 
     public static void copyDefaultAssetImagesToImageFolder(Context context) {
         AssetManager assetManager = context.getAssets();

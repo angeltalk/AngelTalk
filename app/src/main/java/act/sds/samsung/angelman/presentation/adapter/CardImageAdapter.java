@@ -32,8 +32,8 @@ import act.sds.samsung.angelman.presentation.custom.CardView;
 import act.sds.samsung.angelman.presentation.custom.VideoCardTextureView;
 import act.sds.samsung.angelman.presentation.util.AngelManGlideTransform;
 import act.sds.samsung.angelman.presentation.util.ApplicationManager;
-import act.sds.samsung.angelman.presentation.util.FileUtil;
 import act.sds.samsung.angelman.presentation.util.FontUtil;
+import act.sds.samsung.angelman.presentation.util.ContentsUtil;
 import act.sds.samsung.angelman.presentation.util.PlayUtil;
 import act.sds.samsung.angelman.presentation.util.ResourcesUtil;
 
@@ -167,7 +167,7 @@ public class CardImageAdapter extends PagerAdapter {
         if (imagePath.contains("DCIM")) {
             file = new File(imagePath);
         } else {
-            file = new File(FileUtil.getImageFolder() + File.separator + imagePath);
+            file = new File(ContentsUtil.getImageFolder() + File.separator + imagePath);
         }
         return file;
     }

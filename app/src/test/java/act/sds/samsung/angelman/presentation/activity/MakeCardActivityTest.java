@@ -32,7 +32,7 @@ import act.sds.samsung.angelman.domain.model.CategoryModel;
 import act.sds.samsung.angelman.domain.repository.CardRepository;
 import act.sds.samsung.angelman.presentation.custom.CardView;
 import act.sds.samsung.angelman.presentation.util.ApplicationManager;
-import act.sds.samsung.angelman.presentation.util.ImageUtil;
+import act.sds.samsung.angelman.presentation.util.ContentsUtil;
 import act.sds.samsung.angelman.presentation.util.PlayUtil;
 import act.sds.samsung.angelman.presentation.util.RecordUtil;
 import act.sds.samsung.angelman.presentation.util.ResourcesUtil;
@@ -69,16 +69,16 @@ public class MakeCardActivityTest extends UITest{
 
     private void setupPhotoCard() {
         Intent intent = new Intent();
-        intent.putExtra(ImageUtil.CONTENT_PATH, "/Users/ssa009/workspace/angelman/app/src/main/assets/bus.jpg");
-        intent.putExtra(ImageUtil.CARD_TYPE, CardModel.CardType.PHOTO_CARD.getValue());
+        intent.putExtra(ContentsUtil.CONTENT_PATH, "/Users/ssa009/workspace/angelman/app/src/main/assets/bus.jpg");
+        intent.putExtra(ContentsUtil.CARD_TYPE, CardModel.CardType.PHOTO_CARD.getValue());
         when(applicationManager.getCategoryModel()).thenReturn(getCategoryModel());
         when(applicationManager.getCategoryModelColor()).thenReturn(getCategoryModelColor());
         subject = setupActivityWithIntent(MakeCardActivity.class, intent);
     }
     private void setupVideoCard() {
         Intent intent = new Intent();
-        intent.putExtra(ImageUtil.CONTENT_PATH, "/Users/ssa009/workspace/angelman/app/src/main/assets/bus.jpg");
-        intent.putExtra(ImageUtil.CARD_TYPE ,CardModel.CardType.VIDEO_CARD.getValue());
+        intent.putExtra(ContentsUtil.CONTENT_PATH, "/Users/ssa009/workspace/angelman/app/src/main/assets/bus.jpg");
+        intent.putExtra(ContentsUtil.CARD_TYPE ,CardModel.CardType.VIDEO_CARD.getValue());
         when(applicationManager.getCategoryModel()).thenReturn(getCategoryModel());
         when(applicationManager.getCategoryModelColor()).thenReturn(getCategoryModelColor());
         subject = setupActivityWithIntent(MakeCardActivity.class, intent);
