@@ -36,7 +36,7 @@ public class AngelmanDbHelperTest {
 
     private CameraGallerySelectionActivity subject;
 
-    private static final String SQL_CREATE_SINGLECARD_LIST =  "CREATE TABLE " + CardColumns.TABLE_NAME + "(" +
+    private static final String SQL_CREATE_SINGLECARD_LIST = "CREATE TABLE " + CardColumns.TABLE_NAME + "(" +
             CardColumns._ID + " INTEGER_PRIMARY_KEY," +
             CardColumns.CATEGORY_ID + " INTEGER," +
             CardColumns.NAME + " TEXT," +
@@ -44,6 +44,7 @@ public class AngelmanDbHelperTest {
             CardColumns.VOICE_PATH + " TEXT," +
             CardColumns.FIRST_TIME + " TEXT," +
             CardColumns.CARD_TYPE + " TEXT," +
+            CardColumns.THUMBNAIL_PATH + " TEXT," +
             CardColumns.CARD_INDEX + " INTEGER)";
     private static final String SQL_CREATE_CATEGORY_LIST = "CREATE TABLE " + CategoryColumns.TABLE_NAME + "(" +
             CategoryColumns._ID + " INTEGER_PRIMARY_KEY," +

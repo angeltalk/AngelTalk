@@ -2,12 +2,15 @@ package act.sds.samsung.angelman.presentation.util;
 
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.media.ThumbnailUtils;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.View;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
 import static act.sds.samsung.angelman.presentation.util.FileUtil.IMAGE_FULL_PATH;
 import static act.sds.samsung.angelman.presentation.util.FileUtil.VOICE_FULL_PATH;
@@ -40,11 +43,11 @@ public class ContentsUtil {
         return getImageFolder() + File.separator + DateUtil.getDateNow() +".jpg";
     }
 
-    public String getVideoPath() {
+    public static String getVideoPath() {
         return getImageFolder() + File.separator + DateUtil.getDateNow() +".mp4";
     }
 
-    public String getThumbnailPath(String videoPath) {
+    public static String getThumbnailPath(String videoPath) {
         return videoPath.replace(".mp4",".jpg");
     }
 
@@ -98,4 +101,34 @@ public class ContentsUtil {
         return Bitmap.createBitmap(
                 drawingCache, 0, 0, width, height, matrix, false);
     }
+    public static void saveVideoThumbnail(String videoPath) {
+        String thumbNailPath = ContentsUtil.getThumbnailPath(videoPath);
+        File fileCacheItem = new File(thumbNailPath);
+        OutputStream out = null;
+
+        Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(videoPath, MediaStore.Images.Thumbnails.MINI_KIND);
+
+        try
+        {
+            fileCacheItem.createNewFile();
+            out = new FileOutputStream(fileCacheItem);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            try
+            {
+                out.close();
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
+
 }

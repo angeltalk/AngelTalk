@@ -341,7 +341,7 @@ public class MakeCardActivityTest extends UITest{
     @Test
     public void whenShowMakeVideoCardActivity_thenShowVideoPreviewAndPlayButton() throws Exception {
         setupVideoCard();
-        assertThat(subject.findViewById(R.id.card_image)).isGone();
+        assertThat(subject.findViewById(R.id.card_image)).isVisible();
         assertThat(subject.findViewById(R.id.card_video)).isVisible();
         assertThat(subject.findViewById(R.id.play_button)).isVisible();
     }

@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class AngelmanDbHelper extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 9;
+    private static final int DATABASE_VERSION = 10;
 
     private static final String DATABASE_NAME = "AngelmanDatabase";
 
@@ -18,6 +18,7 @@ public class AngelmanDbHelper extends SQLiteOpenHelper {
                     CardColumns.VOICE_PATH + " TEXT," +
                     CardColumns.FIRST_TIME + " TEXT," +
                     CardColumns.CARD_TYPE + " TEXT," +
+                    CardColumns.THUMBNAIL_PATH + " TEXT," +
                     CardColumns.CARD_INDEX + " INTEGER)";
 
     private static final String SQL_CREATE_CATEGORY_LIST =
