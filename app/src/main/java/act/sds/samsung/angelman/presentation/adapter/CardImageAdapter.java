@@ -1,14 +1,9 @@
 package act.sds.samsung.angelman.presentation.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaPlayer;
-import android.media.ThumbnailUtils;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Vibrator;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.util.SparseArray;
@@ -32,7 +27,7 @@ import act.sds.samsung.angelman.presentation.custom.CardView;
 import act.sds.samsung.angelman.presentation.custom.VideoCardTextureView;
 import act.sds.samsung.angelman.presentation.util.AngelManGlideTransform;
 import act.sds.samsung.angelman.presentation.util.ApplicationManager;
-import act.sds.samsung.angelman.presentation.util.FileUtil;
+import act.sds.samsung.angelman.presentation.util.ContentsUtil;
 import act.sds.samsung.angelman.presentation.util.FontUtil;
 import act.sds.samsung.angelman.presentation.util.PlayUtil;
 import act.sds.samsung.angelman.presentation.util.ResourcesUtil;
@@ -118,18 +113,16 @@ public class CardImageAdapter extends PagerAdapter {
                         .override(280, 280)
                         .into(cardView.cardImage);
             } else if (singleSectionItems.cardType == CardModel.CardType.VIDEO_CARD) {
-                cardView.findViewById(R.id.card_image).setVisibility(View.GONE);
+                glide.load(getImageFile(ContentsUtil.getThumbnailPath(singleSectionItems.contentPath)))
+                        .bitmapTransform(new AngelManGlideTransform(context, 10, 0, AngelManGlideTransform.CornerType.TOP))
+                        .override(280, 280)
+                        .into(cardView.cardImage);
                 VideoCardTextureView cardVideoView = ((VideoCardTextureView) cardView.findViewById(R.id.card_video));
                 cardVideoView.setVisibility(View.VISIBLE);
                 cardVideoView.setScaleType(VideoCardTextureView.ScaleType.CENTER_CROP);
                 File video = getImageFile(singleSectionItems.contentPath);
                 if(video.exists()) {
                     cardVideoView.setDataSource(video.getAbsolutePath());
-                    if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {
-                        Bitmap thumb = ThumbnailUtils.createVideoThumbnail(video.getAbsolutePath(), MediaStore.Images.Thumbnails.MINI_KIND);
-                        BitmapDrawable bitmapDrawable = new BitmapDrawable(thumb);
-                        cardVideoView.setBackground(bitmapDrawable);
-                    }
                 }
             }
 
@@ -167,7 +160,7 @@ public class CardImageAdapter extends PagerAdapter {
         if (imagePath.contains("DCIM")) {
             file = new File(imagePath);
         } else {
-            file = new File(FileUtil.getImageFolder() + File.separator + imagePath);
+            file = new File(ContentsUtil.getImageFolder() + File.separator + imagePath);
         }
         return file;
     }

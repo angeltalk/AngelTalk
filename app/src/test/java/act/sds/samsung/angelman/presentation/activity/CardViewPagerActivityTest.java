@@ -124,7 +124,7 @@ public class CardViewPagerActivityTest extends UITest {
 
         View view = ((CardImageAdapter) subject.mViewPager.getAdapter()).getItemAt(4);
         assertThat(view.findViewById(R.id.card_video)).isVisible();
-        assertThat(view.findViewById(R.id.card_image)).isGone();
+        assertThat(view.findViewById(R.id.card_image)).isVisible();
     }
 
     @Test

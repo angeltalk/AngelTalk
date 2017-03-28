@@ -31,7 +31,7 @@ import act.sds.samsung.angelman.presentation.custom.CustomConfirmDialog;
 import act.sds.samsung.angelman.presentation.receiver.NotificationActionReceiver;
 import act.sds.samsung.angelman.presentation.util.ApplicationManager;
 import act.sds.samsung.angelman.presentation.util.FileUtil;
-import act.sds.samsung.angelman.presentation.util.ImageUtil;
+import act.sds.samsung.angelman.presentation.util.ContentsUtil;
 import act.sds.samsung.angelman.presentation.util.NotificationActionManager;
 import butterknife.BindString;
 import butterknife.BindView;
@@ -241,7 +241,7 @@ public class CategoryMenuActivity extends AbstractActivity {
             List<CardModel> singleCardList = cardRepository.getSingleCardListWithCategoryId(selectedCategoryId);
 
             for (CardModel cardModel : singleCardList) {
-                if (cardModel.contentPath.contains(ImageUtil.IMAGE_FOLDER)) {
+                if (cardModel.contentPath.contains(ContentsUtil.IMAGE_FOLDER)) {
                     FileUtil.removeFile(cardModel.contentPath);
                     FileUtil.removeFile(cardModel.voicePath);
                 }

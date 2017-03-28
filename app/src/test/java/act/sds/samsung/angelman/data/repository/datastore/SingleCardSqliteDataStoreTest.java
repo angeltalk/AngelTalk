@@ -34,11 +34,12 @@ public class SingleCardSqliteDataStoreTest {
             CardColumns.CATEGORY_ID + " INTEGER," +
             CardColumns.NAME + " TEXT," +
             CardColumns.CONTENT_PATH + " TEXT," +
+            CardColumns.THUMBNAIL_PATH + " TEXT," +
             CardColumns.VOICE_PATH + " TEXT," +
             CardColumns.FIRST_TIME + " TEXT," +
             CardColumns.CARD_TYPE + " TEXT," +
             CardColumns.CARD_INDEX + " INTEGER)";
-    private String[] columns = {CardColumns.NAME, CardColumns.CONTENT_PATH, CardColumns.FIRST_TIME};
+    private String[] columns = {CardColumns.NAME, CardColumns.CONTENT_PATH,CardColumns.THUMBNAIL_PATH, CardColumns.VOICE_PATH, CardColumns.FIRST_TIME, CardColumns.CARD_TYPE};
 
     @Before
     public void setUp() throws Exception {
@@ -99,17 +100,18 @@ public class SingleCardSqliteDataStoreTest {
     private void insertData(SQLiteDatabase db){
         int LOCKSCREEN_VISIBLE = 1;
         int index = 0;
-        insertCategoryItemData(db,   0       , "물 먹고 싶어요"          , "water.mp4", "20161018_000002", CardModel.CardType.VIDEO_CARD, index++  , LOCKSCREEN_VISIBLE);
-        insertCategoryItemData(db,   0       , "쥬스"          , "juice.png", "20161019_120018", CardModel.CardType.PHOTO_CARD, index++  , LOCKSCREEN_VISIBLE);
-        insertCategoryItemData(db,   0       , "우유"          , "milk.png",  "20161019_120017", CardModel.CardType.PHOTO_CARD, index++  , LOCKSCREEN_VISIBLE);
+        insertCategoryItemData(db,   0       , "물 먹고 싶어요"          , "water.mp4", "water.jpg",  "20161018_000002", CardModel.CardType.VIDEO_CARD, index++  , LOCKSCREEN_VISIBLE);
+        insertCategoryItemData(db,   0       , "쥬스"          , "juice.png",null, "20161019_120018", CardModel.CardType.PHOTO_CARD, index++  , LOCKSCREEN_VISIBLE);
+        insertCategoryItemData(db,   0       , "우유"          , "milk.png", null, "20161019_120017", CardModel.CardType.PHOTO_CARD, index++  , LOCKSCREEN_VISIBLE);
 
     }
 
-    private void insertCategoryItemData(SQLiteDatabase db, int categoryIndex, String item, String imagePath, String firstTime, CardModel.CardType cardType, int index, int lockScreen){
+    private void insertCategoryItemData(SQLiteDatabase db, int categoryIndex, String item, String imagePath,String thumbnailPath, String firstTime, CardModel.CardType cardType, int index, int lockScreen){
         ContentValues contentValues = new ContentValues();
         contentValues.put(CardColumns.CATEGORY_ID, categoryIndex);
         contentValues.put(CardColumns.NAME, item);
         contentValues.put(CardColumns.CONTENT_PATH, imagePath);
+        contentValues.put(CardColumns.THUMBNAIL_PATH, thumbnailPath);
         contentValues.put(CardColumns.FIRST_TIME, firstTime);
         contentValues.put(CardColumns.CARD_TYPE, cardType.getValue());
         contentValues.put(CardColumns.CARD_INDEX, index);

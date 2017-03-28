@@ -21,11 +21,11 @@ import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class)
-public class ImageUtilTest {
+public class ContentsUtilTest {
 
     @Test
     public void givenFileNameAndBitMapExists_whenCallImageSave_thenSaveImage() throws Exception {
-        ImageUtil subject = ImageUtil.getInstance();
+        ContentsUtil subject = ContentsUtil.getInstance();
 
         String fileName = subject.getImagePath();
         Bitmap fakeBitmap = Bitmap.createBitmap(1440, 2560, Bitmap.Config.ARGB_8888);//mock(Bitmap.class);

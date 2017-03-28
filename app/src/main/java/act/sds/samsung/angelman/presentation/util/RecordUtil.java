@@ -32,7 +32,7 @@ public class RecordUtil {
     private MediaRecorder mediaRecorder;
 
     public static String getMediaFilePath(){
-        return FileUtil.getVoiceFolder() + File.separator + DateUtil.getDateNow() +".3gdp";
+        return ContentsUtil.getVoiceFolder() + File.separator + DateUtil.getDateNow() +".3gdp";
     }
 
     public void stopRecord() {

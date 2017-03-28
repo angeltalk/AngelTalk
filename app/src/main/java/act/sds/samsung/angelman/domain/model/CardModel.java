@@ -9,6 +9,7 @@ public class CardModel{
     public String contentPath;
     public String voicePath;
     public String firstTime;
+    public String thumbnailPath;
     public int categoryId;
     public int cardIndex;
     public CardType cardType = CardType.PHOTO_CARD;
@@ -63,6 +64,16 @@ public class CardModel{
         this.cardType = cardType;
     }
 
+    public CardModel(String name, String contentPath, String firstTime, int categoryId, int cardIndex, CardType cardType, String thumbnailPath) {
+        this.name = name;
+        this.contentPath = contentPath;
+        this.firstTime = firstTime;
+        this.categoryId = categoryId;
+        this.cardIndex = cardIndex;
+        this.cardType = cardType;
+        this.thumbnailPath = thumbnailPath;
+    }
+
     public CardModel(String name, String contentPath, String voicePath, String firstTime, int categoryId, CardType cardType) {
         this.name = name;
         this.contentPath = contentPath;
@@ -70,6 +81,15 @@ public class CardModel{
         this.firstTime = firstTime;
         this.categoryId = categoryId;
         this.cardType = cardType;
+    }
+    public CardModel(String name, String contentPath, String voicePath, String firstTime, int categoryId, CardType cardType, String thumbnailPath) {
+        this.name = name;
+        this.contentPath = contentPath;
+        this.voicePath = voicePath;
+        this.firstTime = firstTime;
+        this.categoryId = categoryId;
+        this.cardType = cardType;
+        this.thumbnailPath = thumbnailPath;
     }
 
     public enum CardType {

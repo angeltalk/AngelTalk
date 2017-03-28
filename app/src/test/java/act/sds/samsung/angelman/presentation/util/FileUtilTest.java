@@ -24,14 +24,14 @@ public class FileUtilTest {
     public void getImageFolderTest() throws Exception {
         ShadowEnvironment.setExternalStorageState(Environment.MEDIA_MOUNTED);
         File file = new File(Environment.getExternalStorageDirectory() + File.separator + FileUtil.IMAGE_FULL_PATH);
-        assertThat(FileUtil.getImageFolder()).isEqualTo(file.getAbsolutePath());
+        assertThat(ContentsUtil.getImageFolder()).isEqualTo(file.getAbsolutePath());
     }
 
     @Test
     public void getVoiceFolderTest() throws Exception {
         ShadowEnvironment.setExternalStorageState(Environment.MEDIA_MOUNTED);
         File file = new File(Environment.getExternalStorageDirectory() + File.separator + FileUtil.VOICE_FULL_PATH);
-        assertThat(FileUtil.getVoiceFolder()).isEqualTo(file.getAbsolutePath());
+        assertThat(ContentsUtil.getVoiceFolder()).isEqualTo(file.getAbsolutePath());
     }
 
     @Test
@@ -41,8 +41,8 @@ public class FileUtilTest {
         FileUtil.initExternalStorageFolder();
 
         File rootFolder = new File(Environment.getExternalStorageDirectory() + File.separator + FileUtil.ANGELMAN_FOLDER);
-        File imageFolder = new File(FileUtil.getImageFolder());
-        File voiceFolder = new File(FileUtil.getVoiceFolder());
+        File imageFolder = new File(ContentsUtil.getImageFolder());
+        File voiceFolder = new File(ContentsUtil.getVoiceFolder());
 
         assertThat(rootFolder.exists()).isTrue();
         assertThat(imageFolder.exists()).isTrue();
@@ -56,13 +56,13 @@ public class FileUtilTest {
 
         FileUtil.copyDefaultAssetImagesToImageFolder(context);
 
-        File imageFolder = new File(FileUtil.getImageFolder());
+        File imageFolder = new File(ContentsUtil.getImageFolder());
         assertThat(imageFolder.listFiles().length).isEqualTo(context.getAssets().list("contents").length);
     }
 
     @Test
     public void removeFileTest() throws Exception {
-        File file = new File(FileUtil.getImageFolder());
+        File file = new File(ContentsUtil.getImageFolder());
         file.mkdir();
         assertThat(file.exists()).isTrue();
         FileUtil.removeFile(file.getAbsolutePath());

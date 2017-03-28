@@ -27,7 +27,7 @@ public class SingleCardSqliteDataStore implements  SingleCardDataStore {
         ArrayList<CardModel> list = new ArrayList<>();
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        String[] columns = {CardColumns.NAME, CardColumns.CONTENT_PATH, CardColumns.VOICE_PATH, CardColumns.FIRST_TIME};
+        String[] columns = {CardColumns.NAME, CardColumns.CONTENT_PATH,CardColumns.THUMBNAIL_PATH, CardColumns.VOICE_PATH, CardColumns.FIRST_TIME, CardColumns.CARD_TYPE};
         String orderby = CardColumns.CATEGORY_ID + " asc, " + CardColumns.CARD_INDEX + " desc";
 
         @Cleanup
@@ -40,6 +40,8 @@ public class SingleCardSqliteDataStore implements  SingleCardDataStore {
             cardModel.contentPath = c.getString(c.getColumnIndex(CardColumns.CONTENT_PATH));
             cardModel.voicePath = c.getString(c.getColumnIndex(CardColumns.VOICE_PATH));
             cardModel.firstTime = c.getString(c.getColumnIndex(CardColumns.FIRST_TIME));
+            cardModel.thumbnailPath = c.getString(c.getColumnIndex(CardColumns.THUMBNAIL_PATH));
+            cardModel.cardType = CardModel.CardType.valueOf(c.getString(c.getColumnIndex(CardColumns.CARD_TYPE)));
 
             list.add(cardModel);
 
@@ -59,6 +61,7 @@ public class SingleCardSqliteDataStore implements  SingleCardDataStore {
         values.put(CardColumns.CARD_INDEX, getNewIndex(cardModel.categoryId));
         values.put(CardColumns.CATEGORY_ID, cardModel.categoryId);
         values.put(CardColumns.CARD_TYPE, cardModel.cardType.getValue());
+        values.put(CardColumns.THUMBNAIL_PATH, cardModel.thumbnailPath);
 
         return db.insert(CardColumns.TABLE_NAME, null, values);
     }
@@ -85,6 +88,7 @@ public class SingleCardSqliteDataStore implements  SingleCardDataStore {
                 cardModel.voicePath = c.getString(c.getColumnIndex(CardColumns.VOICE_PATH));
                 cardModel.firstTime = c.getString(c.getColumnIndex(CardColumns.FIRST_TIME));
                 cardModel.cardIndex = c.getInt(c.getColumnIndex(CardColumns.CARD_INDEX));
+                cardModel.thumbnailPath = c.getString(c.getColumnIndex(CardColumns.THUMBNAIL_PATH));
                 cardModel.cardType = CardModel.CardType.valueOf(c.getString(c.getColumnIndex(CardColumns.CARD_TYPE)));
                 list.add(cardModel);
             } while (c.moveToNext());
@@ -133,7 +137,8 @@ public class SingleCardSqliteDataStore implements  SingleCardDataStore {
                                   c.getString(c.getColumnIndex(CardColumns.FIRST_TIME)),
                                   c.getInt(c.getColumnIndex(CardColumns.CATEGORY_ID)),
                                   c.getInt(c.getColumnIndex(CardColumns.CARD_INDEX)),
-                                  CardModel.CardType.valueOf(c.getString(c.getColumnIndex(CardColumns.CARD_TYPE))));
+                                  CardModel.CardType.valueOf(c.getString(c.getColumnIndex(CardColumns.CARD_TYPE))),
+                                  c.getString(c.getColumnIndex(CardColumns.THUMBNAIL_PATH)));
         return cardModel;
     }
 }

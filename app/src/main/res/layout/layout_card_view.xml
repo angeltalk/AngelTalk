@@ -17,30 +17,30 @@
 
         <RelativeLayout
             app:layout_heightPercent="81%"
-            android:layout_width="match_parent"
-            >
-            <ImageView
-                android:id="@+id/card_image"
+            android:layout_width="match_parent">
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-            />
-
-            <act.sds.samsung.angelman.presentation.custom.VideoCardTextureView
-                android:layout_height="match_parent"
-                android:layout_width="match_parent"
-                android:id="@+id/card_video"
-                android:visibility="gone"
-            />
-            <ImageView
-                android:id="@+id/play_button"
-                android:layout_width="87dp"
-                android:layout_height="87dp"
-                android:src="@drawable/btn_preview"
-                android:alpha="0.5"
-                android:visibility="gone"
-                android:layout_centerInParent="true"
-                />
-
+                android:layout_height="match_parent">
+                <ImageView
+                    android:id="@+id/card_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    />
+                <act.sds.samsung.angelman.presentation.custom.VideoCardTextureView
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:id="@+id/card_video"
+                    android:visibility="gone"/>
+                <ImageView
+                    android:id="@+id/play_button"
+                    android:layout_width="87dp"
+                    android:layout_height="87dp"
+                    android:src="@drawable/btn_preview"
+                    android:alpha="0.5"
+                    android:visibility="gone"
+                    android:layout_gravity="center"/>
+            </FrameLayout>
         </RelativeLayout>
 
 

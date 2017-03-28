@@ -2,34 +2,53 @@ package act.sds.samsung.angelman.presentation.util;
 
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.media.ThumbnailUtils;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.View;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
-public class ImageUtil {
+import static act.sds.samsung.angelman.presentation.util.FileUtil.IMAGE_FULL_PATH;
+import static act.sds.samsung.angelman.presentation.util.FileUtil.VOICE_FULL_PATH;
+
+public class ContentsUtil {
 
     public static final String IMAGE_FOLDER = "DCIM";
     public static String CONTENT_PATH = "content path";
     public static String CARD_TYPE = "card type";
-    private static ImageUtil instance = null;
+    private static ContentsUtil instance = null;
 
-    private ImageUtil() {}
+    private ContentsUtil() {}
 
-    public static ImageUtil getInstance() {
+    public static ContentsUtil getInstance() {
         if (instance == null)
-            instance = new ImageUtil();
+            instance = new ContentsUtil();
 
         return instance;
     }
 
-    public String getImagePath() {
-        return FileUtil.getImageFolder() + File.separator + DateUtil.getDateNow() +".jpg";
+    public static String getImageFolder() {
+        return Environment.getExternalStorageDirectory() + File.separator + IMAGE_FULL_PATH;
     }
 
-    public String getVideoPath() {
-        return FileUtil.getImageFolder() + File.separator + DateUtil.getDateNow() +".mp4";
+    public static String getVoiceFolder() {
+        return Environment.getExternalStorageDirectory() + File.separator + VOICE_FULL_PATH;
+    }
+
+    public String getImagePath() {
+        return getImageFolder() + File.separator + DateUtil.getDateNow() +".jpg";
+    }
+
+    public static String getVideoPath() {
+        return getImageFolder() + File.separator + DateUtil.getDateNow() +".mp4";
+    }
+
+    public static String getThumbnailPath(String videoPath) {
+        return videoPath.replace(".mp4",".jpg");
     }
 
     public String makeImagePathForAsset(String imgFileName){
@@ -82,4 +101,34 @@ public class ImageUtil {
         return Bitmap.createBitmap(
                 drawingCache, 0, 0, width, height, matrix, false);
     }
+    public static void saveVideoThumbnail(String videoPath) {
+        String thumbNailPath = ContentsUtil.getThumbnailPath(videoPath);
+        File fileCacheItem = new File(thumbNailPath);
+        OutputStream out = null;
+
+        Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(videoPath, MediaStore.Images.Thumbnails.MINI_KIND);
+
+        try
+        {
+            fileCacheItem.createNewFile();
+            out = new FileOutputStream(fileCacheItem);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            try
+            {
+                out.close();
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
+
 }

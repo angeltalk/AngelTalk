@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.percent.PercentRelativeLayout;
 import android.util.TypedValue;
 import android.view.KeyEvent;
@@ -17,6 +18,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
 
 import java.io.File;
 import java.text.DateFormat;
@@ -34,9 +36,9 @@ import act.sds.samsung.angelman.presentation.custom.FontTextView;
 import act.sds.samsung.angelman.presentation.custom.VideoCardTextureView;
 import act.sds.samsung.angelman.presentation.util.AngelManGlideTransform;
 import act.sds.samsung.angelman.presentation.util.ApplicationManager;
+import act.sds.samsung.angelman.presentation.util.ContentsUtil;
 import act.sds.samsung.angelman.presentation.util.FileUtil;
 import act.sds.samsung.angelman.presentation.util.FontUtil;
-import act.sds.samsung.angelman.presentation.util.ImageUtil;
 import act.sds.samsung.angelman.presentation.util.PlayUtil;
 import act.sds.samsung.angelman.presentation.util.RecordUtil;
 import act.sds.samsung.angelman.presentation.util.ResourcesUtil;
@@ -52,6 +54,8 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
     protected int state = STATE_RECORD_NOT_COMPLETE;
 
     private String contentPath;
+
+    private RequestManager glide;
 
     CardView cardView;
     protected InputMethodManager imm;
@@ -77,12 +81,25 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
     ApplicationManager applicationManager;
     private CardModel.CardType cardType;
 
+    @NonNull
+    private File getImageFile(String imagePath) {
+        File file;
+        if (imagePath.contains("DCIM")) {
+            file = new File(imagePath);
+        } else {
+            file = new File(ContentsUtil.getImageFolder() + File.separator + imagePath);
+        }
+        return file;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_make_card);
 
         ((AngelmanApplication) getApplication()).getAngelmanComponent().inject(this);
+
+        glide = Glide.with(this);
 
         applicationManager.setCategoryBackground(
                 findViewById(R.id.show_card_layout),
@@ -95,23 +112,29 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
         selectedCategoryId = applicationManager.getCategoryModel().index;
 
         playUtil = PlayUtil.getInstance();
-        contentPath = intent.getStringExtra(ImageUtil.CONTENT_PATH);
-        cardType = CardModel.CardType.valueOf(intent.getStringExtra(ImageUtil.CARD_TYPE));
+        contentPath = intent.getStringExtra(ContentsUtil.CONTENT_PATH);
+        cardType = CardModel.CardType.valueOf(intent.getStringExtra(ContentsUtil.CARD_TYPE));
 
         cardView = (CardView) findViewById(R.id.card_view_layout);
+        cardView.cardImage.setVisibility(View.VISIBLE);
         cardView.setCardViewLayoutMode(CardView.MODE_MAKE_CARD);
         if(cardType.equals(CardModel.CardType.PHOTO_CARD)) {
-            cardView.cardImage.setVisibility(View.VISIBLE);
             cardView.cardVideo.setVisibility(View.GONE);
             cardView.playButton.setVisibility(View.GONE);
             Glide.with(getApplicationContext()).load(new File(contentPath)).override(280, 280).bitmapTransform(new AngelManGlideTransform(this, 10, 0, AngelManGlideTransform.CornerType.TOP)).into(cardView.cardImage);
         } else if (cardType.equals(CardModel.CardType.VIDEO_CARD)) {
-            cardView.cardImage.setVisibility(View.GONE);
             cardView.cardVideo.setVisibility(View.VISIBLE);
+
+            glide.load(getImageFile(ContentsUtil.getThumbnailPath(contentPath)))
+                    .bitmapTransform(new AngelManGlideTransform(this, 10, 0, AngelManGlideTransform.CornerType.TOP))
+                    .override(280, 280)
+                    .into(cardView.cardImage);
+
             cardView.playButton.setVisibility(View.VISIBLE);
             cardView.playButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    cardView.cardImage.setVisibility(View.GONE);
                     cardView.playButton.setVisibility(View.GONE);
                     cardView.cardVideo.play(new MediaPlayer.OnCompletionListener() {
                         @Override
@@ -285,7 +308,8 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
                 voiceFile,
                 dateFormat.format(date),
                 selectedCategoryId,
-                cardType);
+                cardType,
+                cardType == CardModel.CardType.VIDEO_CARD  ? ContentsUtil.getThumbnailPath(contentPath) : null);
 
         cardRepository.createSingleCardModel(cardModel);
 
