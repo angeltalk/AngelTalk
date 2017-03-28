@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import act.sds.samsung.angelman.R;
+import act.sds.samsung.angelman.domain.model.CardModel;
 import act.sds.samsung.angelman.presentation.util.FontUtil;
 import act.sds.samsung.angelman.presentation.util.ImageUtil;
 
@@ -58,6 +59,7 @@ public class PhotoEditorActivity extends AbstractActivity {
     private void startShowCardActivity(String fileName) {
         Intent intent = new Intent(PhotoEditorActivity.this, MakeCardActivity.class);
         intent.putExtra(ImageUtil.CONTENT_PATH, fileName);
+        intent.putExtra(ImageUtil.CARD_TYPE, CardModel.CardType.PHOTO_CARD.getValue());
         startActivity(intent);
     }
 
