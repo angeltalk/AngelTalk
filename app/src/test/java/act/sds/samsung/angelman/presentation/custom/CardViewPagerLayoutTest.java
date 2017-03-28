@@ -83,7 +83,7 @@ public class CardViewPagerLayoutTest extends UITest{
         viewPager.invalidate();
         viewPager.requestLayout();
 
-        assertThat(((CardView) ((CardImageAdapter) viewPager.getAdapter()).getItemAt(0)).cardTitle.getText()).isEqualTo("물");
+        assertThat(((CardView) ((CardImageAdapter) viewPager.getAdapter()).getItemAt(0)).cardTitle.getText()).isEqualTo("버스");
 
         if (viewPager != null) {
             ImageView cardImageView = ((CardView) ((CardImageAdapter) viewPager.getAdapter()).getItemAt(0)).cardImage;
@@ -97,7 +97,7 @@ public class CardViewPagerLayoutTest extends UITest{
                     expectedImageView.setLayoutParams(cardImageView.getLayoutParams());
 
                     Glide.with(RuntimeEnvironment.application)
-                            .load("file:///android_asset/water.png")
+                            .load("file:///android_asset/bus.png")
                             .bitmapTransform(new AngelManGlideTransform(RuntimeEnvironment.application, 10, 0, AngelManGlideTransform.CornerType.TOP))
                             .override(280, 280)
                             .into(expectedImageView);
@@ -143,7 +143,7 @@ public class CardViewPagerLayoutTest extends UITest{
 
     private ArrayList<CardModel> getCardListWithCategoryId() {
         ArrayList<CardModel> ret = new ArrayList<>();
-        addSingleCardModel(ret, "물", "water.png", "20010928_120020");
+        addSingleCardModel(ret, "버스", "bus.png", "20010928_120020");
         addSingleCardModel(ret, "유유", "milk.png", "20010928_120019");
         addSingleCardModel(ret, "쥬스", "juice.png", "20010928_120015");
         return ret;

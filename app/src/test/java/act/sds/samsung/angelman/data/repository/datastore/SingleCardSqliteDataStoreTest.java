@@ -64,7 +64,7 @@ public class SingleCardSqliteDataStoreTest {
         verify(mockDbHelper).getReadableDatabase();
 
         assertThat(c.getCount()).isEqualTo(list.size());
-        assertThat(list.get(0).name).isEqualTo("물");
+        assertThat(list.get(0).name).isEqualTo("우유");
     }
 
     @Test
@@ -99,10 +99,10 @@ public class SingleCardSqliteDataStoreTest {
     private void insertData(SQLiteDatabase db){
         int LOCKSCREEN_VISIBLE = 1;
         int index = 0;
-        insertCategoryItemData(db,   0       , "젤리"          , "haribo.mp4", "20161018_000002", CardModel.CardType.VIDEO_CARD, index++  , LOCKSCREEN_VISIBLE);
+        insertCategoryItemData(db,   0       , "물 먹고 싶어요"          , "water.mp4", "20161018_000002", CardModel.CardType.VIDEO_CARD, index++  , LOCKSCREEN_VISIBLE);
         insertCategoryItemData(db,   0       , "쥬스"          , "juice.png", "20161019_120018", CardModel.CardType.PHOTO_CARD, index++  , LOCKSCREEN_VISIBLE);
         insertCategoryItemData(db,   0       , "우유"          , "milk.png",  "20161019_120017", CardModel.CardType.PHOTO_CARD, index++  , LOCKSCREEN_VISIBLE);
-        insertCategoryItemData(db,   0       , "물"           , "water.png", "20161019_000001", CardModel.CardType.PHOTO_CARD, index++  , LOCKSCREEN_VISIBLE);
+
     }
 
     private void insertCategoryItemData(SQLiteDatabase db, int categoryIndex, String item, String imagePath, String firstTime, CardModel.CardType cardType, int index, int lockScreen){

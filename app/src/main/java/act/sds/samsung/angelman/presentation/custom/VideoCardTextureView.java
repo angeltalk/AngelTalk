@@ -361,10 +361,7 @@ public class VideoCardTextureView extends TextureView implements TextureView.Sur
     }
 
     public boolean isPlaying() {
-        if(mMediaPlayer != null) {
-            return mMediaPlayer.isPlaying();
-        }
-        return false;
+        return mMediaPlayer != null && mMediaPlayer.isPlaying();
     }
 
     public void resetPlayer(){
