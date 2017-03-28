@@ -10,9 +10,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import act.sds.samsung.angelman.R;
+import act.sds.samsung.angelman.domain.model.CardModel;
+import act.sds.samsung.angelman.presentation.util.ContentsUtil;
 import act.sds.samsung.angelman.presentation.util.FontUtil;
 import act.sds.samsung.angelman.presentation.util.ContentsUtil;
-
 
 public class PhotoEditorActivity extends AbstractActivity {
     public static final String IMAGE_PATH_EXTRA = "imagePath";
@@ -22,11 +23,11 @@ public class PhotoEditorActivity extends AbstractActivity {
     private ImageView rotateButton;
     private View frameImage;
     private TextView pictureGuide;
+    private ContentsUtil contentsUtil;
 
     protected ScaleGestureDetector scaleGestureDetector;
     private Float scale = 1f;
     private float px = 0, py = 0;
-    private ContentsUtil contentsUtil;
 
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
@@ -58,6 +59,7 @@ public class PhotoEditorActivity extends AbstractActivity {
     private void startShowCardActivity(String fileName) {
         Intent intent = new Intent(PhotoEditorActivity.this, MakeCardActivity.class);
         intent.putExtra(ContentsUtil.CONTENT_PATH, fileName);
+        intent.putExtra(ContentsUtil.CARD_TYPE, CardModel.CardType.PHOTO_CARD.getValue());
         startActivity(intent);
     }
 
