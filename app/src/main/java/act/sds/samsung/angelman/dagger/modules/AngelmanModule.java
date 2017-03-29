@@ -6,7 +6,7 @@ import javax.inject.Singleton;
 
 import act.sds.samsung.angelman.data.repository.CardDataRepository;
 import act.sds.samsung.angelman.data.repository.CategoryDataRepository;
-import act.sds.samsung.angelman.data.synchronizer.FirebaseSynchronizer;
+import act.sds.samsung.angelman.data.transfer.CardTransfer;
 import act.sds.samsung.angelman.domain.repository.CardRepository;
 import act.sds.samsung.angelman.domain.repository.CategoryRepository;
 import act.sds.samsung.angelman.presentation.util.ApplicationManager;
@@ -35,8 +35,8 @@ public class AngelmanModule {
 
     @Provides
     @Singleton
-    FirebaseSynchronizer providesFirebaseSynchronizer() {
-        return  new FirebaseSynchronizer(context.getApplicationContext());
+    CardTransfer providesCardTransfer() {
+        return  new CardTransfer();
     }
 
     @Provides
