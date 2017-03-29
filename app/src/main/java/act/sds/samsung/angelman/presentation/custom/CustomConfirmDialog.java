@@ -12,6 +12,8 @@ import act.sds.samsung.angelman.presentation.util.DialogUtil;
 
 public class CustomConfirmDialog {
 
+    public static final int DEFAULT_WIDTH = 310;
+    public static final int DEFAULT_HEIGHT = 235;
     private final AlertDialog dialog;
 
     public CustomConfirmDialog(Context context, String message, View.OnClickListener positiveOnClickListener, View.OnClickListener negativeOnClickListener) {
@@ -19,19 +21,8 @@ public class CustomConfirmDialog {
         ((TextView) innerView.findViewById(R.id.alert_message)).setText(message);
         dialog = DialogUtil.buildCustomDialog(context, innerView, positiveOnClickListener, negativeOnClickListener);
         dialog.show();
+        dialog.getWindow().setLayout((int) ContentsUtil.convertDpToPixel(DEFAULT_WIDTH, context),(int) ContentsUtil.convertDpToPixel(DEFAULT_HEIGHT, context));
     }
-
-
-
-    public CustomConfirmDialog(Context context, String message, int widthDp, int heightDp, View.OnClickListener positiveOnClickListener, View.OnClickListener negativeOnClickListener) {
-        View innerView = ((Activity)context).getLayoutInflater().inflate(R.layout.custom_confirm_dialog, null);
-        ((TextView) innerView.findViewById(R.id.alert_message)).setText(message);
-        dialog = DialogUtil.buildCustomDialog(context, innerView, positiveOnClickListener, negativeOnClickListener);
-        dialog.show();
-        dialog.getWindow().setLayout((int) ContentsUtil.convertDpToPixel(widthDp, context),(int) ContentsUtil.convertDpToPixel(heightDp, context));
-    }
-
-
 
     public void dismiss() {
         dialog.dismiss();

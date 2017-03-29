@@ -95,7 +95,6 @@ public class CategoryMenuActivity extends AbstractActivity {
         initEasterEggPopup();
         setCategoryGridView();
         launchNotification();
-
         if (getString(R.string.kakao_scheme).equals(getIntent().getScheme())) {
             showDownloadConfirmDialog();
         }
@@ -175,7 +174,7 @@ public class CategoryMenuActivity extends AbstractActivity {
                 categoryDeleteButton.setText(R.string.complete);
                 break;
             default:
-                Log.e("EEEE", "category is not set");
+                Log.e("error", "category is not set");
                 break;
         }
         categoryAdapter.changeCategoryItemsStatus(categoryMenuStatus);
@@ -285,8 +284,8 @@ public class CategoryMenuActivity extends AbstractActivity {
 
 
     private void showDownloadConfirmDialog() {
-        String message = "공유 받은 카드를 \n저장하시겠어요?";
-        dialog = new CustomConfirmDialog(this, message, 280 , 219, saveCardClickListener , cancelClickListener);
+        String message = getString(R.string.save_confirm_message);
+        dialog = new CustomConfirmDialog(this, message, saveCardClickListener , cancelClickListener);
     }
 
     private View.OnClickListener saveCardClickListener = new View.OnClickListener() {

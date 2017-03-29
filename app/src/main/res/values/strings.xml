@@ -21,7 +21,7 @@
     <string name="delete">삭제</string>
     <string name="new_category">새 카테고리</string>
     <string name="complete">완료</string>
-    <string name="delete_category">\'%s\' 카테고리를 삭제하시겠습니까?\n카테고리 안의 모든 카드가 삭제됩니다.</string>
+    <string name="delete_category">\'%s\' 카테고리와 모든 카드를 삭제하시겠습니까?</string>
     <string name="total_card">총 %1$d장</string>
     <string name="icon_label">아이콘</string>
     <string name="background_label">색상</string>
@@ -50,4 +50,5 @@
     <string name="voc_web_url">https://docs.google.com/forms/d/1N8sSXRWc0HHVIQSXgtcO60bj_U_3cXh7Hfl5Nlxp1OE/edit</string>
     <string name="video_guide">3초간 영상을 찍어보세요</string>
     <string name="init_count_text">00:00</string>
+    <string name="save_confirm_message">공유 받은 카드를 \n저장 하시겠어요?</string>
 </resources>

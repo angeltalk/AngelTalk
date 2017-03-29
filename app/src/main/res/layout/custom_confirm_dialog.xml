@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
 
     <ImageView
+        android:id="@+id/img_logo_popup"
+        android:scaleType="fitXY"
         android:layout_width="280dp"
-        android:layout_height="64dp"
+        android:layout_height="57dp"
         android:src="@drawable/img_logo_popup"
-        android:layout_gravity="top"/>
+    />
 
     <act.sds.samsung.angelman.presentation.custom.FontTextView
         android:id="@+id/alert_message"
@@ -20,24 +21,26 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="21dp"
         android:layout_marginStart="24dp"
-        tools:text="공유 받은 카드를 \n저장하시겠어요?"
+        android:layout_marginEnd="24dp"
+        android:layout_below="@id/img_logo_popup"
+        tools:text="공유 받은 카드를 \n저장하시겠어요? \n test"
         android:textSize="16dp"
         android:textColor="@color/black_cc"
         app:font="@string/font_regular"
         />
 
     <RelativeLayout
-        android:layout_width="match_parent"
+        android:layout_width="280dp"
         android:layout_height="52dp"
-        android:layout_gravity="bottom">
+        android:layout_alignParentBottom="true"
+        >
 
         <act.sds.samsung.angelman.presentation.custom.FontTextView
             android:id="@+id/cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="138dp"
-            android:layout_marginBottom="15.2dp"
             android:text="@string/cancel"
             app:font="@string/font_medium"
             android:textColor="#d41468"
@@ -47,9 +50,8 @@
             android:id="@+id/confirm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="52dp"
-            android:layout_marginBottom="15.2dp"
             android:layout_toRightOf="@id/cancel"
             android:text="@string/confirm"
             app:font="@string/font_medium"
@@ -57,4 +59,4 @@
             android:textSize="16sp" />
     </RelativeLayout>
 
-</LinearLayout>
+</RelativeLayout>
