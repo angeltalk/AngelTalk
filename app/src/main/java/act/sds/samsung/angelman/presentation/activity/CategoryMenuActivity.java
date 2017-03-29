@@ -84,6 +84,7 @@ public class CategoryMenuActivity extends AbstractActivity {
     private GestureDetector logoGestureDetector;
 
 
+    String receiveKey ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,9 +95,10 @@ public class CategoryMenuActivity extends AbstractActivity {
         initEasterEggPopup();
         setCategoryGridView();
         launchNotification();
-        if (getString(R.string.kakao_scheme).equals(getIntent().getScheme())) {
+//        if (getString(R.string.kakao_scheme).equals(getIntent().getScheme())) {
+            receiveKey = "20110101"; //TODO: Intent로 넘어온 값으로 셋팅 필요
             showDownloadConfirmDialog();
-        }
+//        }
     }
 
     @Override
@@ -283,7 +285,15 @@ public class CategoryMenuActivity extends AbstractActivity {
     private View.OnClickListener saveCardClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Log.d("#Save Card : ", "OK");
+
+            cardTransfer.downloadCard(receiveKey);
+
+
+
+
+
+
+            dialog.dismiss();
         }
     };
 
