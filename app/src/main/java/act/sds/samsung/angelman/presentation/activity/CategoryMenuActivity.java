@@ -21,7 +21,7 @@ import javax.inject.Inject;
 
 import act.sds.samsung.angelman.AngelmanApplication;
 import act.sds.samsung.angelman.R;
-import act.sds.samsung.angelman.data.synchronizer.FirebaseSynchronizer;
+import act.sds.samsung.angelman.data.transfer.CardTransfer;
 import act.sds.samsung.angelman.domain.model.CardModel;
 import act.sds.samsung.angelman.domain.model.CategoryModel;
 import act.sds.samsung.angelman.domain.repository.CardRepository;
@@ -30,8 +30,8 @@ import act.sds.samsung.angelman.presentation.adapter.CategoryAdapter;
 import act.sds.samsung.angelman.presentation.custom.CustomConfirmDialog;
 import act.sds.samsung.angelman.presentation.receiver.NotificationActionReceiver;
 import act.sds.samsung.angelman.presentation.util.ApplicationManager;
-import act.sds.samsung.angelman.presentation.util.ContentsUtil;
 import act.sds.samsung.angelman.presentation.util.FileUtil;
+import act.sds.samsung.angelman.presentation.util.ContentsUtil;
 import act.sds.samsung.angelman.presentation.util.NotificationActionManager;
 import butterknife.BindString;
 import butterknife.BindView;
@@ -50,7 +50,7 @@ public class CategoryMenuActivity extends AbstractActivity {
     CardRepository cardRepository;
 
     @Inject
-    FirebaseSynchronizer firebaseSynchronizer;
+    CardTransfer cardTransfer;
 
     @Inject
     ApplicationManager applicationManager;
@@ -87,7 +87,6 @@ public class CategoryMenuActivity extends AbstractActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main_menu);
         ButterKnife.bind(this);
         ((AngelmanApplication) getApplication()).getAngelmanComponent().inject(this);
@@ -270,15 +269,8 @@ public class CategoryMenuActivity extends AbstractActivity {
         }
     };
 
-    private void syncWithServer() {
-        List<CardModel> singleCardAllList = cardRepository.getSingleCardAllList();
-        List<CategoryModel> categoryAllList = categoryRepository.getCategoryAllList();
-
-        firebaseSynchronizer.uploadDataToFirebase(categoryAllList, singleCardAllList);
-    }
-
     private void launchNotification() {
-        NotificationActionManager notificationActionManager = new NotificationActionManager(getApplicationContext());
+        NotificationActionManager notificationActionManager = new NotificationActionManager(this);
         notificationActionManager.generateNotification(new Intent(this, NotificationActionReceiver.class));
     }
 

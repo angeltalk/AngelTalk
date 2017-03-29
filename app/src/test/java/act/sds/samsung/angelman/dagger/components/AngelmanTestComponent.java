@@ -15,6 +15,7 @@ import act.sds.samsung.angelman.presentation.adapter.CardImageAdapterTest;
 import act.sds.samsung.angelman.presentation.custom.AddCardViewTest;
 import act.sds.samsung.angelman.presentation.custom.CardViewPagerLayoutTest;
 import act.sds.samsung.angelman.presentation.custom.CategoryMenuLayoutTest;
+import act.sds.samsung.angelman.presentation.service.ScreenReceiverTest;
 import dagger.Component;
 
 @Singleton
@@ -32,4 +33,5 @@ public interface AngelmanTestComponent extends AngelmanComponent {
     void inject(OnboardingActivityTest onboardingActivityTest);
     void inject(VideoActivityTest videoActivityTest);
     void inject(CardImageAdapterTest cardImageAdapterTest);
+    void inject(ScreenReceiverTest screenReceiverTest);
 }

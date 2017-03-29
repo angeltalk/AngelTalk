@@ -1,17 +1,22 @@
 package act.sds.samsung.angelman.presentation.activity;
 
 import android.app.AlertDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.percent.PercentFrameLayout;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
+import com.kakao.kakaolink.AppActionBuilder;
+import com.kakao.kakaolink.AppActionInfoBuilder;
+import com.kakao.kakaolink.KakaoLink;
+import com.kakao.kakaolink.KakaoTalkLinkMessageBuilder;
+import com.kakao.util.KakaoParameterException;
 
 import java.util.List;
 
@@ -29,13 +34,12 @@ import act.sds.samsung.angelman.presentation.custom.CardViewPager;
 import act.sds.samsung.angelman.presentation.custom.SnackBar;
 import act.sds.samsung.angelman.presentation.util.ApplicationManager;
 import act.sds.samsung.angelman.presentation.util.DialogUtil;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 
 public class CardViewPagerActivity extends AbstractActivity {
-
-    public static final String INTENT_KEY_NEW_CARD = "isNewCard";
-
-    private static final int SNACKBAR_DURATION = 3000;
 
     @Inject
     CardRepository cardRepository;
@@ -43,92 +47,96 @@ public class CardViewPagerActivity extends AbstractActivity {
     @Inject
     ApplicationManager applicationManager;
 
-    public static String CATEGORY_COLOR = "categoryColor";
-    CategoryModel selectedCategoryModel;
-    List<CardModel> allCardListInSelectedCategory;
-
-    int currentCardIndex = 0;
-    protected CardViewPager mViewPager;
-    private CardImageAdapter adapter;
-
-    private ImageButton deleteButton;
-
+    @BindView(R.id.title_container)
     CardCategoryLayout titleLayout;
+
+    @BindView(R.id.button_container)
+    LinearLayout buttonContainer;
+
+    @BindView(R.id.card_delete_button)
+    ImageButton cardDeleteButton;
+
+    @BindView(R.id.card_share_button)
+    ImageButton cardShareButton;
+
+    @BindView(R.id.view_pager)
+    CardViewPager mViewPager;
+
+    @BindView(R.id.category_item_title)
+    TextView categoryTitle;
+
+    @BindView(R.id.add_card_button_text)
+    TextView addCardButtonText;
+
+    @OnClick(R.id.card_delete_button)
+    public void deleteButtonOnClick() {
+        deleteCard();
+    }
+
+    @OnClick(R.id.card_share_button)
+    public void shareButtonOnClick() {
+        sendKakaoLinkMessage("https://firebasestorage.googleapis.com/v0/b/angeltalk-app.appspot.com/o/MILO%2Fimage%2F20170308_164511.jpg?alt=media&token=e482cb43-2f06-496a-854f-9f39c26c7039");
+    }
+
+    public static String CATEGORY_COLOR = "categoryColor";
+    public static final String INTENT_KEY_NEW_CARD = "isNewCard";
+
+    List<CardModel> allCardListInSelectedCategory;
+    int currentCardIndex = 0;
+
+    private CategoryModel selectedCategoryModel;
+    private CardImageAdapter adapter;
     private AlertDialog dialog;
     private RequestManager glide;
-
-
-    private View.OnClickListener onClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.card_delete_button:
-                    deleteCard();
-                    break;
-                default:
-                    break;
-            }
-        }
-    };
+    private KakaoLink kakaoLink;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         ((AngelmanApplication) getApplication()).getAngelmanComponent().inject(this);
-
         setContentView(R.layout.activity_card_view);
+        ButterKnife.bind(this);
+        glide = Glide.with(this);
+        kakaoLink = applicationManager.getKakaoLink();
 
+        initializeView();
+
+        if (getIntent().getBooleanExtra(INTENT_KEY_NEW_CARD, false)) {
+            showAddNewCardSuccessMessage();
+            mViewPager.setCurrentItem(1);
+        }
+    }
+
+    private void initializeView() {
         applicationManager.setCategoryBackground(
                 findViewById(R.id.category_item_container),
                 applicationManager.getCategoryModelColor()
         );
-
-        glide = Glide.with(this);
-
-        Intent intent = getIntent();
-
-        titleLayout = (CardCategoryLayout) findViewById(R.id.title_container);
 
         selectedCategoryModel = applicationManager.getCategoryModel();
 
         allCardListInSelectedCategory = cardRepository.getSingleCardListWithCategoryId(selectedCategoryModel.index);
         titleLayout.setCategoryModelTitle(applicationManager.getCategoryModel().title);
         titleLayout.refreshCardCountText(0, allCardListInSelectedCategory.size() + 1);
-
-        deleteButton = (ImageButton) findViewById(R.id.card_delete_button);
-        deleteButton.setOnClickListener(onClickListener);
-
-        mViewPager = (CardViewPager) findViewById(R.id.view_pager);
+        categoryTitle.setText(selectedCategoryModel.title);
 
         adapter = new CardImageAdapter(this, allCardListInSelectedCategory, glide, applicationManager);
         adapter.addNewCardViewAtFirst();
         mViewPager.setAdapter(adapter);
         OverScrollDecoratorHelper.setUpOverScroll(mViewPager);
-
-
-        mViewPager.addOnPageChangeListener(pageChangeListener);
-
-        TextView categoryTitle = (TextView) findViewById(R.id.category_item_title);
-        categoryTitle.setText(selectedCategoryModel.title);
+        mViewPager.addOnPageChangeListener(viewPagerOnPageChangeListener);
 
         titleLayout.refreshCardCountText(0, allCardListInSelectedCategory.size());
-        deleteButton.setOnClickListener(onClickListener);
-
-        if (intent.getBooleanExtra(INTENT_KEY_NEW_CARD, false)) {
-            showAddNewCardSuccessMessage();
-            mViewPager.setCurrentItem(1);
-        }
     }
 
-    private ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
+    private ViewPager.OnPageChangeListener viewPagerOnPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
         }
 
         @Override
         public void onPageSelected(int pos) {
-            showOrHideDeleteButtonByIndex(pos);
+            showAndHideButtonContainerBy(pos);
             currentCardIndex = pos;
             titleLayout.refreshCardCountText(pos, mViewPager.getAdapter().getCount());
         }
@@ -138,12 +146,12 @@ public class CardViewPagerActivity extends AbstractActivity {
         }
     };
 
-    private void showOrHideDeleteButtonByIndex(int pos) {
+    private void showAndHideButtonContainerBy(int pos) {
         if(pos == 0){
-            deleteButton.setVisibility(View.GONE);
+            buttonContainer.setVisibility(View.GONE);
             titleLayout.setAddCardTextButtonVisible(View.GONE);
         }else{
-            deleteButton.setVisibility(View.VISIBLE);
+            buttonContainer.setVisibility(View.VISIBLE);
             titleLayout.setAddCardTextButtonVisible(View.VISIBLE);
         }
     }
@@ -165,7 +173,7 @@ public class CardViewPagerActivity extends AbstractActivity {
                     adapter.addNewCardViewAtFirst();
                     mViewPager.setAdapter(adapter);
                     mViewPager.setCurrentItem(currentItem);
-                    showOrHideDeleteButtonByIndex(currentItem);
+                    showAndHideButtonContainerBy(currentItem);
                     titleLayout.refreshCardCountText(mViewPager.getCurrentItem(), adapter.getCount());
                 }
                 dialog.dismiss();
@@ -201,6 +209,25 @@ public class CardViewPagerActivity extends AbstractActivity {
 
     private void showAddNewCardSuccessMessage() {
         PercentFrameLayout rootLayout = (PercentFrameLayout) findViewById(R.id.category_item_container);
-        SnackBar.snackBarWithDuration(rootLayout, getApplicationContext().getResources().getString(R.string.add_new_card_success), SNACKBAR_DURATION);
+        SnackBar.snackBarWithDuration(rootLayout, getApplicationContext().getResources().getString(R.string.add_new_card_success), ApplicationManager.SNACKBAR_DURATION);
+    }
+
+    private void sendKakaoLinkMessage(String fileUrl) {
+        try {
+            KakaoTalkLinkMessageBuilder kakaoTalkLinkMessageBuilder = kakaoLink.createKakaoTalkLinkMessageBuilder();
+            CardView card = (CardView)adapter.viewCollection.get(mViewPager.getCurrentItem());
+            kakaoTalkLinkMessageBuilder.addText("AngelTalk에서 새로운 카드\'" + card.dataModel.name + "\'를 추가해 보세요");
+            kakaoTalkLinkMessageBuilder.addImage(fileUrl, card.getWidth(), card.getHeight());
+            kakaoTalkLinkMessageBuilder.addAppButton("앱으로 이동", new AppActionBuilder().addActionInfo(
+                    AppActionInfoBuilder.createAndroidActionInfoBuilder()
+                            .setExecuteParam("execparamkey1=1111")
+                            .setMarketParam("referrer=kakakotalklink")
+                            .build())
+                    .setUrl("https://angeltalk-team.bitbucket.io/")
+                    .build());
+            kakaoLink.sendMessage(kakaoTalkLinkMessageBuilder, this);
+        } catch (KakaoParameterException e) {
+            e.printStackTrace();
+        }
     }
 }

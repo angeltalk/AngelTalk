@@ -13,6 +13,9 @@ import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
+import com.kakao.kakaolink.KakaoLink;
+import com.kakao.util.KakaoParameterException;
+
 import act.sds.samsung.angelman.R;
 import act.sds.samsung.angelman.domain.model.CategoryModel;
 import act.sds.samsung.angelman.presentation.custom.AngelmanWidgetProvider;
@@ -22,6 +25,8 @@ import act.sds.samsung.angelman.presentation.service.ScreenService;
 public class ApplicationManager {
 
     public static final String PRIVATE_PREFERENCE_NAME = "act.sds.samsung.angelman";
+    public static final int SNACKBAR_DURATION = 3000;
+
     private static final String CATEGORY_MODEL_TITLE = "categoryModelTitle";
     private static final String CATEGORY_MODEL_ICON = "categoryModelIcon";
     private static final String CATEGORY_MODEL_COLOR = "categoryModelColor";
@@ -32,12 +37,17 @@ public class ApplicationManager {
     private SharedPreferences preferences;
     private ChildModeManager childModeManager;
     private Context context;
-
+    private KakaoLink kakaoLink;
 
     public ApplicationManager(Context context) {
         this.context = context;
         this.preferences = context.getSharedPreferences(PRIVATE_PREFERENCE_NAME, Context.MODE_PRIVATE);
         this.childModeManager = new ChildModeManager(context);
+        try {
+            this.kakaoLink = KakaoLink.getKakaoLink(context);
+        } catch (KakaoParameterException e) {
+            e.printStackTrace();
+        }
     }
 
     public void setCategoryModel(CategoryModel categoryModel){
@@ -149,6 +159,10 @@ public class ApplicationManager {
     @VisibleForTesting
     public ChildModeManager getChildModeManager() {
         return childModeManager;
+    }
+
+    public KakaoLink getKakaoLink() {
+        return kakaoLink;
     }
 
     public void makeChildView(){
