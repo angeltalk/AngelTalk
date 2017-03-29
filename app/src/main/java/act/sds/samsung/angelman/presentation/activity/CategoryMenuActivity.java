@@ -30,8 +30,8 @@ import act.sds.samsung.angelman.presentation.adapter.CategoryAdapter;
 import act.sds.samsung.angelman.presentation.custom.CustomConfirmDialog;
 import act.sds.samsung.angelman.presentation.receiver.NotificationActionReceiver;
 import act.sds.samsung.angelman.presentation.util.ApplicationManager;
-import act.sds.samsung.angelman.presentation.util.ContentsUtil;
 import act.sds.samsung.angelman.presentation.util.FileUtil;
+import act.sds.samsung.angelman.presentation.util.ContentsUtil;
 import act.sds.samsung.angelman.presentation.util.NotificationActionManager;
 import butterknife.BindString;
 import butterknife.BindView;
@@ -94,6 +94,9 @@ public class CategoryMenuActivity extends AbstractActivity {
         initEasterEggPopup();
         setCategoryGridView();
         launchNotification();
+        if (getString(R.string.kakao_scheme).equals(getIntent().getScheme())) {
+            showDownloadConfirmDialog();
+        }
     }
 
     @Override
@@ -170,7 +173,7 @@ public class CategoryMenuActivity extends AbstractActivity {
                 categoryDeleteButton.setText(R.string.complete);
                 break;
             default:
-                Log.e("EEEE", "category is not set");
+                Log.e("error", "category is not set");
                 break;
         }
         categoryAdapter.changeCategoryItemsStatus(categoryMenuStatus);
@@ -268,6 +271,21 @@ public class CategoryMenuActivity extends AbstractActivity {
 
     private void launchNotification() {
         NotificationActionManager notificationActionManager = new NotificationActionManager(this);
-        notificationActionManager.generateNotification(new Intent(this, NotificationActionReceiver.class));//
+        notificationActionManager.generateNotification(new Intent(this, NotificationActionReceiver.class));
     }
+
+
+    private void showDownloadConfirmDialog() {
+        String message = getString(R.string.save_confirm_message);
+        dialog = new CustomConfirmDialog(this, message, saveCardClickListener , cancelClickListener);
+    }
+
+    private View.OnClickListener saveCardClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Log.d("#Save Card : ", "OK");
+        }
+    };
+
+
 }
