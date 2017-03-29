@@ -103,7 +103,7 @@ public class CardViewPagerTest {
         ViewInteraction imageButton = onView(
                 allOf(withId(R.id.card_delete_button),
                         childAtPosition(
-                                allOf(withId(R.id.footer_container),
+                                allOf(withId(R.id.button_container),
                                         childAtPosition(
                                                 withId(R.id.category_item_container),
                                                 2)),
@@ -133,7 +133,7 @@ public class CardViewPagerTest {
         ViewInteraction imageButton2 = onView(
                 allOf(withId(R.id.card_delete_button),
                         childAtPosition(
-                                allOf(withId(R.id.footer_container),
+                                allOf(withId(R.id.button_container),
                                         childAtPosition(
                                                 withId(R.id.category_item_container),
                                                 2)),
@@ -143,7 +143,7 @@ public class CardViewPagerTest {
 
         ViewInteraction appCompatImageButton2 = onView(
                 allOf(withId(R.id.card_delete_button),
-                        withParent(allOf(withId(R.id.footer_container),
+                        withParent(allOf(withId(R.id.button_container),
                                 withParent(withId(R.id.category_item_container)))),
                         isDisplayed()));
         appCompatImageButton2.perform(click());

@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,7 +14,6 @@ import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
@@ -73,8 +71,6 @@ public class CardViewPagerActivityTest extends UITest {
     ApplicationManager applicationManager;
 
     private CardViewPagerActivity subject;
-    private ImageButton deleteCardButton;
-    private TextView addCardText;
 
     @Before
     public void setUp() throws Exception {
@@ -84,9 +80,6 @@ public class CardViewPagerActivityTest extends UITest {
         when(applicationManager.getCategoryModelColor()).thenReturn(getCategoryModelColor());
         subject = setupActivity(CardViewPagerActivity.class);
         subject.mViewPager.setCurrentItem(1);
-
-        deleteCardButton = (ImageButton) subject.findViewById(R.id.card_delete_button);
-        addCardText = (TextView) subject.findViewById(R.id.add_card_button_text);
     }
 
     @Test
@@ -104,8 +97,9 @@ public class CardViewPagerActivityTest extends UITest {
     public void whenLaunchedCardViewPager_thenShowsAddNewCardPageOnViewPager() throws Exception {
         subject.mViewPager.setCurrentItem(0);
 
-        assertThat(deleteCardButton).isGone();
-        assertThat(addCardText).isGone();
+        assertThat(subject.buttonContainer).isGone();
+
+        assertThat(subject.addCardButtonText).isGone();
         assertThat(((CardImageAdapter) subject.mViewPager.getAdapter()).getItemAt(0)).isInstanceOf(AddCardView.class);
     }
 
@@ -116,6 +110,7 @@ public class CardViewPagerActivityTest extends UITest {
         View view = ((CardImageAdapter) subject.mViewPager.getAdapter()).getItemAt(1);
         assertThat(view.findViewById(R.id.card_video)).isGone();
         assertThat(view.findViewById(R.id.card_image)).isVisible();
+        assertThat(subject.buttonContainer).isVisible();
     }
 
     @Test
@@ -125,11 +120,12 @@ public class CardViewPagerActivityTest extends UITest {
         View view = ((CardImageAdapter) subject.mViewPager.getAdapter()).getItemAt(4);
         assertThat(view.findViewById(R.id.card_video)).isVisible();
         assertThat(view.findViewById(R.id.card_image)).isVisible();
+        assertThat(subject.buttonContainer).isVisible();
     }
 
     @Test
-    public void whenLaunchedCardViewPagerActivity_thenShowsDeleteButton() throws Exception {
-        assertThat(deleteCardButton).isVisible();
+    public void whenLaunchedCardViewPagerActivity_thenShowsButtonContainer() throws Exception {
+        assertThat(subject.buttonContainer).isVisible();
     }
 
     @Test
@@ -161,7 +157,7 @@ public class CardViewPagerActivityTest extends UITest {
 
         subject.mViewPager.setCurrentItem(2);
         assertThat(((CardView) ((CardImageAdapter) viewPager.getAdapter()).getItemAt(2)).cardTitle.getText()).isEqualTo("우유");
-        assertThat(deleteCardButton.getVisibility()).isEqualTo(View.VISIBLE);
+        assertThat(subject.cardDeleteButton.getVisibility()).isEqualTo(View.VISIBLE);
 
         when(repository.deleteSingleCardWithCardIndex(anyInt(), anyInt())).thenReturn(true);
         final ArrayList<CardModel> cardListWithCategoryId = getCardListWithCategoryId();
@@ -294,7 +290,6 @@ public class CardViewPagerActivityTest extends UITest {
     }
 
     @Test
-    @Ignore
     public void givenShownVideoCardOnScreen_whenClickCardView_thenPlayVideo() throws Exception {
         subject.mViewPager.setCurrentItem(4);
 
@@ -303,12 +298,12 @@ public class CardViewPagerActivityTest extends UITest {
 
         Robolectric.getForegroundThreadScheduler().advanceBy(1000, TimeUnit.MILLISECONDS);
 
-        assertThat(((VideoCardTextureView) cardView.findViewById(R.id.card_video)).isPlaying()).isTrue();
+        assertThat(((VideoCardTextureView) cardView.findViewById(R.id.card_video))).isVisible();
     }
 
     @Test
     public void whenClickedAddButton_thenMovesToCameraGallerySelectionActivity() throws Exception {
-        addCardText.performClick();
+        subject.addCardButtonText.performClick();
 
         ShadowActivity shadowActivity = shadowOf(subject);
         Intent nextStartedActivity = shadowActivity.getNextStartedActivity();
@@ -336,7 +331,7 @@ public class CardViewPagerActivityTest extends UITest {
     @Test
     public void whenClickAddCardButton_thenShowMainActivity() throws Exception {
 
-        addCardText.performClick();
+        subject.addCardButtonText.performClick();
 
         ShadowActivity shadowActivity = shadowOf(subject);
         Intent nextStartedActivity = shadowActivity.getNextStartedActivity();
@@ -420,7 +415,7 @@ public class CardViewPagerActivityTest extends UITest {
     }
 
     private ShadowAlertDialog getShadowAlertDialog() {
-        deleteCardButton.performClick();
+        subject.cardDeleteButton.performClick();
 
         AlertDialog alert = ShadowAlertDialog.getLatestAlertDialog();
         return shadowOf(alert);
