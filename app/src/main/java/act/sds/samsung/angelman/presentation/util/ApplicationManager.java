@@ -13,6 +13,9 @@ import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
+import com.kakao.kakaolink.KakaoLink;
+import com.kakao.util.KakaoParameterException;
+
 import act.sds.samsung.angelman.R;
 import act.sds.samsung.angelman.domain.model.CategoryModel;
 import act.sds.samsung.angelman.presentation.custom.AngelmanWidgetProvider;
@@ -34,11 +37,17 @@ public class ApplicationManager {
     private SharedPreferences preferences;
     private ChildModeManager childModeManager;
     private Context context;
+    private KakaoLink kakaoLink;
 
     public ApplicationManager(Context context) {
         this.context = context;
         this.preferences = context.getSharedPreferences(PRIVATE_PREFERENCE_NAME, Context.MODE_PRIVATE);
         this.childModeManager = new ChildModeManager(context);
+        try {
+            this.kakaoLink = KakaoLink.getKakaoLink(context);
+        } catch (KakaoParameterException e) {
+            e.printStackTrace();
+        }
     }
 
     public void setCategoryModel(CategoryModel categoryModel){
@@ -150,6 +159,10 @@ public class ApplicationManager {
     @VisibleForTesting
     public ChildModeManager getChildModeManager() {
         return childModeManager;
+    }
+
+    public KakaoLink getKakaoLink() {
+        return kakaoLink;
     }
 
     public void makeChildView(){

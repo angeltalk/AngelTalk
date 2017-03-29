@@ -14,6 +14,8 @@ import act.sds.samsung.angelman.presentation.custom.AddCardView;
 import act.sds.samsung.angelman.presentation.custom.CardCategoryLayout;
 import act.sds.samsung.angelman.presentation.custom.CardViewPagerLayout;
 import act.sds.samsung.angelman.presentation.custom.CategoryMenuLayout;
+import act.sds.samsung.angelman.presentation.service.ScreenReceiver;
+import act.sds.samsung.angelman.presentation.util.NotificationActionManager;
 import dagger.Component;
 
 @Singleton
@@ -30,4 +32,6 @@ public interface AngelmanComponent {
     void inject(AddCardView addCardView);
     void inject(CameraGallerySelectionActivity cameraGallerySelectionActivity);
     void inject(OnboardingActivity onboardingActivity);
+    void inject(NotificationActionManager notificationActionManager);
+    void inject(ScreenReceiver screenReceiver);
 }

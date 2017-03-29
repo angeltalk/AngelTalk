@@ -267,7 +267,7 @@ public class CategoryMenuActivity extends AbstractActivity {
     };
 
     private void launchNotification() {
-        NotificationActionManager notificationActionManager = new NotificationActionManager(getApplicationContext());
+        NotificationActionManager notificationActionManager = new NotificationActionManager(this);
         notificationActionManager.generateNotification(new Intent(this, NotificationActionReceiver.class));//
     }
 }
