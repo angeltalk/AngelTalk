@@ -193,7 +193,7 @@ public class MakeNewCardWithCameraTest {
 
 
         ViewInteraction relativeLayout4 = onView(
-                allOf(withId(R.id.footer_container),
+                allOf(withId(R.id.button_container),
                         childAtPosition(
                                 allOf(withId(R.id.category_item_container),
                                         childAtPosition(

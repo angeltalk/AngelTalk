@@ -17,21 +17,27 @@
         android:layout_gravity="center_vertical"
         app:layout_heightPercent="62.5%" />
 
-    <RelativeLayout
-        android:id="@+id/footer_container"
+    <LinearLayout
+        android:id="@+id/button_container"
+        app:layout_heightPercent="18.75%"
         android:layout_width="match_parent"
         android:layout_gravity="bottom"
-        app:layout_heightPercent="18.75%">
-
+        android:gravity="center_horizontal"
+        android:visibility="gone"
+        android:paddingTop="15dp">
         <ImageButton
             android:id="@+id/card_delete_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_marginBottom="30dp"
-            android:background="@drawable/ic_card_delete"
-            android:visibility="gone"/>
-    </RelativeLayout>
+            android:background="@drawable/ic_card_delete"/>
+        <ImageButton
+            android:id="@+id/card_share_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="0dp"
+            android:background="@drawable/btn_share"/>
+    </LinearLayout>
 
 </android.support.percent.PercentFrameLayout>
 

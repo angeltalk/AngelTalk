@@ -22,6 +22,8 @@ import act.sds.samsung.angelman.presentation.service.ScreenService;
 public class ApplicationManager {
 
     public static final String PRIVATE_PREFERENCE_NAME = "act.sds.samsung.angelman";
+    public static final int SNACKBAR_DURATION = 3000;
+
     private static final String CATEGORY_MODEL_TITLE = "categoryModelTitle";
     private static final String CATEGORY_MODEL_ICON = "categoryModelIcon";
     private static final String CATEGORY_MODEL_COLOR = "categoryModelColor";
@@ -32,7 +34,6 @@ public class ApplicationManager {
     private SharedPreferences preferences;
     private ChildModeManager childModeManager;
     private Context context;
-
 
     public ApplicationManager(Context context) {
         this.context = context;
