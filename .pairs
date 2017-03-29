@@ -4,8 +4,8 @@ pairs:
     mk: Milo Kim
     lk: Lamos Kim
     km: Kate Ma
-#email:
-#  prefix: pair
-#  domain: gmail.com
-#  no_solo_prefix: true
-global: true  # Set to true for git-pair to change git configurationOption for all your projects
+email:
+  prefix: pair
+  domain: gmail.com
+  no_solo_prefix: true
+#global: true  # Set to true for git-pair to change git configurationOption for all your projects
