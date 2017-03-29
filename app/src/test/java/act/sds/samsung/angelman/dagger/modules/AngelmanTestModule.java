@@ -2,6 +2,7 @@ package act.sds.samsung.angelman.dagger.modules;
 
 import android.content.Context;
 
+import act.sds.samsung.angelman.data.transfer.CardTransfer;
 import act.sds.samsung.angelman.domain.repository.CardRepository;
 import act.sds.samsung.angelman.domain.repository.CategoryRepository;
 import act.sds.samsung.angelman.presentation.util.ApplicationManager;
@@ -27,5 +28,10 @@ public class AngelmanTestModule extends AngelmanModule {
     @Override
     ApplicationManager providesApplicationManager() {
         return mock(ApplicationManager.class);
+    }
+
+    @Override
+    CardTransfer providesCardTransfer() {
+        return mock(CardTransfer.class);
     }
 }
