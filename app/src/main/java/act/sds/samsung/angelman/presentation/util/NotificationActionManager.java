@@ -8,19 +8,24 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.widget.RemoteViews;
 
+import javax.inject.Inject;
+
+import act.sds.samsung.angelman.AngelmanApplication;
 import act.sds.samsung.angelman.R;
 
 import static act.sds.samsung.angelman.presentation.util.ApplicationManager.PRIVATE_PREFERENCE_NAME;
 
 public class NotificationActionManager {
 
-    private final ApplicationManager applicationManager;
+    @Inject
+    ApplicationManager applicationManager;
+
     private Context context;
     private boolean isChildMode;
 
     public NotificationActionManager(Context context) {
+        ((AngelmanApplication) context.getApplicationContext()).getAngelmanComponent().inject(this);
         this.context = context;
-        applicationManager = new ApplicationManager(context);
         isChildMode = getChildMode();
     }
 

@@ -23,6 +23,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="@string/kakao_app_key" />
+
         <activity
             android:name=".presentation.activity.OnboardingActivity"
             android:screenOrientation="portrait">
@@ -98,7 +102,7 @@
             android:enabled="true"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver> 
     </application>
