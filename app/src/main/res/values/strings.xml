@@ -51,4 +51,9 @@
     <string name="video_guide">3초간 영상을 찍어보세요</string>
     <string name="init_count_text">00:00</string>
     <string name="save_confirm_message">공유 받은 카드를 \n저장 하시겠어요?</string>
+    <string name="kakao_add_new_card_text">AngelTalk에서 새로운 카드\n \'%s\'를 추가해 보세요</string>
+    <string name="kakao_button_go_to_app">앱으로 이동</string>
+    <string name="web_url">https://angeltalk-team.bitbucket.io/</string>
+    <string name="share_fail_message">카드 공유가 실패하였습니다.</string>
+
 </resources>

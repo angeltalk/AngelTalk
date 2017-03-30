@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.support.percent.PercentRelativeLayout;
 import android.util.TypedValue;
 import android.view.KeyEvent;
@@ -81,17 +80,6 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
     ApplicationManager applicationManager;
     private CardModel.CardType cardType;
 
-    @NonNull
-    private File getImageFile(String imagePath) {
-        File file;
-        if (imagePath.contains("DCIM")) {
-            file = new File(imagePath);
-        } else {
-            file = new File(ContentsUtil.getImageFolder() + File.separator + imagePath);
-        }
-        return file;
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,7 +113,7 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
         } else if (cardType.equals(CardModel.CardType.VIDEO_CARD)) {
             cardView.cardVideo.setVisibility(View.VISIBLE);
 
-            glide.load(getImageFile(ContentsUtil.getThumbnailPath(contentPath)))
+            glide.load(ContentsUtil.getContentFileFromContentPath(ContentsUtil.getThumbnailPath(contentPath)))
                     .bitmapTransform(new AngelManGlideTransform(this, 10, 0, AngelManGlideTransform.CornerType.TOP))
                     .override(280, 280)
                     .into(cardView.cardImage);

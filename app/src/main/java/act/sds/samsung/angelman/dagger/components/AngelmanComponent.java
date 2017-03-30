@@ -4,6 +4,8 @@ import javax.inject.Singleton;
 
 import act.sds.samsung.angelman.dagger.modules.AngelmanModule;
 import act.sds.samsung.angelman.data.sqlite.AngelmanDbHelper;
+import act.sds.samsung.angelman.data.transfer.CardTransfer;
+import act.sds.samsung.angelman.data.transfer.KaKaoTransfer;
 import act.sds.samsung.angelman.presentation.activity.CameraGallerySelectionActivity;
 import act.sds.samsung.angelman.presentation.activity.CardViewPagerActivity;
 import act.sds.samsung.angelman.presentation.activity.CategoryMenuActivity;
@@ -34,4 +36,6 @@ public interface AngelmanComponent {
     void inject(OnboardingActivity onboardingActivity);
     void inject(NotificationActionManager notificationActionManager);
     void inject(ScreenReceiver screenReceiver);
+    void inject(CardTransfer cardTransfer);
+    void inject(KaKaoTransfer kaKaoTransfer);
 }
