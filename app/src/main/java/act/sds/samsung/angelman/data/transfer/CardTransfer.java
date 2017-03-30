@@ -1,7 +1,10 @@
 package act.sds.samsung.angelman.data.transfer;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.util.Log;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -15,12 +18,12 @@ import com.google.firebase.storage.StorageReference;
 import java.io.File;
 
 import act.sds.samsung.angelman.domain.model.CardModel;
+import act.sds.samsung.angelman.domain.model.CardTransferModel;
 import act.sds.samsung.angelman.presentation.listener.OnDownloadCompleteListener;
 import act.sds.samsung.angelman.presentation.util.ContentsUtil;
 import act.sds.samsung.angelman.presentation.util.DateUtil;
 
 public class CardTransfer {
-
 
     private static final String DEFAULT_SHARE_REFERENCE = "share";
     private DatabaseReference shareDataReference;
@@ -44,7 +47,6 @@ public class CardTransfer {
 
         String key = DateUtil.getDateNow();
         DatabaseReference uploadReference = makeUploadCardReference(key);
-
         uploadReference.setValue("cardType", cardModel.cardType.getValue());
         uploadReference.setValue("name", cardModel.name);
         uploadReference.setValue("thumbnailPath", cardModel.thumbnailPath);
@@ -62,37 +64,45 @@ public class CardTransfer {
              new ValueEventListener() {
                  @Override
                  public void onDataChange(DataSnapshot dataSnapshot) {
-                     final CardModel newCardModel = new CardModel();
+                     final CardTransferModel cardTransferModel = new CardTransferModel();
                      for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                         setCardModealData(newCardModel, snapshot);
+                         setCardModealData(cardTransferModel, snapshot);
                      }
 
                      final File localFile = new File(ContentsUtil.getTempFolder() + File.separator + "temp.zip");
-                     storage.getReferenceFromUrl(newCardModel.contentPath)
-                             .getFile(localFile)
-                             .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                                 @Override
-                                 public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-
-                                 }
-                             });
+                     storage.getReferenceFromUrl(cardTransferModel.contentPath)
+                         .getFile(localFile)
+                         .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                             @Override
+                             public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                                 downloadCompleteListener.onSuccess(cardTransferModel, localFile.getAbsolutePath());
+                             }
+                         })
+                         .addOnFailureListener(new OnFailureListener() {
+                             @Override
+                             public void onFailure(@NonNull Exception e) {
+                                 Log.d("DOWNLOAD FAIL ", "download fail." );
+                                 downloadCompleteListener.onFail();
+                             }
+                         });
                  }
 
                  @Override
                  public void onCancelled(DatabaseError databaseError) {
-
+                     Log.d("onCancelled", databaseError.getMessage());
+                     downloadCompleteListener.onFail();
                  }
              }
          );
     }
 
-    private void setCardModealData(CardModel newCardModel, DataSnapshot snapshot) {
+    private void setCardModealData(CardTransferModel newCardModel, DataSnapshot snapshot) {
         if (snapshot.getKey().equals("name")) {
             newCardModel.name = snapshot.getValue().toString();
         } else if (snapshot.getKey().equals("contentPath")) {
             newCardModel.contentPath = snapshot.getValue().toString();
         } else if (snapshot.getKey().equals("cardType")) {
-            newCardModel.cardType = CardModel.CardType.valueOf(snapshot.getValue().toString());
+            newCardModel.cardType = snapshot.getValue().toString();
         }
     }
 }

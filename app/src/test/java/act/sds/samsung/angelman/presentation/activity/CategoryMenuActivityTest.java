@@ -33,6 +33,7 @@ import act.sds.samsung.angelman.BuildConfig;
 import act.sds.samsung.angelman.R;
 import act.sds.samsung.angelman.TestAngelmanApplication;
 import act.sds.samsung.angelman.UITest;
+import act.sds.samsung.angelman.data.transfer.CardTransfer;
 import act.sds.samsung.angelman.domain.model.CategoryModel;
 import act.sds.samsung.angelman.domain.repository.CardRepository;
 import act.sds.samsung.angelman.domain.repository.CategoryRepository;
@@ -57,6 +58,9 @@ public class CategoryMenuActivityTest extends UITest {
 
     @Inject
     CardRepository cardRepository;
+
+    @Inject
+    CardTransfer cardTransfer;
 
     private CategoryMenuActivity subject;
     private GridView categoryList;

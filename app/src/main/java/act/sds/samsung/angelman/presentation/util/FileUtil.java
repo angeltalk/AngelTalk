@@ -101,6 +101,20 @@ public class FileUtil {
         }
     }
 
+    public static void removeFilesIn(String path) {
+        File directory = new File(path);
+        if(directory.isDirectory()) {
+            File[] files = directory.listFiles();
+            for(File file : files) {
+                file.delete();
+            }
+        }
+    }
+
+    public static void copyFile(File in, File out) throws IOException {
+        copyFile(new FileInputStream(in), new FileOutputStream(out));
+    }
+
     private static void copyFile(InputStream in, OutputStream out) throws IOException {
         byte[] buffer = new byte[1024];
         int read;
@@ -155,10 +169,12 @@ public class FileUtil {
                             unzipFile.mkdirs();
                         }
                     } else {
-                        FileOutputStream fout = new FileOutputStream(path, false);
+                        byte data[] = new byte[BUFFER_SIZE];
+                        BufferedOutputStream fout = new BufferedOutputStream( new FileOutputStream(path, false), BUFFER_SIZE);
                         try {
-                            for (int c = zin.read(); c != -1; c = zin.read()) {
-                                fout.write(c);
+                            int count;
+                            while ((count = zin.read(data, 0, BUFFER_SIZE)) != -1) {
+                                fout.write(data, 0, count);
                             }
                             zin.closeEntry();
                         } finally {

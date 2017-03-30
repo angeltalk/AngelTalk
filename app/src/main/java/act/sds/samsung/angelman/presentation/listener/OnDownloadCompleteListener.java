@@ -1,10 +1,10 @@
 package act.sds.samsung.angelman.presentation.listener;
 
-import act.sds.samsung.angelman.domain.model.CardModel;
+import act.sds.samsung.angelman.domain.model.CardTransferModel;
 
 public interface OnDownloadCompleteListener {
 
-    void onSuccess(CardModel cardModel);
+    void onSuccess(CardTransferModel cardModel, String downloadFilePath);
 
     void onFail();
 

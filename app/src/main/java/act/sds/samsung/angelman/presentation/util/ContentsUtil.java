@@ -8,6 +8,7 @@ import android.media.ThumbnailUtils;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 
 import java.io.File;
@@ -15,9 +16,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import act.sds.samsung.angelman.domain.model.CardModel;
+
 import static act.sds.samsung.angelman.presentation.util.FileUtil.IMAGE_FULL_PATH;
 import static act.sds.samsung.angelman.presentation.util.FileUtil.TEMP_FULL_PATH;
 import static act.sds.samsung.angelman.presentation.util.FileUtil.VOICE_FULL_PATH;
+import static act.sds.samsung.angelman.presentation.util.FileUtil.copyFile;
 
 public class ContentsUtil {
 
@@ -27,7 +31,8 @@ public class ContentsUtil {
     public static String CARD_TYPE = "card type";
     private static ContentsUtil instance = null;
 
-    private ContentsUtil() {}
+    private ContentsUtil() {
+    }
 
     public static ContentsUtil getInstance() {
         if (instance == null)
@@ -48,19 +53,23 @@ public class ContentsUtil {
         return Environment.getExternalStorageDirectory() + File.separator + TEMP_FULL_PATH;
     }
 
-    public String getImagePath() {
-        return getImageFolder() + File.separator + DateUtil.getDateNow() +".jpg";
+    public static String getImagePath() {
+        return getImageFolder() + File.separator + DateUtil.getDateNow() + ".jpg";
     }
 
     public static String getVideoPath() {
-        return getImageFolder() + File.separator + DateUtil.getDateNow() +".mp4";
+        return getImageFolder() + File.separator + DateUtil.getDateNow() + ".mp4";
+    }
+
+    public static String getVoicePath() {
+        return getVoiceFolder() + File.separator + DateUtil.getDateNow() + ".3gdp";
     }
 
     public static String getThumbnailPath(String videoPath) {
-        return videoPath.replace(".mp4",".jpg");
+        return videoPath.replace(".mp4", ".jpg");
     }
 
-    public void saveImage(View decorView, String fileName){
+    public void saveImage(View decorView, String fileName) {
         Bitmap bitmap = screenShot(decorView);
 
         saveImage(bitmap, fileName, 490, 112);
@@ -90,6 +99,7 @@ public class ContentsUtil {
             }
         }
     }
+
     private Bitmap screenShot(View decorView) {
         int width = decorView.getWidth();
         int height = decorView.getHeight();
@@ -97,8 +107,8 @@ public class ContentsUtil {
         Bitmap drawingCache = decorView.getDrawingCache();
 
         Matrix matrix = new Matrix();
-        float scaleX = 1080 / (float)width;
-        float scaleY = 1920 / (float)height;
+        float scaleX = 1080 / (float) width;
+        float scaleY = 1920 / (float) height;
         matrix.postScale(scaleX, scaleY);
         matrix.postRotate(-90);
 
@@ -113,33 +123,46 @@ public class ContentsUtil {
 
         Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(videoPath, MediaStore.Images.Thumbnails.MINI_KIND);
 
-        try
-        {
+        try {
             fileCacheItem.createNewFile();
             out = new FileOutputStream(fileCacheItem);
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
-        }
-        finally
-        {
-            try
-            {
+        } finally {
+            try {
                 out.close();
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    public static float convertDpToPixel(float dp, Context context){
+    public static float convertDpToPixel(float dp, Context context) {
         Resources resources = context.getResources();
         DisplayMetrics metrics = resources.getDisplayMetrics();
-        float px = dp * ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+        float px = dp * ((float) metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
         return px;
+    }
+
+    public static void copySharedFiles(CardModel cardModel) {
+        File[] files = new File(getTempFolder()).listFiles();
+        for (File file : files) {
+            try {
+                if (file.getAbsolutePath().contains("mp4")) {
+                    FileUtil.copyFile(file, new File(cardModel.contentPath));
+                } else if (file.getAbsolutePath().contains("jpg")) {
+                    if (cardModel.cardType == CardModel.CardType.VIDEO_CARD) {
+                        FileUtil.copyFile(file, new File(cardModel.thumbnailPath));
+                    } else {
+                        FileUtil.copyFile(file, new File(cardModel.contentPath));
+                    }
+                } else if (file.getAbsolutePath().contains("3gdp")) {
+                    copyFile(file, new File(cardModel.voicePath));
+                }
+            } catch (IOException e) {
+                Log.e("error", "copyShardFile error : " + e.getStackTrace());
+            }
+        }
     }
 }

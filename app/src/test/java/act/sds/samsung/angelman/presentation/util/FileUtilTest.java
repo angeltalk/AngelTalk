@@ -71,6 +71,33 @@ public class FileUtilTest {
         assertThat(file.exists()).isFalse();
     }
 
+
+    @Test
+    public void removeFilesInTest() throws Exception {
+        ShadowEnvironment.setExternalStorageState(Environment.MEDIA_MOUNTED);
+        Context context = RuntimeEnvironment.application;
+
+        FileUtil.copyDefaultAssetImagesToImageFolder(context);
+
+        File imageFolder = new File(ContentsUtil.getImageFolder());
+        assertThat(imageFolder.listFiles()).isNotEmpty();
+        FileUtil.removeFilesIn(imageFolder.getAbsolutePath());
+        assertThat(imageFolder.listFiles()).isEmpty();
+    }
+
+    @Test
+    public void copyFileTest() throws Exception {
+        ShadowEnvironment.setExternalStorageState(Environment.MEDIA_MOUNTED);
+
+        File fileIn = new File(ContentsUtil.getTempFolder() + File.separator + "file.in");
+        fileIn.createNewFile();
+        File fileOut = new File(ContentsUtil.getTempFolder() + File.separator + "file.out");
+
+        assertThat(fileOut).doesNotExist();
+        FileUtil.copyFile(fileIn, fileOut);
+        assertThat(fileOut).exists();
+    }
+
     @Test
     public void givenFilesAndDirectory_whenZip_thenCreateZipFile() throws Exception {
         // given

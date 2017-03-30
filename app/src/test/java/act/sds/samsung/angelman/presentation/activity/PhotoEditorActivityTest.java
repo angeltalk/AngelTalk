@@ -28,7 +28,6 @@ import act.sds.samsung.angelman.presentation.util.ContentsUtil;
 import static org.assertj.android.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -92,24 +91,23 @@ public class PhotoEditorActivityTest extends UITest{
 
     @Test
     public void whenClickConfirmButton_thenSaveCroppedImageAndShowCardView() throws Exception {
-
-        ContentsUtil mockUtil = mock(ContentsUtil.class);
+        ContentsUtil contentUtil = mock(ContentsUtil.class);
 
         Field contentsUtil = PhotoEditorActivity.class.getDeclaredField("contentsUtil");
         contentsUtil.setAccessible(true);
-        contentsUtil.set(subject, mockUtil);
+        contentsUtil.set(subject, contentUtil);
 
-        when(mockUtil.getImagePath()).thenReturn("test file name");
-
+        // when
         subject.findViewById(R.id.photo_edit_confirm).performClick();
 
-        verify(mockUtil).saveImage(any(View.class), eq("test file name"));
+        // then
+        verify(contentUtil).saveImage(any(View.class), any(String.class));
+
 
         ShadowActivity shadowActivity = shadowOf(subject);
         Intent nextStartedActivity = shadowActivity.getNextStartedActivity();
         assertThat(nextStartedActivity.getComponent().getClassName()).isEqualTo(MakeCardActivity.class.getCanonicalName());
         assertThat(shadowActivity.isFinishing()).isTrue();
-
 
         contentsUtil.setAccessible(false);
     }
