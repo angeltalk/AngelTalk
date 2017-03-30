@@ -16,11 +16,13 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import static act.sds.samsung.angelman.presentation.util.FileUtil.IMAGE_FULL_PATH;
+import static act.sds.samsung.angelman.presentation.util.FileUtil.TEMP_FULL_PATH;
 import static act.sds.samsung.angelman.presentation.util.FileUtil.VOICE_FULL_PATH;
 
 public class ContentsUtil {
 
     public static final String IMAGE_FOLDER = "DCIM";
+
     public static String CONTENT_PATH = "content path";
     public static String CARD_TYPE = "card type";
     private static ContentsUtil instance = null;
@@ -42,6 +44,10 @@ public class ContentsUtil {
         return Environment.getExternalStorageDirectory() + File.separator + VOICE_FULL_PATH;
     }
 
+    public static String getTempFolder() {
+        return Environment.getExternalStorageDirectory() + File.separator + TEMP_FULL_PATH;
+    }
+
     public String getImagePath() {
         return getImageFolder() + File.separator + DateUtil.getDateNow() +".jpg";
     }
@@ -52,10 +58,6 @@ public class ContentsUtil {
 
     public static String getThumbnailPath(String videoPath) {
         return videoPath.replace(".mp4",".jpg");
-    }
-
-    public String makeImagePathForAsset(String imgFileName){
-        return "file:///android_asset/" + imgFileName;
     }
 
     public void saveImage(View decorView, String fileName){
@@ -88,7 +90,6 @@ public class ContentsUtil {
             }
         }
     }
-
     private Bitmap screenShot(View decorView) {
         int width = decorView.getWidth();
         int height = decorView.getHeight();
@@ -104,6 +105,7 @@ public class ContentsUtil {
         return Bitmap.createBitmap(
                 drawingCache, 0, 0, width, height, matrix, false);
     }
+
     public static void saveVideoThumbnail(String videoPath) {
         String thumbNailPath = ContentsUtil.getThumbnailPath(videoPath);
         File fileCacheItem = new File(thumbNailPath);
@@ -140,5 +142,4 @@ public class ContentsUtil {
         float px = dp * ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
         return px;
     }
-
 }

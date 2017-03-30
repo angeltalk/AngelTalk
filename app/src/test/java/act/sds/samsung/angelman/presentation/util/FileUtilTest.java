@@ -43,10 +43,12 @@ public class FileUtilTest {
         File rootFolder = new File(Environment.getExternalStorageDirectory() + File.separator + FileUtil.ANGELMAN_FOLDER);
         File imageFolder = new File(ContentsUtil.getImageFolder());
         File voiceFolder = new File(ContentsUtil.getVoiceFolder());
+        File tempFolder = new File(ContentsUtil.getTempFolder());
 
-        assertThat(rootFolder.exists()).isTrue();
-        assertThat(imageFolder.exists()).isTrue();
-        assertThat(voiceFolder.exists()).isTrue();
+        assertThat(rootFolder).exists();
+        assertThat(imageFolder).exists();
+        assertThat(voiceFolder).exists();
+        assertThat(tempFolder).exists();
     }
 
     @Test

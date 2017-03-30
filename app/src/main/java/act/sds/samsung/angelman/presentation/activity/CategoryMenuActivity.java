@@ -28,10 +28,11 @@ import act.sds.samsung.angelman.domain.repository.CardRepository;
 import act.sds.samsung.angelman.domain.repository.CategoryRepository;
 import act.sds.samsung.angelman.presentation.adapter.CategoryAdapter;
 import act.sds.samsung.angelman.presentation.custom.CustomConfirmDialog;
+import act.sds.samsung.angelman.presentation.listener.OnDownloadCompleteListener;
 import act.sds.samsung.angelman.presentation.receiver.NotificationActionReceiver;
 import act.sds.samsung.angelman.presentation.util.ApplicationManager;
-import act.sds.samsung.angelman.presentation.util.FileUtil;
 import act.sds.samsung.angelman.presentation.util.ContentsUtil;
+import act.sds.samsung.angelman.presentation.util.FileUtil;
 import act.sds.samsung.angelman.presentation.util.NotificationActionManager;
 import butterknife.BindString;
 import butterknife.BindView;
@@ -286,12 +287,16 @@ public class CategoryMenuActivity extends AbstractActivity {
         @Override
         public void onClick(View v) {
 
-            cardTransfer.downloadCard(receiveKey);
-
-
-
-
-
+            cardTransfer.downloadCard(receiveKey, new OnDownloadCompleteListener(){
+                @Override
+                public void onSuccess(CardModel cardModel){
+                    Log.d("#",cardModel.toString());
+                }
+                @Override
+                public void onFail(){
+                    Log.d("DOWNLOAD FAIL ", "FAIL" );
+                }
+            });
 
             dialog.dismiss();
         }
