@@ -34,4 +34,6 @@ public interface AngelmanTestComponent extends AngelmanComponent {
     void inject(VideoActivityTest videoActivityTest);
     void inject(CardImageAdapterTest cardImageAdapterTest);
     void inject(ScreenReceiverTest screenReceiverTest);
+
+
 }

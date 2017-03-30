@@ -243,7 +243,7 @@ public class CategoryMenuActivity extends AbstractActivity {
             List<CardModel> singleCardList = cardRepository.getSingleCardListWithCategoryId(selectedCategoryId);
 
             for (CardModel cardModel : singleCardList) {
-                if (cardModel.contentPath.contains(ContentsUtil.IMAGE_FOLDER)) {
+                if (cardModel.contentPath.contains(ContentsUtil.CONTENT_FOLDER)) {
                     FileUtil.removeFile(cardModel.contentPath);
                     FileUtil.removeFile(cardModel.voicePath);
                 }

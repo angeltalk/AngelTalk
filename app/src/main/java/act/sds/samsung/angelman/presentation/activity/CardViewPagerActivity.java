@@ -1,7 +1,10 @@
 package act.sds.samsung.angelman.presentation.activity;
 
 import android.app.AlertDialog;
+import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.percent.PercentFrameLayout;
 import android.support.v4.view.ViewPager;
@@ -9,21 +12,25 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
-import com.kakao.kakaolink.AppActionBuilder;
-import com.kakao.kakaolink.AppActionInfoBuilder;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.kakao.kakaolink.KakaoLink;
-import com.kakao.kakaolink.KakaoTalkLinkMessageBuilder;
-import com.kakao.util.KakaoParameterException;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
 import act.sds.samsung.angelman.AngelmanApplication;
 import act.sds.samsung.angelman.R;
+import act.sds.samsung.angelman.data.transfer.CardTransfer;
+import act.sds.samsung.angelman.data.transfer.KaKaoTransfer;
 import act.sds.samsung.angelman.domain.model.CardModel;
 import act.sds.samsung.angelman.domain.model.CategoryModel;
 import act.sds.samsung.angelman.domain.repository.CardRepository;
@@ -47,6 +54,12 @@ public class CardViewPagerActivity extends AbstractActivity {
     @Inject
     ApplicationManager applicationManager;
 
+    @Inject
+    CardTransfer cardTransfer;
+
+    @Inject
+    KaKaoTransfer kaKaoTransfer;
+
     @BindView(R.id.title_container)
     CardCategoryLayout titleLayout;
 
@@ -68,6 +81,8 @@ public class CardViewPagerActivity extends AbstractActivity {
     @BindView(R.id.add_card_button_text)
     TextView addCardButtonText;
 
+    private Uri downloadUrl;
+
     @OnClick(R.id.card_delete_button)
     public void deleteButtonOnClick() {
         deleteCard();
@@ -75,8 +90,30 @@ public class CardViewPagerActivity extends AbstractActivity {
 
     @OnClick(R.id.card_share_button)
     public void shareButtonOnClick() {
-        sendKakaoLinkMessage("https://firebasestorage.googleapis.com/v0/b/angeltalk-app.appspot.com/o/MILO%2Fimage%2F20170308_164511.jpg?alt=media&token=e482cb43-2f06-496a-854f-9f39c26c7039");
+
+        final CardView card = (CardView) adapter.viewCollection.get(mViewPager.getCurrentItem());
+        final CardModel cardModel = card.dataModel;
+
+        cardTransfer.uploadCard(cardModel, new OnSuccessListener<Map<String,String>>() {
+            @Override
+            public void onSuccess(Map<String, String> resultMap) {
+                String thumbnailUrl = resultMap.get("url");
+                String key = resultMap.get("key");
+                kaKaoTransfer.sendKakaoLinkMessage(context, key, thumbnailUrl, cardModel);
+
+            }
+
+        }, new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(context, R.string.share_fail_message,Toast.LENGTH_SHORT);
+            }
+        });
+
     }
+
+
+
 
     public static String CATEGORY_COLOR = "categoryColor";
     public static final String INTENT_KEY_NEW_CARD = "isNewCard";
@@ -88,7 +125,7 @@ public class CardViewPagerActivity extends AbstractActivity {
     private CardImageAdapter adapter;
     private AlertDialog dialog;
     private RequestManager glide;
-    private KakaoLink kakaoLink;
+    Context context;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -97,8 +134,7 @@ public class CardViewPagerActivity extends AbstractActivity {
         setContentView(R.layout.activity_card_view);
         ButterKnife.bind(this);
         glide = Glide.with(this);
-        kakaoLink = applicationManager.getKakaoLink();
-
+        context = this;
         initializeView();
 
         if (getIntent().getBooleanExtra(INTENT_KEY_NEW_CARD, false)) {
@@ -147,10 +183,10 @@ public class CardViewPagerActivity extends AbstractActivity {
     };
 
     private void showAndHideButtonContainerBy(int pos) {
-        if(pos == 0){
+        if (pos == 0) {
             buttonContainer.setVisibility(View.GONE);
             titleLayout.setAddCardTextButtonVisible(View.GONE);
-        }else{
+        } else {
             buttonContainer.setVisibility(View.VISIBLE);
             titleLayout.setAddCardTextButtonVisible(View.VISIBLE);
         }
@@ -197,7 +233,7 @@ public class CardViewPagerActivity extends AbstractActivity {
 
     private int setCurrentItem() {
         int currentItem = mViewPager.getCurrentItem();
-        if(currentItem == adapter.getCount() - 1){
+        if (currentItem == adapter.getCount() - 1) {
             currentItem--;
         }
         return currentItem;
@@ -212,22 +248,4 @@ public class CardViewPagerActivity extends AbstractActivity {
         SnackBar.snackBarWithDuration(rootLayout, getApplicationContext().getResources().getString(R.string.add_new_card_success), ApplicationManager.SNACKBAR_DURATION);
     }
 
-    private void sendKakaoLinkMessage(String fileUrl) {
-        try {
-            KakaoTalkLinkMessageBuilder kakaoTalkLinkMessageBuilder = kakaoLink.createKakaoTalkLinkMessageBuilder();
-            CardView card = (CardView)adapter.viewCollection.get(mViewPager.getCurrentItem());
-            kakaoTalkLinkMessageBuilder.addText("AngelTalk에서 새로운 카드\'" + card.dataModel.name + "\'를 추가해 보세요");
-            kakaoTalkLinkMessageBuilder.addImage(fileUrl, card.getWidth(), card.getHeight());
-            kakaoTalkLinkMessageBuilder.addAppButton("앱으로 이동", new AppActionBuilder().addActionInfo(
-                    AppActionInfoBuilder.createAndroidActionInfoBuilder()
-                            .setExecuteParam("execparamkey1=1111")
-                            .setMarketParam("referrer=kakakotalklink")
-                            .build())
-                    .setUrl("https://angeltalk-team.bitbucket.io/")
-                    .build());
-            kakaoLink.sendMessage(kakaoTalkLinkMessageBuilder, this);
-        } catch (KakaoParameterException e) {
-            e.printStackTrace();
-        }
-    }
 }

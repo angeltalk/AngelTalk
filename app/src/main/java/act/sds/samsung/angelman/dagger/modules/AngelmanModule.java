@@ -7,9 +7,11 @@ import javax.inject.Singleton;
 import act.sds.samsung.angelman.data.repository.CardDataRepository;
 import act.sds.samsung.angelman.data.repository.CategoryDataRepository;
 import act.sds.samsung.angelman.data.transfer.CardTransfer;
+import act.sds.samsung.angelman.data.transfer.KaKaoTransfer;
 import act.sds.samsung.angelman.domain.repository.CardRepository;
 import act.sds.samsung.angelman.domain.repository.CategoryRepository;
 import act.sds.samsung.angelman.presentation.util.ApplicationManager;
+import act.sds.samsung.angelman.presentation.util.FileShareUtil;
 import dagger.Module;
 import dagger.Provides;
 
@@ -35,13 +37,26 @@ public class AngelmanModule {
 
     @Provides
     @Singleton
-    CardTransfer providesCardTransfer() {
-        return  new CardTransfer();
+    ApplicationManager providesApplicationManager() {
+        return  new ApplicationManager(context.getApplicationContext());
     }
 
     @Provides
     @Singleton
-    ApplicationManager providesApplicationManager() {
-        return  new ApplicationManager(context.getApplicationContext());
+    FileShareUtil providesFileShareUtil() {
+        return  new FileShareUtil(context.getApplicationContext());
+    }
+
+
+    @Provides
+    @Singleton
+    CardTransfer providesCardTransfer() {
+        return  new CardTransfer(context.getApplicationContext());
+    }
+
+    @Provides
+    @Singleton
+    KaKaoTransfer providesKaKaoTransfer() {
+        return  new KaKaoTransfer(context.getApplicationContext());
     }
 }

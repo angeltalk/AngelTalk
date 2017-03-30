@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
@@ -23,10 +24,15 @@ import static org.mockito.Mockito.when;
 @Config(constants = BuildConfig.class)
 public class ContentsUtilTest {
 
+    private ContentsUtil subject;
+
+    @Before
+    public void setUp() throws Exception {
+        subject = ContentsUtil.getInstance();
+    }
+
     @Test
     public void givenFileNameAndBitMapExists_whenCallImageSave_thenSaveImage() throws Exception {
-        ContentsUtil subject = ContentsUtil.getInstance();
-
         String fileName = subject.getImagePath();
         Bitmap fakeBitmap = Bitmap.createBitmap(1440, 2560, Bitmap.Config.ARGB_8888);//mock(Bitmap.class);
         Window window = mock(Window.class);
@@ -44,5 +50,13 @@ public class ContentsUtilTest {
 
         File file = new File(fileName);
         assertThat(file.exists()).isTrue();
+    }
+
+    @Test
+    public void givenFileFullPath_whenGetFileNameFromFullPath_thenReturnFileName() throws Exception {
+        // given
+        String fileFullPath = "/storage/emulated/0/angelman/DCIM/20170329_133245.jpg";
+        // when then
+        assertThat(ContentsUtil.getFileNameFromFullPath(fileFullPath)).isEqualTo("20170329_133245.jpg");
     }
 }

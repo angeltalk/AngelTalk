@@ -10,6 +10,8 @@ import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.view.View;
 
+import com.google.common.base.Strings;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -20,7 +22,7 @@ import static act.sds.samsung.angelman.presentation.util.FileUtil.VOICE_FULL_PAT
 
 public class ContentsUtil {
 
-    public static final String IMAGE_FOLDER = "DCIM";
+    public static final String CONTENT_FOLDER = "DCIM";
     public static String CONTENT_PATH = "content path";
     public static String CARD_TYPE = "card type";
     private static ContentsUtil instance = null;
@@ -34,7 +36,7 @@ public class ContentsUtil {
         return instance;
     }
 
-    public static String getImageFolder() {
+    public static String getContentFolder() {
         return Environment.getExternalStorageDirectory() + File.separator + IMAGE_FULL_PATH;
     }
 
@@ -43,11 +45,11 @@ public class ContentsUtil {
     }
 
     public String getImagePath() {
-        return getImageFolder() + File.separator + DateUtil.getDateNow() +".jpg";
+        return getContentFolder() + File.separator + DateUtil.getDateNow() +".jpg";
     }
 
     public static String getVideoPath() {
-        return getImageFolder() + File.separator + DateUtil.getDateNow() +".mp4";
+        return getContentFolder() + File.separator + DateUtil.getDateNow() +".mp4";
     }
 
     public static String getThumbnailPath(String videoPath) {
@@ -141,4 +143,21 @@ public class ContentsUtil {
         return px;
     }
 
+    public static String getFileNameFromFullPath(String contentPath) {
+        String[] splitedFilePath = contentPath.split(File.separator);
+        return splitedFilePath[splitedFilePath.length - 1];
+    }
+
+    public static File getContentFileFromContentPath(String contentsPath) {
+        if(Strings.isNullOrEmpty(contentsPath)) {
+            return null;
+        }
+        File file;
+        if (contentsPath.contains(CONTENT_FOLDER) || contentsPath.contains(FileUtil.VOICE_FOLDER)) {
+            file = new File(contentsPath);
+        } else {
+            file = new File(getContentFolder() + File.separator + contentsPath);
+        }
+        return file;
+    }
 }
