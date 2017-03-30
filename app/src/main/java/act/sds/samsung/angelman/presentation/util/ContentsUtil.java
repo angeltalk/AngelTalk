@@ -8,6 +8,7 @@ import android.media.ThumbnailUtils;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 
 import com.google.common.base.Strings;
@@ -17,9 +18,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import act.sds.samsung.angelman.domain.model.CardModel;
+
 import static act.sds.samsung.angelman.presentation.util.FileUtil.IMAGE_FULL_PATH;
 import static act.sds.samsung.angelman.presentation.util.FileUtil.TEMP_FULL_PATH;
 import static act.sds.samsung.angelman.presentation.util.FileUtil.VOICE_FULL_PATH;
+import static act.sds.samsung.angelman.presentation.util.FileUtil.copyFile;
 
 public class ContentsUtil {
 
@@ -164,12 +168,12 @@ public class ContentsUtil {
         for (File file : files) {
             try {
                 if (file.getAbsolutePath().contains("mp4")) {
-                    FileUtil.copyFile(file, new File(cardModel.contentPath));
+                    copyFile(file, new File(cardModel.contentPath));
                 } else if (file.getAbsolutePath().contains("jpg")) {
                     if (cardModel.cardType == CardModel.CardType.VIDEO_CARD) {
-                        FileUtil.copyFile(file, new File(cardModel.thumbnailPath));
+                        copyFile(file, new File(cardModel.thumbnailPath));
                     } else {
-                        FileUtil.copyFile(file, new File(cardModel.contentPath));
+                        copyFile(file, new File(cardModel.contentPath));
                     }
                 } else if (file.getAbsolutePath().contains("3gdp")) {
                     copyFile(file, new File(cardModel.voicePath));

@@ -79,7 +79,7 @@ public class FileUtilTest {
 
         FileUtil.copyDefaultAssetImagesToImageFolder(context);
 
-        File imageFolder = new File(ContentsUtil.getImageFolder());
+        File imageFolder = new File(ContentsUtil.getContentFolder());
         assertThat(imageFolder.listFiles()).isNotEmpty();
         FileUtil.removeFilesIn(imageFolder.getAbsolutePath());
         assertThat(imageFolder.listFiles()).isEmpty();
@@ -103,7 +103,7 @@ public class FileUtilTest {
         // given
         ShadowEnvironment.setExternalStorageState(Environment.MEDIA_MOUNTED);
 
-        File imageFolder = new File(ContentsUtil.getImageFolder());
+        File imageFolder = new File(ContentsUtil.getContentFolder());
         String[] files = new String[imageFolder.listFiles().length];
 
         for (int i=0; i<files.length; i++) {
@@ -124,7 +124,7 @@ public class FileUtilTest {
         // given
         ShadowEnvironment.setExternalStorageState(Environment.MEDIA_MOUNTED);
 
-        File imageFolder = new File(ContentsUtil.getImageFolder());
+        File imageFolder = new File(ContentsUtil.getContentFolder());
         String[] files = new String[imageFolder.listFiles().length];
 
         for (int i=0; i<files.length; i++) {
