@@ -67,8 +67,9 @@ public class CardTransfer {
                          setCardModealData(newCardModel, snapshot);
                      }
 
-                     final File localFile = new File(ContentsUtil.getVideoPath());
-                     storage.getReferenceFromUrl(newCardModel.contentPath).getFile(localFile)
+                     final File localFile = new File(ContentsUtil.getTempFolder() + File.separator + "temp.zip");
+                     storage.getReferenceFromUrl(newCardModel.contentPath)
+                             .getFile(localFile)
                              .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                                  @Override
                                  public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {

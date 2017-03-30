@@ -70,4 +70,49 @@ public class FileUtilTest {
         FileUtil.removeFile(file.getAbsolutePath());
         assertThat(file.exists()).isFalse();
     }
+
+    @Test
+    public void givenFilesAndDirectory_whenZip_thenCreateZipFile() throws Exception {
+        // given
+        ShadowEnvironment.setExternalStorageState(Environment.MEDIA_MOUNTED);
+
+        File imageFolder = new File(ContentsUtil.getImageFolder());
+        String[] files = new String[imageFolder.listFiles().length];
+
+        for (int i=0; i<files.length; i++) {
+            files[i] = imageFolder.listFiles()[i].getAbsolutePath();
+        }
+
+        String zipFile = imageFolder + File.separator + "temp.zip";
+
+        // when
+        FileUtil.zip(files, zipFile);
+
+        // then
+        assertThat(new File(zipFile)).exists();
+    }
+
+    @Test
+    public void givenZipFileAndLocation_whenUnzip_thenUnzipFile() throws Exception {
+        // given
+        ShadowEnvironment.setExternalStorageState(Environment.MEDIA_MOUNTED);
+
+        File imageFolder = new File(ContentsUtil.getImageFolder());
+        String[] files = new String[imageFolder.listFiles().length];
+
+        for (int i=0; i<files.length; i++) {
+            files[i] = imageFolder.listFiles()[i].getAbsolutePath();
+        }
+
+        String zipFile = imageFolder + File.separator + "temp.zip";
+
+        FileUtil.zip(files, zipFile);
+
+        // when
+        String tempFolder = ContentsUtil.getTempFolder();
+        FileUtil.unzip(zipFile, tempFolder);
+
+        // then
+        assertThat(new File(tempFolder).listFiles().length).isEqualTo(files.length);
+    }
 }
