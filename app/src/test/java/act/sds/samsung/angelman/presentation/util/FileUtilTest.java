@@ -24,7 +24,7 @@ public class FileUtilTest {
     public void getImageFolderTest() throws Exception {
         ShadowEnvironment.setExternalStorageState(Environment.MEDIA_MOUNTED);
         File file = new File(Environment.getExternalStorageDirectory() + File.separator + FileUtil.IMAGE_FULL_PATH);
-        assertThat(ContentsUtil.getImageFolder()).isEqualTo(file.getAbsolutePath());
+        assertThat(ContentsUtil.getContentFolder()).isEqualTo(file.getAbsolutePath());
     }
 
     @Test
@@ -41,7 +41,7 @@ public class FileUtilTest {
         FileUtil.initExternalStorageFolder();
 
         File rootFolder = new File(Environment.getExternalStorageDirectory() + File.separator + FileUtil.ANGELMAN_FOLDER);
-        File imageFolder = new File(ContentsUtil.getImageFolder());
+        File imageFolder = new File(ContentsUtil.getContentFolder());
         File voiceFolder = new File(ContentsUtil.getVoiceFolder());
         File tempFolder = new File(ContentsUtil.getTempFolder());
 
@@ -58,13 +58,13 @@ public class FileUtilTest {
 
         FileUtil.copyDefaultAssetImagesToImageFolder(context);
 
-        File imageFolder = new File(ContentsUtil.getImageFolder());
+        File imageFolder = new File(ContentsUtil.getContentFolder());
         assertThat(imageFolder.listFiles().length).isEqualTo(context.getAssets().list("contents").length);
     }
 
     @Test
     public void removeFileTest() throws Exception {
-        File file = new File(ContentsUtil.getImageFolder());
+        File file = new File(ContentsUtil.getContentFolder());
         file.mkdir();
         assertThat(file.exists()).isTrue();
         FileUtil.removeFile(file.getAbsolutePath());

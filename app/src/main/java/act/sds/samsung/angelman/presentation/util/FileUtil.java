@@ -17,7 +17,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
-import static act.sds.samsung.angelman.presentation.util.ContentsUtil.getImageFolder;
+import static act.sds.samsung.angelman.presentation.util.ContentsUtil.getContentFolder;
 
 public class FileUtil {
 
@@ -25,11 +25,11 @@ public class FileUtil {
     public static final String VOICE_FOLDER = "voice";
     public static final String TEMP_FOLDER = "temp";
 
-    public static final String IMAGE_FULL_PATH = ANGELMAN_FOLDER + File.separator + ContentsUtil.IMAGE_FOLDER;
+    public static final String IMAGE_FULL_PATH = ANGELMAN_FOLDER + File.separator + ContentsUtil.CONTENT_FOLDER;
     public static final String VOICE_FULL_PATH = ANGELMAN_FOLDER + File.separator + VOICE_FOLDER;
     public static final String TEMP_FULL_PATH = ANGELMAN_FOLDER + File.separator + TEMP_FOLDER;
 
-    private static final int BUFFER_SIZE = 1024;
+    public static final int BUFFER_SIZE = 8192;
 
     public static void initExternalStorageFolder() {
         File rootFolder = new File(Environment.getExternalStorageDirectory() + File.separator + ANGELMAN_FOLDER);
@@ -38,7 +38,8 @@ public class FileUtil {
             rootFolder.mkdir();
         }
 
-        File imageFolder = new File(ContentsUtil.getImageFolder());
+        File imageFolder = new File(ContentsUtil.getContentFolder());
+
         if (!imageFolder.exists()) {
             imageFolder.mkdir();
         }
@@ -67,7 +68,7 @@ public class FileUtil {
             OutputStream out = null;
             try {
                 in = assetManager.open("contents" + File.separator + fileName);
-                File outFile = new File(getImageFolder(), fileName);
+                File outFile = new File(getContentFolder(), fileName);
                 out = new FileOutputStream(outFile);
                 copyFile(in, out);
             } catch(IOException e) {

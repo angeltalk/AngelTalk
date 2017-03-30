@@ -4,7 +4,6 @@ import android.content.Context;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Vibrator;
-import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.util.SparseArray;
 import android.view.View;
@@ -108,19 +107,19 @@ public class CardImageAdapter extends PagerAdapter {
                 cardView.findViewById(R.id.card_image).setVisibility(View.VISIBLE);
                 cardView.findViewById(R.id.card_video).setVisibility(View.GONE);
                 String imagePath = singleSectionItems.contentPath;
-                glide.load(getImageFile(imagePath))
+                glide.load(ContentsUtil.getContentFileFromContentPath(imagePath))
                         .bitmapTransform(new AngelManGlideTransform(context, 10, 0, AngelManGlideTransform.CornerType.TOP))
                         .override(280, 280)
                         .into(cardView.cardImage);
             } else if (singleSectionItems.cardType == CardModel.CardType.VIDEO_CARD) {
-                glide.load(getImageFile(ContentsUtil.getThumbnailPath(singleSectionItems.contentPath)))
+                glide.load(ContentsUtil.getContentFileFromContentPath(ContentsUtil.getThumbnailPath(singleSectionItems.contentPath)))
                         .bitmapTransform(new AngelManGlideTransform(context, 10, 0, AngelManGlideTransform.CornerType.TOP))
                         .override(280, 280)
                         .into(cardView.cardImage);
                 VideoCardTextureView cardVideoView = ((VideoCardTextureView) cardView.findViewById(R.id.card_video));
                 cardVideoView.setVisibility(View.VISIBLE);
                 cardVideoView.setScaleType(VideoCardTextureView.ScaleType.CENTER_CROP);
-                File video = getImageFile(singleSectionItems.contentPath);
+                File video = ContentsUtil.getContentFileFromContentPath(singleSectionItems.contentPath);
                 if(video.exists()) {
                     cardVideoView.setDataSource(video.getAbsolutePath());
                 }
@@ -152,17 +151,6 @@ public class CardImageAdapter extends PagerAdapter {
         hasNewCardView = true;
         CardModel emptyModel = new CardModel();
         dataList.add(0, emptyModel);
-    }
-
-    @NonNull
-    private File getImageFile(String imagePath) {
-        File file;
-        if (imagePath.contains("DCIM")) {
-            file = new File(imagePath);
-        } else {
-            file = new File(ContentsUtil.getImageFolder() + File.separator + imagePath);
-        }
-        return file;
     }
 
     private View.OnClickListener cardContainerOnClickListener = new View.OnClickListener() {
