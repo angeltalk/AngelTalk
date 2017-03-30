@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import static act.sds.samsung.angelman.presentation.util.FileUtil.IMAGE_FULL_PATH;
+import static act.sds.samsung.angelman.presentation.util.FileUtil.TEMP_FULL_PATH;
 import static act.sds.samsung.angelman.presentation.util.FileUtil.VOICE_FULL_PATH;
 
 public class ContentsUtil {
@@ -44,23 +45,27 @@ public class ContentsUtil {
         return Environment.getExternalStorageDirectory() + File.separator + VOICE_FULL_PATH;
     }
 
-    public String getImagePath() {
-        return getContentFolder() + File.separator + DateUtil.getDateNow() +".jpg";
+    public static String getTempFolder() {
+        return Environment.getExternalStorageDirectory() + File.separator + TEMP_FULL_PATH;
+    }
+
+    public static String getImagePath() {
+        return getContentFolder() + File.separator + DateUtil.getDateNow() + ".jpg";
     }
 
     public static String getVideoPath() {
         return getContentFolder() + File.separator + DateUtil.getDateNow() +".mp4";
     }
 
+    public static String getVoicePath() {
+        return getVoiceFolder() + File.separator + DateUtil.getDateNow() + ".3gdp";
+    }
+
     public static String getThumbnailPath(String videoPath) {
         return videoPath.replace(".mp4",".jpg");
     }
 
-    public String makeImagePathForAsset(String imgFileName){
-        return "file:///android_asset/" + imgFileName;
-    }
-
-    public void saveImage(View decorView, String fileName){
+    public void saveImage(View decorView, String fileName) {
         Bitmap bitmap = screenShot(decorView);
 
         saveImage(bitmap, fileName, 490, 112);
@@ -118,19 +123,12 @@ public class ContentsUtil {
             fileCacheItem.createNewFile();
             out = new FileOutputStream(fileCacheItem);
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
-        }
-        finally
-        {
-            try
-            {
+        } finally {
+            try {
                 out.close();
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -159,5 +157,26 @@ public class ContentsUtil {
             file = new File(getContentFolder() + File.separator + contentsPath);
         }
         return file;
+    }
+
+    public static void copySharedFiles(CardModel cardModel) {
+        File[] files = new File(getTempFolder()).listFiles();
+        for (File file : files) {
+            try {
+                if (file.getAbsolutePath().contains("mp4")) {
+                    FileUtil.copyFile(file, new File(cardModel.contentPath));
+                } else if (file.getAbsolutePath().contains("jpg")) {
+                    if (cardModel.cardType == CardModel.CardType.VIDEO_CARD) {
+                        FileUtil.copyFile(file, new File(cardModel.thumbnailPath));
+                    } else {
+                        FileUtil.copyFile(file, new File(cardModel.contentPath));
+                    }
+                } else if (file.getAbsolutePath().contains("3gdp")) {
+                    copyFile(file, new File(cardModel.voicePath));
+                }
+            } catch (IOException e) {
+                Log.e("error", "copyShardFile error : " + e.getStackTrace());
+            }
+        }
     }
 }

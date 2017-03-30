@@ -13,7 +13,6 @@ import act.sds.samsung.angelman.R;
 import act.sds.samsung.angelman.domain.model.CardModel;
 import act.sds.samsung.angelman.presentation.util.ContentsUtil;
 import act.sds.samsung.angelman.presentation.util.FontUtil;
-import act.sds.samsung.angelman.presentation.util.ContentsUtil;
 
 public class PhotoEditorActivity extends AbstractActivity {
     public static final String IMAGE_PATH_EXTRA = "imagePath";
@@ -87,7 +86,7 @@ public class PhotoEditorActivity extends AbstractActivity {
     }
 
     public String saveEditedImage() {
-        String fileName = contentsUtil.getImagePath();
+        String fileName = ContentsUtil.getImagePath();
         contentsUtil.saveImage(getWindow().getDecorView(), fileName);
         return fileName;
     }

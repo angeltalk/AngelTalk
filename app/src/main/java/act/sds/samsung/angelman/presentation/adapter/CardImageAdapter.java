@@ -218,12 +218,18 @@ public class CardImageAdapter extends PagerAdapter {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (cardView.dataModel == null || cardView.dataModel.voicePath == null || cardView.dataModel.voicePath.length() < 1) {
-                    playUtil.ttsSpeak(cardView.cardTitle.getText().toString());
-                } else {
-                    playUtil.play(cardView.dataModel.voicePath);
-                }
+            if (voiceFileExists(cardView)) {
+                playUtil.play(cardView.dataModel.voicePath);
+            } else {
+                playUtil.ttsSpeak(cardView.cardTitle.getText().toString());
+            }
             }
         }, delayMillis);
+    }
+
+    private boolean voiceFileExists(CardView cardView) {
+        return cardView.dataModel != null &&
+                cardView.dataModel.voicePath != null &&
+                (new File(cardView.dataModel.voicePath)).exists();
     }
 }

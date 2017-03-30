@@ -23,9 +23,12 @@ public class FileUtil {
 
     public static final String ANGELMAN_FOLDER = "angelman";
     public static final String VOICE_FOLDER = "voice";
+    public static final String TEMP_FOLDER = "temp";
 
     public static final String IMAGE_FULL_PATH = ANGELMAN_FOLDER + File.separator + ContentsUtil.CONTENT_FOLDER;
     public static final String VOICE_FULL_PATH = ANGELMAN_FOLDER + File.separator + VOICE_FOLDER;
+    public static final String TEMP_FULL_PATH = ANGELMAN_FOLDER + File.separator + TEMP_FOLDER;
+
     public static final int BUFFER_SIZE = 8192;
 
     public static void initExternalStorageFolder() {
@@ -42,9 +45,14 @@ public class FileUtil {
         }
 
         File voiceFolder = new File(ContentsUtil.getVoiceFolder());
-
-        if (!voiceFolder.exists())
+        if (!voiceFolder.exists()) {
             voiceFolder.mkdir();
+        }
+
+        File tempFolder = new File(ContentsUtil.getTempFolder());
+        if(!tempFolder.exists()) {
+            tempFolder.mkdir();
+        }
     }
 
     public static void copyDefaultAssetImagesToImageFolder(Context context) {
@@ -94,6 +102,20 @@ public class FileUtil {
         }
     }
 
+    public static void removeFilesIn(String path) {
+        File directory = new File(path);
+        if(directory.isDirectory()) {
+            File[] files = directory.listFiles();
+            for(File file : files) {
+                file.delete();
+            }
+        }
+    }
+
+    public static void copyFile(File in, File out) throws IOException {
+        copyFile(new FileInputStream(in), new FileOutputStream(out));
+    }
+
     private static void copyFile(InputStream in, OutputStream out) throws IOException {
         byte[] buffer = new byte[1024];
         int read;
@@ -107,7 +129,7 @@ public class FileUtil {
     }
 
     public static void zip(String[] files, String zipFile) throws IOException {
-        BufferedInputStream origin = null;
+        BufferedInputStream origin;
         ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(zipFile)));
         try {
             byte data[] = new byte[BUFFER_SIZE];
@@ -116,79 +138,56 @@ public class FileUtil {
                 FileInputStream fi = new FileInputStream(files[i]);
                 origin = new BufferedInputStream(fi, BUFFER_SIZE);
                 try {
-                    ZipEntry entry = new ZipEntry(files[i].substring(files[i].lastIndexOf("/") + 1));
+                    ZipEntry entry = new ZipEntry(files[i].substring(files[i].lastIndexOf(File.separator) + 1));
                     out.putNextEntry(entry);
                     int count;
                     while ((count = origin.read(data, 0, BUFFER_SIZE)) != -1) {
                         out.write(data, 0, count);
                     }
-                }
-                finally {
+                } finally {
                     origin.close();
                 }
             }
-        }
-        finally {
+        } finally {
             out.close();
         }
     }
 
     public static void unzip(String zipFile, String location) throws IOException {
-        int size;
-        byte[] buffer = new byte[BUFFER_SIZE];
-
         try {
-            if ( !location.endsWith("/") ) {
-                location += "/";
-            }
             File f = new File(location);
-            if(!f.isDirectory()) {
+            if (!f.isDirectory()) {
                 f.mkdirs();
             }
-            ZipInputStream zin = new ZipInputStream(new BufferedInputStream(new FileInputStream(zipFile), BUFFER_SIZE));
+            ZipInputStream zin = new ZipInputStream(new FileInputStream(zipFile));
             try {
-                ZipEntry ze = null;
+                ZipEntry ze;
                 while ((ze = zin.getNextEntry()) != null) {
-                    String path = location + ze.getName();
-                    File unzipFile = new File(path);
-
+                    String path = location + File.separator + ze.getName();
                     if (ze.isDirectory()) {
-                        if(!unzipFile.isDirectory()) {
+                        File unzipFile = new File(path);
+                        if (!unzipFile.isDirectory()) {
                             unzipFile.mkdirs();
                         }
                     } else {
-                        // check for and create parent directories if they don't exist
-                        File parentDir = unzipFile.getParentFile();
-                        if ( null != parentDir ) {
-                            if ( !parentDir.isDirectory() ) {
-                                parentDir.mkdirs();
-                            }
-                        }
-
-                        // unzip the file
-                        FileOutputStream out = new FileOutputStream(unzipFile, false);
-                        BufferedOutputStream fout = new BufferedOutputStream(out, BUFFER_SIZE);
+                        byte data[] = new byte[BUFFER_SIZE];
+                        BufferedOutputStream fout = new BufferedOutputStream( new FileOutputStream(path, false), BUFFER_SIZE);
                         try {
-                            while ( (size = zin.read(buffer, 0,  BUFFER_SIZE)) != -1 ) {
-                                fout.write(buffer, 0, size);
+                            int count;
+                            while ((count = zin.read(data, 0, BUFFER_SIZE)) != -1) {
+                                fout.write(data, 0, count);
                             }
-
                             zin.closeEntry();
-                        }
-                        finally {
-                            fout.flush();
+                        } finally {
                             fout.close();
                         }
                     }
                 }
-            }
-            finally {
+            } finally {
                 zin.close();
             }
-        }
-        catch (Exception e) {
-            Log.e("#", "Unzip exception", e);
+        } catch (Exception e) {
+            Log.e("Error", "Unzip exception", e);
         }
     }
-
 }

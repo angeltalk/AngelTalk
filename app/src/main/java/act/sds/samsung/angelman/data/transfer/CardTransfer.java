@@ -118,4 +118,50 @@ public class CardTransfer {
         return ContentsUtil.getContentFileFromContentPath(filePath).getAbsolutePath();
     }
 
+    public void downloadCard(String receiveKey, final OnDownloadCompleteListener downloadCompleteListener) {
+        shareDataReference.child(receiveKey).addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        final CardTransferModel cardTransferModel = new CardTransferModel();
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            setCardModealData(cardTransferModel, snapshot);
+                        }
+
+                        final File localFile = new File(ContentsUtil.getTempFolder() + File.separator + "temp.zip");
+                        storage.getReferenceFromUrl(cardTransferModel.contentPath)
+                                .getFile(localFile)
+                                .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                                    @Override
+                                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                                        downloadCompleteListener.onSuccess(cardTransferModel, localFile.getAbsolutePath());
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.d("DOWNLOAD FAIL ", "download fail." );
+                                        downloadCompleteListener.onFail();
+                                    }
+                                });
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.d("onCancelled", databaseError.getMessage());
+                        downloadCompleteListener.onFail();
+                    }
+                }
+        );
+    }
+
+    private void setCardModealData(CardTransferModel newCardModel, DataSnapshot snapshot) {
+        if (snapshot.getKey().equals("name")) {
+            newCardModel.name = snapshot.getValue().toString();
+        } else if (snapshot.getKey().equals("contentPath")) {
+            newCardModel.contentPath = snapshot.getValue().toString();
+        } else if (snapshot.getKey().equals("cardType")) {
+            newCardModel.cardType = snapshot.getValue().toString();
+        }
+    }
 }
