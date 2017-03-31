@@ -62,7 +62,7 @@ android {
 
 jacoco {
     toolVersion = "0.7.6.201602180812"
-    reportsDir = file("${buildDir}/reports")
+    reportsDir = file("${project.buildDir}/reports")
 }
 
 task coverageReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
@@ -72,7 +72,7 @@ task coverageReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
     def coverageSourceDirs = ['src/main/java']
 
     classDirectories = fileTree(
-            dir: "${buildDir}/intermediates/classes/debug",
+            dir: "${project.buildDir}/intermediates/classes/debug",
             includes: [
                     '**/**/*',
             ],
@@ -84,7 +84,7 @@ task coverageReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
     )
 
     sourceDirectories = files(coverageSourceDirs)
-    executionData = files("${buildDir}/jacoco/testDebugUnitTest.exec")
+    executionData = files("${project.buildDir}/jacoco/testDebugUnitTest.exec")
 
     reports {
         xml.enabled = true
