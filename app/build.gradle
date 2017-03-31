@@ -75,7 +75,14 @@ task coverageReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
                        '**/R$*.class',
                        '**/BuildConfig.*',
                        '**/Manifest*.*',
-                       'com/android/**/*.class']
+                       'com/android/**/*.class',
+                       '**/AngelmanApplication.class',
+                       '**/AngelmanComponent.class',
+                       '**/AngelmanModule.class',
+                       '**/*$ViewInjector*.*',
+                       '**/*$ModuleAdapter*.*',
+                       '**/*$InjectAdapter*.*',
+                       '**/*$ViewBinder*.*']
     )
 
     def coverageSourceDirs = ["../app/src/main/java"]
