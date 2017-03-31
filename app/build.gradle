@@ -2,7 +2,6 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'org.sonarqube'
 
-//apply from: 'jacoco.gradle'
 apply from: 'sonarqube.gradle'
 apply plugin: 'jacoco'
 
@@ -28,8 +27,7 @@ android {
         versionCode 8
         versionName "1.0"
         multiDexEnabled true
-        //testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     testOptions {
         unitTests.returnDefaultValues = true
@@ -61,15 +59,12 @@ android {
 }
 
 jacoco {
-    toolVersion = "0.7.6.201602180812"
-    reportsDir = file("${project.buildDir}/reports")
+    toolVersion = "0.7.1.201405082137"
 }
 
 task coverageReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
     group = "Reporting"
     description = "Generate Jacoco coverage reports"
-
-    def coverageSourceDirs = ['src/main/java']
 
     classDirectories = fileTree(
             dir: "${project.buildDir}/intermediates/classes/debug",
@@ -83,12 +78,21 @@ task coverageReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
                        'com/android/**/*.class']
     )
 
+    def coverageSourceDirs = ["../app/src/main/java"]
+    additionalSourceDirs = files(coverageSourceDirs)
     sourceDirectories = files(coverageSourceDirs)
     executionData = files("${project.buildDir}/jacoco/testDebugUnitTest.exec")
 
     reports {
-        xml.enabled = true
-        html.enabled = true
+        xml {
+            enabled = true
+            destination "${project.buildDir}/reports/jacoco/jacoco.xml"
+        }
+        csv.enabled false
+        html {
+            enabled = true
+            destination "${project.buildDir}/reports/jacoco/html"
+        }
     }
 }
 
