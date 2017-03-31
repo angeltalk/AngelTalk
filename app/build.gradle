@@ -31,25 +31,25 @@ android {
         //testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
     }
-//    testOptions {
-//        unitTests.returnDefaultValues = true
-//        unitTests.all {
-//            jvmArgs '-Xmx2g', '-XX:MaxPermSize=1024m', '-XX:+HeapDumpOnOutOfMemoryError'
-//            jacoco {
-//                includeNoLocationClasses = true
-//            }
-//
-//        }
-//    }
+    testOptions {
+        unitTests.returnDefaultValues = true
+        unitTests.all {
+            jvmArgs '-Xmx2g', '-XX:MaxPermSize=1024m', '-XX:+HeapDumpOnOutOfMemoryError'
+            jacoco {
+                includeNoLocationClasses = true
+            }
+
+        }
+    }
 
     buildTypes {
         debug {
-            testCoverageEnabled = false
+            testCoverageEnabled = true
             signingConfig signingConfigs.debug
             applicationVariants.all { variant -> renameAPK(variant) }
         }
         release {
-            testCoverageEnabled = false
+            testCoverageEnabled = true
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             applicationVariants.all { variant -> renameAPK(variant) }
@@ -60,9 +60,8 @@ android {
     }
 }
 
-
-
 jacoco {
+    toolVersion = "0.7.6.201602180812"
     reportsDir = file("${buildDir}/reports")
 }
 
@@ -74,6 +73,9 @@ task coverageReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
 
     classDirectories = fileTree(
             dir: "${buildDir}/intermediates/classes/debug",
+            includes: [
+                    '**/**/*',
+            ],
             excludes: ['**/R.class',
                        '**/R$*.class',
                        '**/BuildConfig.*',
