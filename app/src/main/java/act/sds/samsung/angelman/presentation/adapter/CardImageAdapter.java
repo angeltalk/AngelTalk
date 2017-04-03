@@ -181,7 +181,9 @@ public class CardImageAdapter extends PagerAdapter {
         }
     };
 
+    CardView lastSelectedCardView = null;
     private void startCardSelectionEffect(CardView cardView) {
+        lastSelectedCardView = cardView;
         if (cardView.mode == CardView.MODE_VIEW_CARD) {
             cardView.bringToFront();
 
@@ -206,16 +208,17 @@ public class CardImageAdapter extends PagerAdapter {
                     });
 
                 }
-                startSpeakCardName(cardView, 3500);
+                startSpeakCardName(cardView, 3500); //Video card
             } else {
-                startSpeakCardName(cardView, 500);
+                startSpeakCardName(cardView, 500); //Text card
             }
         }
     }
 
+    Handler speakhandler = new Handler();
     private void startSpeakCardName(final CardView cardView, int delayMillis) {
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
+        //Handler handler = new Handler();
+        speakhandler.postDelayed(new Runnable() {
             @Override
             public void run() {
             if (voiceFileExists(cardView)) {
@@ -225,6 +228,20 @@ public class CardImageAdapter extends PagerAdapter {
             }
             }
         }, delayMillis);
+    }
+
+    public void stopVideoView(){
+        if(lastSelectedCardView != null){
+            VideoCardTextureView cardVideoView = ((VideoCardTextureView) lastSelectedCardView.findViewById(R.id.card_video));
+            if(cardVideoView != null && cardVideoView.isPlaying()){
+                cardVideoView.stop();
+                cardVideoView.seekTo(0);
+            }
+        }
+    }
+
+    public void releaseSpeakHandler(){
+        speakhandler.removeCallbacksAndMessages(null);
     }
 
     private boolean voiceFileExists(CardView cardView) {

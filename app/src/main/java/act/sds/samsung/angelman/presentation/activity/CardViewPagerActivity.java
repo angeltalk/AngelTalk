@@ -174,6 +174,8 @@ public class CardViewPagerActivity extends AbstractActivity {
 
         @Override
         public void onPageSelected(int pos) {
+            adapter.releaseSpeakHandler();
+            adapter.stopVideoView();
             showAndHideButtonContainerBy(pos);
             currentCardIndex = pos;
             titleLayout.refreshCardCountText(pos, mViewPager.getAdapter().getCount());
