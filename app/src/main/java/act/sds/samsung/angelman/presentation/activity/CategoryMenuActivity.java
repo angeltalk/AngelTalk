@@ -217,7 +217,7 @@ public class CategoryMenuActivity extends AbstractActivity {
                         moveToNewCategoryActivity();
                     } else {
                         CategoryModel categoryModel = categoryList.get(position);
-                        moveToCategoryViewPagerActivity(categoryModel);
+                        moveToCategoryViewPagerActivity(categoryModel, null);
                     }
                 }
             }
@@ -239,11 +239,12 @@ public class CategoryMenuActivity extends AbstractActivity {
         startActivity(intent);
     }
 
-    private void moveToCategoryViewPagerActivity(CategoryModel categoryModel) {
+    private void moveToCategoryViewPagerActivity(CategoryModel categoryModel , String intentKey) {
         Intent intent = new Intent(getApplicationContext(), CardViewPagerActivity.class);
         applicationManager.setCategoryModel(categoryModel);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(CardViewPagerActivity.CATEGORY_COLOR, categoryModel.color);
+        intent.putExtra(intentKey, true);
         getApplicationContext().startActivity(intent);
     }
 
@@ -301,6 +302,10 @@ public class CategoryMenuActivity extends AbstractActivity {
                         CardModel cardModel = saveNewSharedCard(cardTransferModel);
                         ContentsUtil.copySharedFiles(cardModel);
                         FileUtil.removeFilesIn(ContentsUtil.getTempFolder());
+
+                        CategoryModel categoryModel = categoryRepository.getCategoryAllList().get(0);
+                        moveToCategoryViewPagerActivity(categoryModel, CardViewPagerActivity.INTENT_KEY_SHARE_CARD);
+
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
