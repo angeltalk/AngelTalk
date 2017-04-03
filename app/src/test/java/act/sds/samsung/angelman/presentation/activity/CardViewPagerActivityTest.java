@@ -12,10 +12,14 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
@@ -24,11 +28,14 @@ import org.robolectric.fakes.RoboVibrator;
 import org.robolectric.shadows.ShadowActivity;
 import org.robolectric.shadows.ShadowAlertDialog;
 import org.robolectric.shadows.ShadowLooper;
+import org.robolectric.shadows.ShadowToast;
 
 import java.lang.reflect.Field;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -53,7 +60,9 @@ import act.sds.samsung.angelman.presentation.util.ResourcesUtil;
 import static junit.framework.Assert.assertTrue;
 import static org.assertj.android.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -374,16 +383,6 @@ public class CardViewPagerActivityTest extends UITest {
         }
     }
 
-    public boolean equals(Bitmap bitmap1, Bitmap bitmap2) {
-        ByteBuffer buffer1 = ByteBuffer.allocate(bitmap1.getHeight() * bitmap1.getRowBytes());
-        bitmap1.copyPixelsToBuffer(buffer1);
-
-        ByteBuffer buffer2 = ByteBuffer.allocate(bitmap2.getHeight() * bitmap2.getRowBytes());
-        bitmap2.copyPixelsToBuffer(buffer2);
-
-        return Arrays.equals(buffer1.array(), buffer2.array());
-    }
-
     @Test
     public void whenFinishedToMakeNewCard_thenShowsNewAddedCardAtFirstInCardViewPager() throws Exception {
         Intent intent = new Intent();
@@ -396,7 +395,61 @@ public class CardViewPagerActivityTest extends UITest {
 
         assertThat(subject.mViewPager.getCurrentItem()).isNotEqualTo(0);
         assertThat(subject.mViewPager.getCurrentItem()).isEqualTo(1);
+    }
 
+    @Test
+    public void whenClickShareButtonAndUploadSuccess_thenSendKakaoLinkMessage() throws Exception {
+        subject.mViewPager.setCurrentItem(1);
+        CardModel cardModel = subject.getCardModel(1);
+
+        final Map<String, String> resultMap = new HashMap<>();
+        resultMap.put("url", "url string");
+        resultMap.put("key", "key string");
+
+        doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+
+                OnSuccessListener<Map<String,String>> onSuccessListener = ((OnSuccessListener<Map<String, String>>) invocation.getArguments()[1]);
+                onSuccessListener.onSuccess(resultMap);
+                return null;
+            }
+        }).when(subject.cardTransfer).uploadCard(any(CardModel.class), any(OnSuccessListener.class), any(OnFailureListener.class));
+
+        // when
+        subject.cardShareButton.performClick();
+
+        // then
+        verify(subject.kaKaoTransfer).sendKakaoLinkMessage(subject.context, "key string", "url string", cardModel);
+    }
+
+    @Test
+    public void whenClickShareButtonAndUploadFail_thenShowFailMessage() throws Exception {
+        doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                OnFailureListener onFailureListener = ((OnFailureListener) invocation.getArguments()[2]);
+                onFailureListener.onFailure(new Exception());
+                return null;
+            }
+        }).when(subject.cardTransfer).uploadCard(any(CardModel.class), any(OnSuccessListener.class), any(OnFailureListener.class));
+
+        // when
+        subject.cardShareButton.performClick();
+
+        // then
+        assertThat(ShadowToast.getLatestToast()).isNotNull();
+        assertThat(ShadowToast.getTextOfLatestToast()).isEqualTo("카드 공유가 실패하였습니다.");
+    }
+
+    public boolean equals(Bitmap bitmap1, Bitmap bitmap2) {
+        ByteBuffer buffer1 = ByteBuffer.allocate(bitmap1.getHeight() * bitmap1.getRowBytes());
+        bitmap1.copyPixelsToBuffer(buffer1);
+
+        ByteBuffer buffer2 = ByteBuffer.allocate(bitmap2.getHeight() * bitmap2.getRowBytes());
+        bitmap2.copyPixelsToBuffer(buffer2);
+
+        return Arrays.equals(buffer1.array(), buffer2.array());
     }
 
     private ArrayList<CardModel> getCardListWithCategoryId() {
