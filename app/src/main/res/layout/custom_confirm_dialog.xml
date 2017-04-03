@@ -36,24 +36,25 @@
         >
 
         <act.sds.samsung.angelman.presentation.custom.FontTextView
-            android:id="@+id/cancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="138dp"
-            android:text="@string/cancel"
-            app:font="@string/font_medium"
-            android:textColor="#d41468"
-            android:textSize="16sp" />
-
-        <act.sds.samsung.angelman.presentation.custom.FontTextView
             android:id="@+id/confirm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="52dp"
-            android:layout_toRightOf="@id/cancel"
+            android:layout_marginRight="30dp"
+            android:layout_alignParentRight="true"
             android:text="@string/confirm"
+            app:font="@string/font_medium"
+            android:textColor="#d41468"
+            android:textSize="16sp" />
+
+        <act.sds.samsung.angelman.presentation.custom.FontTextView
+            android:id="@+id/cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="@string/cancel"
+            android:layout_toLeftOf="@id/confirm"
             app:font="@string/font_medium"
             android:textColor="#d41468"
             android:textSize="16sp" />

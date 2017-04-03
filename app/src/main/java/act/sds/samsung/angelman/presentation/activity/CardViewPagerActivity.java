@@ -1,6 +1,5 @@
 package act.sds.samsung.angelman.presentation.activity;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,9 +17,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.kakao.kakaolink.KakaoLink;
 
 import java.util.List;
 import java.util.Map;
@@ -38,9 +34,9 @@ import act.sds.samsung.angelman.presentation.adapter.CardImageAdapter;
 import act.sds.samsung.angelman.presentation.custom.CardCategoryLayout;
 import act.sds.samsung.angelman.presentation.custom.CardView;
 import act.sds.samsung.angelman.presentation.custom.CardViewPager;
+import act.sds.samsung.angelman.presentation.custom.CustomConfirmDialog;
 import act.sds.samsung.angelman.presentation.custom.SnackBar;
 import act.sds.samsung.angelman.presentation.util.ApplicationManager;
-import act.sds.samsung.angelman.presentation.util.DialogUtil;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -117,13 +113,14 @@ public class CardViewPagerActivity extends AbstractActivity {
 
     public static String CATEGORY_COLOR = "categoryColor";
     public static final String INTENT_KEY_NEW_CARD = "isNewCard";
+    public static final String INTENT_KEY_SHARE_CARD = "isShareCard";
 
     List<CardModel> allCardListInSelectedCategory;
     int currentCardIndex = 0;
 
     private CategoryModel selectedCategoryModel;
     private CardImageAdapter adapter;
-    private AlertDialog dialog;
+    private CustomConfirmDialog dialog;
     private RequestManager glide;
     Context context;
 
@@ -138,7 +135,12 @@ public class CardViewPagerActivity extends AbstractActivity {
         initializeView();
 
         if (getIntent().getBooleanExtra(INTENT_KEY_NEW_CARD, false)) {
-            showAddNewCardSuccessMessage();
+            showSnackBarMessage(INTENT_KEY_NEW_CARD);
+            mViewPager.setCurrentItem(1);
+        }
+
+        if (getIntent().getBooleanExtra(INTENT_KEY_SHARE_CARD, false)) {
+            showSnackBarMessage(INTENT_KEY_SHARE_CARD);
             mViewPager.setCurrentItem(1);
         }
     }
@@ -227,8 +229,8 @@ public class CardViewPagerActivity extends AbstractActivity {
         TextView alertMessage = (TextView) innerView.findViewById(R.id.alert_message);
         alertMessage.setText(message);
 
-        dialog = DialogUtil.buildCustomDialog(CardViewPagerActivity.this, innerView, positiveListener, negativeListener);
-        dialog.show();
+        dialog = new CustomConfirmDialog(this, message, positiveListener, negativeListener);
+
     }
 
     private int setCurrentItem() {
@@ -243,9 +245,13 @@ public class CardViewPagerActivity extends AbstractActivity {
         return cardRepository.deleteSingleCardWithCardIndex(selectedCategoryModel.index, cardIndex);
     }
 
-    private void showAddNewCardSuccessMessage() {
+    private void showSnackBarMessage(String intentKey) {
         PercentFrameLayout rootLayout = (PercentFrameLayout) findViewById(R.id.category_item_container);
-        SnackBar.snackBarWithDuration(rootLayout, getApplicationContext().getResources().getString(R.string.add_new_card_success), ApplicationManager.SNACKBAR_DURATION);
+        if(INTENT_KEY_NEW_CARD.equals(intentKey)) {
+            SnackBar.snackBarWithDuration(rootLayout, getApplicationContext().getResources().getString(R.string.add_new_card_success), ApplicationManager.SNACKBAR_DURATION);
+        }else if(INTENT_KEY_SHARE_CARD.equals(intentKey)){
+            SnackBar.snackBarWithDuration(rootLayout, getApplicationContext().getResources().getString(R.string.add_share_card_success), ApplicationManager.SNACKBAR_DURATION);
+        }
     }
 
 }
