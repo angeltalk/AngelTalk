@@ -45,9 +45,9 @@ public class CardTransfer {
     public static final String DEFAULT_SHARE_REFERENCE = "share";
     public static final String IMAGE_FILE_EXTENSION = ".jpg";
 
-    private DatabaseReference shareDataReference;
-    private StorageReference storageReference;
-    private FirebaseStorage storage;
+    DatabaseReference shareDataReference;
+    StorageReference storageReference;
+    FirebaseStorage storage;
     private Context context;
 
     public CardTransfer(Context context) {
@@ -66,14 +66,10 @@ public class CardTransfer {
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        Uri uploadFileUri ;
-                        if(cardModel.cardType == CardModel.CardType.PHOTO_CARD){
-                            uploadFileUri = Uri.fromFile(new File( getAbsoluteContentsPath(cardModel.contentPath)));
-                        } else{
-                            uploadFileUri = Uri.fromFile(new File( getAbsoluteContentsPath(cardModel.thumbnailPath)));
-                        }
-                        storageReference.child(key).child(key + IMAGE_FILE_EXTENSION)
-                                .putFile(uploadFileUri)
+
+                        Uri uploadFileUri = getUploadFileUri(cardModel);
+
+                        storageReference.child(key).child(key + IMAGE_FILE_EXTENSION).putFile(uploadFileUri)
                                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                     @Override
                                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -100,29 +96,6 @@ public class CardTransfer {
                 }
         });
 
-    }
-
-    @NonNull
-    private String makeShareZipFile(CardModel cardModel, String key) {
-        List<String> filePathList = Lists.newArrayList(getAbsoluteContentsPath(cardModel.contentPath));
-        if (cardModel.voicePath != null) {
-            filePathList.add(getAbsoluteContentsPath(cardModel.voicePath));
-        }
-        if (cardModel.cardType == CardModel.CardType.VIDEO_CARD) {
-            filePathList.add(getAbsoluteContentsPath(cardModel.thumbnailPath));
-        }
-
-        final String zipFilePath = context.getCacheDir() + File.separator + key + ".zip";
-        try {
-            FileUtil.zip(filePathList.toArray(new String[filePathList.size()]), zipFilePath);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return zipFilePath;
-    }
-
-    private String getAbsoluteContentsPath(String filePath){
-        return ContentsUtil.getContentFileFromContentPath(filePath).getAbsolutePath();
     }
 
     public void downloadCard(String receiveKey, final OnDownloadCompleteListener downloadCompleteListener) {
@@ -160,6 +133,39 @@ public class CardTransfer {
                     }
                 }
         );
+    }
+
+    private Uri getUploadFileUri(CardModel cardModel) {
+        Uri uploadFileUri ;
+        if(cardModel.cardType == CardModel.CardType.PHOTO_CARD){
+            uploadFileUri = Uri.fromFile(new File( getAbsoluteContentsPath(cardModel.contentPath)));
+        } else{
+            uploadFileUri = Uri.fromFile(new File( getAbsoluteContentsPath(cardModel.thumbnailPath)));
+        }
+        return uploadFileUri;
+    }
+
+    @NonNull
+    private String makeShareZipFile(CardModel cardModel, String key) {
+        List<String> filePathList = Lists.newArrayList(getAbsoluteContentsPath(cardModel.contentPath));
+        if (cardModel.voicePath != null) {
+            filePathList.add(getAbsoluteContentsPath(cardModel.voicePath));
+        }
+        if (cardModel.cardType == CardModel.CardType.VIDEO_CARD) {
+            filePathList.add(getAbsoluteContentsPath(cardModel.thumbnailPath));
+        }
+
+        final String zipFilePath = context.getCacheDir() + File.separator + key + ".zip";
+        try {
+            FileUtil.zip(filePathList.toArray(new String[filePathList.size()]), zipFilePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return zipFilePath;
+    }
+
+    private String getAbsoluteContentsPath(String filePath){
+        return ContentsUtil.getContentFileFromContentPath(filePath).getAbsolutePath();
     }
 
     private void setCardModealData(CardTransferModel newCardModel, DataSnapshot snapshot) {
