@@ -30,6 +30,7 @@ import act.sds.samsung.angelman.domain.model.CategoryItemModel;
 import act.sds.samsung.angelman.domain.model.CategoryModel;
 import act.sds.samsung.angelman.domain.repository.CategoryRepository;
 import act.sds.samsung.angelman.presentation.adapter.NewCategoryItemAdapter;
+import act.sds.samsung.angelman.presentation.manager.ApplicationConstants;
 import act.sds.samsung.angelman.presentation.util.ResourceMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -153,7 +154,7 @@ public class NewCategoryActivityTest extends UITest {
         saveButton.performClick();
 
         Intent actualIntent = shadowOf(subject).getNextStartedActivity();
-        int actualColor = (int) actualIntent.getExtras().get(CardViewPagerActivity.CATEGORY_COLOR);
+        int actualColor = (int) actualIntent.getExtras().get(ApplicationConstants.CATEGORY_COLOR);
 
         assertThat(actualColor).isEqualTo(ResourceMapper.ColorType.RED.ordinal());
     }

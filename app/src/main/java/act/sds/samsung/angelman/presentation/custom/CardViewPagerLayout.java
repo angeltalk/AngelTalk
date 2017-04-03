@@ -22,7 +22,7 @@ import act.sds.samsung.angelman.domain.model.CardModel;
 import act.sds.samsung.angelman.domain.model.CategoryModel;
 import act.sds.samsung.angelman.domain.repository.CardRepository;
 import act.sds.samsung.angelman.presentation.adapter.CardImageAdapter;
-import act.sds.samsung.angelman.presentation.util.ApplicationManager;
+import act.sds.samsung.angelman.presentation.manager.ApplicationManager;
 import act.sds.samsung.angelman.presentation.util.ResourcesUtil;
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 

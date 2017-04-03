@@ -8,7 +8,7 @@ import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 
-import act.sds.samsung.angelman.data.sqlite.AngelmanDbHelper;
+import act.sds.samsung.angelman.data.sqlite.DatabaseHelper;
 import act.sds.samsung.angelman.data.sqlite.CardColumns;
 import act.sds.samsung.angelman.domain.model.CardModel;
 import lombok.Cleanup;
@@ -16,10 +16,10 @@ import lombok.Cleanup;
 
 public class SingleCardSqliteDataStore implements  SingleCardDataStore {
 
-    AngelmanDbHelper dbHelper;
+    DatabaseHelper dbHelper;
 
     public SingleCardSqliteDataStore(@NonNull Context context) {
-        dbHelper = AngelmanDbHelper.getInstance(context);
+        dbHelper = DatabaseHelper.getInstance(context);
     }
 
     @Override

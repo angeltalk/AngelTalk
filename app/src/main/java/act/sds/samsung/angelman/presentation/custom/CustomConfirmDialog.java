@@ -12,8 +12,8 @@ import act.sds.samsung.angelman.presentation.util.DialogUtil;
 
 public class CustomConfirmDialog {
 
-    public static final int DEFAULT_WIDTH = 310;
-    public static final int DEFAULT_HEIGHT = 235;
+    private static final int DEFAULT_WIDTH = 310;
+    private static final int DEFAULT_HEIGHT = 235;
     private final AlertDialog dialog;
 
     public CustomConfirmDialog(Context context, String message, View.OnClickListener positiveOnClickListener, View.OnClickListener negativeOnClickListener) {

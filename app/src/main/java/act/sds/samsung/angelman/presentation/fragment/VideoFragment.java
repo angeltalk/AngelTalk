@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package act.sds.samsung.angelman.presentation.activity;
+package act.sds.samsung.angelman.presentation.fragment;
 
 import android.Manifest;
 import android.app.Activity;
@@ -72,6 +72,8 @@ import java.util.concurrent.TimeUnit;
 
 import act.sds.samsung.angelman.R;
 import act.sds.samsung.angelman.domain.model.CardModel;
+import act.sds.samsung.angelman.presentation.activity.MakeCardActivity;
+import act.sds.samsung.angelman.presentation.manager.ApplicationConstants;
 import act.sds.samsung.angelman.presentation.custom.AutoFitTextureView;
 import act.sds.samsung.angelman.presentation.util.ContentsUtil;
 
@@ -86,7 +88,7 @@ public class VideoFragment extends Fragment
     private static final String TAG = "VideoFragment";
     private static final int REQUEST_VIDEO_PERMISSIONS = 1;
     private static final String FRAGMENT_DIALOG = "dialog";
-    public static final int DOUBLE_CLICK_PREVENTING_TIME = 1700;
+    private static final int DOUBLE_CLICK_PREVENTING_TIME = 1700;
 
     private Integer mSensorOrientation;
     private String mNextVideoAbsolutePath;
@@ -318,7 +320,7 @@ public class VideoFragment extends Fragment
 
         if (allowRefresh){
             allowRefresh = false;
-            getFragmentManager().beginTransaction().replace(R.id.container, this, VideoActivity.VIDEO_FRAGMENT_TAG).commit();
+            getFragmentManager().beginTransaction().replace(R.id.container, this, ApplicationConstants.VIDEO_FRAGMENT_TAG).commit();
         }
 
         if (mTextureView.isAvailable()) {
@@ -620,7 +622,7 @@ public class VideoFragment extends Fragment
         mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
         mMediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
         if (mNextVideoAbsolutePath == null || mNextVideoAbsolutePath.isEmpty()) {
-            mNextVideoAbsolutePath = getVideoFilePath();
+            mNextVideoAbsolutePath = ContentsUtil.getVideoPath();
         }
         mMediaRecorder.setOutputFile(mNextVideoAbsolutePath);
         mMediaRecorder.setVideoEncodingBitRate(10000000);
@@ -646,11 +648,6 @@ public class VideoFragment extends Fragment
             }
         });
         mMediaRecorder.prepare();
-    }
-
-    private String getVideoFilePath() {
-        ContentsUtil contentsUtil = ContentsUtil.getInstance();
-        return contentsUtil.getVideoPath();
     }
 
     public void playBeep(String fileName) {

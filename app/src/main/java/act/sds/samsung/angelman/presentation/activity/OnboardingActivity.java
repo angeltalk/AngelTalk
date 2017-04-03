@@ -18,8 +18,7 @@ import javax.inject.Inject;
 import act.sds.samsung.angelman.AngelmanApplication;
 import act.sds.samsung.angelman.R;
 import act.sds.samsung.angelman.presentation.adapter.OnboardingImageAdapter;
-import act.sds.samsung.angelman.presentation.util.ApplicationManager;
-import act.sds.samsung.angelman.presentation.util.FileUtil;
+import act.sds.samsung.angelman.presentation.manager.ApplicationManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -61,7 +60,6 @@ public class OnboardingActivity extends AbstractActivity {
 
         angelmanApplication = (AngelmanApplication) getApplicationContext();
         if (applicationManager.isFirstLaunched()) {
-            FileUtil.copyDefaultAssetImagesToImageFolder(this);
             showOnboardingView();
             applicationManager.setNotFirstLaunched();
         } else {

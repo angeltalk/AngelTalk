@@ -25,18 +25,19 @@ import javax.inject.Inject;
 
 import act.sds.samsung.angelman.AngelmanApplication;
 import act.sds.samsung.angelman.R;
-import act.sds.samsung.angelman.data.transfer.CardTransfer;
-import act.sds.samsung.angelman.data.transfer.KaKaoTransfer;
+import act.sds.samsung.angelman.network.transfer.CardTransfer;
+import act.sds.samsung.angelman.network.transfer.KaKaoTransfer;
 import act.sds.samsung.angelman.domain.model.CardModel;
 import act.sds.samsung.angelman.domain.model.CategoryModel;
 import act.sds.samsung.angelman.domain.repository.CardRepository;
 import act.sds.samsung.angelman.presentation.adapter.CardImageAdapter;
+import act.sds.samsung.angelman.presentation.manager.ApplicationConstants;
 import act.sds.samsung.angelman.presentation.custom.CardCategoryLayout;
 import act.sds.samsung.angelman.presentation.custom.CardView;
 import act.sds.samsung.angelman.presentation.custom.CardViewPager;
 import act.sds.samsung.angelman.presentation.custom.CustomConfirmDialog;
-import act.sds.samsung.angelman.presentation.custom.SnackBar;
-import act.sds.samsung.angelman.presentation.util.ApplicationManager;
+import act.sds.samsung.angelman.presentation.custom.CustomSnackBar;
+import act.sds.samsung.angelman.presentation.manager.ApplicationManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -106,10 +107,6 @@ public class CardViewPagerActivity extends AbstractActivity {
         });
     }
 
-    public static String CATEGORY_COLOR = "categoryColor";
-    public static final String INTENT_KEY_NEW_CARD = "isNewCard";
-    public static final String INTENT_KEY_SHARE_CARD = "isShareCard";
-
     List<CardModel> allCardListInSelectedCategory;
     int currentCardIndex = 0;
 
@@ -134,13 +131,13 @@ public class CardViewPagerActivity extends AbstractActivity {
         context = this;
         initializeView();
 
-        if (getIntent().getBooleanExtra(INTENT_KEY_NEW_CARD, false)) {
-            showSnackBarMessage(INTENT_KEY_NEW_CARD);
+        if (getIntent().getBooleanExtra(ApplicationConstants.INTENT_KEY_NEW_CARD, false)) {
+            showSnackBarMessage(ApplicationConstants.INTENT_KEY_NEW_CARD);
             mViewPager.setCurrentItem(1);
         }
 
-        if (getIntent().getBooleanExtra(INTENT_KEY_SHARE_CARD, false)) {
-            showSnackBarMessage(INTENT_KEY_SHARE_CARD);
+        if (getIntent().getBooleanExtra(ApplicationConstants.INTENT_KEY_SHARE_CARD, false)) {
+            showSnackBarMessage(ApplicationConstants.INTENT_KEY_SHARE_CARD);
             mViewPager.setCurrentItem(1);
         }
     }
@@ -249,10 +246,10 @@ public class CardViewPagerActivity extends AbstractActivity {
 
     private void showSnackBarMessage(String intentKey) {
         PercentFrameLayout rootLayout = (PercentFrameLayout) findViewById(R.id.category_item_container);
-        if(INTENT_KEY_NEW_CARD.equals(intentKey)) {
-            SnackBar.snackBarWithDuration(rootLayout, getApplicationContext().getResources().getString(R.string.add_new_card_success), ApplicationManager.SNACKBAR_DURATION);
-        }else if(INTENT_KEY_SHARE_CARD.equals(intentKey)){
-            SnackBar.snackBarWithDuration(rootLayout, getApplicationContext().getResources().getString(R.string.add_share_card_success), ApplicationManager.SNACKBAR_DURATION);
+        if(ApplicationConstants.INTENT_KEY_NEW_CARD.equals(intentKey)) {
+            CustomSnackBar.snackBarWithDuration(rootLayout, getApplicationContext().getResources().getString(R.string.add_new_card_success));
+        }else if(ApplicationConstants.INTENT_KEY_SHARE_CARD.equals(intentKey)){
+            CustomSnackBar.snackBarWithDuration(rootLayout, getApplicationContext().getResources().getString(R.string.add_share_card_success));
         }
     }
 

@@ -30,6 +30,7 @@ import org.robolectric.shadows.ShadowAlertDialog;
 import org.robolectric.shadows.ShadowLooper;
 import org.robolectric.shadows.ShadowToast;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -52,8 +53,10 @@ import act.sds.samsung.angelman.presentation.custom.AddCardView;
 import act.sds.samsung.angelman.presentation.custom.CardView;
 import act.sds.samsung.angelman.presentation.custom.CardViewPager;
 import act.sds.samsung.angelman.presentation.custom.VideoCardTextureView;
+import act.sds.samsung.angelman.presentation.manager.ApplicationConstants;
+import act.sds.samsung.angelman.presentation.manager.ApplicationManager;
 import act.sds.samsung.angelman.presentation.util.AngelManGlideTransform;
-import act.sds.samsung.angelman.presentation.util.ApplicationManager;
+import act.sds.samsung.angelman.presentation.util.ContentsUtil;
 import act.sds.samsung.angelman.presentation.util.PlayUtil;
 import act.sds.samsung.angelman.presentation.util.ResourcesUtil;
 
@@ -387,7 +390,7 @@ public class CardViewPagerActivityTest extends UITest {
     public void whenFinishedToMakeNewCard_thenShowsNewAddedCardAtFirstInCardViewPager() throws Exception {
         Intent intent = new Intent();
 
-        intent.putExtra(CardViewPagerActivity.INTENT_KEY_NEW_CARD, true);
+        intent.putExtra(ApplicationConstants.INTENT_KEY_NEW_CARD, true);
 
         when(repository.getSingleCardListWithCategoryId(anyInt())).thenReturn(getCardListWithCategoryId());
 
@@ -453,11 +456,14 @@ public class CardViewPagerActivityTest extends UITest {
     }
 
     private ArrayList<CardModel> getCardListWithCategoryId() {
+
+        String contentFolder = ContentsUtil.getContentFolder() + File.separator;
+
         ArrayList<CardModel> ret = new ArrayList<>();
-        addSingleCardModel(ret, "물", "water.png", "20010928_120020", 0, 0, CardModel.CardType.PHOTO_CARD);
-        addSingleCardModel(ret, "우유", "milk.png", "20010928_120019", 0, 1, CardModel.CardType.PHOTO_CARD);
-        addSingleCardModel(ret, "쥬스", "juice.png", "20010928_120015", 0, 2, CardModel.CardType.PHOTO_CARD);
-        addSingleCardModel(ret, "젤리", "haribo.mp4", "20010928_120015", 0, 3, CardModel.CardType.VIDEO_CARD);
+        addSingleCardModel(ret, "물", contentFolder+"water.png", "20010928_120020", 0, 0, CardModel.CardType.PHOTO_CARD);
+        addSingleCardModel(ret, "우유", contentFolder+"milk.png", "20010928_120019", 0, 1, CardModel.CardType.PHOTO_CARD);
+        addSingleCardModel(ret, "쥬스", contentFolder+"juice.png", "20010928_120015", 0, 2, CardModel.CardType.PHOTO_CARD);
+        addSingleCardModel(ret, "젤리", contentFolder+"haribo.mp4", "20010928_120015", 0, 3, CardModel.CardType.VIDEO_CARD);
 
         return ret;
     }

@@ -8,7 +8,7 @@ import android.content.Intent;
 import javax.inject.Inject;
 
 import act.sds.samsung.angelman.AngelmanApplication;
-import act.sds.samsung.angelman.presentation.util.ApplicationManager;
+import act.sds.samsung.angelman.presentation.manager.ApplicationManager;
 
 
 public class ScreenReceiver extends BroadcastReceiver {

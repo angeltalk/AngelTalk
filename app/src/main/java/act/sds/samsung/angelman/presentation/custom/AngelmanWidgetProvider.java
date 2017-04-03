@@ -8,7 +8,7 @@ import android.content.Intent;
 import android.widget.RemoteViews;
 
 import act.sds.samsung.angelman.R;
-import act.sds.samsung.angelman.presentation.util.ApplicationManager;
+import act.sds.samsung.angelman.presentation.manager.ApplicationManager;
 
 public class AngelmanWidgetProvider extends AppWidgetProvider {
 

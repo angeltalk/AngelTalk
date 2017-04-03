@@ -25,20 +25,21 @@ import javax.inject.Inject;
 
 import act.sds.samsung.angelman.AngelmanApplication;
 import act.sds.samsung.angelman.R;
-import act.sds.samsung.angelman.data.transfer.CardTransfer;
+import act.sds.samsung.angelman.network.transfer.CardTransfer;
 import act.sds.samsung.angelman.domain.model.CardModel;
 import act.sds.samsung.angelman.domain.model.CardTransferModel;
 import act.sds.samsung.angelman.domain.model.CategoryModel;
 import act.sds.samsung.angelman.domain.repository.CardRepository;
 import act.sds.samsung.angelman.domain.repository.CategoryRepository;
 import act.sds.samsung.angelman.presentation.adapter.CategoryAdapter;
+import act.sds.samsung.angelman.presentation.manager.ApplicationConstants;
 import act.sds.samsung.angelman.presentation.custom.CustomConfirmDialog;
 import act.sds.samsung.angelman.presentation.listener.OnDownloadCompleteListener;
 import act.sds.samsung.angelman.presentation.receiver.NotificationActionReceiver;
-import act.sds.samsung.angelman.presentation.util.ApplicationManager;
+import act.sds.samsung.angelman.presentation.manager.ApplicationManager;
 import act.sds.samsung.angelman.presentation.util.ContentsUtil;
 import act.sds.samsung.angelman.presentation.util.FileUtil;
-import act.sds.samsung.angelman.presentation.util.NotificationActionManager;
+import act.sds.samsung.angelman.presentation.manager.NotificationActionManager;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -243,7 +244,7 @@ public class CategoryMenuActivity extends AbstractActivity {
         Intent intent = new Intent(getApplicationContext(), CardViewPagerActivity.class);
         applicationManager.setCategoryModel(categoryModel);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra(CardViewPagerActivity.CATEGORY_COLOR, categoryModel.color);
+        intent.putExtra(ApplicationConstants.CATEGORY_COLOR, categoryModel.color);
         intent.putExtra(intentKey, true);
         getApplicationContext().startActivity(intent);
     }
@@ -254,10 +255,9 @@ public class CategoryMenuActivity extends AbstractActivity {
             List<CardModel> singleCardList = cardRepository.getSingleCardListWithCategoryId(selectedCategoryId);
 
             for (CardModel cardModel : singleCardList) {
-                if (cardModel.contentPath.contains(ContentsUtil.CONTENT_FOLDER)) {
-                    FileUtil.removeFile(cardModel.contentPath);
-                    FileUtil.removeFile(cardModel.voicePath);
-                }
+                FileUtil.removeFile(cardModel.contentPath);
+                FileUtil.removeFile(cardModel.voicePath);
+                FileUtil.removeFile(cardModel.thumbnailPath);
             }
 
             cardRepository.deleteSingleCardsWithCategory(selectedCategoryId);
@@ -304,7 +304,7 @@ public class CategoryMenuActivity extends AbstractActivity {
                         FileUtil.removeFilesIn(ContentsUtil.getTempFolder());
 
                         CategoryModel categoryModel = categoryRepository.getCategoryAllList().get(0);
-                        moveToCategoryViewPagerActivity(categoryModel, CardViewPagerActivity.INTENT_KEY_SHARE_CARD);
+                        moveToCategoryViewPagerActivity(categoryModel, ApplicationConstants.INTENT_KEY_SHARE_CARD);
 
                     } catch (IOException e) {
                         e.printStackTrace();

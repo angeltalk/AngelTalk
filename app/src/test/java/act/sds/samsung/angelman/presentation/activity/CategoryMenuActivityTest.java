@@ -33,7 +33,7 @@ import act.sds.samsung.angelman.BuildConfig;
 import act.sds.samsung.angelman.R;
 import act.sds.samsung.angelman.TestAngelmanApplication;
 import act.sds.samsung.angelman.UITest;
-import act.sds.samsung.angelman.data.transfer.CardTransfer;
+import act.sds.samsung.angelman.network.transfer.CardTransfer;
 import act.sds.samsung.angelman.domain.model.CategoryModel;
 import act.sds.samsung.angelman.domain.repository.CardRepository;
 import act.sds.samsung.angelman.domain.repository.CategoryRepository;

@@ -4,7 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public class AngelmanDbHelper extends SQLiteOpenHelper {
+public class DatabaseHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 10;
 
     private static final String DATABASE_NAME = "AngelmanDatabase";
@@ -29,23 +29,23 @@ public class AngelmanDbHelper extends SQLiteOpenHelper {
                     CategoryColumns.COLOR + " INTEGER," +
                     CategoryColumns.INDEX + " INTEGER)";
 
-    private static AngelmanDbHelper angelmanDbHelper;
+    private static DatabaseHelper databaseHelper;
 
-    private AngelmanDbHelper(Context context) {
+    private DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    public static AngelmanDbHelper getInstance(Context context){
-        if(angelmanDbHelper == null){
-            angelmanDbHelper = new AngelmanDbHelper(context);
+    public static DatabaseHelper getInstance(Context context){
+        if(databaseHelper == null){
+            databaseHelper = new DatabaseHelper(context);
         }
-        return angelmanDbHelper;
+        return databaseHelper;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         createTables(db);
-        new DefaultDataCreator().insertDefaultData(db);
+        new DefaultDataGenerator().insertDefaultData(db);
     }
 
     @Override

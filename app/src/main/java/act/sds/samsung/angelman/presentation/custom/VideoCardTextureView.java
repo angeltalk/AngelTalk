@@ -12,8 +12,6 @@ import android.view.TextureView;
 import java.io.IOException;
 
 public class VideoCardTextureView extends TextureView implements TextureView.SurfaceTextureListener {
-    // Indicate if logging is on
-    public static final boolean LOG_ON = true;
 
     // Log tag
     private static final String TAG = VideoCardTextureView.class.getName();
@@ -140,7 +138,7 @@ public class VideoCardTextureView extends TextureView implements TextureView.Sur
             mIsDataSourceSet = true;
             prepare();
         } catch (IOException e) {
-            Log.d(TAG, e.getMessage());
+            Log.e(TAG, e.getMessage());
         }
     }
 
@@ -160,7 +158,7 @@ public class VideoCardTextureView extends TextureView implements TextureView.Sur
                 @Override
                 public void onCompletion(MediaPlayer mp) {
                     mState = State.END;
-                    log("Video has ended.");
+                    Log.d(TAG,"Video has ended.");
 
                     if (mListener != null) {
                         mListener.onVideoEnd();
@@ -174,7 +172,7 @@ public class VideoCardTextureView extends TextureView implements TextureView.Sur
                 public void onPrepared(MediaPlayer mediaPlayer) {
                     mIsVideoPrepared = true;
                     if (mIsPlayCalled && mIsViewAvailable) {
-                        log("Player is prepared and play() was called.");
+                        Log.d(TAG,"Player is prepared and play() was called.");
                         play(null);
                     }
 
@@ -184,8 +182,6 @@ public class VideoCardTextureView extends TextureView implements TextureView.Sur
                 }
             });
 
-        } catch (SecurityException e) {
-            Log.d(TAG, e.getMessage());
         } catch (IllegalArgumentException e) {
             Log.d(TAG, e.getMessage());
         } catch (IllegalStateException e) {
@@ -201,36 +197,36 @@ public class VideoCardTextureView extends TextureView implements TextureView.Sur
      */
     public void play(MediaPlayer.OnCompletionListener completionListener) {
         if (!mIsDataSourceSet) {
-            log("play() was called but data source was not set.");
+            Log.d(TAG,"play() was called but data source was not set.");
             return;
         }
 
         mIsPlayCalled = true;
 
         if (!mIsVideoPrepared) {
-            log("play() was called but video is not prepared yet, waiting.");
+            Log.d(TAG,"play() was called but video is not prepared yet, waiting.");
             return;
         }
 
         if (!mIsViewAvailable) {
-            log("play() was called but view is not available yet, waiting.");
+            Log.d(TAG,"play() was called but view is not available yet, waiting.");
             return;
         }
 
         if (mState == State.PLAY) {
-            log("play() was called but video is already playing.");
+            Log.d(TAG,"play() was called but video is already playing.");
             return;
         }
 
         if (mState == State.PAUSE) {
-            log("play() was called but video is paused, resuming.");
+            Log.d(TAG,"play() was called but video is paused, resuming.");
             mState = State.PLAY;
             mMediaPlayer.start();
             return;
         }
 
         if (mState == State.END || mState == State.STOP) {
-            log("play() was called but video already ended, starting over.");
+            Log.d(TAG,"play() was called but video already ended, starting over.");
             mState = State.PLAY;
             mMediaPlayer.seekTo(0);
             mMediaPlayer.start();
@@ -249,17 +245,17 @@ public class VideoCardTextureView extends TextureView implements TextureView.Sur
      */
     public void pause() {
         if (mState == State.PAUSE) {
-            log("pause() was called but video already paused.");
+            Log.d(TAG,"pause() was called but video already paused.");
             return;
         }
 
         if (mState == State.STOP) {
-            log("pause() was called but video already stopped.");
+            Log.d(TAG,"pause() was called but video already stopped.");
             return;
         }
 
         if (mState == State.END) {
-            log("pause() was called but video already ended.");
+            Log.d(TAG,"pause() was called but video already ended.");
             return;
         }
 
@@ -275,12 +271,12 @@ public class VideoCardTextureView extends TextureView implements TextureView.Sur
      */
     public void stop() {
         if (mState == State.STOP) {
-            log("stop() was called but video already stopped.");
+            Log.d(TAG,"stop() was called but video already stopped.");
             return;
         }
 
         if (mState == State.END) {
-            log("stop() was called but video already ended.");
+            Log.d(TAG,"stop() was called but video already ended.");
             return;
         }
 
@@ -312,12 +308,6 @@ public class VideoCardTextureView extends TextureView implements TextureView.Sur
         return mMediaPlayer.getDuration();
     }
 
-    static void log(String message) {
-        if (LOG_ON) {
-            Log.d(TAG, message);
-        }
-    }
-
     private MediaPlayerListener mListener;
 
     /**
@@ -340,7 +330,7 @@ public class VideoCardTextureView extends TextureView implements TextureView.Sur
         mMediaPlayer.setSurface(surface);
         mIsViewAvailable = true;
         if (mIsDataSourceSet && mIsPlayCalled && mIsVideoPrepared) {
-            log("View is available and play() was called.");
+            Log.d(TAG,"View is available and play() was called.");
             play(null);
         }
     }

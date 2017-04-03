@@ -8,9 +8,11 @@ import android.widget.TextView;
 import act.sds.samsung.angelman.R;
 import act.sds.samsung.angelman.presentation.util.FontUtil;
 
-public class SnackBar {
+public class CustomSnackBar {
 
-    public static void snackBarWithDuration(View content, String message, int duration){
+    private static int SNACKBAR_DURATION = 3000;
+
+    public static void snackBarWithDuration(View content, String message){
         final Snackbar snackbar = Snackbar.make(content, message, Snackbar.LENGTH_INDEFINITE);
         ((TextView) snackbar.getView().findViewById(R.id.snackbar_text)).setTypeface(FontUtil.setFont(content.getContext(), FontUtil.FONT_REGULAR));
         snackbar.show();
@@ -20,7 +22,7 @@ public class SnackBar {
             public void run() {
                 snackbar.dismiss();
             }
-        }, duration);
+        }, SNACKBAR_DURATION);
 
     }
 }

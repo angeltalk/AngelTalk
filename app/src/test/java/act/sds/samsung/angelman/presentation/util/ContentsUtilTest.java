@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
@@ -24,16 +23,9 @@ import static org.mockito.Mockito.when;
 @Config(constants = BuildConfig.class)
 public class ContentsUtilTest {
 
-    private ContentsUtil subject;
-
-    @Before
-    public void setUp() throws Exception {
-        subject = ContentsUtil.getInstance();
-    }
-
     @Test
     public void givenFileNameAndBitMapExists_whenCallImageSave_thenSaveImage() throws Exception {
-        String fileName = subject.getImagePath();
+        String fileName = ContentsUtil.getImagePath();
         Bitmap fakeBitmap = Bitmap.createBitmap(1440, 2560, Bitmap.Config.ARGB_8888);//mock(Bitmap.class);
         Window window = mock(Window.class);
         WindowManager windowManager = mock(WindowManager.class);
@@ -43,7 +35,7 @@ public class ContentsUtilTest {
         when(windowManager.getDefaultDisplay()).thenReturn((display));
         when(window.getDecorView()).thenReturn(view);
 
-        subject.saveImage(fakeBitmap, fileName, 444, 112);
+        ContentsUtil.saveImage(fakeBitmap, fileName, 444, 112);
 
         assertThat(fakeBitmap.getHeight()).isEqualTo(2560);
         assertThat(fakeBitmap.getWidth()).isEqualTo(1440);
@@ -57,6 +49,6 @@ public class ContentsUtilTest {
         // given
         String fileFullPath = "/storage/emulated/0/angelman/DCIM/20170329_133245.jpg";
         // when then
-        assertThat(ContentsUtil.getFileNameFromFullPath(fileFullPath)).isEqualTo("20170329_133245.jpg");
+        assertThat(ContentsUtil.getContentNameFromContentPath(fileFullPath)).isEqualTo("20170329_133245.jpg");
     }
 }

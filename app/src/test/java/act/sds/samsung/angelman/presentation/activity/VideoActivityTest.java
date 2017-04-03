@@ -12,6 +12,7 @@ import org.robolectric.annotation.Config;
 
 import act.sds.samsung.angelman.BuildConfig;
 import act.sds.samsung.angelman.UITest;
+import act.sds.samsung.angelman.presentation.manager.ApplicationConstants;
 
 import static junit.framework.Assert.assertNotNull;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,7 +35,7 @@ public class VideoActivityTest extends UITest{
 
     @Test
     public void whenLaunched_thenMoveToVideoFragment() throws Exception {
-        Fragment fragment = subject.getFragmentManager().findFragmentByTag(VideoActivity.VIDEO_FRAGMENT_TAG);
+        Fragment fragment = subject.getFragmentManager().findFragmentByTag(ApplicationConstants.VIDEO_FRAGMENT_TAG);
         assertThat(fragment).isNotNull();
     }
 }

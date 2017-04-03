@@ -9,7 +9,7 @@ import java.util.Hashtable;
 
 import javax.inject.Inject;
 
-import act.sds.samsung.angelman.presentation.util.ApplicationManager;
+import act.sds.samsung.angelman.presentation.manager.ApplicationManager;
 
 public class AbstractActivity extends AppCompatActivity {
 

@@ -32,7 +32,8 @@ import act.sds.samsung.angelman.domain.repository.CategoryRepository;
 import act.sds.samsung.angelman.presentation.adapter.NewCategoryItemAdapter;
 import act.sds.samsung.angelman.presentation.adapter.NewCategoryItemColorAdapter;
 import act.sds.samsung.angelman.presentation.adapter.NewCategoryItemIconAdapter;
-import act.sds.samsung.angelman.presentation.util.ApplicationManager;
+import act.sds.samsung.angelman.presentation.manager.ApplicationConstants;
+import act.sds.samsung.angelman.presentation.manager.ApplicationManager;
 import act.sds.samsung.angelman.presentation.util.DialogUtil;
 import act.sds.samsung.angelman.presentation.util.FontUtil;
 
@@ -132,9 +133,7 @@ public class NewCategoryActivity extends AbstractActivity{
                 model.title = categoryTitleTextView.getText().toString();
                 model.icon = iconAdapter.getSelectedItem().type;
                 model.color = backgroundAdapter.getSelectedItem().type;
-                int id = repository.saveNewCategoryItemAndReturnId(model);
-
-                model.index = id;
+                model.index = repository.saveNewCategoryItemAndReturnId(model);
                 moveToNextActivity(model);
                 finish();
             }
@@ -202,7 +201,7 @@ public class NewCategoryActivity extends AbstractActivity{
         @Override
         public void afterTextChanged(Editable s) {
             if (editCategoryTitle.getText().length() > 0) {
-                categoryTitleTextView.setText(editCategoryTitle.getText() + "");
+                categoryTitleTextView.setText(editCategoryTitle.getText().toString());
 
                 saveButton.setEnabled(true);
                 saveButton.setTextColor(getResources().getColor(R.color.white));
@@ -238,7 +237,7 @@ public class NewCategoryActivity extends AbstractActivity{
         Intent intent = new Intent(getApplicationContext(), CardViewPagerActivity.class);
         applicationManager.setCategoryModel(categoryModel);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra(CardViewPagerActivity.CATEGORY_COLOR, categoryModel.color);
+        intent.putExtra(ApplicationConstants.CATEGORY_COLOR, categoryModel.color);
         getApplicationContext().startActivity(intent);
     }
 

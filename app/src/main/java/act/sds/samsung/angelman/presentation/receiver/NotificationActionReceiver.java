@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import act.sds.samsung.angelman.presentation.util.NotificationActionManager;
+import act.sds.samsung.angelman.presentation.manager.NotificationActionManager;
 
 public class NotificationActionReceiver extends BroadcastReceiver {
 

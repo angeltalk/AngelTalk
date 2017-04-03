@@ -15,7 +15,7 @@ import org.robolectric.annotation.Config;
 
 import act.sds.samsung.angelman.BuildConfig;
 import act.sds.samsung.angelman.R;
-import act.sds.samsung.angelman.presentation.util.ApplicationManager;
+import act.sds.samsung.angelman.presentation.manager.ApplicationManager;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;

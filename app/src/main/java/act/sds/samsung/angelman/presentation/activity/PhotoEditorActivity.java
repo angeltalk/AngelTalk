@@ -11,18 +11,17 @@ import android.widget.TextView;
 
 import act.sds.samsung.angelman.R;
 import act.sds.samsung.angelman.domain.model.CardModel;
+import act.sds.samsung.angelman.presentation.manager.ApplicationConstants;
 import act.sds.samsung.angelman.presentation.util.ContentsUtil;
 import act.sds.samsung.angelman.presentation.util.FontUtil;
 
 public class PhotoEditorActivity extends AbstractActivity {
-    public static final String IMAGE_PATH_EXTRA = "imagePath";
 
     private ImageView imageCapture;
     private ImageView confirmButton;
     private ImageView rotateButton;
     private View frameImage;
     private TextView pictureGuide;
-    private ContentsUtil contentsUtil;
 
     protected ScaleGestureDetector scaleGestureDetector;
     private Float scale = 1f;
@@ -82,12 +81,11 @@ public class PhotoEditorActivity extends AbstractActivity {
         confirmButton.setOnClickListener(onClickListener);
         rotateButton.setOnClickListener(onClickListener);
 
-        contentsUtil = ContentsUtil.getInstance();
     }
 
     public String saveEditedImage() {
         String fileName = ContentsUtil.getImagePath();
-        contentsUtil.saveImage(getWindow().getDecorView(), fileName);
+        ContentsUtil.saveImage(getWindow().getDecorView(), fileName);
         return fileName;
     }
 
@@ -100,7 +98,7 @@ public class PhotoEditorActivity extends AbstractActivity {
         pictureGuide.setVisibility(View.VISIBLE);
     }
     private void setImageIntoImageCaptureView() {
-        Uri imagePath = getIntent().getParcelableExtra(IMAGE_PATH_EXTRA);
+        Uri imagePath = getIntent().getParcelableExtra(ApplicationConstants.IMAGE_PATH_EXTRA);
         imageCapture.setImageURI(imagePath);
     }
 

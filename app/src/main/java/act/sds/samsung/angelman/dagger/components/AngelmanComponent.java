@@ -3,9 +3,9 @@ package act.sds.samsung.angelman.dagger.components;
 import javax.inject.Singleton;
 
 import act.sds.samsung.angelman.dagger.modules.AngelmanModule;
-import act.sds.samsung.angelman.data.sqlite.AngelmanDbHelper;
-import act.sds.samsung.angelman.data.transfer.CardTransfer;
-import act.sds.samsung.angelman.data.transfer.KaKaoTransfer;
+import act.sds.samsung.angelman.data.sqlite.DatabaseHelper;
+import act.sds.samsung.angelman.network.transfer.CardTransfer;
+import act.sds.samsung.angelman.network.transfer.KaKaoTransfer;
 import act.sds.samsung.angelman.presentation.activity.CameraGallerySelectionActivity;
 import act.sds.samsung.angelman.presentation.activity.CardViewPagerActivity;
 import act.sds.samsung.angelman.presentation.activity.CategoryMenuActivity;
@@ -17,7 +17,8 @@ import act.sds.samsung.angelman.presentation.custom.CardCategoryLayout;
 import act.sds.samsung.angelman.presentation.custom.CardViewPagerLayout;
 import act.sds.samsung.angelman.presentation.custom.CategoryMenuLayout;
 import act.sds.samsung.angelman.presentation.service.ScreenReceiver;
-import act.sds.samsung.angelman.presentation.util.NotificationActionManager;
+import act.sds.samsung.angelman.presentation.manager.ApplicationInitializer;
+import act.sds.samsung.angelman.presentation.manager.NotificationActionManager;
 import dagger.Component;
 
 @Singleton
@@ -29,7 +30,7 @@ public interface AngelmanComponent {
     void inject(NewCategoryActivity activity);
     void inject(CategoryMenuLayout view);
     void inject(CardViewPagerLayout view);
-    void inject(AngelmanDbHelper angelmanDbHelper);
+    void inject(DatabaseHelper databaseHelper);
     void inject(CardCategoryLayout cardCategoryLayout);
     void inject(AddCardView addCardView);
     void inject(CameraGallerySelectionActivity cameraGallerySelectionActivity);
@@ -38,4 +39,5 @@ public interface AngelmanComponent {
     void inject(ScreenReceiver screenReceiver);
     void inject(CardTransfer cardTransfer);
     void inject(KaKaoTransfer kaKaoTransfer);
+    void inject(ApplicationInitializer applicationInitializer);
 }

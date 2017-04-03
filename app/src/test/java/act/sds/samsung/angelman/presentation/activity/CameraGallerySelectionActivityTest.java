@@ -22,7 +22,7 @@ import act.sds.samsung.angelman.R;
 import act.sds.samsung.angelman.TestAngelmanApplication;
 import act.sds.samsung.angelman.UITest;
 import act.sds.samsung.angelman.domain.model.CategoryModel;
-import act.sds.samsung.angelman.presentation.util.ApplicationManager;
+import act.sds.samsung.angelman.presentation.manager.ApplicationManager;
 import act.sds.samsung.angelman.presentation.util.ResourcesUtil;
 
 import static junit.framework.Assert.assertTrue;

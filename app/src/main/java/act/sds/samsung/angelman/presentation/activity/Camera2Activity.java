@@ -113,7 +113,6 @@ public class Camera2Activity extends AbstractActivity implements View.OnClickLis
     private static final int MAX_PREVIEW_HEIGHT = 1080;
 
     private PlayUtil playUtil;
-    private ContentsUtil contentsUtil;
 
     /**
      * {@link TextureView.SurfaceTextureListener} handles several lifecycle events on a
@@ -399,9 +398,7 @@ public class Camera2Activity extends AbstractActivity implements View.OnClickLis
 
         ((TextView) findViewById(R.id.picture_guide)).setTypeface(FontUtil.setFont(this, FontUtil.FONT_DEMILIGHT));
 
-        contentsUtil = ContentsUtil.getInstance();
-
-        fileName = contentsUtil.getImagePath();
+        fileName = ContentsUtil.getImagePath();
         playUtil = PlayUtil.getInstance();
     }
 
@@ -844,7 +841,7 @@ public class Camera2Activity extends AbstractActivity implements View.OnClickLis
             buffer.get(bytes);
             Bitmap original = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
 
-            contentsUtil.saveImage(original, fileName, 444, 112);
+            ContentsUtil.saveImage(original, fileName, 444, 112);
             mImage.close();
         }
     }

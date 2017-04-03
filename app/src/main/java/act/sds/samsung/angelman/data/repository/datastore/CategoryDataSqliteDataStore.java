@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 
-import act.sds.samsung.angelman.data.sqlite.AngelmanDbHelper;
+import act.sds.samsung.angelman.data.sqlite.DatabaseHelper;
 import act.sds.samsung.angelman.data.sqlite.CategoryColumns;
 import act.sds.samsung.angelman.domain.model.CategoryItemModel;
 import act.sds.samsung.angelman.domain.model.CategoryModel;
@@ -16,16 +16,15 @@ import act.sds.samsung.angelman.presentation.util.ResourceMapper;
 import act.sds.samsung.angelman.presentation.util.ResourceMapper.ColorState;
 import act.sds.samsung.angelman.presentation.util.ResourceMapper.IconState;
 import act.sds.samsung.angelman.presentation.util.ResourceMapper.IconType;
+import lombok.Cleanup;
 
 
 public class CategoryDataSqliteDataStore implements CategoryDataStore{
 
-    private final Context context;
-    protected AngelmanDbHelper dbHelper;
+    private DatabaseHelper dbHelper;
 
     public CategoryDataSqliteDataStore(Context context) {
-        this.context = context;
-        dbHelper = AngelmanDbHelper.getInstance(context);
+        dbHelper = DatabaseHelper.getInstance(context);
     }
 
     @Override
@@ -34,6 +33,8 @@ public class CategoryDataSqliteDataStore implements CategoryDataStore{
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String[] columns = {CategoryColumns.TITLE, CategoryColumns.ICON, CategoryColumns.INDEX, CategoryColumns.COLOR};
+
+        @Cleanup
         Cursor c = db.query(true, CategoryColumns.TABLE_NAME, columns, null,null, null, null, CategoryColumns.INDEX, null);
         c.moveToFirst();
 
@@ -64,6 +65,7 @@ public class CategoryDataSqliteDataStore implements CategoryDataStore{
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
+        @Cleanup
         Cursor c = db.rawQuery(
                 "Select a.icon, ifnull(status, " + IconState.UNSELECT.ordinal() + ") as status from (" + getSelectIconListQuery() + ") a left outer join (select icon, " + IconState.USED.ordinal() + " as status from category)c on a.icon = c.icon", null);
         c.moveToFirst();
@@ -85,6 +87,7 @@ public class CategoryDataSqliteDataStore implements CategoryDataStore{
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
+        @Cleanup
         Cursor c = db.rawQuery("Select a.color, ifnull(status, " + ColorState.UNSELECT.ordinal() + ") as status from (" + getSelectBackgroudListQuery() + ") a left outer join (select color, " + ColorState.USED.ordinal() + " as status from category)c on a.color = c.color", null);
         c.moveToFirst();
 
@@ -127,15 +130,17 @@ public class CategoryDataSqliteDataStore implements CategoryDataStore{
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         String orderBy = CategoryColumns.INDEX + " desc";
+
+        @Cleanup
         Cursor c = db.query(CategoryColumns.TABLE_NAME, null, null, null, null, null, orderBy, "1");
 
-        if (c.getCount() == 0) return 0;
+        if (c.getCount() == 0) {
+            return 0;
+        }
 
         c.moveToFirst();
 
-        int lastIndex = c.getInt(c.getColumnIndex(CategoryColumns.INDEX));
-
-        return lastIndex;
+        return c.getInt(c.getColumnIndex(CategoryColumns.INDEX));
     }
 
     public String getSelectIconListQuery() {

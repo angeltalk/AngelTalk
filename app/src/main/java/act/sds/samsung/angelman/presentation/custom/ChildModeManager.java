@@ -8,7 +8,7 @@ import android.view.WindowManager;
 
 import act.sds.samsung.angelman.domain.model.CategoryModel;
 
-import static act.sds.samsung.angelman.presentation.util.ApplicationManager.PRIVATE_PREFERENCE_NAME;
+import static act.sds.samsung.angelman.presentation.manager.ApplicationConstants.PRIVATE_PREFERENCE_NAME;
 import static android.content.Context.WINDOW_SERVICE;
 
 public class ChildModeManager {

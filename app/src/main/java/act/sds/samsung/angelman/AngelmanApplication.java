@@ -12,7 +12,7 @@ import org.acra.annotation.ReportsCrashes;
 import act.sds.samsung.angelman.dagger.components.AngelmanComponent;
 import act.sds.samsung.angelman.dagger.components.DaggerAngelmanComponent;
 import act.sds.samsung.angelman.dagger.modules.AngelmanModule;
-import act.sds.samsung.angelman.presentation.util.FileUtil;
+import act.sds.samsung.angelman.presentation.manager.ApplicationInitializer;
 
 
 @ReportsCrashes(
@@ -24,6 +24,7 @@ import act.sds.samsung.angelman.presentation.util.FileUtil;
 public class AngelmanApplication extends Application {
 
     private AngelmanComponent angelmanComponent;
+    private ApplicationInitializer applicationInitializer;
 
     @Override
     public void onCreate() {
@@ -33,7 +34,8 @@ public class AngelmanApplication extends Application {
                 .angelmanModule(new AngelmanModule(this))
                 .build();
 
-        FileUtil.initExternalStorageFolder();
+        applicationInitializer = new ApplicationInitializer(getApplicationContext());
+        applicationInitializer.initializeApplication();
     }
 
     @Override
@@ -51,4 +53,6 @@ public class AngelmanApplication extends Application {
     public void setComponent(AngelmanComponent angelmanComponent) {
         this.angelmanComponent = angelmanComponent;
     }
+
+
 }

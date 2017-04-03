@@ -16,7 +16,7 @@ import act.sds.samsung.angelman.BuildConfig;
 import act.sds.samsung.angelman.TestAngelmanApplication;
 import act.sds.samsung.angelman.domain.model.CategoryModel;
 import act.sds.samsung.angelman.presentation.activity.CameraGallerySelectionActivity;
-import act.sds.samsung.angelman.presentation.util.ApplicationManager;
+import act.sds.samsung.angelman.presentation.manager.ApplicationManager;
 import act.sds.samsung.angelman.presentation.util.ResourcesUtil;
 
 import static org.mockito.Matchers.any;
@@ -29,7 +29,7 @@ import static org.robolectric.Robolectric.setupActivity;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class)
-public class AngelmanDbHelperTest {
+public class DatabaseHelperTest {
 
     @Inject
     ApplicationManager applicationManager;
@@ -64,7 +64,7 @@ public class AngelmanDbHelperTest {
     public void givenSchemaExits_whenClassCreated_thenCreateDb() throws Exception {
         SQLiteDatabase mockDb = mock(SQLiteDatabase.class);
 
-        AngelmanDbHelper dbHelper = AngelmanDbHelper.getInstance(subject.getApplicationContext());
+        DatabaseHelper dbHelper = DatabaseHelper.getInstance(subject.getApplicationContext());
         dbHelper.onCreate(mockDb);
         verify(mockDb).execSQL(SQL_CREATE_SINGLECARD_LIST);
 
@@ -77,7 +77,7 @@ public class AngelmanDbHelperTest {
     public void givenSchemaExits_whenVersionUpgraded_thenUpgradeDb() throws Exception {
         SQLiteDatabase mockDb = mock(SQLiteDatabase.class);
 
-        AngelmanDbHelper dbHelper = AngelmanDbHelper.getInstance(subject.getApplicationContext());
+        DatabaseHelper dbHelper = DatabaseHelper.getInstance(subject.getApplicationContext());
         dbHelper.onUpgrade(mockDb, 1, 2);
 
         verify(mockDb).execSQL("drop table " + CardColumns.TABLE_NAME);
@@ -91,7 +91,7 @@ public class AngelmanDbHelperTest {
     public void givenSchemaExits_whenVersionUpgraded_thenDowngradeDb() throws Exception {
         SQLiteDatabase mockDb = mock(SQLiteDatabase.class);
 
-        AngelmanDbHelper dbHelper = AngelmanDbHelper.getInstance(subject.getApplicationContext());
+        DatabaseHelper dbHelper = DatabaseHelper.getInstance(subject.getApplicationContext());
         dbHelper.onDowngrade(mockDb, 2, 1);
 
         verify(mockDb).execSQL("drop table " + CardColumns.TABLE_NAME);

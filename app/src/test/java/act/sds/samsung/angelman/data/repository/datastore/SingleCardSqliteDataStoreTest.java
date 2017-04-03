@@ -14,7 +14,7 @@ import org.robolectric.annotation.Config;
 import java.util.ArrayList;
 
 import act.sds.samsung.angelman.BuildConfig;
-import act.sds.samsung.angelman.data.sqlite.AngelmanDbHelper;
+import act.sds.samsung.angelman.data.sqlite.DatabaseHelper;
 import act.sds.samsung.angelman.data.sqlite.CardColumns;
 import act.sds.samsung.angelman.domain.model.CardModel;
 import lombok.Cleanup;
@@ -48,7 +48,7 @@ public class SingleCardSqliteDataStoreTest {
 
     @Test
     public void givenExistDataBase_whenGetAllSingleCardList_thenVerifySizeOfList() throws Exception {
-        AngelmanDbHelper mockDbHelper = mock(AngelmanDbHelper.class);
+        DatabaseHelper mockDbHelper = mock(DatabaseHelper.class);
 
         SingleCardSqliteDataStore dataStore = new SingleCardSqliteDataStore(RuntimeEnvironment.application);
         dataStore.dbHelper = mockDbHelper;
@@ -70,7 +70,7 @@ public class SingleCardSqliteDataStoreTest {
 
     @Test
     public void givenExistDataBase_whenCreateSingleCard_thenVerifyIncrementation() throws Exception {
-        AngelmanDbHelper mockDbHelper = mock(AngelmanDbHelper.class);
+        DatabaseHelper mockDbHelper = mock(DatabaseHelper.class);
 
         SingleCardSqliteDataStore dataStore = new SingleCardSqliteDataStore(RuntimeEnvironment.application);
         dataStore.dbHelper = mockDbHelper;

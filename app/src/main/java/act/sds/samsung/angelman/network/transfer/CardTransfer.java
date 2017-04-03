@@ -1,8 +1,9 @@
-package act.sds.samsung.angelman.data.transfer;
+package act.sds.samsung.angelman.network.transfer;
 
 
 import android.content.Context;
 import android.net.Uri;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -25,29 +26,22 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import javax.inject.Inject;
-
 import act.sds.samsung.angelman.AngelmanApplication;
 import act.sds.samsung.angelman.domain.model.CardModel;
 import act.sds.samsung.angelman.domain.model.CardTransferModel;
 import act.sds.samsung.angelman.presentation.listener.OnDownloadCompleteListener;
 import act.sds.samsung.angelman.presentation.util.ContentsUtil;
-import act.sds.samsung.angelman.presentation.util.FileShareUtil;
 import act.sds.samsung.angelman.presentation.util.FileUtil;
 
 public class CardTransfer {
 
 
+    private static final String DEFAULT_SHARE_REFERENCE = "share";
+    private static final String IMAGE_FILE_EXTENSION = ".jpg";
 
-    @Inject
-    FileShareUtil fileShareUtil;
-
-    public static final String DEFAULT_SHARE_REFERENCE = "share";
-    public static final String IMAGE_FILE_EXTENSION = ".jpg";
-
-    DatabaseReference shareDataReference;
-    StorageReference storageReference;
-    FirebaseStorage storage;
+    private DatabaseReference shareDataReference;
+    private StorageReference storageReference;
+    private FirebaseStorage storage;
     private Context context;
 
     public CardTransfer(Context context) {
@@ -59,7 +53,10 @@ public class CardTransfer {
     }
 
     public void uploadCard(final CardModel cardModel, final OnSuccessListener<Map<String, String>> onSuccessListener, final OnFailureListener onFailureListener) {
-        final String key = fileShareUtil.getShareKey();
+
+        final String key = generateShareKey();
+
+
         final String zipFilePath = makeShareZipFile(cardModel, key);
 
         storageReference.child(key).child(key + ".zip").putFile(Uri.fromFile(new File(zipFilePath))) // Zip File upload
@@ -75,25 +72,25 @@ public class CardTransfer {
                                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                         Map<String, String> resultMap = Maps.newHashMap();
                                         resultMap.put("key", key);
-                                        resultMap.put("url", taskSnapshot.getDownloadUrl().toString());
+                                        resultMap.put("url", taskSnapshot.getDownloadUrl() == null ? "" : taskSnapshot.getDownloadUrl().toString());
                                         onSuccessListener.onSuccess(resultMap);
                                     }
                                 }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        onFailureListener.onFailure(e);
-                                    }
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                onFailureListener.onFailure(e);
+                            }
                         });
                         shareDataReference.child(key).child("cardType").setValue(cardModel.cardType.getValue());
                         shareDataReference.child(key).child("name").setValue(cardModel.name);
-                        shareDataReference.child(key).child("contentPath").setValue(taskSnapshot.getDownloadUrl().toString());
+                        shareDataReference.child(key).child("contentPath").setValue(taskSnapshot.getDownloadUrl() == null ? "" : taskSnapshot.getDownloadUrl().toString());
                     }
                 }).addOnFailureListener(new OnFailureListener() {
 
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    onFailureListener.onFailure(e);
-                }
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                onFailureListener.onFailure(e);
+            }
         });
 
     }
@@ -120,7 +117,7 @@ public class CardTransfer {
                                 .addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
-                                        Log.d("DOWNLOAD FAIL ", "download fail." );
+                                        Log.d("DOWNLOAD FAIL ", "download fail.");
                                         downloadCompleteListener.onFail();
                                     }
                                 });
@@ -136,11 +133,11 @@ public class CardTransfer {
     }
 
     private Uri getUploadFileUri(CardModel cardModel) {
-        Uri uploadFileUri ;
-        if(cardModel.cardType == CardModel.CardType.PHOTO_CARD){
-            uploadFileUri = Uri.fromFile(new File( getAbsoluteContentsPath(cardModel.contentPath)));
-        } else{
-            uploadFileUri = Uri.fromFile(new File( getAbsoluteContentsPath(cardModel.thumbnailPath)));
+        Uri uploadFileUri;
+        if (cardModel.cardType == CardModel.CardType.PHOTO_CARD) {
+            uploadFileUri = Uri.fromFile(new File(getAbsoluteContentsPath(cardModel.contentPath)));
+        } else {
+            uploadFileUri = Uri.fromFile(new File(getAbsoluteContentsPath(cardModel.thumbnailPath)));
         }
         return uploadFileUri;
     }
@@ -164,8 +161,8 @@ public class CardTransfer {
         return zipFilePath;
     }
 
-    private String getAbsoluteContentsPath(String filePath){
-        return ContentsUtil.getContentFileFromContentPath(filePath).getAbsolutePath();
+    private String getAbsoluteContentsPath(String filePath) {
+        return ContentsUtil.getContentFile(filePath).getAbsolutePath();
     }
 
     private void setCardModealData(CardTransferModel newCardModel, DataSnapshot snapshot) {
@@ -177,4 +174,11 @@ public class CardTransfer {
             newCardModel.cardType = snapshot.getValue().toString();
         }
     }
+
+    // TODO : deviceID unique key 확인
+    private String generateShareKey() {
+        String deviceId = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+        return deviceId + System.currentTimeMillis();
+    }
+
 }

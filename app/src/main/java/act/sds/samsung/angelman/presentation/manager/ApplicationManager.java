@@ -1,4 +1,4 @@
-package act.sds.samsung.angelman.presentation.util;
+package act.sds.samsung.angelman.presentation.manager;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -21,18 +21,15 @@ import act.sds.samsung.angelman.domain.model.CategoryModel;
 import act.sds.samsung.angelman.presentation.custom.AngelmanWidgetProvider;
 import act.sds.samsung.angelman.presentation.custom.ChildModeManager;
 import act.sds.samsung.angelman.presentation.service.ScreenService;
+import act.sds.samsung.angelman.presentation.util.ResourcesUtil;
 
 public class ApplicationManager {
-
-    public static final String PRIVATE_PREFERENCE_NAME = "act.sds.samsung.angelman";
-    public static final int SNACKBAR_DURATION = 3000;
 
     private static final String CATEGORY_MODEL_TITLE = "categoryModelTitle";
     private static final String CATEGORY_MODEL_ICON = "categoryModelIcon";
     private static final String CATEGORY_MODEL_COLOR = "categoryModelColor";
     private static final String CATEGORY_MODEL_INDEX = "categoryModelIndex";
     private static final String CHILD_MODE = "childMode";
-    private static final String FIRST_LAUNCH = "firstLaunch";
 
     private SharedPreferences preferences;
     private ChildModeManager childModeManager;
@@ -41,7 +38,7 @@ public class ApplicationManager {
 
     public ApplicationManager(Context context) {
         this.context = context;
-        this.preferences = context.getSharedPreferences(PRIVATE_PREFERENCE_NAME, Context.MODE_PRIVATE);
+        this.preferences = context.getSharedPreferences(ApplicationConstants.PRIVATE_PREFERENCE_NAME, Context.MODE_PRIVATE);
         this.childModeManager = new ChildModeManager(context);
         try {
             this.kakaoLink = KakaoLink.getKakaoLink(context);
@@ -52,11 +49,11 @@ public class ApplicationManager {
 
     public void setCategoryModel(CategoryModel categoryModel){
         SharedPreferences.Editor edit = preferences.edit();
-        edit.putString(CATEGORY_MODEL_TITLE, categoryModel.title);
-        edit.putInt(CATEGORY_MODEL_INDEX, categoryModel.index);
-        edit.putInt(CATEGORY_MODEL_ICON, categoryModel.icon);
-        edit.putInt(CATEGORY_MODEL_COLOR, categoryModel.color);
-        edit.commit();
+        edit.putString(CATEGORY_MODEL_TITLE, categoryModel.title)
+                .putInt(CATEGORY_MODEL_INDEX, categoryModel.index)
+                .putInt(CATEGORY_MODEL_ICON, categoryModel.icon)
+                .putInt(CATEGORY_MODEL_COLOR, categoryModel.color)
+                .apply();
     }
 
     public CategoryModel getCategoryModel(){
@@ -111,7 +108,7 @@ public class ApplicationManager {
         return preferences.getBoolean(CHILD_MODE, true);
     }
 
-    public boolean isServiceRunningCheck() {
+    private boolean isServiceRunningCheck() {
         ActivityManager manager = (ActivityManager) context.getSystemService(Activity.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
             if (service.service.getClassName().contains(ScreenService.class.getCanonicalName())) {
@@ -121,7 +118,7 @@ public class ApplicationManager {
         return false;
     }
 
-    public void updateWidgetView(@DrawableRes int drawable) {
+    private void updateWidgetView(@DrawableRes int drawable) {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_angelman);
         views.setImageViewResource(R.id.angelman_button, drawable);
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
@@ -130,19 +127,17 @@ public class ApplicationManager {
     }
 
     public void changeChildMode(boolean mode) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(PRIVATE_PREFERENCE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(ApplicationConstants.PRIVATE_PREFERENCE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor edit = sharedPreferences.edit();
 
         if (mode) {
-            edit.putBoolean(CHILD_MODE, true);
             if (!isServiceRunningCheck()) {
                 Intent screenService = new Intent(context, ScreenService.class);
                 context.startService(screenService);
             }
-            edit.commit();
+            edit.putBoolean(CHILD_MODE, true).apply();
             Toast.makeText(context, R.string.inform_show_child_mode, Toast.LENGTH_LONG).show();
         } else {
-            edit.putBoolean(CHILD_MODE, false);
             ActivityManager manager = (ActivityManager) context.getSystemService(Activity.ACTIVITY_SERVICE);
             for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
                 if (service.service.getClassName().contains(ScreenService.class.getCanonicalName())) {
@@ -151,7 +146,7 @@ public class ApplicationManager {
                     context.stopService(stop);
                 }
             }
-            edit.commit();
+            edit.putBoolean(CHILD_MODE, false).apply();
             Toast.makeText(context, R.string.inform_hide_child_mode, Toast.LENGTH_LONG).show();
         }
     }
@@ -171,15 +166,15 @@ public class ApplicationManager {
     }
 
     public void setNotFirstLaunched() {
-        if(preferences.getBoolean(FIRST_LAUNCH, true)) {
+        if(preferences.getBoolean(ApplicationConstants.FIRST_LAUNCH, true)) {
             SharedPreferences.Editor edit = preferences.edit();
-            edit.putBoolean(FIRST_LAUNCH, false);
+            edit.putBoolean(ApplicationConstants.FIRST_LAUNCH, false);
             edit.commit();
         }
     }
 
     public boolean isFirstLaunched(){
-        return preferences.getBoolean(FIRST_LAUNCH, true);
+        return preferences.getBoolean(ApplicationConstants.FIRST_LAUNCH, true);
     }
 
 }

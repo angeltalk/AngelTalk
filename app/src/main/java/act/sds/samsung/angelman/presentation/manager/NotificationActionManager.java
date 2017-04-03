@@ -1,4 +1,4 @@
-package act.sds.samsung.angelman.presentation.util;
+package act.sds.samsung.angelman.presentation.manager;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -13,7 +13,7 @@ import javax.inject.Inject;
 import act.sds.samsung.angelman.AngelmanApplication;
 import act.sds.samsung.angelman.R;
 
-import static act.sds.samsung.angelman.presentation.util.ApplicationManager.PRIVATE_PREFERENCE_NAME;
+import static act.sds.samsung.angelman.presentation.manager.ApplicationConstants.PRIVATE_PREFERENCE_NAME;
 
 public class NotificationActionManager {
 

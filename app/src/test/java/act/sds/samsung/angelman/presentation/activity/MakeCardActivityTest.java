@@ -30,8 +30,9 @@ import act.sds.samsung.angelman.UITest;
 import act.sds.samsung.angelman.domain.model.CardModel;
 import act.sds.samsung.angelman.domain.model.CategoryModel;
 import act.sds.samsung.angelman.domain.repository.CardRepository;
+import act.sds.samsung.angelman.presentation.manager.ApplicationConstants;
 import act.sds.samsung.angelman.presentation.custom.CardView;
-import act.sds.samsung.angelman.presentation.util.ApplicationManager;
+import act.sds.samsung.angelman.presentation.manager.ApplicationManager;
 import act.sds.samsung.angelman.presentation.util.ContentsUtil;
 import act.sds.samsung.angelman.presentation.util.PlayUtil;
 import act.sds.samsung.angelman.presentation.util.RecordUtil;
@@ -257,7 +258,7 @@ public class MakeCardActivityTest extends UITest{
         Intent nextStartedActivity = shadowActivity.getNextStartedActivity();
 
         assertThat(nextStartedActivity.getComponent().getClassName()).contains("CardViewPagerActivity");
-        assertThat(nextStartedActivity.getExtras().get(CardViewPagerActivity.INTENT_KEY_NEW_CARD)).isNotNull();
+        assertThat(nextStartedActivity.getExtras().get(ApplicationConstants.INTENT_KEY_NEW_CARD)).isNotNull();
         assertThat(subject).isFinishing();
     }
 

@@ -18,7 +18,7 @@ import javax.inject.Inject;
 import act.sds.samsung.angelman.BuildConfig;
 import act.sds.samsung.angelman.TestAngelmanApplication;
 import act.sds.samsung.angelman.UITest;
-import act.sds.samsung.angelman.presentation.util.ApplicationManager;
+import act.sds.samsung.angelman.presentation.manager.ApplicationManager;
 
 import static org.assertj.android.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;

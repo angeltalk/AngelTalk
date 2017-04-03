@@ -25,7 +25,7 @@ import act.sds.samsung.angelman.presentation.custom.AddCardView;
 import act.sds.samsung.angelman.presentation.custom.CardView;
 import act.sds.samsung.angelman.presentation.custom.VideoCardTextureView;
 import act.sds.samsung.angelman.presentation.util.AngelManGlideTransform;
-import act.sds.samsung.angelman.presentation.util.ApplicationManager;
+import act.sds.samsung.angelman.presentation.manager.ApplicationManager;
 import act.sds.samsung.angelman.presentation.util.ContentsUtil;
 import act.sds.samsung.angelman.presentation.util.FontUtil;
 import act.sds.samsung.angelman.presentation.util.PlayUtil;
@@ -41,7 +41,8 @@ public class CardImageAdapter extends PagerAdapter {
     private PlayUtil playUtil;
     private boolean isNotLongClicked;
     private ApplicationManager applicationManager;
-
+    private CardView lastSelectedCardView = null;
+    private Handler speakHandler = new Handler();
 
     public CardImageAdapter(Context context, List<CardModel> dataList, RequestManager glide, ApplicationManager applicationManager) {
         this.context = context;
@@ -107,20 +108,20 @@ public class CardImageAdapter extends PagerAdapter {
                 cardView.findViewById(R.id.card_image).setVisibility(View.VISIBLE);
                 cardView.findViewById(R.id.card_video).setVisibility(View.GONE);
                 String imagePath = singleSectionItems.contentPath;
-                glide.load(ContentsUtil.getContentFileFromContentPath(imagePath))
+                glide.load(ContentsUtil.getContentFile(imagePath))
                         .bitmapTransform(new AngelManGlideTransform(context, 10, 0, AngelManGlideTransform.CornerType.TOP))
                         .override(280, 280)
                         .into(cardView.cardImage);
             } else if (singleSectionItems.cardType == CardModel.CardType.VIDEO_CARD) {
-                glide.load(ContentsUtil.getContentFileFromContentPath(ContentsUtil.getThumbnailPath(singleSectionItems.contentPath)))
+                glide.load(ContentsUtil.getContentFile(ContentsUtil.getThumbnailPath(singleSectionItems.contentPath)))
                         .bitmapTransform(new AngelManGlideTransform(context, 10, 0, AngelManGlideTransform.CornerType.TOP))
                         .override(280, 280)
                         .into(cardView.cardImage);
                 VideoCardTextureView cardVideoView = ((VideoCardTextureView) cardView.findViewById(R.id.card_video));
                 cardVideoView.setVisibility(View.VISIBLE);
                 cardVideoView.setScaleType(VideoCardTextureView.ScaleType.CENTER_CROP);
-                File video = ContentsUtil.getContentFileFromContentPath(singleSectionItems.contentPath);
-                if(video.exists()) {
+                File video = ContentsUtil.getContentFile(singleSectionItems.contentPath);
+                if(video != null) {
                     cardVideoView.setDataSource(video.getAbsolutePath());
                 }
             }
@@ -181,7 +182,7 @@ public class CardImageAdapter extends PagerAdapter {
         }
     };
 
-    CardView lastSelectedCardView = null;
+
     private void startCardSelectionEffect(CardView cardView) {
         lastSelectedCardView = cardView;
         if (cardView.mode == CardView.MODE_VIEW_CARD) {
@@ -215,10 +216,9 @@ public class CardImageAdapter extends PagerAdapter {
         }
     }
 
-    Handler speakhandler = new Handler();
     private void startSpeakCardName(final CardView cardView, int delayMillis) {
         //Handler handler = new Handler();
-        speakhandler.postDelayed(new Runnable() {
+        speakHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
             if (voiceFileExists(cardView)) {
@@ -241,7 +241,7 @@ public class CardImageAdapter extends PagerAdapter {
     }
 
     public void releaseSpeakHandler(){
-        speakhandler.removeCallbacksAndMessages(null);
+        speakHandler.removeCallbacksAndMessages(null);
     }
 
     private boolean voiceFileExists(CardView cardView) {

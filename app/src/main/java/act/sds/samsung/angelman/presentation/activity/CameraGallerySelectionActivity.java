@@ -11,8 +11,9 @@ import javax.inject.Inject;
 
 import act.sds.samsung.angelman.AngelmanApplication;
 import act.sds.samsung.angelman.R;
+import act.sds.samsung.angelman.presentation.manager.ApplicationConstants;
 import act.sds.samsung.angelman.presentation.custom.CardCategoryLayout;
-import act.sds.samsung.angelman.presentation.util.ApplicationManager;
+import act.sds.samsung.angelman.presentation.manager.ApplicationManager;
 import act.sds.samsung.angelman.presentation.util.ResourcesUtil;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -101,7 +102,7 @@ public class CameraGallerySelectionActivity extends AbstractActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data != null) {
             Intent intent = new Intent(CameraGallerySelectionActivity.this, PhotoEditorActivity.class);
-            intent.putExtra(PhotoEditorActivity.IMAGE_PATH_EXTRA, data.getData());
+            intent.putExtra(ApplicationConstants.IMAGE_PATH_EXTRA, data.getData());
             startActivity(intent);
         }
     }

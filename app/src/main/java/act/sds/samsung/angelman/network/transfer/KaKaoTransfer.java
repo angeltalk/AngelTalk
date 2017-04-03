@@ -1,4 +1,4 @@
-package act.sds.samsung.angelman.data.transfer;
+package act.sds.samsung.angelman.network.transfer;
 
 
 import android.content.Context;
@@ -14,14 +14,14 @@ import javax.inject.Inject;
 import act.sds.samsung.angelman.AngelmanApplication;
 import act.sds.samsung.angelman.R;
 import act.sds.samsung.angelman.domain.model.CardModel;
-import act.sds.samsung.angelman.presentation.util.ApplicationManager;
+import act.sds.samsung.angelman.presentation.manager.ApplicationManager;
 
 public class KaKaoTransfer {
 
     @Inject
     ApplicationManager applicationManager;
 
-    Context context;
+    private Context context;
 
     public KaKaoTransfer(Context context){
         this.context = context;

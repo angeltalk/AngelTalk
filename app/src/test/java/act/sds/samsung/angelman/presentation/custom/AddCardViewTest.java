@@ -20,7 +20,7 @@ import act.sds.samsung.angelman.UITest;
 import act.sds.samsung.angelman.domain.model.CategoryModel;
 import act.sds.samsung.angelman.presentation.activity.CameraGallerySelectionActivity;
 import act.sds.samsung.angelman.presentation.activity.CardViewPagerActivity;
-import act.sds.samsung.angelman.presentation.util.ApplicationManager;
+import act.sds.samsung.angelman.presentation.manager.ApplicationManager;
 import act.sds.samsung.angelman.presentation.util.ResourcesUtil;
 
 import static org.assertj.android.api.Assertions.assertThat;

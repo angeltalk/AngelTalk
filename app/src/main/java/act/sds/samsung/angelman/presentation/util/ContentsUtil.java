@@ -20,29 +20,23 @@ import java.io.OutputStream;
 
 import act.sds.samsung.angelman.domain.model.CardModel;
 
-import static act.sds.samsung.angelman.presentation.util.FileUtil.IMAGE_FULL_PATH;
-import static act.sds.samsung.angelman.presentation.util.FileUtil.TEMP_FULL_PATH;
-import static act.sds.samsung.angelman.presentation.util.FileUtil.VOICE_FULL_PATH;
 import static act.sds.samsung.angelman.presentation.util.FileUtil.copyFile;
 
 public class ContentsUtil {
 
-    public static final String CONTENT_FOLDER = "DCIM";
+    public static final String ANGELMAN_FOLDER = "angelman";
+    public static final String CONTENT_FOLDER = "contents";
+    public static final String VOICE_FOLDER = "voice";
+    public static final String TEMP_FOLDER = "temp";
+    public static final String CONTENT_FULL_PATH = ANGELMAN_FOLDER + File.separator + CONTENT_FOLDER;
+    public static final String VOICE_FULL_PATH = ANGELMAN_FOLDER + File.separator + VOICE_FOLDER;
+    public static final String TEMP_FULL_PATH = ANGELMAN_FOLDER + File.separator + TEMP_FOLDER;
+
     public static String CONTENT_PATH = "content path";
     public static String CARD_TYPE = "card type";
-    private static ContentsUtil instance = null;
-
-    private ContentsUtil() {}
-
-    public static ContentsUtil getInstance() {
-        if (instance == null)
-            instance = new ContentsUtil();
-
-        return instance;
-    }
 
     public static String getContentFolder() {
-        return Environment.getExternalStorageDirectory() + File.separator + IMAGE_FULL_PATH;
+        return Environment.getExternalStorageDirectory() + File.separator + CONTENT_FULL_PATH;
     }
 
     public static String getVoiceFolder() {
@@ -69,13 +63,13 @@ public class ContentsUtil {
         return videoPath.replace(".mp4",".jpg");
     }
 
-    public void saveImage(View decorView, String fileName) {
+    public static void saveImage(View decorView, String fileName) {
         Bitmap bitmap = screenShot(decorView);
 
         saveImage(bitmap, fileName, 490, 112);
     }
 
-    public void saveImage(Bitmap original, String fileName, int x, int y) {
+    public static void saveImage(Bitmap original, String fileName, int x, int y) {
         Matrix mtx = new Matrix();
         mtx.postRotate(90);
         Bitmap croppedBitmap = Bitmap.createBitmap(original, x, y, 852, 852, mtx, true);
@@ -100,7 +94,7 @@ public class ContentsUtil {
         }
     }
 
-    private Bitmap screenShot(View decorView) {
+    private static Bitmap screenShot(View decorView) {
         int width = decorView.getWidth();
         int height = decorView.getHeight();
         decorView.buildDrawingCache();
@@ -122,8 +116,7 @@ public class ContentsUtil {
 
         Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(videoPath, MediaStore.Images.Thumbnails.MINI_KIND);
 
-        try
-        {
+        try {
             fileCacheItem.createNewFile();
             out = new FileOutputStream(fileCacheItem);
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
@@ -131,7 +124,9 @@ public class ContentsUtil {
             e.printStackTrace();
         } finally {
             try {
-                out.close();
+                if(out != null) {
+                    out.close();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -141,24 +136,21 @@ public class ContentsUtil {
     public static float convertDpToPixel(float dp, Context context){
         Resources resources = context.getResources();
         DisplayMetrics metrics = resources.getDisplayMetrics();
-        float px = dp * ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
-        return px;
+        return dp * ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
     }
 
-    public static String getFileNameFromFullPath(String contentPath) {
-        String[] splitedFilePath = contentPath.split(File.separator);
-        return splitedFilePath[splitedFilePath.length - 1];
+    public static String getContentNameFromContentPath(String contentPath) {
+        String[] splitPath = contentPath.split(File.separator);
+        return splitPath[splitPath.length - 1];
     }
 
-    public static File getContentFileFromContentPath(String contentsPath) {
-        if(Strings.isNullOrEmpty(contentsPath)) {
+    public static File getContentFile(String path) {
+        if(Strings.isNullOrEmpty(path)) {
             return null;
         }
-        File file;
-        if (contentsPath.contains(CONTENT_FOLDER) || contentsPath.contains(FileUtil.VOICE_FOLDER)) {
-            file = new File(contentsPath);
-        } else {
-            file = new File(getContentFolder() + File.separator + contentsPath);
+        File file = new File(path);
+        if (!file.exists()) {
+            return null;
         }
         return file;
     }

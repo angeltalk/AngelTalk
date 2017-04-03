@@ -19,7 +19,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 
-import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -30,11 +29,12 @@ import act.sds.samsung.angelman.AngelmanApplication;
 import act.sds.samsung.angelman.R;
 import act.sds.samsung.angelman.domain.model.CardModel;
 import act.sds.samsung.angelman.domain.repository.CardRepository;
+import act.sds.samsung.angelman.presentation.manager.ApplicationConstants;
 import act.sds.samsung.angelman.presentation.custom.CardView;
 import act.sds.samsung.angelman.presentation.custom.FontTextView;
 import act.sds.samsung.angelman.presentation.custom.VideoCardTextureView;
 import act.sds.samsung.angelman.presentation.util.AngelManGlideTransform;
-import act.sds.samsung.angelman.presentation.util.ApplicationManager;
+import act.sds.samsung.angelman.presentation.manager.ApplicationManager;
 import act.sds.samsung.angelman.presentation.util.ContentsUtil;
 import act.sds.samsung.angelman.presentation.util.FileUtil;
 import act.sds.samsung.angelman.presentation.util.FontUtil;
@@ -48,7 +48,7 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
     private static final int STATE_RECORD_COMPLETE = 1;
     private static final int INIT_COUNT = 3;
     private static final int COUNT_TEXT_SIZE = 60;
-    public static final long COUNT_INTERVAL = 1000;
+    private static final long COUNT_INTERVAL = 1000;
 
     protected int state = STATE_RECORD_NOT_COMPLETE;
 
@@ -109,11 +109,11 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
         if(cardType.equals(CardModel.CardType.PHOTO_CARD)) {
             cardView.cardVideo.setVisibility(View.GONE);
             cardView.playButton.setVisibility(View.GONE);
-            Glide.with(getApplicationContext()).load(new File(contentPath)).override(280, 280).bitmapTransform(new AngelManGlideTransform(this, 10, 0, AngelManGlideTransform.CornerType.TOP)).into(cardView.cardImage);
+            Glide.with(getApplicationContext()).load(ContentsUtil.getContentFile(contentPath)).override(280, 280).bitmapTransform(new AngelManGlideTransform(this, 10, 0, AngelManGlideTransform.CornerType.TOP)).into(cardView.cardImage);
         } else if (cardType.equals(CardModel.CardType.VIDEO_CARD)) {
             cardView.cardVideo.setVisibility(View.VISIBLE);
 
-            glide.load(ContentsUtil.getContentFileFromContentPath(ContentsUtil.getThumbnailPath(contentPath)))
+            glide.load(ContentsUtil.getContentFile(ContentsUtil.getThumbnailPath(contentPath)))
                     .bitmapTransform(new AngelManGlideTransform(this, 10, 0, AngelManGlideTransform.CornerType.TOP))
                     .override(280, 280)
                     .into(cardView.cardImage);
@@ -135,7 +135,7 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
             });
 
             cardView.cardVideo.setScaleType(VideoCardTextureView.ScaleType.CENTER_CROP);
-            if(FileUtil.isContentExist(contentPath)) {
+            if(FileUtil.isFileExist(contentPath)) {
                 cardView.cardVideo.setDataSource(contentPath);
             }
         }
@@ -303,7 +303,7 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
 
         Intent intent = new Intent(MakeCardActivity.this, CardViewPagerActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra(CardViewPagerActivity.INTENT_KEY_NEW_CARD, true);
+        intent.putExtra(ApplicationConstants.INTENT_KEY_NEW_CARD, true);
         startActivity(intent);
         finish();
     }

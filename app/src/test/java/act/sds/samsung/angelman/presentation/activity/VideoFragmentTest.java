@@ -14,8 +14,9 @@ import org.robolectric.annotation.Config;
 import act.sds.samsung.angelman.BuildConfig;
 import act.sds.samsung.angelman.R;
 import act.sds.samsung.angelman.UITest;
+import act.sds.samsung.angelman.presentation.fragment.VideoFragment;
 
-import static act.sds.samsung.angelman.presentation.activity.VideoActivity.VIDEO_FRAGMENT_TAG;
+import static act.sds.samsung.angelman.presentation.manager.ApplicationConstants.VIDEO_FRAGMENT_TAG;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(RobolectricTestRunner.class)

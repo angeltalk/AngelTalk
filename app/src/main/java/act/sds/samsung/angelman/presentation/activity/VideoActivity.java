@@ -4,10 +4,10 @@ import android.app.Activity;
 import android.os.Bundle;
 
 import act.sds.samsung.angelman.R;
+import act.sds.samsung.angelman.presentation.manager.ApplicationConstants;
+import act.sds.samsung.angelman.presentation.fragment.VideoFragment;
 
 public class VideoActivity extends Activity {
-
-    public static final String VIDEO_FRAGMENT_TAG = "VIDEO_FRAGMENT_TAG";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -15,7 +15,7 @@ public class VideoActivity extends Activity {
         setContentView(R.layout.activity_video);
         if (null == savedInstanceState) {
             getFragmentManager().beginTransaction()
-                    .replace(R.id.container, VideoFragment.newInstance(this), VIDEO_FRAGMENT_TAG)
+                    .replace(R.id.container, VideoFragment.newInstance(this), ApplicationConstants.VIDEO_FRAGMENT_TAG)
                     .commit();
         }
     }
