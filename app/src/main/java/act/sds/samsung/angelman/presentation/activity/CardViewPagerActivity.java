@@ -18,9 +18,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.kakao.kakaolink.KakaoLink;
 
 import java.util.List;
 import java.util.Map;
@@ -91,8 +88,7 @@ public class CardViewPagerActivity extends AbstractActivity {
     @OnClick(R.id.card_share_button)
     public void shareButtonOnClick() {
 
-        final CardView card = (CardView) adapter.viewCollection.get(mViewPager.getCurrentItem());
-        final CardModel cardModel = card.dataModel;
+        final CardModel cardModel = getCardModel(mViewPager.getCurrentItem());
 
         cardTransfer.uploadCard(cardModel, new OnSuccessListener<Map<String,String>>() {
             @Override
@@ -106,14 +102,10 @@ public class CardViewPagerActivity extends AbstractActivity {
         }, new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(context, R.string.share_fail_message,Toast.LENGTH_SHORT);
+                Toast.makeText(context, R.string.share_fail_message,Toast.LENGTH_SHORT).show();
             }
         });
-
     }
-
-
-
 
     public static String CATEGORY_COLOR = "categoryColor";
     public static final String INTENT_KEY_NEW_CARD = "isNewCard";
@@ -126,6 +118,11 @@ public class CardViewPagerActivity extends AbstractActivity {
     private AlertDialog dialog;
     private RequestManager glide;
     Context context;
+
+    public CardModel getCardModel(int index) {
+        CardView card = (CardView) adapter.viewCollection.get(index);
+        return card.dataModel;
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
