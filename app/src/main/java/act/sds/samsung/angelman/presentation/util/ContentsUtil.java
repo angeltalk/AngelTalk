@@ -169,7 +169,7 @@ public class ContentsUtil {
             try {
                 if (file.getAbsolutePath().contains("mp4")) {
                     copyFile(file, new File(cardModel.contentPath));
-                } else if (file.getAbsolutePath().contains("jpg")) {
+                } else if (file.getAbsolutePath().contains("jpg") || file.getAbsolutePath().contains("png")) {
                     if (cardModel.cardType == CardModel.CardType.VIDEO_CARD) {
                         copyFile(file, new File(cardModel.thumbnailPath));
                     } else {

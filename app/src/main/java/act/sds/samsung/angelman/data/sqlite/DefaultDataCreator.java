@@ -61,9 +61,9 @@ public class DefaultDataCreator {
         insertCategoryItemData(db,   3       , "마트"        , "mart.JPG",  null,"20161019_120012", CardModel.CardType.PHOTO_CARD, index++, LOCKSCREEN_INVISIBLE);
 
         index = 0;
-        insertCategoryItemData(db,   4       , "선생님"      ,"",  null,"20161019_120013", CardModel.CardType.PHOTO_CARD, index++, LOCKSCREEN_INVISIBLE);
-        insertCategoryItemData(db,   4       , "아빠"       ,"",  null,"20161019_120013", CardModel.CardType.PHOTO_CARD, index++, LOCKSCREEN_INVISIBLE);
-        insertCategoryItemData(db,   4       , "엄마"       ,"", null, "20161019_120012", CardModel.CardType.PHOTO_CARD, index++, LOCKSCREEN_INVISIBLE);
+        insertCategoryItemData(db,   4       , "선생님"      ,"blank.jpg",  null,"20161019_120013", CardModel.CardType.PHOTO_CARD, index++, LOCKSCREEN_INVISIBLE);
+        insertCategoryItemData(db,   4       , "아빠"       ,"blank.jpg",  null,"20161019_120013", CardModel.CardType.PHOTO_CARD, index++, LOCKSCREEN_INVISIBLE);
+        insertCategoryItemData(db,   4       , "엄마"       ,"blank.jpg", null, "20161019_120012", CardModel.CardType.PHOTO_CARD, index++, LOCKSCREEN_INVISIBLE);
     }
 
     private void insertCategoryData(SQLiteDatabase db, int order, String name, int icon, int color) {
