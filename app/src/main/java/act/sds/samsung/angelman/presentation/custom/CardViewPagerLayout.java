@@ -92,6 +92,8 @@ public class CardViewPagerLayout extends RelativeLayout {
 
             @Override
             public void onPageSelected(int pos) {
+                cardImageAdapter.releaseSpeakHandler();
+                cardImageAdapter.stopVideoView();
                 currentCardIndex = pos;
                 View view = cardImageAdapter.viewCollection.get(pos);
                 view.bringToFront();
