@@ -9,6 +9,7 @@ import android.support.percent.PercentFrameLayout;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -75,8 +76,8 @@ public class CardViewPagerActivity extends AbstractActivity {
     @BindView(R.id.category_item_title)
     TextView categoryTitle;
 
-    @BindView(R.id.add_card_button_text)
-    TextView addCardButtonText;
+    @BindView(R.id.list_card_button)
+    ImageView listCardButton;
 
     private Uri downloadUrl;
 

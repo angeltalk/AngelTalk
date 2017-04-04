@@ -16,6 +16,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.invocation.InvocationOnMock;
@@ -111,7 +112,7 @@ public class CardViewPagerActivityTest extends UITest {
 
         assertThat(subject.buttonContainer).isGone();
 
-        assertThat(subject.addCardButtonText).isGone();
+        assertThat(subject.listCardButton).isGone();
         assertThat(((CardImageAdapter) subject.mViewPager.getAdapter()).getItemAt(0)).isInstanceOf(AddCardView.class);
     }
 
@@ -314,8 +315,9 @@ public class CardViewPagerActivityTest extends UITest {
     }
 
     @Test
-    public void whenClickedAddButton_thenMovesToCameraGallerySelectionActivity() throws Exception {
-        subject.addCardButtonText.performClick();
+    @Ignore("Next Stroy")
+    public void whenClickedListButton_thenMovesToCameraGallerySelectionActivity() throws Exception {
+        subject.listCardButton.performClick();
 
         ShadowActivity shadowActivity = shadowOf(subject);
         Intent nextStartedActivity = shadowActivity.getNextStartedActivity();
@@ -341,13 +343,9 @@ public class CardViewPagerActivityTest extends UITest {
     }
 
     @Test
-    public void whenClickAddCardButton_thenShowMainActivity() throws Exception {
-
-        subject.addCardButtonText.performClick();
-
-        ShadowActivity shadowActivity = shadowOf(subject);
-        Intent nextStartedActivity = shadowActivity.getNextStartedActivity();
-        assertThat(nextStartedActivity.getComponent().getClassName()).isEqualTo(CameraGallerySelectionActivity.class.getCanonicalName());
+    public void whenClickBackButton_thenFinishActivity() throws Exception {
+        subject.findViewById(R.id.back_button).performClick();
+        assertThat(subject.isFinishing()).isTrue();
     }
 
     @Test
