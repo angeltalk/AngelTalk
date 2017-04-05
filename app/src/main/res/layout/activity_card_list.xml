@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.percent.PercentRelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_card_list"
     android:layout_width="match_parent"
@@ -8,9 +9,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <RelativeLayout
-        android:id="@+id/title_card_list_container"
+        android:id="@+id/title_layout"
         android:layout_width="match_parent"
-        android:layout_height="128dp"
+        app:layout_heightPercent="20%"
         android:background="@color/white"
         android:elevation="4dp">
 
@@ -95,13 +96,13 @@
 
     </RelativeLayout>
 
-    <!--<android.support.v7.widget.RecyclerView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="0dp"-->
-        <!--android:layout_weight="1"-->
-        <!--android:background="@color/white" >-->
-
-    <!--</android.support.v7.widget.RecyclerView>-->
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/card_list_recycler_view"
+        android:layout_width="match_parent"
+        app:layout_heightPercent="80%"
+        android:layout_below="@id/title_layout"
+        android:background="@color/white" >
+    </android.support.v7.widget.RecyclerView>
 
     <ImageView
         android:id="@+id/add_card_button"
@@ -114,4 +115,4 @@
         android:src="@drawable/btn_add_floating"
         android:elevation="6dp"/>
 
-</RelativeLayout>
+</android.support.percent.PercentRelativeLayout>
