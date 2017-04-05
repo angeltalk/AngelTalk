@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.firebase.database.DataSnapshot;
@@ -145,7 +146,7 @@ public class CardTransfer {
     @NonNull
     private String makeShareZipFile(CardModel cardModel, String key) {
         List<String> filePathList = Lists.newArrayList(getAbsoluteContentsPath(cardModel.contentPath));
-        if (cardModel.voicePath != null) {
+        if (!Strings.isNullOrEmpty(cardModel.voicePath)) {
             filePathList.add(getAbsoluteContentsPath(cardModel.voicePath));
         }
         if (cardModel.cardType == CardModel.CardType.VIDEO_CARD) {
