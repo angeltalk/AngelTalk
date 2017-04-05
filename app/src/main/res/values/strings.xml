@@ -60,5 +60,6 @@
     <string name="change_order_text">순서바꾸기</string>
     <string name="share_card_message">공유 받은 카드를 저장해 보세요</string>
     <string name="new_card_title">새로운 카드</string>
+    <string name="cannot_share_card_save_message">카드를 저장할 수 없습니다.</string>
 
 </resources>
