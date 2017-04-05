@@ -169,6 +169,62 @@ public class ResourcesUtil {
         return backgroundColor;
     }
 
+    public static int getShowHideItemBarBy(@BackgroundColors int color) {
+        int drawable;
+        switch (color){
+            case RED:
+                drawable = R.drawable.show_red;
+                break;
+            case ORANGE:
+                drawable = R.drawable.show_orange;
+                break;
+            case YELLOW:
+                drawable = R.drawable.show_yellow;
+                break;
+            case GREEN:
+                drawable = R.drawable.show_green;
+                break;
+            case BLUE:
+                drawable = R.drawable.show_blue;
+                break;
+            case PURPLE:
+                drawable = R.drawable.show_purple;
+                break;
+            default:
+                drawable = R.drawable.hide;
+                break;
+        }
+        return drawable;
+    }
+
+    public static int getShowHideIconBy(@BackgroundColors int color) {
+        int drawable;
+        switch (color){
+            case RED:
+                drawable = R.drawable.ic_show_red;
+                break;
+            case ORANGE:
+                drawable = R.drawable.ic_show_orange;
+                break;
+            case YELLOW:
+                drawable = R.drawable.ic_show_yellow;
+                break;
+            case GREEN:
+                drawable = R.drawable.ic_show_green;
+                break;
+            case BLUE:
+                drawable = R.drawable.ic_show_blue;
+                break;
+            case PURPLE:
+                drawable = R.drawable.ic_show_purple;
+                break;
+            default:
+                drawable = R.drawable.ic_hide;
+                break;
+        }
+        return drawable;
+    }
+
     public static void setViewBackground(View view, @BackgroundColors int color, Context context){
         view.setBackground(
                 ResourcesCompat.getDrawable(
