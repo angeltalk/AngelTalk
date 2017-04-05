@@ -144,6 +144,31 @@ public class ResourcesUtil {
         return drawable;
     }
 
+    public static int getTitleBackgroundColor(@BackgroundColors int color) {
+        int backgroundColor=-1;
+        switch (color){
+            case RED:
+                backgroundColor = R.color.simple_background_red;
+                break;
+            case ORANGE:
+                backgroundColor = R.color.simple_background_orange;
+                break;
+            case YELLOW:
+                backgroundColor = R.color.simple_background_yellow;
+                break;
+            case GREEN:
+                backgroundColor = R.color.simple_background_green;
+                break;
+            case BLUE:
+                backgroundColor = R.color.simple_background_blue;
+                break;
+            case PURPLE:
+                backgroundColor = R.color.simple_background_purple;
+                break;
+        }
+        return backgroundColor;
+    }
+
     public static void setViewBackground(View view, @BackgroundColors int color, Context context){
         view.setBackground(
                 ResourcesCompat.getDrawable(
