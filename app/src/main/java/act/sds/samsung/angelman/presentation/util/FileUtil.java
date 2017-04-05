@@ -80,9 +80,6 @@ public class FileUtil {
 
     public static void unzip(String zipFile, String location) throws IOException {
         try {
-            Log.d("#", zipFile);
-            Log.d("#", location);
-
             File f = new File(location);
             if (!f.isDirectory()) {
                 f.mkdirs();

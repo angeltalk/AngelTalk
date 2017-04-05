@@ -42,12 +42,12 @@ android {
 
     buildTypes {
         debug {
-            testCoverageEnabled = true
+            testCoverageEnabled = false
             signingConfig signingConfigs.debug
             applicationVariants.all { variant -> renameAPK(variant) }
         }
         release {
-            testCoverageEnabled = true
+            testCoverageEnabled = false
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             applicationVariants.all { variant -> renameAPK(variant) }

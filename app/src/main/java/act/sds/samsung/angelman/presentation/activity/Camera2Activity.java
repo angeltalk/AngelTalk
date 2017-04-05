@@ -743,8 +743,6 @@ public class Camera2Activity extends AbstractActivity implements View.OnClickLis
                 public void onCaptureCompleted(@NonNull CameraCaptureSession session,
                                                @NonNull CaptureRequest request,
                                                @NonNull TotalCaptureResult result) {
-//                    showToast("Saved: " + mFile);
-//                    Log.d(TAG, mFile.toString());
 
                     if (mState != STATE_PICTURE_FINISHED) {
                         unlockFocus();

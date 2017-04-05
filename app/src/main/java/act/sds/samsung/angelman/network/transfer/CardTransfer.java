@@ -146,7 +146,8 @@ public class CardTransfer {
     @NonNull
     private String makeShareZipFile(CardModel cardModel, String key) {
         List<String> filePathList = Lists.newArrayList(getAbsoluteContentsPath(cardModel.contentPath));
-        if (!Strings.isNullOrEmpty(cardModel.voicePath)) {
+
+        if (!Strings.isNullOrEmpty(cardModel.voicePath) && getAbsoluteContentsPath(cardModel.voicePath) != null) {
             filePathList.add(getAbsoluteContentsPath(cardModel.voicePath));
         }
         if (cardModel.cardType == CardModel.CardType.VIDEO_CARD) {
@@ -163,7 +164,12 @@ public class CardTransfer {
     }
 
     private String getAbsoluteContentsPath(String filePath) {
-        return ContentsUtil.getContentFile(filePath).getAbsolutePath();
+        File contentFile = ContentsUtil.getContentFile(filePath);
+        if(contentFile != null){
+            return ContentsUtil.getContentFile(filePath).getAbsolutePath();
+        }else{
+            return null;
+        }
     }
 
     private void setCardModealData(CardTransferModel newCardModel, DataSnapshot snapshot) {
