@@ -23,8 +23,9 @@
             android:id="@+id/card_view_layout"
             android:layout_width="match_parent"
             android:layout_below="@id/test"
-            app:layout_heightPercent="62.5%" />
+            app:layout_heightPercent="60%" />
         <act.sds.samsung.angelman.presentation.custom.FontTextView
+            android:layout_marginTop="24dp"
             android:id="@+id/recoding_guide"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
