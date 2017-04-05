@@ -37,8 +37,6 @@ public class ShareCardActivityTest extends UITest {
     @Before
     public void setUp() throws Exception {
         ((TestAngelmanApplication) RuntimeEnvironment.application).getAngelmanTestComponent().inject(this);
-
-
     }
 
     @Test

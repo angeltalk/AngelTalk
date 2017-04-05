@@ -70,8 +70,7 @@
 
         <activity
             android:name=".presentation.activity.CategoryMenuActivity"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".presentation.activity.VideoActivity"
