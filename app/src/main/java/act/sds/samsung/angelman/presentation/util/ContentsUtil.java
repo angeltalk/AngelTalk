@@ -8,7 +8,6 @@ import android.media.ThumbnailUtils;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 
 import com.google.common.base.Strings;
@@ -19,8 +18,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import act.sds.samsung.angelman.domain.model.CardModel;
-
-import static act.sds.samsung.angelman.presentation.util.FileUtil.copyFile;
+import act.sds.samsung.angelman.domain.model.CardTransferModel;
 
 public class ContentsUtil {
 
@@ -155,24 +153,25 @@ public class ContentsUtil {
         return file;
     }
 
-    public static void copySharedFiles(CardModel cardModel) {
-        File[] files = new File(getTempFolder()).listFiles();
+    public static CardModel getTempCardModel(String folderPath, CardTransferModel cardTransferModel) {
+        CardModel cardModel = new CardModel();
+        cardModel.name = cardTransferModel.name;
+        cardModel.cardType = CardModel.CardType.valueOf(cardTransferModel.cardType);
+
+        File[] files = new File(folderPath).listFiles();
         for (File file : files) {
-            try {
-                if (file.getAbsolutePath().contains("mp4")) {
-                    copyFile(file, new File(cardModel.contentPath));
-                } else if (file.getAbsolutePath().contains("jpg") || file.getAbsolutePath().contains("png")) {
-                    if (cardModel.cardType == CardModel.CardType.VIDEO_CARD) {
-                        copyFile(file, new File(cardModel.thumbnailPath));
-                    } else {
-                        copyFile(file, new File(cardModel.contentPath));
-                    }
-                } else if (file.getAbsolutePath().contains("3gdp")) {
-                    copyFile(file, new File(cardModel.voicePath));
+            if (file.getAbsolutePath().contains("mp4")) {
+                cardModel.contentPath = file.getAbsolutePath();
+            } else if (file.getAbsolutePath().contains("jpg") || file.getAbsolutePath().contains("png")) {
+                if (CardModel.CardType.valueOf(cardTransferModel.cardType) == CardModel.CardType.VIDEO_CARD) {
+                    cardModel.thumbnailPath = file.getAbsolutePath();
+                } else {
+                    cardModel.contentPath = file.getAbsolutePath();
                 }
-            } catch (IOException e) {
-                Log.e("error", "copyShardFile error : " + e.getStackTrace());
+            } else if (file.getAbsolutePath().contains("3gdp")) {
+                cardModel.voicePath = file.getAbsolutePath();
             }
         }
+        return  cardModel;
     }
 }

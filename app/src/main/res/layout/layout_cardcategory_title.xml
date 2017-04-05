@@ -40,7 +40,7 @@
         android:textColor="@color/white"
         android:alpha="0.8"
         app:font="@string/font_medium"
-        android:textSize="16dp" />
+        android:textSize="16dp"/>
 
     <ImageView
         android:id="@+id/list_card_button"

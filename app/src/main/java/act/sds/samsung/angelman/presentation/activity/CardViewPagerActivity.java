@@ -5,7 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.percent.PercentFrameLayout;
+import android.support.percent.PercentRelativeLayout;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.ImageButton;
@@ -26,18 +26,18 @@ import javax.inject.Inject;
 
 import act.sds.samsung.angelman.AngelmanApplication;
 import act.sds.samsung.angelman.R;
-import act.sds.samsung.angelman.network.transfer.CardTransfer;
-import act.sds.samsung.angelman.network.transfer.KaKaoTransfer;
 import act.sds.samsung.angelman.domain.model.CardModel;
 import act.sds.samsung.angelman.domain.model.CategoryModel;
 import act.sds.samsung.angelman.domain.repository.CardRepository;
+import act.sds.samsung.angelman.network.transfer.CardTransfer;
+import act.sds.samsung.angelman.network.transfer.KaKaoTransfer;
 import act.sds.samsung.angelman.presentation.adapter.CardImageAdapter;
-import act.sds.samsung.angelman.presentation.manager.ApplicationConstants;
 import act.sds.samsung.angelman.presentation.custom.CardCategoryLayout;
 import act.sds.samsung.angelman.presentation.custom.CardView;
 import act.sds.samsung.angelman.presentation.custom.CardViewPager;
 import act.sds.samsung.angelman.presentation.custom.CustomConfirmDialog;
 import act.sds.samsung.angelman.presentation.custom.CustomSnackBar;
+import act.sds.samsung.angelman.presentation.manager.ApplicationConstants;
 import act.sds.samsung.angelman.presentation.manager.ApplicationManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -246,7 +246,7 @@ public class CardViewPagerActivity extends AbstractActivity {
     }
 
     private void showSnackBarMessage(String intentKey) {
-        PercentFrameLayout rootLayout = (PercentFrameLayout) findViewById(R.id.category_item_container);
+        PercentRelativeLayout rootLayout = (PercentRelativeLayout) findViewById(R.id.category_item_container);
         if(ApplicationConstants.INTENT_KEY_NEW_CARD.equals(intentKey)) {
             CustomSnackBar.snackBarWithDuration(rootLayout, getApplicationContext().getResources().getString(R.string.add_new_card_success));
         }else if(ApplicationConstants.INTENT_KEY_SHARE_CARD.equals(intentKey)){

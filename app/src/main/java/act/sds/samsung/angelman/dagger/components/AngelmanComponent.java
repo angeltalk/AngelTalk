@@ -13,6 +13,7 @@ import act.sds.samsung.angelman.presentation.activity.CategoryMenuActivity;
 import act.sds.samsung.angelman.presentation.activity.MakeCardActivity;
 import act.sds.samsung.angelman.presentation.activity.NewCategoryActivity;
 import act.sds.samsung.angelman.presentation.activity.OnboardingActivity;
+import act.sds.samsung.angelman.presentation.activity.ShareCardActivity;
 import act.sds.samsung.angelman.presentation.custom.AddCardView;
 import act.sds.samsung.angelman.presentation.custom.CardCategoryLayout;
 import act.sds.samsung.angelman.presentation.custom.CardViewPagerLayout;
@@ -42,4 +43,5 @@ public interface AngelmanComponent {
     void inject(KaKaoTransfer kaKaoTransfer);
     void inject(ApplicationInitializer applicationInitializer);
     void inject(CardListActivity cardListActivity);
+    void inject(ShareCardActivity shareCardActivity);
 }

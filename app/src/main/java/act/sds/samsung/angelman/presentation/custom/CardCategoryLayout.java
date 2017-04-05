@@ -51,6 +51,7 @@ public class CardCategoryLayout extends RelativeLayout {
         if ( !isInEditMode() ) {
             title = this.categoryModelTitle;
         }
+
         ((TextView) findViewById(R.id.category_item_title)).setText(title);
     }
 
@@ -78,6 +79,14 @@ public class CardCategoryLayout extends RelativeLayout {
             cardCount.setText(message);
         } else {
             cardCount.setText(count + " / " + (total - 1));
+        }
+    }
+
+    public void hideCardCountText(boolean hide) {
+        if(hide){
+            cardCount.setVisibility(View.GONE);
+        } else {
+            cardCount.setVisibility(View.VISIBLE);
         }
     }
 

@@ -3,7 +3,6 @@ package act.sds.samsung.angelman.presentation.activity;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
 import android.support.v7.widget.CardView;
 import android.widget.GridView;
@@ -14,7 +13,6 @@ import android.widget.TextView;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
@@ -22,7 +20,6 @@ import org.robolectric.shadows.ShadowAbsListView;
 import org.robolectric.shadows.ShadowActivity;
 import org.robolectric.shadows.ShadowAlertDialog;
 import org.robolectric.shadows.ShadowDrawable;
-import org.robolectric.util.ActivityController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,10 +30,10 @@ import act.sds.samsung.angelman.BuildConfig;
 import act.sds.samsung.angelman.R;
 import act.sds.samsung.angelman.TestAngelmanApplication;
 import act.sds.samsung.angelman.UITest;
-import act.sds.samsung.angelman.network.transfer.CardTransfer;
 import act.sds.samsung.angelman.domain.model.CategoryModel;
 import act.sds.samsung.angelman.domain.repository.CardRepository;
 import act.sds.samsung.angelman.domain.repository.CategoryRepository;
+import act.sds.samsung.angelman.network.transfer.CardTransfer;
 import act.sds.samsung.angelman.presentation.util.ResourcesUtil;
 
 import static act.sds.samsung.angelman.presentation.util.ResourceMapper.IconType.BUS;
@@ -262,15 +259,6 @@ public class CategoryMenuActivityTest extends UITest {
         subject.onResume();
         // then
         assertThat(categoryList.getChildCount()).isEqualTo(6);
-    }
-
-    @Test
-    public  void whenKaKaoIntentReceived_thenShowDownloadConfirmPopup() throws Exception{
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.kakao_scheme)+"://"+ getString(R.string.kakaolink_host)));
-        when(categoryRepository.getCategoryAllList()).thenReturn(getCategoryList(5));
-        ActivityController ac = Robolectric.buildActivity(CategoryMenuActivity.class).withIntent(intent).create();
-        AlertDialog latestAlertDialog = ShadowAlertDialog.getLatestAlertDialog();
-        assertThat(latestAlertDialog).isNotNull();
     }
 
     private void setUpActivityWithCategoryList(int listSize) {

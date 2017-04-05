@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.percent.PercentRelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/category_item_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_basic_1"
+    >
+
+
+    <act.sds.samsung.angelman.presentation.custom.CardCategoryLayout
+        android:id="@+id/title_container"
+        android:layout_width="match_parent"
+        app:layout_heightPercent="13%"/>
+
+    <act.sds.samsung.angelman.presentation.custom.CardViewPager
+        android:id="@+id/view_pager"
+        android:layout_below="@id/title_container"
+        android:paddingTop="17dp"
+        android:layout_width="match_parent"
+        app:layout_heightPercent="59.5%"
+        />
+
+    <LinearLayout
+        android:id="@+id/button_container"
+        app:layout_heightPercent="27.5%"
+        android:layout_width="match_parent"
+        android:layout_gravity="bottom"
+        android:gravity="center_horizontal"
+        android:layout_below="@id/view_pager"
+        android:orientation="vertical" >
+        <act.sds.samsung.angelman.presentation.custom.FontTextView
+            android:id="@+id/category_item_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:layout_marginTop="27.2dp"
+            android:textSize="17sp"
+            app:font="@string/font_demilight"
+            android:text="@string/share_card_message"/>
+        <ImageView
+            android:id="@+id/card_save_button"
+            android:layout_width="62dp"
+            android:layout_height="62dp"
+            android:layout_marginTop="27dp"
+            android:src="@drawable/btn_save"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/on_loading_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_loading"
+        android:visibility="visible"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/image_angelee_gif"
+            android:layout_width="85dp"
+            android:layout_height="72dp"
+            android:src="@drawable/angelee" />
+
+        <act.sds.samsung.angelman.presentation.custom.FontTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:layout_marginTop="15dp"
+            android:textSize="17sp"
+            app:font="@string/font_demilight"
+            android:text="카드를 불러오고 있어요"/>
+
+    </LinearLayout>
+
+</android.support.percent.PercentRelativeLayout>

@@ -58,5 +58,7 @@
     <string name="share_fail_message">카드 공유가 실패하였습니다.</string>
     <string name="show_hide_text">보이기/숨기기</string>
     <string name="change_order_text">순서바꾸기</string>
+    <string name="share_card_message">공유 받은 카드를 저장해 보세요</string>
+    <string name="new_card_title">새로운 카드</string>
 
 </resources>

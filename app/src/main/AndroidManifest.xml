@@ -56,26 +56,26 @@
         <activity
             android:name=".presentation.activity.PhotoEditorActivity"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".presentation.activity.CategoryMenuActivity"
-            android:screenOrientation="portrait">
+
+        <activity android:name=".presentation.activity.ShareCardActivity"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="@string/kakaolink_host"
+                <data android:host="@string/kakaolink_host"
                     android:scheme="@string/kakao_scheme" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".presentation.activity.CategoryMenuActivity"
+            android:screenOrientation="portrait" />
+
         <activity
             android:name=".presentation.activity.VideoActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait" />
-
-        <activity android:name=".presentation.activity.CardListActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
 
         <service android:name=".presentation.service.ScreenService" />
 
@@ -85,6 +85,7 @@
                 <action android:name="android.intent.action.PHONE_STATE" />
             </intent-filter>
         </receiver>
+
         <receiver
             android:name=".presentation.custom.AngelmanWidgetProvider"
             android:label="엔젤톡">
@@ -98,8 +99,8 @@
                 android:resource="@xml/widget_provider" />
         </receiver>
 
-        <receiver android:name=".presentation.receiver.NotificationActionReceiver" />
-         
+        <receiver android:name=".presentation.receiver.NotificationActionReceiver"/>
+
         <receiver
             android:name=".presentation.receiver.BootCompleteReceiver"
             android:enabled="true"
