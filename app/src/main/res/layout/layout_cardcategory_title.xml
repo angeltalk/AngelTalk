@@ -40,7 +40,7 @@
         android:textColor="@color/white"
         android:alpha="0.8"
         app:font="@string/font_medium"
-        android:textSize="16dp" />
+        android:textSize="16dp"/>
 
     <act.sds.samsung.angelman.presentation.custom.FontTextView
         android:id="@+id/add_card_button_text"

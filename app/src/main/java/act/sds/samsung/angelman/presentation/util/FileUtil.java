@@ -59,49 +59,60 @@ public class FileUtil {
         try {
             byte data[] = new byte[BUFFER_SIZE];
 
-            for (String file : files) {
-                FileInputStream fi = new FileInputStream(file);
+            for (int i = 0; i < files.length; i++) {
+                FileInputStream fi = new FileInputStream(files[i]);
                 origin = new BufferedInputStream(fi, BUFFER_SIZE);
-
-                ZipEntry entry = new ZipEntry(file.substring(file.lastIndexOf(File.separator) + 1));
-                out.putNextEntry(entry);
-                int count;
-                while ((count = origin.read(data, 0, BUFFER_SIZE)) != -1) {
-                    out.write(data, 0, count);
+                try {
+                    ZipEntry entry = new ZipEntry(files[i].substring(files[i].lastIndexOf(File.separator) + 1));
+                    out.putNextEntry(entry);
+                    int count;
+                    while ((count = origin.read(data, 0, BUFFER_SIZE)) != -1) {
+                        out.write(data, 0, count);
+                    }
+                } finally {
+                    origin.close();
                 }
-
             }
-        } catch (Exception e) {
-            Log.e("Error", "Zip exception", e);
+        } finally {
+            out.close();
         }
     }
 
     public static void unzip(String zipFile, String location) throws IOException {
         try {
+            Log.d("#", zipFile);
+            Log.d("#", location);
+
             File f = new File(location);
             if (!f.isDirectory()) {
                 f.mkdirs();
             }
             ZipInputStream zin = new ZipInputStream(new FileInputStream(zipFile));
-            ZipEntry ze;
-
-            while ((ze = zin.getNextEntry()) != null) {
-                String path = location + File.separator + ze.getName();
-                if (ze.isDirectory()) {
-                    File unzipFile = new File(path);
-                    if (!unzipFile.isDirectory()) {
-                        unzipFile.mkdirs();
+            try {
+                ZipEntry ze;
+                while ((ze = zin.getNextEntry()) != null) {
+                    String path = location + File.separator + ze.getName();
+                    if (ze.isDirectory()) {
+                        File unzipFile = new File(path);
+                        if (!unzipFile.isDirectory()) {
+                            unzipFile.mkdirs();
+                        }
+                    } else {
+                        byte data[] = new byte[BUFFER_SIZE];
+                        BufferedOutputStream fout = new BufferedOutputStream( new FileOutputStream(path, false), BUFFER_SIZE);
+                        try {
+                            int count;
+                            while ((count = zin.read(data, 0, BUFFER_SIZE)) != -1) {
+                                fout.write(data, 0, count);
+                            }
+                            zin.closeEntry();
+                        } finally {
+                            fout.close();
+                        }
                     }
-                } else {
-                    byte data[] = new byte[BUFFER_SIZE];
-                    BufferedOutputStream fout = new BufferedOutputStream(new FileOutputStream(path, false), BUFFER_SIZE);
-
-                    int count;
-                    while ((count = zin.read(data, 0, BUFFER_SIZE)) != -1) {
-                        fout.write(data, 0, count);
-                    }
-                    zin.closeEntry();
                 }
+            } finally {
+                zin.close();
             }
         } catch (Exception e) {
             Log.e("Error", "Unzip exception", e);

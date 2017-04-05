@@ -2,27 +2,28 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="act.sds.samsung.angelman">
 
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
-    <uses-feature android:name="android.hardware.camera2.full" android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera2.full"
+        android:required="false" />
 
     <application
-        android:allowBackup="true"
         android:name=".AngelmanApplication"
+        android:allowBackup="true"
         android:icon="@drawable/ic_angelman_logo"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_app_key" />
@@ -32,6 +33,7 @@
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -39,40 +41,47 @@
         <activity
             android:name=".presentation.activity.CameraGallerySelectionActivity"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".presentation.activity.NewCategoryActivity"
-            android:windowSoftInputMode="stateHidden|adjustPan"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
 
         <activity
             android:name=".presentation.activity.Camera2Activity"
             android:screenOrientation="portrait" />
 
-        <activity android:name=".presentation.activity.MakeCardActivity"
+        <activity
+            android:name=".presentation.activity.MakeCardActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
+
         <activity
             android:name=".presentation.activity.CardViewPagerActivity"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".presentation.activity.PhotoEditorActivity"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".presentation.activity.CategoryMenuActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".presentation.activity.VideoActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".presentation.activity.ShareCardActivity"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="@string/kakao_scheme"
-                    android:host="@string/kakaolink_host" />
+                <data android:host="@string/kakaolink_host"
+                      android:scheme="@string/kakao_scheme" />
             </intent-filter>
-            </activity>
-
-        <activity android:name=".presentation.activity.VideoActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/app_name">
         </activity>
 
         <service android:name=".presentation.service.ScreenService" />
@@ -83,27 +92,28 @@
                 <action android:name="android.intent.action.PHONE_STATE" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".presentation.custom.AngelmanWidgetProvider"
+
+        <receiver
+            android:name=".presentation.custom.AngelmanWidgetProvider"
             android:label="엔젤톡">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
-                <action android:name="android.action.BUTTON_CLICK"/>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.action.BUTTON_CLICK" />
             </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/widget_provider"/>
+                android:resource="@xml/widget_provider" />
         </receiver>
 
-         <receiver android:name=".presentation.receiver.NotificationActionReceiver"> 
-        </receiver>
+        <receiver android:name=".presentation.receiver.NotificationActionReceiver"/>
 
-         <receiver
+        <receiver
             android:name=".presentation.receiver.BootCompleteReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
-        </receiver> 
+        </receiver>
     </application>
 </manifest>

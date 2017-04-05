@@ -56,5 +56,7 @@
     <string name="kakao_button_go_to_app">앱으로 이동</string>
     <string name="web_url">https://angeltalk-team.bitbucket.io/</string>
     <string name="share_fail_message">카드 공유가 실패하였습니다.</string>
+    <string name="share_card_message">공유 받은 카드를 저장해 보세요</string>
+    <string name="new_card_title">새로운 카드</string>
 
 </resources>

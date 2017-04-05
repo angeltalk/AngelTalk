@@ -60,14 +60,18 @@ public class CardCategoryLayout extends RelativeLayout {
 
         cardCount = ((TextView) findViewById(R.id.category_item_count));
 
+
         String title = "";
 
         if ( !isInEditMode() ) {
             title = this.categoryModelTitle;
         }
 
+
         ((TextView) findViewById(R.id.category_item_title)).setText(title);
         findViewById(R.id.back_button).setOnClickListener(onClickListener);
+
+
     }
 
     public CardCategoryLayout(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -81,6 +85,14 @@ public class CardCategoryLayout extends RelativeLayout {
             cardCount.setText(message);
         } else {
             cardCount.setText(count + " / " + (total - 1));
+        }
+    }
+
+    public void hideCardCountText(boolean hide) {
+        if(hide){
+            cardCount.setVisibility(View.GONE);
+        } else {
+            cardCount.setVisibility(View.VISIBLE);
         }
     }
 
