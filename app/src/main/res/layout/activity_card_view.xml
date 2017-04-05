@@ -42,5 +42,31 @@
             android:background="@drawable/btn_share"/>
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/on_loading_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_loading"
+        android:visibility="gone"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/image_angelee_gif"
+            android:layout_width="85dp"
+            android:layout_height="72dp"
+            android:src="@drawable/angelee" />
+
+        <act.sds.samsung.angelman.presentation.custom.FontTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:layout_marginTop="15dp"
+            android:textSize="17sp"
+            app:font="@string/font_demilight"
+            android:text="카드를 준비하고 있어요"/>
+
+    </LinearLayout>
+
 </android.support.percent.PercentRelativeLayout>
 

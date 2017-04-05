@@ -1,7 +1,6 @@
 package act.sds.samsung.angelman.presentation.activity;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -79,7 +78,12 @@ public class CardViewPagerActivity extends AbstractActivity {
     @BindView(R.id.list_card_button)
     ImageView listCardButton;
 
-    private Uri downloadUrl;
+    @BindView(R.id.on_loading_view)
+    LinearLayout loadingViewLayout;
+
+    @BindView(R.id.image_angelee_gif)
+    ImageView imageLoadingGif;
+
 
     @OnClick(R.id.card_delete_button)
     public void deleteButtonOnClick() {
@@ -90,19 +94,21 @@ public class CardViewPagerActivity extends AbstractActivity {
     public void shareButtonOnClick() {
 
         final CardModel cardModel = getCardModel(mViewPager.getCurrentItem());
-
+        showLoadingAnimation();
         cardTransfer.uploadCard(cardModel, new OnSuccessListener<Map<String,String>>() {
             @Override
             public void onSuccess(Map<String, String> resultMap) {
                 String thumbnailUrl = resultMap.get("url");
                 String key = resultMap.get("key");
-                kaKaoTransfer.sendKakaoLinkMessage(context, key, thumbnailUrl, cardModel);
 
+                kaKaoTransfer.sendKakaoLinkMessage(context, key, thumbnailUrl, cardModel);
+                loadingViewLayout.setVisibility(View.GONE);
             }
 
         }, new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                loadingViewLayout.setVisibility(View.GONE);
                 Toast.makeText(context, R.string.share_fail_message,Toast.LENGTH_SHORT).show();
             }
         });
@@ -252,6 +258,15 @@ public class CardViewPagerActivity extends AbstractActivity {
         }else if(ApplicationConstants.INTENT_KEY_SHARE_CARD.equals(intentKey)){
             CustomSnackBar.snackBarWithDuration(rootLayout, getApplicationContext().getResources().getString(R.string.add_share_card_success));
         }
+    }
+
+    private void showLoadingAnimation(){
+        loadingViewLayout.setVisibility(View.VISIBLE);
+        Glide.with(CardViewPagerActivity.this)
+                .load(R.drawable.angelee)
+                .asGif()
+                .crossFade()
+                .into(imageLoadingGif);
     }
 
 }
