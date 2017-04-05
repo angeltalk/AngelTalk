@@ -63,7 +63,7 @@ public class DefaultDataGenerator {
         insertCategoryItemData(db,   3       , "그네 타러 가요" , contentFolder+"swing.mp4",contentFolder+"swing.jpg", "20161019_120012", CardModel.CardType.VIDEO_CARD, index++, LOCKSCREEN_INVISIBLE);
         insertCategoryItemData(db,   3       , "패스트푸드"    , contentFolder+"fastfood.jpg", null, "20161019_120012", CardModel.CardType.PHOTO_CARD, index++, LOCKSCREEN_INVISIBLE);
         insertCategoryItemData(db,   3       , "수영장"       , contentFolder+"swimmingpool.jpg", null, "20161019_120012", CardModel.CardType.PHOTO_CARD, index++, LOCKSCREEN_INVISIBLE);
-        insertCategoryItemData(db,   3       , "마트"        , contentFolder+"mart.JPG",  null,"20161019_120012", CardModel.CardType.PHOTO_CARD, index++, LOCKSCREEN_INVISIBLE);
+        insertCategoryItemData(db,   3       , "마트"        , contentFolder+"mart.jpg",  null,"20161019_120012", CardModel.CardType.PHOTO_CARD, index++, LOCKSCREEN_INVISIBLE);
 
         index = 0;
         insertCategoryItemData(db,   4       , "선생님"      ,contentFolder+"blank.jpg",  null,"20161019_120013", CardModel.CardType.PHOTO_CARD, index++, LOCKSCREEN_INVISIBLE);

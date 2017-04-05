@@ -8,6 +8,7 @@ import android.media.ThumbnailUtils;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 
 import com.google.common.base.Strings;
@@ -19,6 +20,8 @@ import java.io.OutputStream;
 
 import act.sds.samsung.angelman.domain.model.CardModel;
 import act.sds.samsung.angelman.domain.model.CardTransferModel;
+
+import static act.sds.samsung.angelman.presentation.util.FileUtil.copyFile;
 
 public class ContentsUtil {
 
@@ -174,4 +177,26 @@ public class ContentsUtil {
         }
         return  cardModel;
     }
+
+    public static void copySharedFiles(CardModel cardModel) {
+        File[] files = new File(getTempFolder()).listFiles();
+        for (File file : files) {
+            try {
+                if (file.getAbsolutePath().contains("mp4")) {
+                    copyFile(file, new File(cardModel.contentPath));
+                } else if (file.getAbsolutePath().contains("jpg") || file.getAbsolutePath().contains("png")) {
+                    if (cardModel.cardType == CardModel.CardType.VIDEO_CARD) {
+                        copyFile(file, new File(cardModel.thumbnailPath));
+                    } else {
+                        copyFile(file, new File(cardModel.contentPath));
+                    }
+                } else if (file.getAbsolutePath().contains("3gdp")) {
+                    copyFile(file, new File(cardModel.voicePath));
+                }
+            } catch (IOException e) {
+                Log.e("error", "copyShardFile error : " + e.getStackTrace());
+            }
+        }
+    }
+
 }
