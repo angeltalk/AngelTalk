@@ -14,6 +14,7 @@
     <color name="white">#FFFFFF</color>
     <color name="white_32">#32FFFFFF</color>
     <color name="white_3A">#3AFFFFFF</color>
+    <color name="white_B2">#B2FFFFFF</color>
     <color name="white_fa">#FAFAFA</color>
     <color name="black_99">#99000000</color>
     <color name="black_cc">#cc000000</color>
@@ -25,4 +26,11 @@
     <color name="background_yellow">#ffe567</color>
     <color name="background_green">#16a085</color>
     <color name="background_blue">#412c82</color>
+
+    <color name="simple_background_red">#D41468</color>
+    <color name="simple_background_orange">#FC7C42</color>
+    <color name="simple_background_yellow">#F9B235</color>
+    <color name="simple_background_green">#5EB274</color>
+    <color name="simple_background_blue">#467095</color>
+    <color name="simple_background_purple">#8F42D6</color>
 </resources>

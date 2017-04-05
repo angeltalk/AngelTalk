@@ -16,7 +16,6 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.invocation.InvocationOnMock;
@@ -315,13 +314,12 @@ public class CardViewPagerActivityTest extends UITest {
     }
 
     @Test
-    @Ignore("Next Stroy")
-    public void whenClickedListButton_thenMovesToCameraGallerySelectionActivity() throws Exception {
+    public void whenClickedListButton_thenMovesToCardListActivity() throws Exception {
         subject.listCardButton.performClick();
 
         ShadowActivity shadowActivity = shadowOf(subject);
         Intent nextStartedActivity = shadowActivity.getNextStartedActivity();
-        assertThat(nextStartedActivity.getComponent().getClassName()).isEqualTo(CameraGallerySelectionActivity.class.getCanonicalName());
+        assertThat(nextStartedActivity.getComponent().getClassName()).isEqualTo(CardListActivity.class.getCanonicalName());
     }
 
     @Test

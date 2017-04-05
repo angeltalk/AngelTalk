@@ -5,6 +5,7 @@ import javax.inject.Singleton;
 import act.sds.samsung.angelman.dagger.modules.AngelmanModule;
 import act.sds.samsung.angelman.data.sqlite.DatabaseHelperTest;
 import act.sds.samsung.angelman.presentation.activity.CameraGallerySelectionActivityTest;
+import act.sds.samsung.angelman.presentation.activity.CardListActivityTest;
 import act.sds.samsung.angelman.presentation.activity.CardViewPagerActivityTest;
 import act.sds.samsung.angelman.presentation.activity.CategoryMenuActivityTest;
 import act.sds.samsung.angelman.presentation.activity.MakeCardActivityTest;
@@ -34,4 +35,5 @@ public interface AngelmanTestComponent extends AngelmanComponent {
     void inject(VideoActivityTest videoActivityTest);
     void inject(CardImageAdapterTest cardImageAdapterTest);
     void inject(ScreenReceiverTest screenReceiverTest);
+    void inject(CardListActivityTest cardListActivityTest);
 }
