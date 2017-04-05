@@ -15,8 +15,9 @@ public class ResourcesUtil {
     public static final int GREEN = 3;
     public static final int BLUE = 4;
     public static final int PURPLE = 5;
+    public static final int HIDING = -1;
 
-    @IntDef(flag = true, value = {RED, ORANGE, YELLOW, GREEN, BLUE, PURPLE})
+    @IntDef(flag = true, value = {RED, ORANGE, YELLOW, GREEN, BLUE, PURPLE, HIDING})
     public @interface BackgroundColors { }
 
     public static int getCardViewLayoutBackgroundBy(@BackgroundColors int color) {

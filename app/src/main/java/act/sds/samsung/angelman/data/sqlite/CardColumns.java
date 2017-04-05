@@ -13,4 +13,5 @@ public class CardColumns implements BaseColumns {
     public static final String CARD_INDEX  = "card_index";
     public static final String CARD_TYPE = "card_type";
     public static final String THUMBNAIL_PATH = "thumbnail_path";
+    public static final String SHOWING ="showing";
 }
