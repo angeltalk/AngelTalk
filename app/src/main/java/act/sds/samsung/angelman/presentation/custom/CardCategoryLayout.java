@@ -6,35 +6,26 @@ import android.content.Intent;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import act.sds.samsung.angelman.R;
 import act.sds.samsung.angelman.presentation.activity.CameraGallerySelectionActivity;
+import act.sds.samsung.angelman.presentation.activity.CardListActivity;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class CardCategoryLayout extends RelativeLayout {
 
-    private TextView addCardText;
-    private TextView cardCount;
-    private String categoryModelTitle;
+    @BindView(R.id.list_card_button)
+    public ImageView listCardText;
 
-    private View.OnClickListener onClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.add_card_button_text:
-                    startCameraGallerySelectionActivity();
-                    break;
-                case R.id.back_button:
-                    if (getContext() instanceof Activity) {
-                        ((Activity) getContext()).finish();
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
-    };
+    @BindView(R.id.category_item_count)
+    public TextView cardCount;
+
+    private String categoryModelTitle;
 
     public CardCategoryLayout(Context context) {
         super(context);
@@ -54,24 +45,27 @@ public class CardCategoryLayout extends RelativeLayout {
     private void initUI() {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         inflater.inflate(R.layout.layout_cardcategory_title, this);
-
-        addCardText = (TextView) findViewById(R.id.add_card_button_text);
-        addCardText.setOnClickListener(onClickListener);
-
-        cardCount = ((TextView) findViewById(R.id.category_item_count));
-
+        ButterKnife.bind(this);
 
         String title = "";
-
         if ( !isInEditMode() ) {
             title = this.categoryModelTitle;
         }
 
-
         ((TextView) findViewById(R.id.category_item_title)).setText(title);
-        findViewById(R.id.back_button).setOnClickListener(onClickListener);
+    }
 
+    @OnClick(R.id.list_card_button)
+    public void onClickListCardButtonText(View v) {
+        Intent intent = new Intent(getContext(), CardListActivity.class);
+        getContext().startActivity(intent);
+    }
 
+    @OnClick(R.id.back_button)
+    public void onClickBackButton(View v) {
+        if (getContext() instanceof Activity) {
+            ((Activity) getContext()).finish();
+        }
     }
 
     public CardCategoryLayout(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -97,7 +91,7 @@ public class CardCategoryLayout extends RelativeLayout {
     }
 
     public void setAddCardTextButtonVisible(int visible) {
-        addCardText.setVisibility(visible);
+        listCardText.setVisibility(visible);
     }
 
     public void setCardCountVisible(int visible) {

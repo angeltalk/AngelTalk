@@ -33,45 +33,29 @@
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".presentation.activity.CameraGallerySelectionActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".presentation.activity.NewCategoryActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-
         <activity
             android:name=".presentation.activity.Camera2Activity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".presentation.activity.MakeCardActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
-
         <activity
             android:name=".presentation.activity.CardViewPagerActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".presentation.activity.PhotoEditorActivity"
             android:screenOrientation="portrait" />
-
-        <activity
-            android:name=".presentation.activity.CategoryMenuActivity"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name=".presentation.activity.VideoActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait"/>
 
         <activity android:name=".presentation.activity.ShareCardActivity"
             android:screenOrientation="portrait" >
@@ -80,9 +64,19 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:host="@string/kakaolink_host"
-                      android:scheme="@string/kakao_scheme" />
+                    android:scheme="@string/kakao_scheme" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".presentation.activity.CategoryMenuActivity"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+            android:name=".presentation.activity.VideoActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"/>
 
         <service android:name=".presentation.service.ScreenService" />
 
@@ -100,6 +94,7 @@
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="android.action.BUTTON_CLICK" />
             </intent-filter>
+
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_provider" />

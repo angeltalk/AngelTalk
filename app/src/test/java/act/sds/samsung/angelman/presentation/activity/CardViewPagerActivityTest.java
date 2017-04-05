@@ -111,7 +111,7 @@ public class CardViewPagerActivityTest extends UITest {
 
         assertThat(subject.buttonContainer).isGone();
 
-        assertThat(subject.addCardButtonText).isGone();
+        assertThat(subject.listCardButton).isGone();
         assertThat(((CardImageAdapter) subject.mViewPager.getAdapter()).getItemAt(0)).isInstanceOf(AddCardView.class);
     }
 
@@ -314,12 +314,12 @@ public class CardViewPagerActivityTest extends UITest {
     }
 
     @Test
-    public void whenClickedAddButton_thenMovesToCameraGallerySelectionActivity() throws Exception {
-        subject.addCardButtonText.performClick();
+    public void whenClickedListButton_thenMovesToCardListActivity() throws Exception {
+        subject.listCardButton.performClick();
 
         ShadowActivity shadowActivity = shadowOf(subject);
         Intent nextStartedActivity = shadowActivity.getNextStartedActivity();
-        assertThat(nextStartedActivity.getComponent().getClassName()).isEqualTo(CameraGallerySelectionActivity.class.getCanonicalName());
+        assertThat(nextStartedActivity.getComponent().getClassName()).isEqualTo(CardListActivity.class.getCanonicalName());
     }
 
     @Test
@@ -341,13 +341,9 @@ public class CardViewPagerActivityTest extends UITest {
     }
 
     @Test
-    public void whenClickAddCardButton_thenShowMainActivity() throws Exception {
-
-        subject.addCardButtonText.performClick();
-
-        ShadowActivity shadowActivity = shadowOf(subject);
-        Intent nextStartedActivity = shadowActivity.getNextStartedActivity();
-        assertThat(nextStartedActivity.getComponent().getClassName()).isEqualTo(CameraGallerySelectionActivity.class.getCanonicalName());
+    public void whenClickBackButton_thenFinishActivity() throws Exception {
+        subject.findViewById(R.id.back_button).performClick();
+        assertThat(subject.isFinishing()).isTrue();
     }
 
     @Test

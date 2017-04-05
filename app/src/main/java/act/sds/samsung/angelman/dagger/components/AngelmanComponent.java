@@ -7,6 +7,7 @@ import act.sds.samsung.angelman.data.sqlite.DatabaseHelper;
 import act.sds.samsung.angelman.network.transfer.CardTransfer;
 import act.sds.samsung.angelman.network.transfer.KaKaoTransfer;
 import act.sds.samsung.angelman.presentation.activity.CameraGallerySelectionActivity;
+import act.sds.samsung.angelman.presentation.activity.CardListActivity;
 import act.sds.samsung.angelman.presentation.activity.CardViewPagerActivity;
 import act.sds.samsung.angelman.presentation.activity.CategoryMenuActivity;
 import act.sds.samsung.angelman.presentation.activity.MakeCardActivity;
@@ -41,5 +42,6 @@ public interface AngelmanComponent {
     void inject(CardTransfer cardTransfer);
     void inject(KaKaoTransfer kaKaoTransfer);
     void inject(ApplicationInitializer applicationInitializer);
+    void inject(CardListActivity cardListActivity);
     void inject(ShareCardActivity shareCardActivity);
 }
