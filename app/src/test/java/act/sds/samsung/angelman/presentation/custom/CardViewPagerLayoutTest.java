@@ -32,6 +32,7 @@ import act.sds.samsung.angelman.presentation.util.AngelManGlideTransform;
 import act.sds.samsung.angelman.presentation.util.ResourcesUtil;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -67,7 +68,7 @@ public class CardViewPagerLayoutTest extends UITest{
 
     @Test
     public void whenLaunchedCardViewPagerView_thenShowsCardListInSelectedCategory() throws Exception {
-        when(repository.getSingleCardListWithCategoryId(anyInt())).thenReturn(getCardListWithCategoryId());
+        when(repository.getSingleCardListWithCategoryId(anyInt(), anyBoolean())).thenReturn(getCardListWithCategoryId());
         subject.setCategoryData(setDefaultCategoryModel());
 
         CardViewPager viewPager = subject.mViewPager;
@@ -125,7 +126,7 @@ public class CardViewPagerLayoutTest extends UITest{
 
     @Test
     public void whenClickCategoryMenu_ShowCardViewPagerLayoutAndSetBackgroudColor() throws Exception {
-        when(repository.getSingleCardListWithCategoryId(anyInt())).thenReturn(getCardListWithCategoryId());
+        when(repository.getSingleCardListWithCategoryId(anyInt(), anyBoolean())).thenReturn(getCardListWithCategoryId());
         subject.setCategoryData(setDefaultCategoryModel());
 
         assertThat(subject.getBackground()).isEqualTo(getDrawable(R.drawable.background_gradient_red));
@@ -150,7 +151,7 @@ public class CardViewPagerLayoutTest extends UITest{
     }
 
     private void addSingleCardModel(ArrayList list, String name, String path, String time) {
-        CardModel model = CardModel.builder().name(name).contentPath(path).firstTime(time).build();
+        CardModel model = CardModel.builder().name(name).contentPath(path).firstTime(time).hide(false).build();
         list.add(model);
     }
 
