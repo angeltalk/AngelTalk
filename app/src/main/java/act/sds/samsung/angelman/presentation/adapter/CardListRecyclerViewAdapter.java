@@ -15,18 +15,21 @@ import java.util.List;
 import act.sds.samsung.angelman.R;
 import act.sds.samsung.angelman.domain.model.CardModel;
 import act.sds.samsung.angelman.presentation.custom.FontTextView;
+import act.sds.samsung.angelman.presentation.listener.OnDataChangeListener;
 import act.sds.samsung.angelman.presentation.util.AngelManGlideTransform;
 import act.sds.samsung.angelman.presentation.util.ContentsUtil;
 import act.sds.samsung.angelman.presentation.util.ResourcesUtil;
 
 public class CardListRecyclerViewAdapter extends RecyclerView.Adapter<CardListRecyclerViewAdapter.CardListRecyclerViewHolder> {
 
-    private final List<CardModel> cardModelList;
     private final RequestManager glide;
     private final Context context;
     private final int categoryModelColor;
+    private List<CardModel> cardModelList;
+    private OnDataChangeListener dataChangeListener;
 
-    public CardListRecyclerViewAdapter(List<CardModel> cardModelList, int categoryModelColor, Context context) {
+    public CardListRecyclerViewAdapter(List<CardModel> cardModelList, int categoryModelColor, Context context, OnDataChangeListener dataChangeListener) {
+        this.dataChangeListener = dataChangeListener;
         this.cardModelList = cardModelList;
         this.context = context;
         this.categoryModelColor = categoryModelColor;
@@ -40,7 +43,7 @@ public class CardListRecyclerViewAdapter extends RecyclerView.Adapter<CardListRe
     }
 
     @Override
-    public void onBindViewHolder(final CardListRecyclerViewHolder holder, int position) {
+    public void onBindViewHolder(final CardListRecyclerViewHolder holder, final int position) {
         CardModel cardModel = cardModelList.get(position);
         glide.load(ContentsUtil.getContentFile(getThumbnailPath(cardModel)))
                 .override(60, 60)
@@ -48,7 +51,16 @@ public class CardListRecyclerViewAdapter extends RecyclerView.Adapter<CardListRe
                         , 10, 0, AngelManGlideTransform.CornerType.ALL))
                 .into(holder.cardThumbnail);
         holder.cardName.setText(cardModel.name);
-        initViewByShowing(holder, cardModel.showing);
+        setViewByHide(holder, cardModel.hide);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean show = !cardModelList.get(position).hide;
+                dataChangeListener.onHideChange(position, show);
+                setViewByHide(holder, show);
+            }
+        });
     }
 
     @Override
@@ -56,15 +68,17 @@ public class CardListRecyclerViewAdapter extends RecyclerView.Adapter<CardListRe
         return cardModelList.size();
     }
 
-    private void initViewByShowing(final CardListRecyclerViewHolder holder, boolean showing) {
-        if(showing) {
-            holder.showHideItemBar.setImageResource(ResourcesUtil.getShowHideItemBarBy(categoryModelColor));
-            holder.showHideIcon.setImageResource(ResourcesUtil.getShowHideIconBy(categoryModelColor));
-        } else {
+    private void setViewByHide(final CardListRecyclerViewHolder holder, boolean hide) {
+        if(hide) {
             holder.showHideItemBar.setImageResource(ResourcesUtil.getShowHideItemBarBy(ResourcesUtil.HIDING));
             holder.showHideIcon.setImageResource(ResourcesUtil.getShowHideIconBy(ResourcesUtil.HIDING));
             holder.cardName.setTextColor(context.getResources().getColor(R.color.black_4C));
             holder.cardThumbnail.setImageAlpha(60);
+        } else {
+            holder.showHideItemBar.setImageResource(ResourcesUtil.getShowHideItemBarBy(categoryModelColor));
+            holder.showHideIcon.setImageResource(ResourcesUtil.getShowHideIconBy(categoryModelColor));
+            holder.cardName.setTextColor(context.getResources().getColor(R.color.black_00));
+            holder.cardThumbnail.setImageAlpha(255);
         }
     }
 

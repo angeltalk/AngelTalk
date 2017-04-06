@@ -86,7 +86,7 @@ public class DefaultDataGenerator {
         contentValues.put(CardColumns.FIRST_TIME, firstTime);
         contentValues.put(CardColumns.CARD_TYPE, cardType.getValue());
         contentValues.put(CardColumns.CARD_INDEX, index);
-        contentValues.put(CardColumns.SHOWING, 1);
+        contentValues.put(CardColumns.HIDE, 0);
         db.insert(CardColumns.TABLE_NAME, "null", contentValues);
     }
 }

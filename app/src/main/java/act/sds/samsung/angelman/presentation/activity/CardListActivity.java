@@ -17,6 +17,7 @@ import act.sds.samsung.angelman.domain.model.CardModel;
 import act.sds.samsung.angelman.domain.repository.CardRepository;
 import act.sds.samsung.angelman.presentation.adapter.CardListRecyclerViewAdapter;
 import act.sds.samsung.angelman.presentation.custom.FontTextView;
+import act.sds.samsung.angelman.presentation.listener.OnDataChangeListener;
 import act.sds.samsung.angelman.presentation.manager.ApplicationManager;
 import act.sds.samsung.angelman.presentation.util.ResourcesUtil;
 import butterknife.BindView;
@@ -58,9 +59,14 @@ public class CardListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_card_list);
         ButterKnife.bind(this);
 
-        cardList = cardRepository.getSingleCardListWithCategoryId((applicationManager.getCategoryModel().index));
-        cardListRecyclerViewAdapter = new CardListRecyclerViewAdapter(cardList, applicationManager.getCategoryModelColor(), getApplicationContext());
-
+        cardList = cardRepository.getSingleCardListWithCategoryId(applicationManager.getCategoryModel().index);
+        cardListRecyclerViewAdapter = new CardListRecyclerViewAdapter(cardList, applicationManager.getCategoryModelColor(), getApplicationContext(), new OnDataChangeListener(){
+            @Override
+            public void onHideChange(int position, boolean hide) {
+                cardList.get(position).hide = hide;
+                cardRepository.updateSingleCardModelHide(cardList.get(position));
+            }
+        });
         initView();
     }
 
