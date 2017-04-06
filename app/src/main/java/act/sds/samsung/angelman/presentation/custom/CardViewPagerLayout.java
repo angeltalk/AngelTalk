@@ -79,7 +79,7 @@ public class CardViewPagerLayout extends RelativeLayout {
 
         mViewPager = (CardViewPager) findViewById(R.id.view_pager);
 
-        allCardListInSelectedCategory = cardRepository.getSingleCardListWithCategoryId(categoryModel.index);
+        allCardListInSelectedCategory = cardRepository.getSingleCardListWithCategoryId(categoryModel.index, false);
 
         final CardImageAdapter cardImageAdapter = new CardImageAdapter(context, allCardListInSelectedCategory, glide, applicationManager);
         mViewPager.setAdapter(cardImageAdapter);
