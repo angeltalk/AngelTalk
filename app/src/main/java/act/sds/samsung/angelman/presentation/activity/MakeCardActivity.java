@@ -29,18 +29,21 @@ import act.sds.samsung.angelman.AngelmanApplication;
 import act.sds.samsung.angelman.R;
 import act.sds.samsung.angelman.domain.model.CardModel;
 import act.sds.samsung.angelman.domain.repository.CardRepository;
-import act.sds.samsung.angelman.presentation.manager.ApplicationConstants;
 import act.sds.samsung.angelman.presentation.custom.CardView;
 import act.sds.samsung.angelman.presentation.custom.FontTextView;
 import act.sds.samsung.angelman.presentation.custom.VideoCardTextureView;
-import act.sds.samsung.angelman.presentation.util.AngelManGlideTransform;
+import act.sds.samsung.angelman.presentation.manager.ApplicationConstants;
 import act.sds.samsung.angelman.presentation.manager.ApplicationManager;
+import act.sds.samsung.angelman.presentation.util.AngelManGlideTransform;
 import act.sds.samsung.angelman.presentation.util.ContentsUtil;
 import act.sds.samsung.angelman.presentation.util.FileUtil;
 import act.sds.samsung.angelman.presentation.util.FontUtil;
 import act.sds.samsung.angelman.presentation.util.PlayUtil;
 import act.sds.samsung.angelman.presentation.util.RecordUtil;
 import act.sds.samsung.angelman.presentation.util.ResourcesUtil;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MakeCardActivity extends AbstractActivity implements RecordUtil.RecordCallback {
 
@@ -49,43 +52,48 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
     private static final int INIT_COUNT = 3;
     private static final int COUNT_TEXT_SIZE = 60;
     private static final long COUNT_INTERVAL = 1000;
-
+    private int mCountDown = INIT_COUNT;
     protected int state = STATE_RECORD_NOT_COMPLETE;
+    protected InputMethodManager imm;
 
     private String contentPath;
-
     private RequestManager glide;
 
-    CardView cardView;
-    protected InputMethodManager imm;
     private int selectedCategoryId;
-
-    private FontTextView waitCount;
-    private int mCountDown = INIT_COUNT;
-    private Handler countHandler = new Handler();
-
-    RecordUtil recordUtil = RecordUtil.getInstance();
-    PlayUtil playUtil;
     private String voiceFile;
     private RelativeLayout.LayoutParams params;
+    private Handler countHandler = new Handler();
+    private CardModel.CardType cardType;
 
-    Button recordStopBtn;
-    private Button micButton;
-    private PercentRelativeLayout countScene;
+    CardView cardView;
+    RecordUtil recordUtil = RecordUtil.getInstance();
+    PlayUtil playUtil;
 
     @Inject
     CardRepository cardRepository;
 
     @Inject
     ApplicationManager applicationManager;
-    private CardModel.CardType cardType;
+
+    @BindView(R.id.record_stop_btn)
+    Button recordStopBtn;
+
+    @BindView(R.id.mic_btn)
+    Button micButton;
+
+    @BindView(R.id.waiting_count)
+    FontTextView waitCount;
+
+    @BindView(R.id.counting_scene)
+    PercentRelativeLayout countScene;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_make_card);
-
         ((AngelmanApplication) getApplication()).getAngelmanComponent().inject(this);
+        setContentView(R.layout.activity_make_card);
+        ButterKnife.bind(this);
 
         glide = Glide.with(this);
 
@@ -168,36 +176,10 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
             }
         });
 
-        waitCount = (FontTextView) findViewById(R.id.waiting_count);
-        micButton = (Button) findViewById(R.id.mic_btn);
-        countScene = (PercentRelativeLayout) findViewById(R.id.counting_scene);
-
-        micButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                countScene.setVisibility(View.VISIBLE);
-                micButton.setEnabled(false);
-                countHandler.postDelayed(countAction, COUNT_INTERVAL);
-            }
-        });
-
-        recordStopBtn = (Button) findViewById(R.id.record_stop_btn);
-        recordStopBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (state == STATE_RECORD_NOT_COMPLETE) {
-                    recordUtil.stopRecord();
-                    playRecordVoiceFile();
-                }
-                else saveCardAndMoveToNextActivity();
-            }
-        });
-
-        Handler handler = new Handler();
-
         findViewById(R.id.card_image_title).setVisibility(View.GONE);
         findViewById(R.id.card_image_title_edit).setVisibility(View.VISIBLE);
 
+        Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -207,7 +189,22 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
         }, 500);
 
         params = (RelativeLayout.LayoutParams) cardView.getLayoutParams();
+    }
 
+    @OnClick(R.id.record_stop_btn)
+    public void onClickRecStopButton(View view){
+        if (state == STATE_RECORD_NOT_COMPLETE) {
+            recordUtil.stopRecord();
+            playRecordVoiceFile();
+        }
+        else saveCardAndMoveToNextActivity();
+    }
+
+    @OnClick(R.id.mic_btn)
+    public void onClickMicButton(View view){
+                countScene.setVisibility(View.VISIBLE);
+                view.setEnabled(false);
+                countHandler.postDelayed(countAction, COUNT_INTERVAL);
     }
 
     private void playRecordVoiceFile() {
