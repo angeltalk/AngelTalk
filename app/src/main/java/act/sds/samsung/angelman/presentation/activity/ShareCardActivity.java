@@ -205,7 +205,8 @@ public class ShareCardActivity extends AppCompatActivity {
                 dateFormat.format(date),
                 categoryRepository.getCategoryAllList().get(0).index,
                 cardType,
-                cardType == CardModel.CardType.VIDEO_CARD ? ContentsUtil.getThumbnailPath(contentPath) : null);
+                cardType == CardModel.CardType.VIDEO_CARD ? ContentsUtil.getThumbnailPath(contentPath) : null,
+                false);
 
         cardRepository.createSingleCardModel(cardModel);
 

@@ -140,7 +140,6 @@ public class MakeCardActivityTest extends UITest{
     public void givenExistSingleCard_whenClickEnter_thenSaveNewSingleCard() throws Exception {
         setupPhotoCard();
 
-
         EditText cardTitleEdit = (EditText) subject.findViewById(R.id.card_image_title_edit);
         TextView textView = ((TextView) subject.findViewById(R.id.card_image_title));
         subject.cardView.status = CardView.CardViewStatus.CARD_TITLE_EDITABLE;
