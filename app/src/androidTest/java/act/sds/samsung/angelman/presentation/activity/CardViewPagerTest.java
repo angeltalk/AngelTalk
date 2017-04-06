@@ -96,7 +96,7 @@ public class CardViewPagerTest {
 
 
         ViewInteraction textView5 = onView(
-                allOf(withId(R.id.add_card_button_text),
+                allOf(withId(R.id.add_card_button),
                         isDisplayed()));
         textView5.check(matches(withText("새 카드")));
 

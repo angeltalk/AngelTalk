@@ -39,9 +39,9 @@ public class SingleCardSqliteDataStoreTest {
                     CardColumns.FIRST_TIME + " TEXT," +
                     CardColumns.CARD_TYPE + " TEXT," +
                     CardColumns.THUMBNAIL_PATH + " TEXT," +
-                    CardColumns.SHOWING + " INTEGER," +
+                    CardColumns.HIDE + " INTEGER," +
                     CardColumns.CARD_INDEX + " INTEGER)";
-    private String[] columns = {CardColumns.NAME, CardColumns.CONTENT_PATH,CardColumns.THUMBNAIL_PATH, CardColumns.VOICE_PATH, CardColumns.FIRST_TIME, CardColumns.CARD_TYPE, CardColumns.SHOWING};
+    private String[] columns = {CardColumns.NAME, CardColumns.CONTENT_PATH,CardColumns.THUMBNAIL_PATH, CardColumns.VOICE_PATH, CardColumns.FIRST_TIME, CardColumns.CARD_TYPE, CardColumns.HIDE};
 
     @Before
     public void setUp() throws Exception {
@@ -99,16 +99,46 @@ public class SingleCardSqliteDataStoreTest {
         assertThat(result).isNotEqualTo(-1);
     }
 
-    private void insertData(SQLiteDatabase db){
-        int LOCKSCREEN_VISIBLE = 1;
-        int index = 0;
-        insertCategoryItemData(db,   0       , "물 먹고 싶어요"          , "water.mp4", "water.jpg",  "20161018_000002", CardModel.CardType.VIDEO_CARD, index++  , LOCKSCREEN_VISIBLE);
-        insertCategoryItemData(db,   0       , "쥬스"          , "juice.png",null, "20161019_120018", CardModel.CardType.PHOTO_CARD, index++  , LOCKSCREEN_VISIBLE);
-        insertCategoryItemData(db,   0       , "우유"          , "milk.png", null, "20161019_120017", CardModel.CardType.PHOTO_CARD, index++  , LOCKSCREEN_VISIBLE);
+    @Test
+    public void givenExistDataBase_whenUpdateSingleCardModelHide_thenVerifyChangeHide() throws Exception {
+        DatabaseHelper mockDbHelper = mock(DatabaseHelper.class);
+
+        SingleCardSqliteDataStore dataStore = new SingleCardSqliteDataStore(RuntimeEnvironment.application);
+        dataStore.dbHelper = mockDbHelper;
+
+        when(mockDbHelper.getWritableDatabase()).thenReturn(mockDb);
+        when(mockDbHelper.getReadableDatabase()).thenReturn(mockDb);
+
+        mockDb.execSQL(SQL_CREATE_SINGLECARD_LIST);
+        insertData(mockDb);
+
+        for(CardModel cardModel  : dataStore.getCardListWithCategoryId(0)){
+            if(cardModel.cardIndex == 1){
+                assertThat(cardModel.hide).isFalse();
+            }
+        }
+
+        // when
+        dataStore.updateSingleCardModelHide(1,true);
+
+        // then
+        for(CardModel cardModel  : dataStore.getCardListWithCategoryId(0)){
+            if(cardModel.cardIndex == 1){
+                assertThat(cardModel.hide).isTrue();
+            }
+        }
 
     }
 
-    private void insertCategoryItemData(SQLiteDatabase db, int categoryIndex, String item, String imagePath,String thumbnailPath, String firstTime, CardModel.CardType cardType, int index, int lockScreen){
+    private void insertData(SQLiteDatabase db){
+        int index = 0;
+        insertCategoryItemData(db,   0       , "물 먹고 싶어요"  , "water.mp4", "water.jpg",  "20161018_000002", CardModel.CardType.VIDEO_CARD, index++);
+        insertCategoryItemData(db,   0       , "쥬스"          , "juice.png",null, "20161019_120018", CardModel.CardType.PHOTO_CARD, index++);
+        insertCategoryItemData(db,   0       , "우유"          , "milk.png", null, "20161019_120017", CardModel.CardType.PHOTO_CARD, index++);
+
+    }
+
+    private void insertCategoryItemData(SQLiteDatabase db, int categoryIndex, String item, String imagePath,String thumbnailPath, String firstTime, CardModel.CardType cardType, int index){
         ContentValues contentValues = new ContentValues();
         contentValues.put(CardColumns.CATEGORY_ID, categoryIndex);
         contentValues.put(CardColumns.NAME, item);
@@ -117,6 +147,7 @@ public class SingleCardSqliteDataStoreTest {
         contentValues.put(CardColumns.FIRST_TIME, firstTime);
         contentValues.put(CardColumns.CARD_TYPE, cardType.getValue());
         contentValues.put(CardColumns.CARD_INDEX, index);
+        contentValues.put(CardColumns.HIDE, 0);
         db.insert(CardColumns.TABLE_NAME, "null", contentValues);
     }
 }

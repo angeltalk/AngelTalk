@@ -45,6 +45,12 @@ public class CardDataRepository implements CardRepository {
         return dataStore.removeSingleCardModel(categoryId, cardIndex);
     }
 
+    @Override
+    public boolean updateSingleCardModelHide(CardModel cardModel) {
+        SingleCardDataStore dataStore = new SingleCardSqliteDataStore(context);
+        return dataStore.updateSingleCardModelHide(cardModel.cardIndex, cardModel.hide);
+    }
+
     private ArrayList<CardModel> getDataModels(ArrayList<CardModel> cardModels){
         if(cardModels == null){
             return new ArrayList<>();
