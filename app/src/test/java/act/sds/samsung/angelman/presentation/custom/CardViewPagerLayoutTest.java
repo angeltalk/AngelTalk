@@ -150,7 +150,7 @@ public class CardViewPagerLayoutTest extends UITest{
     }
 
     private void addSingleCardModel(ArrayList list, String name, String path, String time) {
-        CardModel model = new CardModel(name, path, time);
+        CardModel model = CardModel.builder().name(name).contentPath(path).firstTime(time).build();
         list.add(model);
     }
 

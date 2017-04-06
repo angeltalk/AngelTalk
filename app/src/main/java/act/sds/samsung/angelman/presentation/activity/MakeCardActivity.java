@@ -288,14 +288,14 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
 
-        CardModel cardModel = new CardModel(cardView.cardTitleEdit.getText().toString(),
-                contentPath,
-                voiceFile,
-                dateFormat.format(date),
-                selectedCategoryId,
-                cardType,
-                cardType == CardModel.CardType.VIDEO_CARD  ? ContentsUtil.getThumbnailPath(contentPath) : null,
-                false);
+        CardModel cardModel = CardModel.builder()
+                .name(cardView.cardTitleEdit.getText().toString())
+                .contentPath(contentPath).voicePath(voiceFile)
+                .firstTime(dateFormat.format(date))
+                .categoryId(selectedCategoryId)
+                .cardType(cardType)
+                .thumbnailPath(cardType == CardModel.CardType.VIDEO_CARD ? ContentsUtil.getThumbnailPath(contentPath) : null)
+                .hide(false).build();
 
         cardRepository.createSingleCardModel(cardModel);
 

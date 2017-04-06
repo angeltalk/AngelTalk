@@ -135,14 +135,15 @@ public class CardListActivityTest extends UITest{
 
         String contentFolder = ContentsUtil.getContentFolder() + File.separator;
 
-        list.add(new CardModel("물0", contentFolder+"water.png", "20161018_000003", 0, 0, CardModel.CardType.PHOTO_CARD, "", false));
-        list.add(new CardModel("물1", contentFolder+"water.png", "20161018_000003", 0, 1, CardModel.CardType.PHOTO_CARD));
-        list.add(new CardModel("물2", contentFolder+"water.png", "20161018_000003", 0, 2, CardModel.CardType.PHOTO_CARD, "", true));
-        list.add(new CardModel("물3", contentFolder+"water.png", "20161018_000003", 0, 3, CardModel.CardType.PHOTO_CARD, "", true));
-        list.add(new CardModel("물4", contentFolder+"water.png", "20161018_000003", 0, 4, CardModel.CardType.PHOTO_CARD));
-        list.add(new CardModel("물5", contentFolder+"water.png", "20161018_000003", 0, 5, CardModel.CardType.PHOTO_CARD));
-        list.add(new CardModel("젤리0", contentFolder+"haribo.mp4", "20161018_000003", 0, 6, CardModel.CardType.VIDEO_CARD, contentFolder+"haribo.jpg"));
-        list.add(new CardModel("젤리1", contentFolder+"haribo.mp4", "20161018_000003", 0, 7, CardModel.CardType.VIDEO_CARD, contentFolder+"haribo.jpg", true));
+        list.add(CardModel.builder().name("물0").contentPath(contentFolder+"water.png").firstTime("20161018_000003").categoryId(0).cardIndex(0).cardType(CardModel.CardType.PHOTO_CARD).thumbnailPath("").hide(false).build());
+        list.add(CardModel.builder().name("물1").contentPath(contentFolder+"water.png").firstTime("20161018_000003").categoryId(0).cardIndex(1).cardType(CardModel.CardType.PHOTO_CARD).thumbnailPath("").hide(true).build());
+        list.add(CardModel.builder().name("물2").contentPath(contentFolder+"water.png").firstTime("20161018_000003").categoryId(0).cardIndex(2).cardType(CardModel.CardType.PHOTO_CARD).thumbnailPath("").hide(true).build());
+        list.add(CardModel.builder().name("물3").contentPath(contentFolder+"water.png").firstTime("20161018_000003").categoryId(0).cardIndex(3).cardType(CardModel.CardType.PHOTO_CARD).thumbnailPath("").hide(false).build());
+        list.add(CardModel.builder().name("물4").contentPath(contentFolder+"water.png").firstTime("20161018_000003").categoryId(0).cardIndex(4).cardType(CardModel.CardType.PHOTO_CARD).thumbnailPath("").hide(false).build());
+        list.add(CardModel.builder().name("물5").contentPath(contentFolder+"water.png").firstTime("20161018_000003").categoryId(0).cardIndex(5).cardType(CardModel.CardType.PHOTO_CARD).thumbnailPath("").hide(false).build());
+        list.add(CardModel.builder().name("젤리0").contentPath(contentFolder+"haribo.mp4").firstTime("20161018_000003").categoryId(0).cardIndex(6).cardType(CardModel.CardType.VIDEO_CARD).thumbnailPath(contentFolder+"haribo.jpg").hide(false).build());
+        list.add(CardModel.builder().name("젤리1").contentPath(contentFolder+"haribo.mp4").firstTime("20161018_000003").categoryId(0).cardIndex(7).cardType(CardModel.CardType.VIDEO_CARD).thumbnailPath(contentFolder+"haribo.jpg").hide(true).build());
+
         return list;
     }
 
