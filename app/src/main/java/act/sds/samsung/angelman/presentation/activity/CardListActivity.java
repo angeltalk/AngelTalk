@@ -1,5 +1,6 @@
 package act.sds.samsung.angelman.presentation.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,6 +19,7 @@ import act.sds.samsung.angelman.domain.repository.CardRepository;
 import act.sds.samsung.angelman.presentation.adapter.CardListRecyclerViewAdapter;
 import act.sds.samsung.angelman.presentation.custom.FontTextView;
 import act.sds.samsung.angelman.presentation.listener.OnDataChangeListener;
+import act.sds.samsung.angelman.presentation.manager.ApplicationConstants;
 import act.sds.samsung.angelman.presentation.manager.ApplicationManager;
 import act.sds.samsung.angelman.presentation.util.ResourcesUtil;
 import butterknife.BindView;
@@ -44,11 +46,6 @@ public class CardListActivity extends AppCompatActivity {
     @BindView(R.id.card_list_recycler_view)
     RecyclerView cardListRecyclerView;
 
-    @OnClick(R.id.back_button)
-    public void onClickBackButton(View v) {
-        finish();
-    }
-
     private CardListRecyclerViewAdapter cardListRecyclerViewAdapter;
     private List<CardModel> cardList;
 
@@ -70,6 +67,19 @@ public class CardListActivity extends AppCompatActivity {
         initView();
     }
 
+    @Override
+    public void onBackPressed() {
+        moveToCardViewPagerActivity();
+        finish();
+    }
+
+
+    @OnClick(R.id.back_button)
+    public void onClickBackButton(View v) {
+        moveToCardViewPagerActivity();
+        finish();
+    }
+
     private void initView() {
         titleLayout.setBackgroundResource(
                 ResourcesUtil.getTitleBackgroundColor(
@@ -82,5 +92,12 @@ public class CardListActivity extends AppCompatActivity {
 
         cardListRecyclerView.setAdapter(cardListRecyclerViewAdapter);
         cardListRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+    }
+
+    private void moveToCardViewPagerActivity() {
+        Intent intent = new Intent(getApplicationContext(), CardViewPagerActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra(ApplicationConstants.INTENT_KEY_REFRESH_CARD, true);
+        getApplicationContext().startActivity(intent);
     }
 }

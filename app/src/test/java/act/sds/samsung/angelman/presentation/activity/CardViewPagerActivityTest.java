@@ -64,6 +64,7 @@ import static junit.framework.Assert.assertTrue;
 import static org.assertj.android.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doNothing;
@@ -87,7 +88,7 @@ public class CardViewPagerActivityTest extends UITest {
     @Before
     public void setUp() throws Exception {
         ((TestAngelmanApplication) RuntimeEnvironment.application).getAngelmanTestComponent().inject(this);
-        when(repository.getSingleCardListWithCategoryId(anyInt())).thenReturn(getCardListWithCategoryId());
+        when(repository.getSingleCardListWithCategoryId(anyInt(), anyBoolean())).thenReturn(getCardListWithCategoryId());
         when(applicationManager.getCategoryModel()).thenReturn(getCategoryModel());
         when(applicationManager.getCategoryModelColor()).thenReturn(getCategoryModelColor());
         subject = setupActivity(CardViewPagerActivity.class);
@@ -174,7 +175,7 @@ public class CardViewPagerActivityTest extends UITest {
         when(repository.deleteSingleCardWithCardIndex(anyInt(), anyInt())).thenReturn(true);
         final ArrayList<CardModel> cardListWithCategoryId = getCardListWithCategoryId();
         cardListWithCategoryId.remove(2);
-        when(repository.getSingleCardListWithCategoryId(anyInt())).thenReturn(cardListWithCategoryId);
+        when(repository.getSingleCardListWithCategoryId(anyInt(), anyBoolean())).thenReturn(cardListWithCategoryId);
 
         ShadowAlertDialog shadowDialog = getShadowAlertDialog();
         shadowDialog.getView().findViewById(R.id.confirm).performClick();
@@ -456,16 +457,16 @@ public class CardViewPagerActivityTest extends UITest {
         String contentFolder = ContentsUtil.getContentFolder() + File.separator;
 
         ArrayList<CardModel> ret = new ArrayList<>();
-        addSingleCardModel(ret, "물", contentFolder+"water.png", "20010928_120020", 0, 0, CardModel.CardType.PHOTO_CARD);
-        addSingleCardModel(ret, "우유", contentFolder+"milk.png", "20010928_120019", 0, 1, CardModel.CardType.PHOTO_CARD);
-        addSingleCardModel(ret, "쥬스", contentFolder+"juice.png", "20010928_120015", 0, 2, CardModel.CardType.PHOTO_CARD);
-        addSingleCardModel(ret, "젤리", contentFolder+"haribo.mp4", "20010928_120015", 0, 3, CardModel.CardType.VIDEO_CARD);
+        addSingleCardModel(ret, "물", contentFolder+"water.png", "20010928_120020", 0, 0, CardModel.CardType.PHOTO_CARD, null, false);
+        addSingleCardModel(ret, "우유", contentFolder+"milk.png", "20010928_120019", 0, 1, CardModel.CardType.PHOTO_CARD, null, false);
+        addSingleCardModel(ret, "쥬스", contentFolder+"juice.png", "20010928_120015", 0, 2, CardModel.CardType.PHOTO_CARD, null, false);
+        addSingleCardModel(ret, "젤리", contentFolder+"haribo.mp4", "20010928_120015", 0, 3, CardModel.CardType.VIDEO_CARD, contentFolder+"haribo.jpg", false);
 
         return ret;
     }
 
-    public void addSingleCardModel(ArrayList<CardModel> list, String name, String path, String time, int categoryId, int cardIndex, CardModel.CardType cardType) {
-        CardModel model = new CardModel(name, path, time, categoryId, cardIndex, cardType);
+    public void addSingleCardModel(ArrayList<CardModel> list, String name, String path, String time, int categoryId, int cardIndex, CardModel.CardType cardType, String thumbnailPath ,boolean hide) {
+        CardModel model = new CardModel(name, path, time, categoryId, cardIndex, cardType, thumbnailPath, hide);
         list.add(model);
     }
 

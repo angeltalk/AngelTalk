@@ -143,6 +143,10 @@ public class CardViewPagerActivity extends AbstractActivity {
             mViewPager.setCurrentItem(1);
         }
 
+        if (getIntent().getBooleanExtra(ApplicationConstants.INTENT_KEY_REFRESH_CARD, false)) {
+            mViewPager.setCurrentItem(0);
+        }
+
         if (getIntent().getBooleanExtra(ApplicationConstants.INTENT_KEY_SHARE_CARD, false)) {
             showSnackBarMessage(ApplicationConstants.INTENT_KEY_SHARE_CARD);
             mViewPager.setCurrentItem(1);
@@ -157,7 +161,7 @@ public class CardViewPagerActivity extends AbstractActivity {
 
         selectedCategoryModel = applicationManager.getCategoryModel();
 
-        allCardListInSelectedCategory = cardRepository.getSingleCardListWithCategoryId(selectedCategoryModel.index);
+        allCardListInSelectedCategory = cardRepository.getSingleCardListWithCategoryId(selectedCategoryModel.index,false);
         titleLayout.setCategoryModelTitle(applicationManager.getCategoryModel().title);
         titleLayout.refreshCardCountText(0, allCardListInSelectedCategory.size() + 1);
         categoryTitle.setText(selectedCategoryModel.title);
@@ -211,7 +215,7 @@ public class CardViewPagerActivity extends AbstractActivity {
             public void onClick(View v) {
                 int currentItem = setCurrentItem();
                 if (deleteSelectedCard(cardIndex)) {
-                    List<CardModel> cardList = cardRepository.getSingleCardListWithCategoryId((applicationManager.getCategoryModel().index));
+                    List<CardModel> cardList = cardRepository.getSingleCardListWithCategoryId((applicationManager.getCategoryModel().index),false);
                     mViewPager.removeAllViews();
                     adapter = new CardImageAdapter(CardViewPagerActivity.this, cardList, glide, applicationManager);
                     adapter.addNewCardViewAtFirst();
