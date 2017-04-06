@@ -64,7 +64,15 @@ public class CardDataRepositoryTest {
     }
 
     public void addSingleCardModel(List<CardModel> list, String name, String path, String time, int categoryId, int cardIndex, CardModel.CardType cardType, String thumbnailPath ,boolean hide) {
-        CardModel model = new CardModel(name, path, time, categoryId, cardIndex, cardType, thumbnailPath, hide);
+        CardModel model = CardModel.builder()
+                .name(name).contentPath(path)
+                .firstTime(time)
+                .categoryId(categoryId)
+                .cardIndex(cardIndex)
+                .cardType(cardType)
+                .thumbnailPath(thumbnailPath)
+                .hide(hide)
+                .build();
         list.add(model);
     }
 }

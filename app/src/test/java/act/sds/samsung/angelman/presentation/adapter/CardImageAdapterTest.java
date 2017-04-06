@@ -50,8 +50,8 @@ public class CardImageAdapterTest extends UITest {
 
     private List<CardModel> getTestDataList() {
         List<CardModel> list = Lists.newArrayList();
-        list.add(new CardModel("젤리", "haribo.mp4", "20161018_000002", 0, 0, CardModel.CardType.VIDEO_CARD));
-        list.add(new CardModel("물", "water.png", "20161018_000003", 0, 1, CardModel.CardType.PHOTO_CARD));
+        list.add(CardModel.builder().name("젤리").contentPath("haribo.mp4").firstTime("20161018_000002").cardType(CardModel.CardType.VIDEO_CARD).build());
+        list.add(CardModel.builder().name("물").contentPath("water.png").firstTime("20161018_000003").categoryId(0).cardIndex(1).cardType(CardModel.CardType.PHOTO_CARD).build());
         return list;
     }
 }

@@ -8,8 +8,8 @@ import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 
-import act.sds.samsung.angelman.data.sqlite.DatabaseHelper;
 import act.sds.samsung.angelman.data.sqlite.CardColumns;
+import act.sds.samsung.angelman.data.sqlite.DatabaseHelper;
 import act.sds.samsung.angelman.domain.model.CardModel;
 import lombok.Cleanup;
 
@@ -141,14 +141,18 @@ public class SingleCardSqliteDataStore implements  SingleCardDataStore {
         if (c.getCount() == 0) return null;
 
         c.moveToFirst();
-        CardModel cardModel = new CardModel(c.getString(c.getColumnIndex(CardColumns.NAME)),
-                                  c.getString(c.getColumnIndex(CardColumns.CONTENT_PATH)),
-                                  c.getString(c.getColumnIndex(CardColumns.FIRST_TIME)),
-                                  c.getInt(c.getColumnIndex(CardColumns.CATEGORY_ID)),
-                                  c.getInt(c.getColumnIndex(CardColumns.CARD_INDEX)),
-                                  CardModel.CardType.valueOf(c.getString(c.getColumnIndex(CardColumns.CARD_TYPE))),
-                                  c.getString(c.getColumnIndex(CardColumns.THUMBNAIL_PATH)),
-                                  c.getInt(c.getColumnIndex(CardColumns.HIDE)) != 0);
+
+        CardModel cardModel = CardModel.builder()
+                .name(c.getString(c.getColumnIndex(CardColumns.NAME)))
+                .contentPath(c.getString(c.getColumnIndex(CardColumns.CONTENT_PATH)))
+                .firstTime(c.getString(c.getColumnIndex(CardColumns.FIRST_TIME)))
+                .categoryId(c.getInt(c.getColumnIndex(CardColumns.CATEGORY_ID)))
+                .cardIndex(c.getInt(c.getColumnIndex(CardColumns.CARD_INDEX)))
+                .cardType(CardModel.CardType.valueOf(c.getString(c.getColumnIndex(CardColumns.CARD_TYPE))))
+                .thumbnailPath(c.getString(c.getColumnIndex(CardColumns.THUMBNAIL_PATH)))
+                .hide(c.getInt(c.getColumnIndex(CardColumns.HIDE)) != 0)
+                .build();
+
         return cardModel;
     }
 }

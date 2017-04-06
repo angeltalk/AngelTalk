@@ -88,7 +88,7 @@ public class SingleCardSqliteDataStoreTest {
 
         int initialCount = c.getCount();
 
-        CardModel cardModel = new CardModel("치킨", "chicken.png", "20161012_133600");
+        CardModel cardModel = CardModel.builder().name("치킨").contentPath("chicken.png").firstTime("20161012_133600").cardType(CardModel.CardType.PHOTO_CARD).build();
         long result = dataStore.createSingleCardModel(cardModel);
 
         @Cleanup

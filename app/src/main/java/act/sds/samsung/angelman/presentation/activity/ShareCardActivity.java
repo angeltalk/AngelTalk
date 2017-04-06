@@ -199,13 +199,14 @@ public class ShareCardActivity extends AppCompatActivity {
 
         String contentPath = cardType == CardModel.CardType.VIDEO_CARD ? ContentsUtil.getVideoPath() : ContentsUtil.getImagePath();
 
-        CardModel cardModel = new CardModel(cardTransferModel.name,
-                contentPath,
-                ContentsUtil.getVoicePath(),
-                dateFormat.format(date),
-                categoryRepository.getCategoryAllList().get(0).index,
-                cardType,
-                cardType == CardModel.CardType.VIDEO_CARD ? ContentsUtil.getThumbnailPath(contentPath) : null);
+        CardModel cardModel = CardModel.builder()
+                .name(cardTransferModel.name)
+                .contentPath(contentPath)
+                .voicePath(ContentsUtil.getVoicePath())
+                .firstTime(dateFormat.format(date))
+                .categoryId(categoryRepository.getCategoryAllList().get(0).index)
+                .cardType(cardType).thumbnailPath(cardType == CardModel.CardType.VIDEO_CARD ? ContentsUtil.getThumbnailPath(contentPath) : null)
+                .build();
 
         cardRepository.createSingleCardModel(cardModel);
 
