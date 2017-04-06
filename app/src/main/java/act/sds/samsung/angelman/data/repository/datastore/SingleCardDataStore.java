@@ -10,5 +10,5 @@ public interface SingleCardDataStore {
     ArrayList<CardModel> getCardListWithCategoryId(int selectedCategoryId);
     boolean removeSingleCardModel(int categoryId, int cardIndex);
     boolean removeSingleCardsInCategory(int categoryId);
-    boolean updateSingleCardModelHide(int cardIndex, boolean showing);
+    boolean updateSingleCardModelHide(int categoryId, int cardIndex, boolean showing);
 }

@@ -11,7 +11,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import act.sds.samsung.angelman.R;
-import act.sds.samsung.angelman.presentation.activity.CameraGallerySelectionActivity;
 import act.sds.samsung.angelman.presentation.activity.CardListActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -59,6 +58,9 @@ public class CardCategoryLayout extends RelativeLayout {
     public void onClickListCardButtonText(View v) {
         Intent intent = new Intent(getContext(), CardListActivity.class);
         getContext().startActivity(intent);
+        if (getContext() instanceof Activity) {
+            ((Activity) getContext()).finish();
+        }
     }
 
     @OnClick(R.id.back_button)
@@ -96,10 +98,5 @@ public class CardCategoryLayout extends RelativeLayout {
 
     public void setCardCountVisible(int visible) {
         cardCount.setVisibility(visible);
-    }
-
-    private void startCameraGallerySelectionActivity() {
-        Intent intent = new Intent(getContext(), CameraGallerySelectionActivity.class);
-        getContext().startActivity(intent);
     }
 }

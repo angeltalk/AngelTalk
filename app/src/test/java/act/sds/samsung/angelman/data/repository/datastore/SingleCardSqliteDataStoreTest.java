@@ -119,7 +119,7 @@ public class SingleCardSqliteDataStoreTest {
         }
 
         // when
-        dataStore.updateSingleCardModelHide(1,true);
+        dataStore.updateSingleCardModelHide(0, 1, true);
 
         // then
         for(CardModel cardModel  : dataStore.getCardListWithCategoryId(0)){
@@ -135,7 +135,6 @@ public class SingleCardSqliteDataStoreTest {
         insertCategoryItemData(db,   0       , "물 먹고 싶어요"  , "water.mp4", "water.jpg",  "20161018_000002", CardModel.CardType.VIDEO_CARD, index++);
         insertCategoryItemData(db,   0       , "쥬스"          , "juice.png",null, "20161019_120018", CardModel.CardType.PHOTO_CARD, index++);
         insertCategoryItemData(db,   0       , "우유"          , "milk.png", null, "20161019_120017", CardModel.CardType.PHOTO_CARD, index++);
-
     }
 
     private void insertCategoryItemData(SQLiteDatabase db, int categoryIndex, String item, String imagePath,String thumbnailPath, String firstTime, CardModel.CardType cardType, int index){

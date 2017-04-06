@@ -1,8 +1,12 @@
 package act.sds.samsung.angelman.data.repository;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+
+import com.google.common.collect.Lists;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import act.sds.samsung.angelman.data.repository.datastore.SingleCardDataStore;
 import act.sds.samsung.angelman.data.repository.datastore.SingleCardSqliteDataStore;
@@ -34,6 +38,24 @@ public class CardDataRepository implements CardRepository {
     }
 
     @Override
+    public List<CardModel> getSingleCardListWithCategoryId(int selectedCategoryId, boolean isHide) {
+        SingleCardDataStore dataStore = new SingleCardSqliteDataStore(context);
+        List<CardModel> lists = getDataModels(dataStore.getCardListWithCategoryId(selectedCategoryId));
+        return extractCardListByHide(isHide, lists);
+    }
+
+    @NonNull
+    public List<CardModel> extractCardListByHide(boolean isHide, List<CardModel> lists) {
+        List<CardModel> results = Lists.newArrayList();
+        for(CardModel cardModel : lists){
+            if(cardModel.hide == isHide){
+                results.add(cardModel);
+            }
+        }
+        return results;
+    }
+
+    @Override
     public boolean deleteSingleCardsWithCategory(int category) {
         SingleCardDataStore dataStore = new SingleCardSqliteDataStore(context);
         return dataStore.removeSingleCardsInCategory(category);
@@ -48,7 +70,7 @@ public class CardDataRepository implements CardRepository {
     @Override
     public boolean updateSingleCardModelHide(CardModel cardModel) {
         SingleCardDataStore dataStore = new SingleCardSqliteDataStore(context);
-        return dataStore.updateSingleCardModelHide(cardModel.cardIndex, cardModel.hide);
+        return dataStore.updateSingleCardModelHide(cardModel.categoryId, cardModel.cardIndex, cardModel.hide);
     }
 
     private ArrayList<CardModel> getDataModels(ArrayList<CardModel> cardModels){

@@ -90,6 +90,7 @@ public class SingleCardSqliteDataStore implements  SingleCardDataStore {
                 cardModel.voicePath = c.getString(c.getColumnIndex(CardColumns.VOICE_PATH));
                 cardModel.firstTime = c.getString(c.getColumnIndex(CardColumns.FIRST_TIME));
                 cardModel.cardIndex = c.getInt(c.getColumnIndex(CardColumns.CARD_INDEX));
+                cardModel.categoryId = c.getInt(c.getColumnIndex(CardColumns.CATEGORY_ID));
                 cardModel.thumbnailPath = c.getString(c.getColumnIndex(CardColumns.THUMBNAIL_PATH));
                 cardModel.cardType = CardModel.CardType.valueOf(c.getString(c.getColumnIndex(CardColumns.CARD_TYPE)));
                 cardModel.hide = (c.getInt(c.getColumnIndex(CardColumns.HIDE)) != 0);
@@ -113,11 +114,11 @@ public class SingleCardSqliteDataStore implements  SingleCardDataStore {
     }
 
     @Override
-    public boolean updateSingleCardModelHide(int cardIndex, boolean hide) {
+    public boolean updateSingleCardModelHide(int categoryId, int cardIndex, boolean hide) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(CardColumns.HIDE, hide ? 1 : 0);
-        return db.update(CardColumns.TABLE_NAME,contentValues, CardColumns.CARD_INDEX + "=?",new String[]{String.valueOf(cardIndex)} ) > 0 ? true : false;
+        return db.update(CardColumns.TABLE_NAME,contentValues, CardColumns.CATEGORY_ID + "=" + categoryId + " AND " + CardColumns.CARD_INDEX + "=" + cardIndex, null) > 0 ? true : false;
     }
 
     private int getNewIndex(int categoryId) {
