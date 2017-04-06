@@ -41,28 +41,41 @@ public class CardListRecyclerViewAdapter extends RecyclerView.Adapter<CardListRe
 
     @Override
     public void onBindViewHolder(final CardListRecyclerViewHolder holder, int position) {
-
-        holder.showHideItemBar.setImageResource(ResourcesUtil.getShowHideItemBarBy(categoryModelColor));
-        holder.showHideIcon.setImageResource(ResourcesUtil.getShowHideIconBy(categoryModelColor));
-
         CardModel cardModel = cardModelList.get(position);
+        glide.load(ContentsUtil.getContentFile(getThumbnailPath(cardModel)))
+                .override(60, 60)
+                .bitmapTransform(new AngelManGlideTransform(context
+                        , 10, 0, AngelManGlideTransform.CornerType.ALL))
+                .into(holder.cardThumbnail);
         holder.cardName.setText(cardModel.name);
+        initViewByShowing(holder, cardModel.showing);
+    }
+
+    @Override
+    public int getItemCount() {
+        return cardModelList.size();
+    }
+
+    private void initViewByShowing(final CardListRecyclerViewHolder holder, boolean showing) {
+        if(showing) {
+            holder.showHideItemBar.setImageResource(ResourcesUtil.getShowHideItemBarBy(categoryModelColor));
+            holder.showHideIcon.setImageResource(ResourcesUtil.getShowHideIconBy(categoryModelColor));
+        } else {
+            holder.showHideItemBar.setImageResource(ResourcesUtil.getShowHideItemBarBy(ResourcesUtil.HIDING));
+            holder.showHideIcon.setImageResource(ResourcesUtil.getShowHideIconBy(ResourcesUtil.HIDING));
+            holder.cardName.setTextColor(context.getResources().getColor(R.color.black_4C));
+            holder.cardThumbnail.setImageAlpha(60);
+        }
+    }
+
+    private String getThumbnailPath(CardModel cardModel) {
         String thumbnailPath = "";
         if(cardModel.cardType == CardModel.CardType.VIDEO_CARD) {
             thumbnailPath = cardModel.thumbnailPath;
         } else if(cardModel.cardType == CardModel.CardType.PHOTO_CARD) {
             thumbnailPath = cardModel.contentPath;
         }
-        glide.load(ContentsUtil.getContentFile(ContentsUtil.getThumbnailPath(thumbnailPath)))
-                .override(60, 60)
-                .bitmapTransform(new AngelManGlideTransform(context
-                        , 10, 0, AngelManGlideTransform.CornerType.ALL))
-                .into(holder.cardThumbnail);
-    }
-
-    @Override
-    public int getItemCount() {
-        return cardModelList.size();
+        return thumbnailPath;
     }
 
     static class CardListRecyclerViewHolder extends RecyclerView.ViewHolder {

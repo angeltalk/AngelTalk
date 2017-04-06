@@ -29,17 +29,19 @@ import static org.mockito.Mockito.when;
 public class SingleCardSqliteDataStoreTest {
     private SQLiteDatabase mockDb;
 
-    private String SQL_CREATE_SINGLECARD_LIST = "CREATE TABLE " + CardColumns.TABLE_NAME + "(" +
-            CardColumns._ID + " INTEGER_PRIMARY_KEY," +
-            CardColumns.CATEGORY_ID + " INTEGER," +
-            CardColumns.NAME + " TEXT," +
-            CardColumns.CONTENT_PATH + " TEXT," +
-            CardColumns.THUMBNAIL_PATH + " TEXT," +
-            CardColumns.VOICE_PATH + " TEXT," +
-            CardColumns.FIRST_TIME + " TEXT," +
-            CardColumns.CARD_TYPE + " TEXT," +
-            CardColumns.CARD_INDEX + " INTEGER)";
-    private String[] columns = {CardColumns.NAME, CardColumns.CONTENT_PATH,CardColumns.THUMBNAIL_PATH, CardColumns.VOICE_PATH, CardColumns.FIRST_TIME, CardColumns.CARD_TYPE};
+    private String SQL_CREATE_SINGLECARD_LIST =
+            "CREATE TABLE " + CardColumns.TABLE_NAME + "(" +
+                    CardColumns._ID + " INTEGER_PRIMARY_KEY," +
+                    CardColumns.CATEGORY_ID + " INTEGER," +
+                    CardColumns.NAME + " TEXT," +
+                    CardColumns.CONTENT_PATH + " TEXT," +
+                    CardColumns.VOICE_PATH + " TEXT," +
+                    CardColumns.FIRST_TIME + " TEXT," +
+                    CardColumns.CARD_TYPE + " TEXT," +
+                    CardColumns.THUMBNAIL_PATH + " TEXT," +
+                    CardColumns.SHOWING + " INTEGER," +
+                    CardColumns.CARD_INDEX + " INTEGER)";
+    private String[] columns = {CardColumns.NAME, CardColumns.CONTENT_PATH,CardColumns.THUMBNAIL_PATH, CardColumns.VOICE_PATH, CardColumns.FIRST_TIME, CardColumns.CARD_TYPE, CardColumns.SHOWING};
 
     @Before
     public void setUp() throws Exception {

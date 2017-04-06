@@ -1,5 +1,7 @@
 package act.sds.samsung.angelman.presentation.activity;
 
+import android.widget.ImageView;
+
 import com.google.common.collect.Lists;
 
 import org.junit.Before;
@@ -21,6 +23,7 @@ import act.sds.samsung.angelman.UITest;
 import act.sds.samsung.angelman.domain.model.CardModel;
 import act.sds.samsung.angelman.domain.model.CategoryModel;
 import act.sds.samsung.angelman.domain.repository.CardRepository;
+import act.sds.samsung.angelman.presentation.custom.FontTextView;
 import act.sds.samsung.angelman.presentation.manager.ApplicationManager;
 import act.sds.samsung.angelman.presentation.util.ContentsUtil;
 import act.sds.samsung.angelman.presentation.util.ResourcesUtil;
@@ -50,11 +53,37 @@ public class CardListActivityTest extends UITest{
     }
 
     @Test
-    public void whenLaunched_thenShowViewCorrectly() throws Exception {
+    public void whenLaunched_thenShowTitleCorrectly() throws Exception {
         assertThat(shadowOf(subject.titleLayout.getBackground()).getCreatedFromResId()).isEqualTo(R.color.simple_background_red);
         assertThat(subject.categoryItemTitle.getText()).isEqualTo("먹을 것");
+    }
+
+    @Test
+    public void whenLaunched_thenShowCardListInCategory() throws Exception {
         assertThat(subject.cardListRecyclerView).isNotNull();
         assertThat(subject.cardListRecyclerView.getChildCount()).isEqualTo(8);
+    }
+
+    @Test
+    public void givenShowingCardInList_whenLaunched_thenShowIcon() throws Exception {
+        ImageView showHideBarView = ((ImageView) subject.cardListRecyclerView.getChildAt(0).findViewById(R.id.show_hide_item_bar));
+        ImageView showHideIconView = ((ImageView) subject.cardListRecyclerView.getChildAt(0).findViewById(R.id.show_hide_icon));
+
+        assertThat(shadowOf(showHideBarView.getDrawable()).getCreatedFromResId()).isEqualTo(R.drawable.show_red);
+        assertThat(shadowOf(showHideIconView.getDrawable()).getCreatedFromResId()).isEqualTo(R.drawable.ic_show_red);
+    }
+
+    @Test
+    public void givenHidingCardInList_whenLaunched_thenHideIcon() throws Exception {
+        ImageView showHideBarView = ((ImageView) subject.cardListRecyclerView.getChildAt(2).findViewById(R.id.show_hide_item_bar));
+        ImageView showHideIconView = ((ImageView) subject.cardListRecyclerView.getChildAt(2).findViewById(R.id.show_hide_icon));
+        FontTextView cardName = ((FontTextView) subject.cardListRecyclerView.getChildAt(2).findViewById(R.id.card_name));
+        ImageView cardThumbnail = ((ImageView) subject.cardListRecyclerView.getChildAt(2).findViewById(R.id.card_thumbnail));
+
+        assertThat(shadowOf(showHideBarView.getDrawable()).getCreatedFromResId()).isEqualTo(R.drawable.hide);
+        assertThat(shadowOf(showHideIconView.getDrawable()).getCreatedFromResId()).isEqualTo(R.drawable.ic_hide);
+        assertThat(cardName.getCurrentTextColor()).isEqualTo(subject.getResources().getColor(R.color.black_4C));
+        assertThat(cardThumbnail.getImageAlpha()).isEqualTo(60);
     }
 
     @Test
@@ -76,14 +105,14 @@ public class CardListActivityTest extends UITest{
 
         String contentFolder = ContentsUtil.getContentFolder() + File.separator;
 
-        list.add(new CardModel("물0", contentFolder+"water.png", "20161018_000003", 0, 0, CardModel.CardType.PHOTO_CARD));
+        list.add(new CardModel("물0", contentFolder+"water.png", "20161018_000003", 0, 0, CardModel.CardType.PHOTO_CARD, "", true));
         list.add(new CardModel("물1", contentFolder+"water.png", "20161018_000003", 0, 1, CardModel.CardType.PHOTO_CARD));
-        list.add(new CardModel("물2", contentFolder+"water.png", "20161018_000003", 0, 2, CardModel.CardType.PHOTO_CARD));
-        list.add(new CardModel("물3", contentFolder+"water.png", "20161018_000003", 0, 3, CardModel.CardType.PHOTO_CARD));
+        list.add(new CardModel("물2", contentFolder+"water.png", "20161018_000003", 0, 2, CardModel.CardType.PHOTO_CARD, "", false));
+        list.add(new CardModel("물3", contentFolder+"water.png", "20161018_000003", 0, 3, CardModel.CardType.PHOTO_CARD, "", false));
         list.add(new CardModel("물4", contentFolder+"water.png", "20161018_000003", 0, 4, CardModel.CardType.PHOTO_CARD));
         list.add(new CardModel("물5", contentFolder+"water.png", "20161018_000003", 0, 5, CardModel.CardType.PHOTO_CARD));
-        list.add(new CardModel("물6", contentFolder+"water.png", "20161018_000003", 0, 6, CardModel.CardType.PHOTO_CARD));
-        list.add(new CardModel("젤리", contentFolder+"haribo.mp4", "20161018_000003", 0, 7, CardModel.CardType.VIDEO_CARD, contentFolder+"haribo.jpg"));
+        list.add(new CardModel("젤리0", contentFolder+"haribo.mp4", "20161018_000003", 0, 6, CardModel.CardType.VIDEO_CARD, contentFolder+"haribo.jpg"));
+        list.add(new CardModel("젤리1", contentFolder+"haribo.mp4", "20161018_000003", 0, 7, CardModel.CardType.VIDEO_CARD, contentFolder+"haribo.jpg", false));
         return list;
     }
 }
