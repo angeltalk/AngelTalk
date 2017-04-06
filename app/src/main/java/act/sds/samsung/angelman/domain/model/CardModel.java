@@ -103,6 +103,16 @@ public class CardModel{
         this.cardType = cardType;
         this.thumbnailPath = thumbnailPath;
     }
+    public CardModel(String name, String contentPath, String voicePath, String firstTime, int categoryId, CardType cardType, String thumbnailPath, boolean hide) {
+        this.name = name;
+        this.contentPath = contentPath;
+        this.voicePath = voicePath;
+        this.firstTime = firstTime;
+        this.categoryId = categoryId;
+        this.cardType = cardType;
+        this.thumbnailPath = thumbnailPath;
+        this.hide = hide;
+    }
 
     public enum CardType {
         PHOTO_CARD("PHOTO_CARD"),

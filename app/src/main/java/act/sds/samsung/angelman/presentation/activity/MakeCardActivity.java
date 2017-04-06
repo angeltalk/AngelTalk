@@ -294,7 +294,8 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
                 dateFormat.format(date),
                 selectedCategoryId,
                 cardType,
-                cardType == CardModel.CardType.VIDEO_CARD  ? ContentsUtil.getThumbnailPath(contentPath) : null);
+                cardType == CardModel.CardType.VIDEO_CARD  ? ContentsUtil.getThumbnailPath(contentPath) : null,
+                false);
 
         cardRepository.createSingleCardModel(cardModel);
 
