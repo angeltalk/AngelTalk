@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import act.sds.samsung.angelman.data.sqlite.CardColumns;
 import act.sds.samsung.angelman.data.sqlite.DatabaseHelper;
@@ -23,8 +24,8 @@ public class SingleCardSqliteDataStore implements  SingleCardDataStore {
     }
 
     @Override
-    public ArrayList<CardModel> getAllCardList() {
-        ArrayList<CardModel> list = new ArrayList<>();
+    public List<CardModel> getAllCardList() {
+        List<CardModel> list = new ArrayList<>();
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String[] columns = {CardColumns.NAME, CardColumns.CONTENT_PATH,CardColumns.THUMBNAIL_PATH, CardColumns.VOICE_PATH, CardColumns.FIRST_TIME, CardColumns.CARD_TYPE, CardColumns.HIDE};
@@ -69,8 +70,8 @@ public class SingleCardSqliteDataStore implements  SingleCardDataStore {
     }
 
     @Override
-    public ArrayList<CardModel> getCardListWithCategoryId(int selectedCategoryId) {
-        ArrayList<CardModel> list = new ArrayList<>();
+    public List<CardModel> getCardListWithCategoryId(int selectedCategoryId) {
+        List<CardModel> list = new ArrayList<>();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         String selection = "CATEGORY_ID = ?";

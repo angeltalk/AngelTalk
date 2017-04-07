@@ -14,6 +14,7 @@ import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.common.collect.Lists;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -33,9 +34,9 @@ import org.robolectric.shadows.ShadowToast;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -173,7 +174,7 @@ public class CardViewPagerActivityTest extends UITest {
         assertThat(subject.cardDeleteButton.getVisibility()).isEqualTo(View.VISIBLE);
 
         when(repository.deleteSingleCardWithCardIndex(anyInt(), anyInt())).thenReturn(true);
-        final ArrayList<CardModel> cardListWithCategoryId = getCardListWithCategoryId();
+        final List<CardModel> cardListWithCategoryId = getCardListWithCategoryId();
         cardListWithCategoryId.remove(2);
         when(repository.getSingleCardListWithCategoryId(anyInt(), anyBoolean())).thenReturn(cardListWithCategoryId);
 
@@ -452,22 +453,22 @@ public class CardViewPagerActivityTest extends UITest {
         return Arrays.equals(buffer1.array(), buffer2.array());
     }
 
-    private ArrayList<CardModel> getCardListWithCategoryId() {
+    private List<CardModel> getCardListWithCategoryId() {
 
         String contentFolder = ContentsUtil.getContentFolder() + File.separator;
 
-        ArrayList<CardModel> ret = new ArrayList<>();
-        addSingleCardModel(ret, "물", contentFolder+"water.png", "20010928_120020", 0, 0, CardModel.CardType.PHOTO_CARD, null, false);
-        addSingleCardModel(ret, "우유", contentFolder+"milk.png", "20010928_120019", 0, 1, CardModel.CardType.PHOTO_CARD, null, false);
-        addSingleCardModel(ret, "쥬스", contentFolder+"juice.png", "20010928_120015", 0, 2, CardModel.CardType.PHOTO_CARD, null, false);
-        addSingleCardModel(ret, "젤리", contentFolder+"haribo.mp4", "20010928_120015", 0, 3, CardModel.CardType.VIDEO_CARD, contentFolder+"haribo.jpg", false);
+        List<CardModel> ret = Lists.newArrayList(
+                makeSingleCardModel( "물", contentFolder+"water.png", "20010928_120020", 0, 0, CardModel.CardType.PHOTO_CARD, null, false),
+                makeSingleCardModel( "우유", contentFolder+"milk.png", "20010928_120019", 0, 1, CardModel.CardType.PHOTO_CARD, null, false),
+                makeSingleCardModel( "쥬스", contentFolder+"juice.png", "20010928_120015", 0, 2, CardModel.CardType.PHOTO_CARD, null, false),
+                makeSingleCardModel( "젤리", contentFolder+"haribo.mp4", "20010928_120015", 0, 3, CardModel.CardType.VIDEO_CARD, contentFolder+"haribo.jpg", false)
+        );
 
         return ret;
     }
 
-    public void addSingleCardModel(ArrayList<CardModel> list, String name, String path, String time, int categoryId, int cardIndex, CardModel.CardType cardType, String thumbnailPath ,boolean hide) {
-        CardModel model = CardModel.builder().name(name).contentPath(path).firstTime(time).categoryId(categoryId).cardIndex(cardIndex).cardType(cardType).thumbnailPath(thumbnailPath).hide(hide).build();
-        list.add(model);
+    public CardModel makeSingleCardModel(String name, String path, String time, int categoryId, int cardIndex, CardModel.CardType cardType, String thumbnailPath , boolean hide) {
+        return CardModel.builder().name(name).contentPath(path).firstTime(time).categoryId(categoryId).cardIndex(cardIndex).cardType(cardType).thumbnailPath(thumbnailPath).hide(hide).build();
     }
 
     private ShadowAlertDialog getShadowAlertDialog() {

@@ -11,11 +11,11 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import act.sds.samsung.angelman.BuildConfig;
-import act.sds.samsung.angelman.data.sqlite.DatabaseHelper;
 import act.sds.samsung.angelman.data.sqlite.CardColumns;
+import act.sds.samsung.angelman.data.sqlite.DatabaseHelper;
 import act.sds.samsung.angelman.domain.model.CardModel;
 import lombok.Cleanup;
 
@@ -62,7 +62,7 @@ public class SingleCardSqliteDataStoreTest {
 
         @Cleanup
         Cursor c = mockDb.query(CardColumns.TABLE_NAME, columns, null,null, null, null, CardColumns.CARD_INDEX + " desc");
-        ArrayList<CardModel> list = dataStore.getAllCardList();
+        List<CardModel> list = dataStore.getAllCardList();
 
         verify(mockDbHelper).getReadableDatabase();
 

@@ -7,6 +7,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextClock;
 
+import com.google.common.collect.Lists;
+
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -16,8 +18,8 @@ import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowAbsListView;
 import org.robolectric.shadows.ShadowDrawable;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.TimeZone;
 
 import javax.inject.Inject;
@@ -154,13 +156,7 @@ public class CategoryMenuLayoutTest extends UITest {
         container.dispatchDragEvent(dragEvent);
     }
 
-    private ArrayList<CategoryModel> getCategoryList() {
-        ArrayList<CategoryModel> categoryList = new ArrayList<>();
-        CategoryModel categoryModel1 = new CategoryModel();
-        categoryModel1.title = "먹을 것";
-        categoryModel1.icon = ic_food;
-        categoryModel1.color = R.color.background_red;
-        categoryList.add(categoryModel1);
-        return categoryList;
+    private List<CategoryModel> getCategoryList() {
+        return Lists.newArrayList( CategoryModel.builder().title("먹을 것").icon(ic_food).color(R.color.background_red).build() );
     }
 }

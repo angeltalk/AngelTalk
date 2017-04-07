@@ -6,6 +6,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
+import com.google.common.collect.Lists;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -15,8 +16,8 @@ import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -142,17 +143,18 @@ public class CardViewPagerLayoutTest extends UITest{
         return categoryModel;
     }
 
-    private ArrayList<CardModel> getCardListWithCategoryId() {
-        ArrayList<CardModel> ret = new ArrayList<>();
-        addSingleCardModel(ret, "버스", "bus.png", "20010928_120020");
-        addSingleCardModel(ret, "유유", "milk.png", "20010928_120019");
-        addSingleCardModel(ret, "쥬스", "juice.png", "20010928_120015");
+    private List<CardModel> getCardListWithCategoryId() {
+        List<CardModel> ret = Lists.newArrayList(
+                makeSingleCardModel("버스", "bus.png", "20010928_120020"),
+                makeSingleCardModel("유유", "milk.png", "20010928_120019"),
+                makeSingleCardModel("쥬스", "juice.png", "20010928_120015")
+        );
+
         return ret;
     }
 
-    private void addSingleCardModel(ArrayList list, String name, String path, String time) {
-        CardModel model = CardModel.builder().name(name).contentPath(path).firstTime(time).hide(false).build();
-        list.add(model);
+    private CardModel makeSingleCardModel(String name, String path, String time) {
+        return CardModel.builder().name(name).contentPath(path).firstTime(time).hide(false).build();
     }
 
     private boolean equals(Bitmap bitmap1, Bitmap bitmap2) {

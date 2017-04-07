@@ -61,8 +61,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.common.collect.Lists;
+
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -73,8 +74,8 @@ import java.util.concurrent.TimeUnit;
 import act.sds.samsung.angelman.R;
 import act.sds.samsung.angelman.domain.model.CardModel;
 import act.sds.samsung.angelman.presentation.activity.MakeCardActivity;
-import act.sds.samsung.angelman.presentation.manager.ApplicationConstants;
 import act.sds.samsung.angelman.presentation.custom.AutoFitTextureView;
+import act.sds.samsung.angelman.presentation.manager.ApplicationConstants;
 import act.sds.samsung.angelman.presentation.util.ContentsUtil;
 
 public class VideoFragment extends Fragment
@@ -278,7 +279,7 @@ public class VideoFragment extends Fragment
      */
     private static Size chooseOptimalSize(Size[] choices, int width, int height, Size aspectRatio) {
         // Collect the supported resolutions that are at least as big as the preview Surface
-        List<Size> bigEnough = new ArrayList<>();
+        List<Size> bigEnough = Lists.newArrayList();
         int w = aspectRatio.getWidth();
         int h = aspectRatio.getHeight();
         for (Size option : choices) {
@@ -704,7 +705,7 @@ public class VideoFragment extends Fragment
             assert texture != null;
             texture.setDefaultBufferSize(mPreviewSize.getWidth(), mPreviewSize.getHeight());
             mPreviewBuilder = mCameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
-            List<Surface> surfaces = new ArrayList<>();
+            List<Surface> surfaces = Lists.newArrayList();
 
             // Set up Surface for the camera preview
             Surface previewSurface = new Surface(texture);

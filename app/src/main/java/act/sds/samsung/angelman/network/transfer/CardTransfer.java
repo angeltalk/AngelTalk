@@ -182,7 +182,6 @@ public class CardTransfer {
         }
     }
 
-    // TODO : deviceID unique key 확인
     private String generateShareKey() {
         String deviceId = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
         return deviceId + System.currentTimeMillis();

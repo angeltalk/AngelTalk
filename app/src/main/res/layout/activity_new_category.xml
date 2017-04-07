@@ -47,6 +47,7 @@
             android:textAlignment="textEnd"
             android:textColor="@color/white_32"
             android:textSize="17dp" />
+
     </RelativeLayout>
 
     <LinearLayout
@@ -67,9 +68,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_horizontal">
-
                 <include layout="@layout/item_category" />
             </RelativeLayout>
+
         </android.support.v7.widget.CardView>
 
         <LinearLayout
@@ -172,6 +173,7 @@
                 android:splitMotionEvents="false" />
 
         </LinearLayout>
+
     </LinearLayout>
 
 </android.support.percent.PercentRelativeLayout>

@@ -18,8 +18,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.common.collect.Lists;
+
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -241,9 +242,9 @@ public class NewCategoryActivity extends AbstractActivity{
         getApplicationContext().startActivity(intent);
     }
 
-    private ArrayList<CategoryItemModel> sortIconListByStatus(List<CategoryItemModel> list, int usedStateByType){
-        ArrayList<CategoryItemModel> usedItem = new ArrayList<>();
-        ArrayList<CategoryItemModel> unusedItem = new ArrayList<>();
+    private List<CategoryItemModel> sortIconListByStatus(List<CategoryItemModel> list, int usedStateByType){
+        List<CategoryItemModel> usedItem = Lists.newArrayList();
+        List<CategoryItemModel> unusedItem = Lists.newArrayList();
 
         for(int i = 0 ; i < list.size() ; i++){
             if(list.get(i).status == usedStateByType){

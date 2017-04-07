@@ -5,11 +5,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import java.security.InvalidParameterException;
-import java.util.ArrayList;
+import com.google.common.collect.Lists;
 
-import act.sds.samsung.angelman.data.sqlite.DatabaseHelper;
+import java.security.InvalidParameterException;
+import java.util.List;
+
 import act.sds.samsung.angelman.data.sqlite.CategoryColumns;
+import act.sds.samsung.angelman.data.sqlite.DatabaseHelper;
 import act.sds.samsung.angelman.domain.model.CategoryItemModel;
 import act.sds.samsung.angelman.domain.model.CategoryModel;
 import act.sds.samsung.angelman.presentation.util.ResourceMapper;
@@ -28,8 +30,8 @@ public class CategoryDataSqliteDataStore implements CategoryDataStore{
     }
 
     @Override
-    public ArrayList<CategoryModel> getCategoryAllList() {
-        ArrayList<CategoryModel> list = new ArrayList<>();
+    public List<CategoryModel> getCategoryAllList() {
+        List<CategoryModel> list = Lists.newArrayList();
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String[] columns = {CategoryColumns.TITLE, CategoryColumns.ICON, CategoryColumns.INDEX, CategoryColumns.COLOR};
@@ -40,12 +42,12 @@ public class CategoryDataSqliteDataStore implements CategoryDataStore{
 
         if(c.getCount() != 0) {
             do {
-                CategoryModel categoryModel = new CategoryModel();
-                categoryModel.title = c.getString(c.getColumnIndex(CategoryColumns.TITLE));
-                categoryModel.icon = c.getInt(c.getColumnIndex(CategoryColumns.ICON));
-                categoryModel.index = c.getInt(c.getColumnIndex(CategoryColumns.INDEX));
-                categoryModel.color = c.getInt(c.getColumnIndex(CategoryColumns.COLOR));
-                list.add(categoryModel);
+                list.add(CategoryModel.builder()
+                        .title(c.getString(c.getColumnIndex(CategoryColumns.TITLE)))
+                        .icon(c.getInt(c.getColumnIndex(CategoryColumns.ICON)))
+                        .index(c.getInt(c.getColumnIndex(CategoryColumns.INDEX)))
+                        .color(c.getInt(c.getColumnIndex(CategoryColumns.COLOR)))
+                        .build());
             } while (c.moveToNext());
         }
         return list;
@@ -59,9 +61,9 @@ public class CategoryDataSqliteDataStore implements CategoryDataStore{
     }
 
     @Override
-    public ArrayList<CategoryItemModel> getCategoryAllIconList() {
+    public List<CategoryItemModel> getCategoryAllIconList() {
 
-        ArrayList<CategoryItemModel> list = new ArrayList<>();
+        List<CategoryItemModel> list = Lists.newArrayList();
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
@@ -71,19 +73,18 @@ public class CategoryDataSqliteDataStore implements CategoryDataStore{
         c.moveToFirst();
 
         do{
-            CategoryItemModel categoryItemModel = new CategoryItemModel();
-            categoryItemModel.type = c.getInt(c.getColumnIndex(CategoryColumns.ICON));
-            categoryItemModel.status = c.getInt(c.getColumnIndex(CategoryColumns.STATUS));
-            list.add(categoryItemModel);
-
+            list.add(CategoryItemModel.builder()
+                    .type(c.getInt(c.getColumnIndex(CategoryColumns.ICON)))
+                    .status(c.getInt(c.getColumnIndex(CategoryColumns.STATUS)))
+                    .build());
         } while(c.moveToNext());
 
         return list;
     }
 
     @Override
-    public ArrayList<CategoryItemModel> getCategoryAllBackgroundList() {
-        ArrayList<CategoryItemModel> list = new ArrayList<>();
+    public List<CategoryItemModel> getCategoryAllBackgroundList() {
+        List<CategoryItemModel> list = Lists.newArrayList();
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
@@ -92,10 +93,11 @@ public class CategoryDataSqliteDataStore implements CategoryDataStore{
         c.moveToFirst();
 
         do{
-            CategoryItemModel categoryItemModel = new CategoryItemModel();
-            categoryItemModel.type = c.getInt(c.getColumnIndex(CategoryColumns.COLOR));
-            categoryItemModel.status = c.getInt(c.getColumnIndex(CategoryColumns.STATUS));
-            list.add(categoryItemModel);
+            list.add(
+                    CategoryItemModel.builder()
+                            .type(c.getInt(c.getColumnIndex(CategoryColumns.COLOR)))
+                            .status(c.getInt(c.getColumnIndex(CategoryColumns.STATUS)))
+                            .build());
 
         } while(c.moveToNext());
 

@@ -15,15 +15,14 @@
         <RelativeLayout
             android:id="@+id/test"
             android:layout_width="match_parent"
-            app:layout_heightPercent="15%">
-
-        </RelativeLayout>
+            app:layout_heightPercent="15%" />
 
         <act.sds.samsung.angelman.presentation.custom.CardView
             android:id="@+id/card_view_layout"
             android:layout_width="match_parent"
             android:layout_below="@id/test"
             app:layout_heightPercent="60%" />
+
         <act.sds.samsung.angelman.presentation.custom.FontTextView
             android:layout_marginTop="24dp"
             android:id="@+id/recoding_guide"
@@ -45,7 +44,6 @@
             android:layout_centerHorizontal="true"
             android:background="@drawable/mic"
             android:visibility="gone"/>
-
 
     </android.support.percent.PercentRelativeLayout>
 
@@ -83,8 +81,8 @@
             app:layout_marginTopPercent="84%"
             android:layout_centerHorizontal="true"
             android:background="@drawable/record_stop"
-            android:visibility="gone"
-            />
+            android:visibility="gone" />
 
     </android.support.percent.PercentRelativeLayout>
+
 </android.support.design.widget.CoordinatorLayout>

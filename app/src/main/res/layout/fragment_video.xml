@@ -3,12 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
     <act.sds.samsung.angelman.presentation.custom.AutoFitTextureView
         android:id="@+id/texture"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+        android:layout_height="match_parent" />
 
     <View
         android:id="@+id/camera_frame"
@@ -19,53 +17,53 @@
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyleHorizontal"
-        android:progressDrawable="@drawable/progress_bar"
         android:layout_width="284dp"
         android:layout_height="7dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="107dp"
         android:indeterminate="false"
         android:max="3000"
         android:progress="0"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="107dp"
-        />
+        android:progressDrawable="@drawable/progress_bar" />
 
     <TextView
         android:id="@+id/text_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/init_count_text"
         android:layout_centerHorizontal="true"
-        android:textSize="15sp"
-        android:textColor="@color/white"
         android:layout_marginTop="77dp"
-        />
-
+        android:text="@string/init_count_text"
+        android:textColor="@color/white"
+        android:textSize="15sp" />
 
     <TextView
         android:id="@+id/video_guide"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/video_guide"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="160dp"
         android:layout_centerHorizontal="true"
-        android:textSize="17sp"
-        android:textColor="@color/white"/>
+        android:layout_marginBottom="160dp"
+        android:text="@string/video_guide"
+        android:textColor="@color/white"
+        android:textSize="17sp" />
+
     <FrameLayout
         android:id="@+id/video_shutter"
-        android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="35dp"
-        android:layout_centerHorizontal="true">
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="35dp">
+
         <ImageView
             android:id="@+id/btn_record"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:src="@drawable/btn_recording_start"
-            />
+            android:src="@drawable/btn_recording_start" />
+
     </FrameLayout>
+
 </RelativeLayout>

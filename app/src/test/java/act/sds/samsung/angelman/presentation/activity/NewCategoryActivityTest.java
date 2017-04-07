@@ -10,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.common.collect.Lists;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,7 +20,7 @@ import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowAlertDialog;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -33,8 +35,8 @@ import act.sds.samsung.angelman.presentation.adapter.NewCategoryItemAdapter;
 import act.sds.samsung.angelman.presentation.manager.ApplicationConstants;
 import act.sds.samsung.angelman.presentation.util.ResourceMapper;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.android.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -332,7 +334,7 @@ public class NewCategoryActivityTest extends UITest {
 
 
     private void initIconList() {
-        ArrayList<CategoryItemModel> mockItemList = new ArrayList<>();
+        List<CategoryItemModel> mockItemList = Lists.newArrayList();
 
         CategoryItemModel mock1 = new CategoryItemModel();
         mock1.status = ResourceMapper.IconState.DEFAULT.ordinal();
@@ -359,7 +361,7 @@ public class NewCategoryActivityTest extends UITest {
     }
 
     private void initColorList() {
-        ArrayList<CategoryItemModel> mockItemList = new ArrayList<>();
+        List<CategoryItemModel> mockItemList = Lists.newArrayList();
 
         CategoryItemModel mock1 = new CategoryItemModel();
         mock1.status = ResourceMapper.ColorState.MENU.ordinal();

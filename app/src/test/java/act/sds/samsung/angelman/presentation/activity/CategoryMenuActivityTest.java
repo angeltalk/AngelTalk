@@ -10,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.common.collect.Lists;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,7 +23,6 @@ import org.robolectric.shadows.ShadowActivity;
 import org.robolectric.shadows.ShadowAlertDialog;
 import org.robolectric.shadows.ShadowDrawable;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -282,7 +283,7 @@ public class CategoryMenuActivityTest extends UITest {
     }
 
     private List<CategoryModel> getCategoryList(int listSize) {
-        List<CategoryModel> categoryList = new ArrayList<>();
+        List<CategoryModel> categoryList = Lists.newArrayList();
         CategoryModel [] categoryModel = new CategoryModel[listSize];
 
         switch(listSize) {

@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.percent.PercentRelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/add_card_view_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -19,23 +18,22 @@
             android:id="@+id/add_card_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="120dp"
-            android:layout_centerHorizontal="true"
             android:layout_alignParentBottom="true"
-            android:textSize="23dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="120dp"
             android:text="@string/add_new_card"
-            app:font="@string/font_regular"
-            />
+            android:textSize="23dp"
+            app:font="@string/font_regular" />
 
         <ImageView
             android:id="@+id/plus_icon"
             android:layout_width="29.5dp"
             android:layout_height="32dp"
-            android:layout_centerHorizontal="true"
             android:layout_above="@id/add_card_text"
+            android:layout_centerHorizontal="true"
             android:layout_marginBottom="60dp"
-            tools:src="@drawable/plus_red"
-            />
+            tools:src="@drawable/plus_red" />
 
     </android.support.percent.PercentRelativeLayout>
+
 </android.support.percent.PercentRelativeLayout>
