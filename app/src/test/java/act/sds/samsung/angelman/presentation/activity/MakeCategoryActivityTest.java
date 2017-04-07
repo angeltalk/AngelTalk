@@ -44,9 +44,9 @@ import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class)
-public class NewCategoryActivityTest extends UITest {
+public class MakeCategoryActivityTest extends UITest {
 
-    private NewCategoryActivity subject;
+    private MakeCategoryActivity subject;
     private EditText editCategoryTitle;
     private Button saveButton;
     private ImageView cancelButton;
@@ -62,7 +62,7 @@ public class NewCategoryActivityTest extends UITest {
         initIconList();
         initColorList();
 
-        subject = setupActivity(NewCategoryActivity.class);
+        subject = setupActivity(MakeCategoryActivity.class);
         editCategoryTitle = (EditText) subject.findViewById(R.id.edit_category_title);
         saveButton = (Button) subject.findViewById(R.id.new_category_save_button);
         cancelButton = (ImageView) subject.findViewById(R.id.category_title_cancel);

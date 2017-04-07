@@ -1,6 +1,5 @@
 package act.sds.samsung.angelman.presentation.activity;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +9,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -33,15 +33,15 @@ import act.sds.samsung.angelman.domain.repository.CategoryRepository;
 import act.sds.samsung.angelman.presentation.adapter.NewCategoryItemAdapter;
 import act.sds.samsung.angelman.presentation.adapter.NewCategoryItemColorAdapter;
 import act.sds.samsung.angelman.presentation.adapter.NewCategoryItemIconAdapter;
+import act.sds.samsung.angelman.presentation.custom.CustomConfirmDialog;
 import act.sds.samsung.angelman.presentation.manager.ApplicationConstants;
 import act.sds.samsung.angelman.presentation.manager.ApplicationManager;
-import act.sds.samsung.angelman.presentation.util.DialogUtil;
 import act.sds.samsung.angelman.presentation.util.FontUtil;
 
 import static act.sds.samsung.angelman.presentation.util.ResourceMapper.ColorState;
 import static act.sds.samsung.angelman.presentation.util.ResourceMapper.IconState;
 
-public class NewCategoryActivity extends AbstractActivity{
+public class MakeCategoryActivity extends AbstractActivity{
 
     private RecyclerView iconListView;
     private RecyclerView backgroundListView;
@@ -61,7 +61,7 @@ public class NewCategoryActivity extends AbstractActivity{
     NewCategoryItemAdapter iconAdapter;
     NewCategoryItemAdapter backgroundAdapter;
     private RelativeLayout categoryHeader;
-    private AlertDialog alertDialog;
+    private CustomConfirmDialog alertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,14 +120,14 @@ public class NewCategoryActivity extends AbstractActivity{
         editCategoryTitle.addTextChangedListener(textChangeWatcher);
 
         ImageView leftArrowButton = (ImageView) findViewById(R.id.left_arrow_button);
-        leftArrowButton.setOnClickListener(new View.OnClickListener() {
+        leftArrowButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
             }
         });
 
-        saveButton.setOnClickListener(new View.OnClickListener() {
+        saveButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 CategoryModel model = new CategoryModel();
@@ -143,7 +143,7 @@ public class NewCategoryActivity extends AbstractActivity{
         saveButton.setEnabled(false);
         saveButton.setTypeface(FontUtil.setFont(this, FontUtil.FONT_REGULAR));
 
-        cancelButton.setOnClickListener(new View.OnClickListener() {
+        cancelButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 editCategoryTitle.setText("");
@@ -164,15 +164,13 @@ public class NewCategoryActivity extends AbstractActivity{
             View innerView = getLayoutInflater().inflate(R.layout.custom_confirm_dialog, null);
             TextView alertMessage = (TextView) innerView.findViewById(R.id.alert_message);
             alertMessage.setText(getString(R.string.inform_not_saved));
-
-            alertDialog = DialogUtil.buildCustomDialog(NewCategoryActivity.this, innerView, positiveListener, negativeListener);
-            alertDialog.show();
+            alertDialog  = new CustomConfirmDialog(this, getString(R.string.inform_not_saved), positiveListener, negativeListener);
         } else {
             finish();
         }
     }
 
-    private View.OnClickListener positiveListener = new View.OnClickListener() {
+    private OnClickListener positiveListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
             alertDialog.dismiss();
@@ -180,8 +178,8 @@ public class NewCategoryActivity extends AbstractActivity{
         }
     };
 
-    private View.OnClickListener negativeListener = new View.OnClickListener() {
-        @Override
+    private OnClickListener negativeListener = new OnClickListener() {
+
         public void onClick(View v) {
             alertDialog.dismiss();
         }
