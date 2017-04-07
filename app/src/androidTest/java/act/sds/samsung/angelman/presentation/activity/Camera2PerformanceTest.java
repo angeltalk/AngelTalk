@@ -32,7 +32,7 @@ import static org.hamcrest.Matchers.is;
 @RunWith(AndroidJUnit4.class)
 public class Camera2PerformanceTest {
 
-    final static int TEST_TIMES = 100;
+    final static int TEST_TIMES = 2;
 
     @Rule
     public ActivityTestRule<CategoryMenuActivity> mActivityTestRule = new ActivityTestRule<>(CategoryMenuActivity.class);
