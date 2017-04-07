@@ -2,13 +2,13 @@ package act.sds.samsung.angelman.presentation.activity;
 
 
 import android.support.annotation.NonNull;
-import android.support.test.espresso.ViewInteraction;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
 import android.view.View;
 
 import org.hamcrest.Matcher;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,14 +17,14 @@ import act.sds.samsung.angelman.R;
 
 import static act.sds.samsung.angelman.presentation.activity.TestUtil.childAtPosition;
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.pressBack;
 import static android.support.test.espresso.action.ViewActions.pressImeActionButton;
 import static android.support.test.espresso.action.ViewActions.replaceText;
+import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 
@@ -34,6 +34,11 @@ public class MakeNewCardWithCameraTest {
 
     @Rule
     public ActivityTestRule<CategoryMenuActivity> mActivityTestRule = new ActivityTestRule<>(CategoryMenuActivity.class);
+
+    @Before
+    public void setUp() throws Exception {
+        TestUtil.InitializeDatabase(mActivityTestRule.getActivity().getApplicationContext(), mActivityTestRule.getActivity().categoryRepository, mActivityTestRule.getActivity().cardRepository);
+    }
 
     @Test
     public void makeNewCardWithCameraTest() throws InterruptedException {
@@ -66,15 +71,14 @@ public class MakeNewCardWithCameraTest {
 
         onView(withId(R.id.card_image_title_edit))
                 .check(matches(isDisplayed()))
-                .perform(replaceText("Make New Card"));
+                .perform(replaceText("New Card"));
         Thread.sleep(1000);
         pressBack();
         onView(withId(R.id.card_image_title_edit))
                 .perform(pressImeActionButton());
 
-//        onView(withId(R.id.card_image_title_edit))
-//                .check(matches(isDisplayed()))
-//                .check(matches(withText("Make New Card")));
+        Thread.sleep(1000);
+
         onView(withId(R.id.recoding_guide))
                 .check(matches(isDisplayed()))
                 .check(matches(withText("카드 이름을 녹음해주세요")));
@@ -82,66 +86,47 @@ public class MakeNewCardWithCameraTest {
                 .check(matches(isDisplayed()))
                 .perform(click());
 
-        Thread.sleep(4000); // wait for record
+        Thread.sleep(4500); // wait for record
 
-        ViewInteraction button3 = onView(
-                allOf(withId(R.id.record_stop_btn),
-                        withParent(withId(R.id.counting_scene)),
-                        isDisplayed()));
-        button3.check(matches(isDisplayed()));
+        onView(withId(R.id.waiting_count))
+                .check(matches(isDisplayed()))
+                .check(matches(withText("지금 말해주세요!")));
+        onView(withId(R.id.record_stop_btn))
+                .check(matches(isDisplayed()))
+                .perform(click());
 
-        ViewInteraction textView5 = onView(
-                allOf(withId(R.id.waiting_count),
-                        withParent(withId(R.id.counting_scene)),
-                        isDisplayed()));
-        textView5.check(matches(withText("지금 말해주세요!")));
+        onView(withId(R.id.waiting_count))
+                .check(matches(isDisplayed()))
+                .check(matches(withText("녹음된 음성을 확인하세요")));
+        onView(withId(R.id.record_stop_btn))
+                .check(matches(isDisplayed()))
+                .perform(click());
 
-        ViewInteraction appCompatButton2 = onView(
-                allOf(withId(R.id.record_stop_btn),
-                        withParent(withId(R.id.counting_scene)),
-                        isDisplayed()));
-        appCompatButton2.perform(click());
+        Thread.sleep(1000);
 
-        ViewInteraction appCompatButton3 = onView(
-                allOf(withId(R.id.record_stop_btn),
-                        withParent(withId(R.id.counting_scene)),
-                        isDisplayed()));
-        appCompatButton3.perform(click());
+        onView(withId(R.id.snackbar_text))
+                .check(matches(isDisplayed()))
+                .check(matches(withText("새로운 카드가 추가되었습니다.")));
 
+        Thread.sleep(2500); // wait for dismiss snackbar
 
-        ViewInteraction relativeLayout4 = onView(
-                allOf(withId(R.id.button_container),
-                        childAtPosition(
-                                allOf(withId(R.id.category_item_container),
-                                        childAtPosition(
-                                                withId(android.R.id.content),
-                                                0)),
-                                2),
-                        isDisplayed()));
-        relativeLayout4.check(matches(isDisplayed()));
+        onView(withId(R.id.snackbar_text))
+                .check(doesNotExist());
+        onView(withId(R.id.category_item_count))
+                .check(matches(isDisplayed()))
+                .check(matches(withText("1 / 5")));
+        onView(cardViewPagerFirstItem())
+                .check(matches(isDisplayed()))
+                .check(matches(withText("New Card")));
+    }
 
-        ViewInteraction textView6 = onView(
-                allOf(withId(R.id.category_item_count),
-                        childAtPosition(
-                                allOf(withId(R.id.title_container),
-                                        childAtPosition(
-                                                withId(R.id.title_container),
-                                                0)),
-                                2),
-                        isDisplayed()));
-        textView6.check(matches(withText("1 / 3")));
-
-        ViewInteraction textView7 = onView(
-                allOf(withId(R.id.card_image_title),
-                        childAtPosition(
-                                allOf(withId(R.id.card_container),
-                                        childAtPosition(
-                                                withId(R.id.card_view_layout),
-                                                0)),
-                                1),
-                        isDisplayed()));
-        textView7.check(matches(withText("test")));
-
+    @NonNull
+    private Matcher<View> cardViewPagerFirstItem() {
+        return allOf(withId(R.id.card_image_title),
+                    childAtPosition(childAtPosition(childAtPosition(childAtPosition(
+                            withId(R.id.view_pager)
+                            ,0),0),0),1)
+        );
     }
 
     @NonNull
