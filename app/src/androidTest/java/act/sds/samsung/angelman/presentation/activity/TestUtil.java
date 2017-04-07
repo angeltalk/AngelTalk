@@ -1,9 +1,12 @@
 package act.sds.samsung.angelman.presentation.activity;
 
 import android.content.Context;
+import android.support.test.espresso.matcher.BoundedMatcher;
+import android.support.test.internal.util.Checks;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.widget.TextView;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -43,6 +46,20 @@ public class TestUtil {
                 ViewParent parent = view.getParent();
                 return parent instanceof ViewGroup && parentMatcher.matches(parent)
                         && view.equals(((ViewGroup) parent).getChildAt(position));
+            }
+        };
+    }
+
+    public static Matcher<View> withTextColor(final int color) {
+        Checks.checkNotNull(color);
+        return new BoundedMatcher<View, TextView>(TextView.class) {
+            @Override
+            public boolean matchesSafely(TextView warning) {
+                return color == warning.getCurrentTextColor();
+            }
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("with text color: ");
             }
         };
     }
