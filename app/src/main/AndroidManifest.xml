@@ -40,7 +40,7 @@
             android:name=".presentation.activity.CameraGallerySelectionActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".presentation.activity.NewCategoryActivity"
+            android:name=".presentation.activity.MakeCategoryActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity

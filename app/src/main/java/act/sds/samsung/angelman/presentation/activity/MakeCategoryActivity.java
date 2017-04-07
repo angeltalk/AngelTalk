@@ -1,6 +1,5 @@
 package act.sds.samsung.angelman.presentation.activity;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -33,15 +32,15 @@ import act.sds.samsung.angelman.domain.repository.CategoryRepository;
 import act.sds.samsung.angelman.presentation.adapter.NewCategoryItemAdapter;
 import act.sds.samsung.angelman.presentation.adapter.NewCategoryItemColorAdapter;
 import act.sds.samsung.angelman.presentation.adapter.NewCategoryItemIconAdapter;
+import act.sds.samsung.angelman.presentation.custom.CustomConfirmDialog;
 import act.sds.samsung.angelman.presentation.manager.ApplicationConstants;
 import act.sds.samsung.angelman.presentation.manager.ApplicationManager;
-import act.sds.samsung.angelman.presentation.util.DialogUtil;
 import act.sds.samsung.angelman.presentation.util.FontUtil;
 
 import static act.sds.samsung.angelman.presentation.util.ResourceMapper.ColorState;
 import static act.sds.samsung.angelman.presentation.util.ResourceMapper.IconState;
 
-public class NewCategoryActivity extends AbstractActivity{
+public class MakeCategoryActivity extends AbstractActivity{
 
     private RecyclerView iconListView;
     private RecyclerView backgroundListView;
@@ -61,7 +60,7 @@ public class NewCategoryActivity extends AbstractActivity{
     NewCategoryItemAdapter iconAdapter;
     NewCategoryItemAdapter backgroundAdapter;
     private RelativeLayout categoryHeader;
-    private AlertDialog alertDialog;
+    private CustomConfirmDialog alertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -164,9 +163,7 @@ public class NewCategoryActivity extends AbstractActivity{
             View innerView = getLayoutInflater().inflate(R.layout.custom_confirm_dialog, null);
             TextView alertMessage = (TextView) innerView.findViewById(R.id.alert_message);
             alertMessage.setText(getString(R.string.inform_not_saved));
-
-            alertDialog = DialogUtil.buildCustomDialog(NewCategoryActivity.this, innerView, positiveListener, negativeListener);
-            alertDialog.show();
+            alertDialog  = new CustomConfirmDialog(this, getString(R.string.inform_not_saved), positiveListener, negativeListener);
         } else {
             finish();
         }
@@ -181,7 +178,7 @@ public class NewCategoryActivity extends AbstractActivity{
     };
 
     private View.OnClickListener negativeListener = new View.OnClickListener() {
-        @Override
+        @Overrided
         public void onClick(View v) {
             alertDialog.dismiss();
         }

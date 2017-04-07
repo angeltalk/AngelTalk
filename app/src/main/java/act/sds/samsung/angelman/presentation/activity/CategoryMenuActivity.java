@@ -221,7 +221,7 @@ public class CategoryMenuActivity extends AbstractActivity {
     }
 
     private void moveToNewCategoryActivity() {
-        Intent intent = new Intent(this, NewCategoryActivity.class);
+        Intent intent = new Intent(this, MakeCategoryActivity.class);
         startActivity(intent);
     }
 

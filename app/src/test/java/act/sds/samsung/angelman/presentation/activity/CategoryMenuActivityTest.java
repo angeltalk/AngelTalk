@@ -209,7 +209,7 @@ public class CategoryMenuActivityTest extends UITest {
     }
 
     @Test
-    public void whenLastCategoryMenuDeleted_thenLaunchNewCategoryActivity() throws Exception {
+    public void whenLastCategoryMenuDeleted_thenLaunchMakeCategoryActivity() throws Exception {
         setUpActivityWithCategoryList(1);
 
         categoryDeleteButton.performClick();
@@ -223,18 +223,18 @@ public class CategoryMenuActivityTest extends UITest {
 
         ShadowActivity shadowActivity = shadowOf(subject);
         Intent startedIntent = shadowActivity.getNextStartedActivity();
-        assertThat(startedIntent.getComponent().getClassName()).isEqualTo(NewCategoryActivity.class.getCanonicalName());
+        assertThat(startedIntent.getComponent().getClassName()).isEqualTo(MakeCategoryActivity.class.getCanonicalName());
     }
 
     @Test
-    public void whenClickNewCategoryItem_thenLaunchesNewCategoryActivity() throws Exception {
+    public void whenClickNewCategoryItem_thenLaunchesMakeCategoryActivity() throws Exception {
         ShadowAbsListView shadowCategoryList = shadowOf(categoryList);
         shadowCategoryList.populateItems();
         shadowCategoryList.performItemClick(5);
 
         ShadowActivity shadowActivity = shadowOf(subject);
         Intent startedIntent = shadowActivity.getNextStartedActivity();
-        assertThat(startedIntent.getComponent().getClassName()).isEqualTo(NewCategoryActivity.class.getCanonicalName());
+        assertThat(startedIntent.getComponent().getClassName()).isEqualTo(MakeCategoryActivity.class.getCanonicalName());
     }
 
     @Test
