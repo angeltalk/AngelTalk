@@ -1,24 +1,23 @@
 package act.sds.samsung.angelman.presentation.activity;
 
 
+import android.support.annotation.NonNull;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewParent;
 
-import org.hamcrest.Description;
 import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
 import org.hamcrest.core.IsInstanceOf;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import act.sds.samsung.angelman.R;
 
+import static act.sds.samsung.angelman.presentation.activity.TestUtil.childAtPosition;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -33,37 +32,27 @@ import static org.hamcrest.Matchers.allOf;
 public class DeleteCategoryTest {
 
     @Rule
-    public ActivityTestRule<OnboardingActivity> mActivityTestRule = new ActivityTestRule<>(OnboardingActivity.class);
+    public ActivityTestRule<CategoryMenuActivity> mActivityTestRule = new ActivityTestRule<>(CategoryMenuActivity.class);
+
+    @Before
+    public void setUp() throws Exception {
+        TestUtil.InitializeDatabase(mActivityTestRule.getActivity().getApplicationContext(), mActivityTestRule.getActivity().categoryRepository, mActivityTestRule.getActivity().cardRepository);
+    }
 
     @Test
     public void deleteCategoryTest() {
 
-        ViewInteraction fontTextView5 = onView(
-                allOf(withId(R.id.category_delete_button), withText("삭제"),
-                        withParent(withId(R.id.clock_layout)),
-                        isDisplayed()));
-        fontTextView5.perform(click());
+        ViewInteraction categoryDeleteButton = onView(withId(R.id.category_delete_button));
 
-        ViewInteraction textView = onView(
-                allOf(withId(R.id.category_delete_button),
-                        childAtPosition(
-                                allOf(withId(R.id.clock_layout),
-                                        childAtPosition(
-                                                IsInstanceOf.<View>instanceOf(android.widget.RelativeLayout.class),
-                                                0)),
-                                2),
-                        isDisplayed()));
-        textView.check(matches(withText("완료")));
+        // TODO: 삭제버튼 -> 오들오들에니메이션 코드 진행시 perform(click())과 충돌... espresso에서 looping animation 지원안함
+        categoryDeleteButton.check(matches(withText("삭제")))
+                .check(matches(isDisplayed()))
+                .perform(click());
 
-        ViewInteraction imageView = onView(
-                allOf(withId(R.id.delete_button),
-                        childAtPosition(
-                                childAtPosition(childAtPosition(childAtPosition(
-                                        IsInstanceOf.<View>instanceOf(android.widget.GridView.class),
-                                        1),
-                                0),0),0),
-                        isDisplayed()));
-        imageView.check(matches(isDisplayed()));
+        categoryDeleteButton.check(matches(withText("완료")))
+                .check(matches(isDisplayed()));
+
+        onView(secondCategoryItemDeleteButton()).check(matches(isDisplayed()));
 
         ViewInteraction cardView3 = onView(
                 allOf(withId(R.id.category_item_card),
@@ -201,28 +190,17 @@ public class DeleteCategoryTest {
                                 childAtPosition(
                                         IsInstanceOf.<View>instanceOf(android.widget.GridView.class),
                                         0),
-                                0),0),1),1),
+                                0), 0), 1), 1),
                         isDisplayed()));
         textView7.check(matches(withText("새 카테고리")));
 
     }
 
-    private static Matcher<View> childAtPosition(
-            final Matcher<View> parentMatcher, final int position) {
-
-        return new TypeSafeMatcher<View>() {
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("Child at position " + position + " in parent ");
-                parentMatcher.describeTo(description);
-            }
-
-            @Override
-            public boolean matchesSafely(View view) {
-                ViewParent parent = view.getParent();
-                return parent instanceof ViewGroup && parentMatcher.matches(parent)
-                        && view.equals(((ViewGroup) parent).getChildAt(position));
-            }
-        };
+    @NonNull
+    private Matcher<View> secondCategoryItemDeleteButton() {
+        return allOf(withId(R.id.delete_button),
+                childAtPosition(childAtPosition(childAtPosition(childAtPosition(
+                        IsInstanceOf.<View>instanceOf(android.widget.GridView.class),
+                        1),0),0),0));
     }
 }

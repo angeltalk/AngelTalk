@@ -12,7 +12,6 @@ import org.junit.runners.Suite;
         MakeNewCategoryTest.class,
 //        DeleteCategoryTest.class,
         SendVOCTest.class
-
 })
 public class E2ESuite {
 }

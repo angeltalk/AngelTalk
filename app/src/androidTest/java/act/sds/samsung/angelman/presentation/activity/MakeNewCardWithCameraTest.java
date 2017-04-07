@@ -1,171 +1,88 @@
 package act.sds.samsung.angelman.presentation.activity;
 
 
+import android.support.annotation.NonNull;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewParent;
 
-import org.hamcrest.Description;
 import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
-import org.hamcrest.core.IsInstanceOf;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import act.sds.samsung.angelman.R;
 
+import static act.sds.samsung.angelman.presentation.activity.TestUtil.childAtPosition;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.pressBack;
 import static android.support.test.espresso.action.ViewActions.pressImeActionButton;
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.is;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
 public class MakeNewCardWithCameraTest {
 
     @Rule
-    public ActivityTestRule<OnboardingActivity> mActivityTestRule = new ActivityTestRule<>(OnboardingActivity.class);
+    public ActivityTestRule<CategoryMenuActivity> mActivityTestRule = new ActivityTestRule<>(CategoryMenuActivity.class);
 
     @Test
     public void makeNewCardWithCameraTest() throws InterruptedException {
 
-        ViewInteraction cardView = onView(
-                allOf(withId(R.id.category_item_card),
-                        childAtPosition(
-                                withId(R.id.category_list),
-                                1),
-                        isDisplayed()));
-        cardView.perform(click());
+        onView(secondCategoryItemView())
+                .check(matches(isDisplayed()))
+                .perform(click());
 
-        ViewInteraction relativeLayout = onView(
-                allOf(childAtPosition(
-                        allOf(withId(R.id.add_card_view_layout),
-                                childAtPosition(
-                                        IsInstanceOf.<View>instanceOf(android.widget.RelativeLayout.class),
-                                        0)),
-                        0),
-                        isDisplayed()));
-        relativeLayout.check(matches(isDisplayed()));
+        onView(withId(R.id.add_card_view_layout))
+                .check(matches(isDisplayed()));
+        onView(withId(R.id.add_card_text))
+                .check(matches(isDisplayed()))
+                .check(matches(withText("새 카드 만들기")));
+        onView(withId(R.id.add_card_view_layout)).perform(click());
 
-        ViewInteraction textView = onView(
-                allOf(withId(R.id.add_card_text),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.add_card_view_layout),
-                                        0),
-                                0),
-                        isDisplayed()));
-        textView.check(matches(withText("새 카드 만들기")));
+        onView(withId(R.id.layout_camera))
+                .check(matches(isDisplayed()));
+        onView(withId(R.id.text_take_picture))
+                .check(matches(isDisplayed()))
+                .check(matches(withText("사진 찍기")));
+        onView(withId(R.id.layout_camera)).perform(click());
 
-        ViewInteraction addCardView = onView(
-                allOf(withClassName(is("act.sds.samsung.angelman.presentation.custom.AddCardView")),
-                        withParent(allOf(withId(R.id.view_pager),
-                                withParent(withId(R.id.category_item_container)))),
-                        isDisplayed()));
-        addCardView.perform(click());
+        Thread.sleep(2000); // wait for loading camera
 
-        ViewInteraction relativeLayout2 = onView(
-                allOf(withId(R.id.layout_camera),
-                        childAtPosition(
-                                childAtPosition(
-                                        IsInstanceOf.<View>instanceOf(android.widget.RelativeLayout.class),
-                                        1),
-                                0),
-                        isDisplayed()));
-        relativeLayout2.check(matches(isDisplayed()));
+        onView(withId(R.id.camera_shutter))
+                .check(matches(isDisplayed()))
+                .perform(click());
 
-        ViewInteraction textView2 = onView(
-                allOf(withId(R.id.text_take_picture),
-                        childAtPosition(
-                                allOf(withId(R.id.layout_camera),
-                                        childAtPosition(
-                                                IsInstanceOf.<View>instanceOf(android.widget.RelativeLayout.class),
-                                                0)),
-                                1),
-                        isDisplayed()));
-        textView2.check(matches(withText("카메라")));
+        Thread.sleep(2000); // wait for take a picture
 
-        ViewInteraction relativeLayout3 = onView(
-                allOf(withId(R.id.layout_camera), isDisplayed()));
-        relativeLayout3.perform(click());
-
-        Thread.sleep(2000);
-        ViewInteraction frameLayout = onView(
-                allOf(withId(R.id.camera_shutter), isDisplayed()));
+        onView(withId(R.id.card_image_title_edit))
+                .check(matches(isDisplayed()))
+                .perform(replaceText("Make New Card"));
         Thread.sleep(1000);
-        frameLayout.perform(click());
-        Thread.sleep(1000);
+        pressBack();
+        onView(withId(R.id.card_image_title_edit))
+                .perform(pressImeActionButton());
 
-        ViewInteraction fontEditText = onView(
-                allOf(withId(R.id.card_image_title_edit),
-                        withParent(allOf(withId(R.id.card_container),
-                                withParent(withId(R.id.card_view_layout)))),
-                        isDisplayed()));
-        Thread.sleep(1000);
+//        onView(withId(R.id.card_image_title_edit))
+//                .check(matches(isDisplayed()))
+//                .check(matches(withText("Make New Card")));
+        onView(withId(R.id.recoding_guide))
+                .check(matches(isDisplayed()))
+                .check(matches(withText("카드 이름을 녹음해주세요")));
+        onView(withId(R.id.mic_btn))
+                .check(matches(isDisplayed()))
+                .perform(click());
 
-        fontEditText.perform(replaceText("test"), closeSoftKeyboard());
-
-        ViewInteraction fontEditText2 = onView(
-                allOf(withId(R.id.card_image_title_edit),
-                        withParent(allOf(withId(R.id.card_container),
-                                withParent(withId(R.id.card_view_layout)))),
-                        isDisplayed()));
-        fontEditText2.perform(pressImeActionButton());
-
-        ViewInteraction textView3 = onView(
-                allOf(withId(R.id.card_image_title),
-                        childAtPosition(
-                                allOf(withId(R.id.card_container),
-                                        childAtPosition(
-                                                withId(R.id.card_view_layout),
-                                                0)),
-                                1),
-                        isDisplayed()));
-        textView3.check(matches(withText("test")));
-
-        ViewInteraction textView4 = onView(
-                allOf(withId(R.id.recoding_guide),
-                        childAtPosition(
-                                allOf(withId(R.id.show_card_layout),
-                                        childAtPosition(
-                                                IsInstanceOf.<View>instanceOf(android.view.ViewGroup.class),
-                                                0)),
-                                2),
-                        isDisplayed()));
-        textView4.check(matches(withText("카드 이름을 녹음해주세요")));
-
-        ViewInteraction button = onView(
-                allOf(withId(R.id.mic_btn),
-                        childAtPosition(
-                                allOf(withId(R.id.show_card_layout),
-                                        childAtPosition(
-                                                IsInstanceOf.<View>instanceOf(android.view.ViewGroup.class),
-                                                0)),
-                                3),
-                        isDisplayed()));
-        button.check(matches(isDisplayed()));
-
-        ViewInteraction appCompatButton = onView(
-                allOf(withId(R.id.mic_btn),
-                        withParent(withId(R.id.show_card_layout)),
-                        isDisplayed()));
-        appCompatButton.perform(click());
-
-        Thread.sleep(4000);
+        Thread.sleep(4000); // wait for record
 
         ViewInteraction button3 = onView(
                 allOf(withId(R.id.record_stop_btn),
@@ -227,22 +144,11 @@ public class MakeNewCardWithCameraTest {
 
     }
 
-    private static Matcher<View> childAtPosition(
-            final Matcher<View> parentMatcher, final int position) {
-
-        return new TypeSafeMatcher<View>() {
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("Child at position " + position + " in parent ");
-                parentMatcher.describeTo(description);
-            }
-
-            @Override
-            public boolean matchesSafely(View view) {
-                ViewParent parent = view.getParent();
-                return parent instanceof ViewGroup && parentMatcher.matches(parent)
-                        && view.equals(((ViewGroup) parent).getChildAt(position));
-            }
-        };
+    @NonNull
+    private Matcher<View> secondCategoryItemView() {
+        return allOf(withId(R.id.category_item_card),
+                childAtPosition(
+                        withId(R.id.category_list),
+                        1));
     }
 }

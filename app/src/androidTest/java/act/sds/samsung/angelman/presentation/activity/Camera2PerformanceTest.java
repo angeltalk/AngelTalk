@@ -1,24 +1,22 @@
 package act.sds.samsung.angelman.presentation.activity;
 
 
+import android.support.annotation.NonNull;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewParent;
 
-import org.hamcrest.Description;
 import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import act.sds.samsung.angelman.R;
 
+import static act.sds.samsung.angelman.presentation.activity.TestUtil.childAtPosition;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -34,73 +32,63 @@ import static org.hamcrest.Matchers.is;
 @RunWith(AndroidJUnit4.class)
 public class Camera2PerformanceTest {
 
+    final static int TEST_TIMES = 100;
+
     @Rule
     public ActivityTestRule<CategoryMenuActivity> mActivityTestRule = new ActivityTestRule<>(CategoryMenuActivity.class);
 
     @Test
-    public void camera2PerformanceTest() throws Exception{
-        ViewInteraction cardView = onView(
-                allOf(withId(R.id.category_item_card),
-                        childAtPosition(
-                                withId(R.id.category_list),
-                                0),
-                        isDisplayed()));
-        cardView.perform(click());
+    public void camera2PerformanceTest() throws Exception {
+        onView(firstCategoryItemViewMatcher()).perform(click());
+        onView(addCareViewMatcher()).perform(click());
 
-        ViewInteraction addCardView = onView(
-                allOf(withClassName(is("act.sds.samsung.angelman.presentation.custom.AddCardView")),
-                        withParent(allOf(withId(R.id.view_pager),
-                                withParent(withId(R.id.category_item_container)))),
-                        isDisplayed()));
-        addCardView.perform(click());
-
-
-        for (int i = 0; i < 2; i++) {
-            Log.d("camera2PerformanceTest", "i = " + i);
-
-            ViewInteraction relativeLayout = onView(
-                    allOf(withId(R.id.layout_camera), isDisplayed()));
-            relativeLayout.perform(click());
-
+        for (int i = 0; i < TEST_TIMES; i++) {
+            Log.d("camera2PerformanceTest", "camera2PerformanceTest (" + i + "/" + TEST_TIMES + ")");
+            onView(addPhotoCardButtonMatcher()).perform(click());
+            onView(cameraShutterMatcher()).perform(click());
             Thread.sleep(2000);
-            ViewInteraction frameLayout = onView(
-                    allOf(withId(R.id.camera_shutter), isDisplayed()));
 
+            ViewInteraction cardImageTitleEditView = onView(cardImageTitleEditMatcher());
+            cardImageTitleEditView.perform(replaceText("pen"));
             Thread.sleep(1000);
-            frameLayout.perform(click());
-            Thread.sleep(1000);
-            ViewInteraction appCompatEditText = onView(
-                    allOf(withId(R.id.card_image_title_edit),
-                            withParent(allOf(withId(R.id.card_container),
-                                    withParent(withId(R.id.card_view_layout)))),
-                            isDisplayed()));
-
-            Thread.sleep(1000);
-            appCompatEditText.perform(replaceText("pen"));
-            Thread.sleep(1000);
-
             pressBack(); // To hide softKey
             pressBack(); // Go Back To CameraGallerySelection Activity
             Thread.sleep(1000);
         }
     }
 
-    private static Matcher<View> childAtPosition(
-            final Matcher<View> parentMatcher, final int position) {
+    @NonNull
+    private Matcher<View> cardImageTitleEditMatcher() {
+        return allOf(withId(R.id.card_image_title_edit),
+                withParent(allOf(withId(R.id.card_container),
+                        withParent(withId(R.id.card_view_layout)))),
+                isDisplayed());
+    }
 
-        return new TypeSafeMatcher<View>() {
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("Child at position " + position + " in parent ");
-                parentMatcher.describeTo(description);
-            }
+    @NonNull
+    private Matcher<View> cameraShutterMatcher() {
+        return allOf(withId(R.id.camera_shutter), isDisplayed());
+    }
 
-            @Override
-            public boolean matchesSafely(View view) {
-                ViewParent parent = view.getParent();
-                return parent instanceof ViewGroup && parentMatcher.matches(parent)
-                        && view.equals(((ViewGroup) parent).getChildAt(position));
-            }
-        };
+    @NonNull
+    private Matcher<View> addPhotoCardButtonMatcher() {
+        return allOf(withId(R.id.layout_camera), isDisplayed());
+    }
+
+    @NonNull
+    private Matcher<View> addCareViewMatcher() {
+        return allOf(withClassName(is("act.sds.samsung.angelman.presentation.custom.AddCardView")),
+                withParent(allOf(withId(R.id.view_pager),
+                        withParent(withId(R.id.category_item_container)))),
+                isDisplayed());
+    }
+
+    @NonNull
+    private Matcher<View> firstCategoryItemViewMatcher() {
+        return allOf(withId(R.id.category_item_card),
+                childAtPosition(
+                        withId(R.id.category_list),
+                        0),
+                isDisplayed());
     }
 }
