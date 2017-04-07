@@ -9,6 +9,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -119,14 +120,14 @@ public class MakeCategoryActivity extends AbstractActivity{
         editCategoryTitle.addTextChangedListener(textChangeWatcher);
 
         ImageView leftArrowButton = (ImageView) findViewById(R.id.left_arrow_button);
-        leftArrowButton.setOnClickListener(new View.OnClickListener() {
+        leftArrowButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
             }
         });
 
-        saveButton.setOnClickListener(new View.OnClickListener() {
+        saveButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 CategoryModel model = new CategoryModel();
@@ -142,7 +143,7 @@ public class MakeCategoryActivity extends AbstractActivity{
         saveButton.setEnabled(false);
         saveButton.setTypeface(FontUtil.setFont(this, FontUtil.FONT_REGULAR));
 
-        cancelButton.setOnClickListener(new View.OnClickListener() {
+        cancelButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 editCategoryTitle.setText("");
@@ -169,7 +170,7 @@ public class MakeCategoryActivity extends AbstractActivity{
         }
     }
 
-    private View.OnClickListener positiveListener = new View.OnClickListener() {
+    private OnClickListener positiveListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
             alertDialog.dismiss();
@@ -177,8 +178,8 @@ public class MakeCategoryActivity extends AbstractActivity{
         }
     };
 
-    private View.OnClickListener negativeListener = new View.OnClickListener() {
-        @Overrided
+    private OnClickListener negativeListener = new OnClickListener() {
+
         public void onClick(View v) {
             alertDialog.dismiss();
         }
