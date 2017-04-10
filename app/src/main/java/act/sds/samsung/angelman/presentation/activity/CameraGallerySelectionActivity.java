@@ -12,7 +12,7 @@ import javax.inject.Inject;
 import act.sds.samsung.angelman.AngelmanApplication;
 import act.sds.samsung.angelman.R;
 import act.sds.samsung.angelman.presentation.manager.ApplicationConstants;
-import act.sds.samsung.angelman.presentation.custom.CardCategoryLayout;
+import act.sds.samsung.angelman.presentation.custom.CardTitleLayout;
 import act.sds.samsung.angelman.presentation.manager.ApplicationManager;
 import act.sds.samsung.angelman.presentation.util.ResourcesUtil;
 import butterknife.BindView;
@@ -36,7 +36,7 @@ public class CameraGallerySelectionActivity extends AbstractActivity {
     private static final int SELECT_PICTURE = 1;
     static final int REQUEST_VIDEO_CAPTURE = 1;
 
-    CardCategoryLayout titleLayout;
+    CardTitleLayout titleLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +51,7 @@ public class CameraGallerySelectionActivity extends AbstractActivity {
                 applicationManager.getCategoryModelColor()
         );
 
-        titleLayout = (CardCategoryLayout) findViewById(R.id.title_container);
+        titleLayout = (CardTitleLayout) findViewById(R.id.title_container);
         titleLayout.setCategoryModelTitle(applicationManager.getCategoryModel().title);
         titleLayout.setCardCountVisible(View.GONE);
 

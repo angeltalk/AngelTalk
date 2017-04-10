@@ -32,7 +32,7 @@ import act.sds.samsung.angelman.domain.repository.CardRepository;
 import act.sds.samsung.angelman.network.transfer.CardTransfer;
 import act.sds.samsung.angelman.network.transfer.KaKaoTransfer;
 import act.sds.samsung.angelman.presentation.adapter.CardImageAdapter;
-import act.sds.samsung.angelman.presentation.custom.CardCategoryLayout;
+import act.sds.samsung.angelman.presentation.custom.CardTitleLayout;
 import act.sds.samsung.angelman.presentation.custom.CardView;
 import act.sds.samsung.angelman.presentation.custom.CardViewPager;
 import act.sds.samsung.angelman.presentation.custom.CustomConfirmDialog;
@@ -59,7 +59,7 @@ public class CardViewPagerActivity extends AbstractActivity {
     KaKaoTransfer kaKaoTransfer;
 
     @BindView(R.id.title_container)
-    CardCategoryLayout titleLayout;
+    CardTitleLayout cardTitleLayout;
 
     @BindView(R.id.button_container)
     LinearLayout buttonContainer;
@@ -72,12 +72,6 @@ public class CardViewPagerActivity extends AbstractActivity {
 
     @BindView(R.id.view_pager)
     CardViewPager mViewPager;
-
-    @BindView(R.id.category_item_title)
-    TextView categoryTitle;
-
-    @BindView(R.id.list_card_button)
-    ImageView listCardButton;
 
     @BindView(R.id.on_loading_view)
     LinearLayout loadingViewLayout;
@@ -168,9 +162,9 @@ public class CardViewPagerActivity extends AbstractActivity {
         selectedCategoryModel = applicationManager.getCategoryModel();
 
         allCardListInSelectedCategory = cardRepository.getSingleCardListWithCategoryId(selectedCategoryModel.index,false);
-        titleLayout.setCategoryModelTitle(applicationManager.getCategoryModel().title);
-        titleLayout.refreshCardCountText(0, allCardListInSelectedCategory.size() + 1);
-        categoryTitle.setText(selectedCategoryModel.title);
+        cardTitleLayout.setCategoryModelTitle(applicationManager.getCategoryModel().title);
+        cardTitleLayout.refreshCardCountText(0, allCardListInSelectedCategory.size() + 1);
+        cardTitleLayout.categoryTitle.setText(selectedCategoryModel.title);
 
         adapter = new CardImageAdapter(this, allCardListInSelectedCategory, glide, applicationManager);
         adapter.addNewCardViewAtFirst();
@@ -178,8 +172,8 @@ public class CardViewPagerActivity extends AbstractActivity {
         OverScrollDecoratorHelper.setUpOverScroll(mViewPager);
         mViewPager.addOnPageChangeListener(viewPagerOnPageChangeListener);
 
-        titleLayout.refreshCardCountText(0, allCardListInSelectedCategory.size());
-        titleLayout.setBackButtonOnClickListener(new View.OnClickListener() {
+        cardTitleLayout.refreshCardCountText(0, allCardListInSelectedCategory.size());
+        cardTitleLayout.setBackButtonOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 moveToCategoryMenuActivity();
@@ -204,7 +198,7 @@ public class CardViewPagerActivity extends AbstractActivity {
             adapter.stopVideoView();
             showAndHideButtonContainerBy(pos);
             currentCardIndex = pos;
-            titleLayout.refreshCardCountText(pos, mViewPager.getAdapter().getCount());
+            cardTitleLayout.refreshCardCountText(pos, mViewPager.getAdapter().getCount());
         }
 
         @Override
@@ -215,10 +209,8 @@ public class CardViewPagerActivity extends AbstractActivity {
     private void showAndHideButtonContainerBy(int pos) {
         if (pos == 0) {
             buttonContainer.setVisibility(View.GONE);
-            titleLayout.setAddCardTextButtonVisible(View.GONE);
         } else {
             buttonContainer.setVisibility(View.VISIBLE);
-            titleLayout.setAddCardTextButtonVisible(View.VISIBLE);
         }
     }
 
@@ -240,7 +232,7 @@ public class CardViewPagerActivity extends AbstractActivity {
                     mViewPager.setAdapter(adapter);
                     mViewPager.setCurrentItem(currentItem);
                     showAndHideButtonContainerBy(currentItem);
-                    titleLayout.refreshCardCountText(mViewPager.getCurrentItem(), adapter.getCount());
+                    cardTitleLayout.refreshCardCountText(mViewPager.getCurrentItem(), adapter.getCount());
                 }
                 dialog.dismiss();
             }

@@ -9,7 +9,7 @@
     android:background="@drawable/rectangle"
     tools:context=".presentation.activity.CameraGallerySelectionActivity">
 
-    <act.sds.samsung.angelman.presentation.custom.CardCategoryLayout
+    <act.sds.samsung.angelman.presentation.custom.CardTitleLayout
         android:id="@+id/title_container"
         android:layout_width="match_parent"
         app:layout_heightPercent="20%"
@@ -61,7 +61,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/btn_camera"
-                android:layout_marginLeft="33dp"
+                android:layout_marginStart="33dp"
                 android:layout_centerVertical="true" />
 
             <act.sds.samsung.angelman.presentation.custom.FontTextView
@@ -74,8 +74,8 @@
                 app:font="@string/font_regular"
                 android:textSize="18sp"
                 android:text="@string/take_picture"
-                android:layout_marginLeft="25.5dp"
-                android:layout_toRightOf="@id/image_camera"/>
+                android:layout_marginStart="25.5dp"
+                android:layout_toEndOf="@id/image_camera"/>
         </android.support.percent.PercentRelativeLayout>
 
         <View
@@ -96,7 +96,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/btn_gallery"
-                android:layout_marginLeft="33dp"
+                android:layout_marginStart="33dp"
                 android:layout_centerVertical="true" />
 
             <act.sds.samsung.angelman.presentation.custom.FontTextView
@@ -109,8 +109,8 @@
                 app:font="@string/font_regular"
                 android:textSize="18sp"
                 android:text="@string/select_gallery"
-                android:layout_marginLeft="25.5dp"
-                android:layout_toRightOf="@id/image_gallery"/>
+                android:layout_marginStart="25.5dp"
+                android:layout_toEndOf="@id/image_gallery"/>
 
         </android.support.percent.PercentRelativeLayout>
 
@@ -132,7 +132,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/btn_video"
-                android:layout_marginLeft="33dp"
+                android:layout_marginStart="33dp"
                 android:layout_centerVertical="true" />
 
             <act.sds.samsung.angelman.presentation.custom.FontTextView
@@ -145,8 +145,8 @@
                 app:font="@string/font_regular"
                 android:textSize="18sp"
                 android:text="@string/take_video"
-                android:layout_marginLeft="25.5dp"
-                android:layout_toRightOf="@id/image_video"/>
+                android:layout_marginStart="25.5dp"
+                android:layout_toEndOf="@id/image_video"/>
 
         </android.support.percent.PercentRelativeLayout>
 
