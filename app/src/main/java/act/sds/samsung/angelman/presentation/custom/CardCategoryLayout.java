@@ -52,6 +52,14 @@ public class CardCategoryLayout extends RelativeLayout {
         }
 
         ((TextView) findViewById(R.id.category_item_title)).setText(title);
+        findViewById(R.id.back_button).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (getContext() instanceof Activity) {
+                    ((Activity) getContext()).finish();
+                }
+            }
+        });
     }
 
     @OnClick(R.id.list_card_button)
@@ -63,11 +71,8 @@ public class CardCategoryLayout extends RelativeLayout {
         }
     }
 
-    @OnClick(R.id.back_button)
-    public void onClickBackButton(View v) {
-        if (getContext() instanceof Activity) {
-            ((Activity) getContext()).finish();
-        }
+    public void setBackButtonOnClickListener(OnClickListener onClickListener) {
+        findViewById(R.id.back_button).setOnClickListener(onClickListener);
     }
 
     public CardCategoryLayout(Context context, AttributeSet attrs, int defStyleAttr) {
