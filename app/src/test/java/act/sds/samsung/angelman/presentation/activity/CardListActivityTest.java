@@ -10,6 +10,7 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
+import org.robolectric.shadows.ShadowActivity;
 
 import java.io.File;
 import java.util.List;
@@ -120,6 +121,16 @@ public class CardListActivityTest extends UITest{
     public void whenClickBackButton_thenFinishActivity() throws Exception {
         subject.findViewById(R.id.back_button).performClick();
         assertThat(subject.isFinishing()).isTrue();
+    }
+
+    @Test
+    public void whenClickAddCardButton_thenMoveToCameraGallerySelectionActivity() throws Exception {
+        // when
+        subject.findViewById(R.id.add_card_button).performClick();
+
+        // then
+        ShadowActivity shadowActivity = shadowOf(subject);
+        assertThat(shadowActivity.getNextStartedActivity().getComponent().getClassName()).isEqualTo(CameraGallerySelectionActivity.class.getCanonicalName());
     }
 
     private CategoryModel getCategoryModel() {
