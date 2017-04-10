@@ -1,0 +1,6 @@
+<resources>
+    <declare-styleable name="CardListTabButton">
+        <attr name="selected" format="boolean" />
+        <attr name="buttonText" format="reference" />
+    </declare-styleable>
+</resources>

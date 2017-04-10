@@ -133,6 +133,33 @@ public class CardListActivityTest extends UITest{
         assertThat(shadowActivity.getNextStartedActivity().getComponent().getClassName()).isEqualTo(CameraGallerySelectionActivity.class.getCanonicalName());
     }
 
+    @Test
+    public void whenLaunched_thenSetShowHideTabButtonSelectedAndChangeOrderButtonUnselected() throws Exception {
+        assertThat(subject.showHideTabButton.isSelected()).isTrue();
+        assertThat(subject.changeOrderTabButton.isSelected()).isFalse();
+    }
+
+    @Test
+    public void givenLaunched_whenClickChangeOrderTabButton_thenSetShowHideTabButtonUnSelectedAndChangeOrderButtonSelected() throws Exception {
+        // when
+        subject.changeOrderTabButton.performClick();
+
+        // then
+        assertThat(subject.showHideTabButton.isSelected()).isFalse();
+        assertThat(subject.changeOrderTabButton.isSelected()).isTrue();
+    }
+
+    @Test
+    public void givenChangeOrderTabButtonSelected_whenClickShowHideTabButton_thenSetShowHideTabButtonUnSelectedAndChangeOrderButtonUnselected() throws Exception {
+        // given
+        subject.changeOrderTabButton.performClick();
+        // when
+        subject.showHideTabButton.performClick();
+        // then
+        assertThat(subject.showHideTabButton.isSelected()).isTrue();
+        assertThat(subject.changeOrderTabButton.isSelected()).isFalse();
+    }
+
     private CategoryModel getCategoryModel() {
         CategoryModel categoryModel = new CategoryModel();
         categoryModel.index = 0;
