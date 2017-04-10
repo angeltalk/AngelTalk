@@ -73,11 +73,16 @@ public class CardListActivity extends AppCompatActivity {
         finish();
     }
 
-
     @OnClick(R.id.back_button)
     public void onClickBackButton(View v) {
         moveToCardViewPagerActivity();
         finish();
+    }
+
+    @OnClick(R.id.add_card_button)
+    public void onAddCardButtonClick(View view) {
+        Intent intent = new Intent(this, CameraGallerySelectionActivity.class);
+        startActivity(intent);
     }
 
     private void initView() {
