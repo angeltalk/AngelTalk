@@ -1,5 +1,6 @@
 package act.sds.samsung.angelman.presentation.activity;
 
+import android.view.View;
 import android.widget.ImageView;
 
 import com.google.common.collect.Lists;
@@ -149,6 +150,19 @@ public class CardListActivityTest extends UITest{
         assertThat(subject.changeOrderTabButton.isSelected()).isTrue();
     }
 
+
+    @Test
+    public void givenLaunched_whenClickChangeOrderTabButton_thenHideShowAndHideIconAndShowItemMoveIcon() throws Exception {
+        // when
+        subject.changeOrderTabButton.performClick();
+
+        // then
+        ImageView showHideIconView = ((ImageView) subject.cardListRecyclerView.getChildAt(2).findViewById(R.id.show_hide_icon));
+        ImageView itemMoveIcon = ((ImageView) subject.cardListRecyclerView.getChildAt(0).findViewById(R.id.item_move_icon));
+        assertThat(showHideIconView.getVisibility()).isEqualTo(View.GONE);
+        assertThat(itemMoveIcon.getVisibility()).isEqualTo(View.VISIBLE);
+    }
+
     @Test
     public void givenChangeOrderTabButtonSelected_whenClickShowHideTabButton_thenSetShowHideTabButtonUnSelectedAndChangeOrderButtonUnselected() throws Exception {
         // given
@@ -158,6 +172,19 @@ public class CardListActivityTest extends UITest{
         // then
         assertThat(subject.showHideTabButton.isSelected()).isTrue();
         assertThat(subject.changeOrderTabButton.isSelected()).isFalse();
+    }
+
+    @Test
+    public void givenChangeOrderTabButtonSelected_whenClickShowHideTabButton_thenShowShowAndHideIconAndHideItemMoveIcon() throws Exception {
+        // given
+        subject.changeOrderTabButton.performClick();
+        // when
+        subject.showHideTabButton.performClick();
+        // then
+        ImageView showHideIconView = ((ImageView) subject.cardListRecyclerView.getChildAt(2).findViewById(R.id.show_hide_icon));
+        ImageView itemMoveIcon = ((ImageView) subject.cardListRecyclerView.getChildAt(0).findViewById(R.id.item_move_icon));
+        assertThat(showHideIconView.getVisibility()).isEqualTo(View.VISIBLE);
+        assertThat(itemMoveIcon.getVisibility()).isEqualTo(View.GONE);
     }
 
     private CategoryModel getCategoryModel() {
@@ -184,7 +211,4 @@ public class CardListActivityTest extends UITest{
 
         return list;
     }
-
-
-
 }
