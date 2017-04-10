@@ -50,8 +50,9 @@ public class CardListActivity extends AppCompatActivity {
     @BindView(R.id.change_order_tab_button)
     CardListTabButton changeOrderTabButton;
 
-    private CardListRecyclerViewAdapter cardListRecyclerViewAdapter;
     private List<CardModel> cardList;
+    private CardListRecyclerViewAdapter cardListRecyclerViewAdapter;
+    private CardListRecyclerViewAdapter cardListRecyclerViewChangeOrderAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,13 +62,18 @@ public class CardListActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         cardList = cardRepository.getSingleCardListWithCategoryId(applicationManager.getCategoryModel().index);
-        cardListRecyclerViewAdapter = new CardListRecyclerViewAdapter(cardList, applicationManager.getCategoryModelColor(), getApplicationContext(), new OnDataChangeListener(){
+
+        OnDataChangeListener dataChangeListener = new OnDataChangeListener() {
             @Override
             public void onHideChange(int position, boolean hide) {
                 cardList.get(position).hide = hide;
                 cardRepository.updateSingleCardModelHide(cardList.get(position));
             }
-        });
+        };
+
+        cardListRecyclerViewAdapter = new CardListRecyclerViewAdapter(cardList, applicationManager.getCategoryModelColor(), true, getApplicationContext(), dataChangeListener);
+        cardListRecyclerViewChangeOrderAdapter = new CardListRecyclerViewAdapter(cardList, applicationManager.getCategoryModelColor(), false, getApplicationContext(), dataChangeListener);
+
         initView();
     }
 
@@ -94,6 +100,7 @@ public class CardListActivity extends AppCompatActivity {
         if(!showHideTabButton.isSelected()) {
             showHideTabButton.setSelected(true);
             changeOrderTabButton.setSelected(false);
+            cardListRecyclerView.setAdapter(cardListRecyclerViewAdapter);
         }
     }
 
@@ -102,6 +109,7 @@ public class CardListActivity extends AppCompatActivity {
         if(!changeOrderTabButton.isSelected()) {
             showHideTabButton.setSelected(false);
             changeOrderTabButton.setSelected(true);
+            cardListRecyclerView.setAdapter(cardListRecyclerViewChangeOrderAdapter);
         }
     }
 

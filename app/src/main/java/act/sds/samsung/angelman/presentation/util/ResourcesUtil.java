@@ -226,6 +226,34 @@ public class ResourcesUtil {
         return drawable;
     }
 
+    public static int getItemMoveIconBy(@BackgroundColors int color) {
+        int drawable;
+        switch (color){
+            case RED:
+                drawable = R.drawable.ic_list_red;
+                break;
+            case ORANGE:
+                drawable = R.drawable.ic_list_orange;
+                break;
+            case YELLOW:
+                drawable = R.drawable.ic_list_yellow;
+                break;
+            case GREEN:
+                drawable = R.drawable.ic_list_green;
+                break;
+            case BLUE:
+                drawable = R.drawable.ic_list_blue;
+                break;
+            case PURPLE:
+                drawable = R.drawable.ic_list_purple;
+                break;
+            default:
+                drawable = R.drawable.ic_list_red;
+                break;
+        }
+        return drawable;
+    }
+
     public static void setViewBackground(View view, @BackgroundColors int color, Context context){
         view.setBackground(
                 ResourcesCompat.getDrawable(

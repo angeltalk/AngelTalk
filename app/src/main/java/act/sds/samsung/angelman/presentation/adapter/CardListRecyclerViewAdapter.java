@@ -25,15 +25,17 @@ public class CardListRecyclerViewAdapter extends RecyclerView.Adapter<CardListRe
     private final RequestManager glide;
     private final Context context;
     private final int categoryModelColor;
+    private final boolean isShowAndHideMode;
     private List<CardModel> cardModelList;
     private OnDataChangeListener dataChangeListener;
 
-    public CardListRecyclerViewAdapter(List<CardModel> cardModelList, int categoryModelColor, Context context, OnDataChangeListener dataChangeListener) {
+    public CardListRecyclerViewAdapter(List<CardModel> cardModelList, int categoryModelColor, boolean isShowAndHideMode, Context context, OnDataChangeListener dataChangeListener) {
         this.dataChangeListener = dataChangeListener;
         this.cardModelList = cardModelList;
         this.context = context;
         this.categoryModelColor = categoryModelColor;
         this.glide = Glide.with(context);
+        this.isShowAndHideMode = isShowAndHideMode;
     }
 
     @Override
@@ -52,6 +54,7 @@ public class CardListRecyclerViewAdapter extends RecyclerView.Adapter<CardListRe
                 .into(holder.cardThumbnail);
         holder.cardName.setText(cardModel.name);
         setViewByHide(holder, cardModel.hide);
+        changeViewMode(holder, isShowAndHideMode);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,13 +75,25 @@ public class CardListRecyclerViewAdapter extends RecyclerView.Adapter<CardListRe
         if(hide) {
             holder.showHideItemBar.setImageResource(ResourcesUtil.getShowHideItemBarBy(ResourcesUtil.HIDING));
             holder.showHideIcon.setImageResource(ResourcesUtil.getShowHideIconBy(ResourcesUtil.HIDING));
+            holder.itemMoveIcon.setImageResource(ResourcesUtil.getItemMoveIconBy(ResourcesUtil.HIDING));
             holder.cardName.setTextColor(context.getResources().getColor(R.color.black_4C));
             holder.cardThumbnail.setImageAlpha(60);
         } else {
             holder.showHideItemBar.setImageResource(ResourcesUtil.getShowHideItemBarBy(categoryModelColor));
             holder.showHideIcon.setImageResource(ResourcesUtil.getShowHideIconBy(categoryModelColor));
+            holder.itemMoveIcon.setImageResource(ResourcesUtil.getItemMoveIconBy(categoryModelColor));
             holder.cardName.setTextColor(context.getResources().getColor(R.color.black_00));
             holder.cardThumbnail.setImageAlpha(255);
+        }
+    }
+
+    private void changeViewMode(final CardListRecyclerViewHolder holder, boolean isShowAndHideMode) {
+        if (isShowAndHideMode) {
+            holder.showHideIcon.setVisibility(View.VISIBLE);
+            holder.itemMoveIcon.setVisibility(View.GONE);
+        } else {
+            holder.showHideIcon.setVisibility(View.GONE);
+            holder.itemMoveIcon.setVisibility(View.VISIBLE);
         }
     }
 
@@ -97,6 +112,7 @@ public class CardListRecyclerViewAdapter extends RecyclerView.Adapter<CardListRe
         FontTextView cardName;
         ImageView showHideIcon;
         ImageView showHideItemBar;
+        ImageView itemMoveIcon;
 
         public CardListRecyclerViewHolder(View view) {
             super(view);
@@ -104,6 +120,7 @@ public class CardListRecyclerViewAdapter extends RecyclerView.Adapter<CardListRe
             this.cardThumbnail = ((ImageView) view.findViewById(R.id.card_thumbnail));
             this.cardName = ((FontTextView) view.findViewById(R.id.card_name));
             this.showHideIcon = ((ImageView) view.findViewById(R.id.show_hide_icon));
+            this.itemMoveIcon = ((ImageView) view.findViewById(R.id.item_move_icon));
         }
     }
 }
