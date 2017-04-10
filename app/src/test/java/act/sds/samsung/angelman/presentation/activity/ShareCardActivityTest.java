@@ -153,6 +153,29 @@ public class ShareCardActivityTest extends UITest {
         assertThat(shadowIntent.getIntentClass()).isEqualTo(CardViewPagerActivity.class);
     }
 
+
+    @Test
+    public void whenClickBackButton_thenMoveToCategoryMenuActivity() throws Exception {
+        // when
+        subject.findViewById(R.id.back_button).performClick();
+
+        // then
+        ShadowActivity shadowActivity = shadowOf(subject);
+        Intent nextStartedActivity = shadowActivity.getNextStartedActivity();
+        assertThat(nextStartedActivity.getComponent().getClassName()).isEqualTo(CategoryMenuActivity.class.getCanonicalName());
+    }
+
+    @Test
+    public void whenOnBackPressed_thenMoveToCategoryMenuActivity() throws Exception {
+        // when
+        subject.onBackPressed();
+
+        // then
+        ShadowActivity shadowActivity = shadowOf(subject);
+        Intent nextStartedActivity = shadowActivity.getNextStartedActivity();
+        assertThat(nextStartedActivity.getComponent().getClassName()).isEqualTo(CategoryMenuActivity.class.getCanonicalName());
+    }
+
     private List<CategoryModel> getCategoryList(int listSize) {
         List<CategoryModel> categoryList = Lists.newArrayList();
         CategoryModel [] categoryModel = new CategoryModel[listSize];

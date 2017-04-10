@@ -104,10 +104,21 @@ public class ShareCardActivity extends AppCompatActivity {
         downloadCard();
     }
 
+    @Override
+    public void onBackPressed() {
+        moveToCategoryMenuActivity();
+    }
+
     private void initView() {
         showLoadingAnimation();
         titleLayout.setCategoryModelTitle(getApplicationContext().getString(R.string.new_card_title));
         titleLayout.hideCardCountText(true);
+        titleLayout.setBackButtonOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                moveToCategoryMenuActivity();
+            }
+        });
     }
 
     private void showLoadingAnimation() {
@@ -179,6 +190,12 @@ public class ShareCardActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void moveToCategoryMenuActivity() {
+        Intent intent = new Intent(context, CategoryMenuActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 
     private void moveToCategoryViewPagerActivity(CategoryModel categoryModel, String intentKey) {

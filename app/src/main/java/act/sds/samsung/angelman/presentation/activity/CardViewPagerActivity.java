@@ -1,6 +1,7 @@
 package act.sds.samsung.angelman.presentation.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -153,6 +154,11 @@ public class CardViewPagerActivity extends AbstractActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        moveToCategoryMenuActivity();
+    }
+
     private void initializeView() {
         applicationManager.setCategoryBackground(
                 findViewById(R.id.category_item_container),
@@ -173,6 +179,18 @@ public class CardViewPagerActivity extends AbstractActivity {
         mViewPager.addOnPageChangeListener(viewPagerOnPageChangeListener);
 
         titleLayout.refreshCardCountText(0, allCardListInSelectedCategory.size());
+        titleLayout.setBackButtonOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                moveToCategoryMenuActivity();
+            }
+        });
+    }
+
+    private void moveToCategoryMenuActivity() {
+        Intent intent = new Intent(context, CategoryMenuActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 
     private ViewPager.OnPageChangeListener viewPagerOnPageChangeListener = new ViewPager.OnPageChangeListener() {

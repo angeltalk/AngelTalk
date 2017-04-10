@@ -61,7 +61,6 @@ import act.sds.samsung.angelman.presentation.util.ContentsUtil;
 import act.sds.samsung.angelman.presentation.util.PlayUtil;
 import act.sds.samsung.angelman.presentation.util.ResourcesUtil;
 
-import static junit.framework.Assert.assertTrue;
 import static org.assertj.android.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
@@ -183,17 +182,6 @@ public class CardViewPagerActivityTest extends UITest {
 
         assertThat(viewPager.getAdapter().getCount()).isEqualTo(4);
         assertThat(((CardView) ((CardImageAdapter) viewPager.getAdapter()).getItemAt(2)).cardTitle.getText()).isEqualTo(cardListWithCategoryId.get(2).name);
-    }
-
-    @Test
-    public void whenClickedBackButton_thenFinishesCardViewPagerActivity() throws Exception {
-        ImageView backButton = (ImageView) subject.findViewById(R.id.back_button);
-
-        assertThat(backButton).isVisible();
-        backButton.performClick();
-
-        ShadowActivity activityShadow = shadowOf(subject);
-        assertTrue(activityShadow.isFinishing());
     }
 
     @Test
@@ -343,9 +331,25 @@ public class CardViewPagerActivityTest extends UITest {
     }
 
     @Test
-    public void whenClickBackButton_thenFinishActivity() throws Exception {
+    public void whenClickBackButton_thenMoveToCategoryMenuActivity() throws Exception {
+        // when
         subject.findViewById(R.id.back_button).performClick();
-        assertThat(subject.isFinishing()).isTrue();
+
+        // then
+        ShadowActivity shadowActivity = shadowOf(subject);
+        Intent nextStartedActivity = shadowActivity.getNextStartedActivity();
+        assertThat(nextStartedActivity.getComponent().getClassName()).isEqualTo(CategoryMenuActivity.class.getCanonicalName());
+    }
+
+    @Test
+    public void whenOnBackPressed_thenMoveToCategoryMenuActivity() throws Exception {
+        // when
+        subject.onBackPressed();
+
+        // then
+        ShadowActivity shadowActivity = shadowOf(subject);
+        Intent nextStartedActivity = shadowActivity.getNextStartedActivity();
+        assertThat(nextStartedActivity.getComponent().getClassName()).isEqualTo(CategoryMenuActivity.class.getCanonicalName());
     }
 
     @Test
