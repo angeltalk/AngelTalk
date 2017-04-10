@@ -15,7 +15,7 @@ import act.sds.samsung.angelman.presentation.activity.MakeCategoryActivity;
 import act.sds.samsung.angelman.presentation.activity.OnboardingActivity;
 import act.sds.samsung.angelman.presentation.activity.ShareCardActivity;
 import act.sds.samsung.angelman.presentation.custom.AddCardView;
-import act.sds.samsung.angelman.presentation.custom.CardCategoryLayout;
+import act.sds.samsung.angelman.presentation.custom.CardTitleLayout;
 import act.sds.samsung.angelman.presentation.custom.CardViewPagerLayout;
 import act.sds.samsung.angelman.presentation.custom.CategoryMenuLayout;
 import act.sds.samsung.angelman.presentation.service.ScreenReceiver;
@@ -33,7 +33,7 @@ public interface AngelmanComponent {
     void inject(CategoryMenuLayout view);
     void inject(CardViewPagerLayout view);
     void inject(DatabaseHelper databaseHelper);
-    void inject(CardCategoryLayout cardCategoryLayout);
+    void inject(CardTitleLayout cardTitleLayout);
     void inject(AddCardView addCardView);
     void inject(CameraGallerySelectionActivity cameraGallerySelectionActivity);
     void inject(OnboardingActivity onboardingActivity);
