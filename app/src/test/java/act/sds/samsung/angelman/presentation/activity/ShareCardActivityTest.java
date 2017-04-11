@@ -3,6 +3,8 @@ package act.sds.samsung.angelman.presentation.activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.AppCompatRadioButton;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -36,6 +38,7 @@ import act.sds.samsung.angelman.domain.model.CardTransferModel;
 import act.sds.samsung.angelman.domain.model.CategoryModel;
 import act.sds.samsung.angelman.domain.repository.CardRepository;
 import act.sds.samsung.angelman.domain.repository.CategoryRepository;
+import act.sds.samsung.angelman.presentation.custom.CategorySelectDialog;
 import act.sds.samsung.angelman.presentation.custom.FontTextView;
 import act.sds.samsung.angelman.presentation.listener.OnDownloadCompleteListener;
 import act.sds.samsung.angelman.presentation.util.ResourcesUtil;
@@ -106,12 +109,9 @@ public class ShareCardActivityTest extends UITest {
     @Test
     public void whenClickDownloadButton_thenShowCategorySelectDialog() throws Exception {
         // when
-        subject.downloadCard();
-        ImageView saveButton = (ImageView) subject.findViewById(R.id.card_save_button);
-        saveButton.performClick();
+        AlertDialog dialog = showSelectCategoryDialog();
 
         // then
-        AlertDialog dialog = (AlertDialog) ShadowAlertDialog.getLatestDialog();
         assertThat(dialog.isShowing()).isTrue();
 
         FontTextView infoText = ((FontTextView) dialog.findViewById(R.id.text_select_category_guide));
@@ -123,10 +123,8 @@ public class ShareCardActivityTest extends UITest {
 
     @Test
     public void givenShareConfirmDialogShowing_whenClickCancelButton_thenDismissDialog() throws Exception {
-        subject.downloadCard();
-        ImageView saveButton = (ImageView) subject.findViewById(R.id.card_save_button);
-        saveButton.performClick();
-        AlertDialog dialog = (AlertDialog) ShadowAlertDialog.getLatestDialog();
+        AlertDialog dialog = showSelectCategoryDialog();
+
         FontTextView cancelView = (FontTextView) dialog.findViewById(R.id.cancel);
         assertThat(dialog.isShowing()).isTrue();
         cancelView.performClick();
@@ -135,21 +133,53 @@ public class ShareCardActivityTest extends UITest {
 
     @Test
     public void givenShareConfirmDialogShowing_whenClickSaveButton_thenSaveCard() throws Exception {
-        subject.downloadCard();
-        ImageView saveButton = (ImageView) subject.findViewById(R.id.card_save_button);
-        saveButton.performClick();
-        AlertDialog dialog = (AlertDialog) ShadowAlertDialog.getLatestDialog();
+        AlertDialog dialog = showSelectCategoryDialog();
+
+        FontTextView confirmView = (FontTextView) dialog.findViewById(R.id.confirm);
+        confirmView.performClick();
+        assertThat(dialog.isShowing()).isTrue();
+    }
+
+    @Test
+    public void givenShareConfirmDialogShowing_whenClickFirstCategory_thenChangeConfirmButtonTextColor() throws Exception {
+        // given
+        AlertDialog dialog = showSelectCategoryDialog();
+        selectCategoryRadioButtonAt(dialog, 0);
+
+        // then
+        RecyclerView recyclerView = (RecyclerView) dialog.findViewById(R.id.category_list_recycler_view);
+        assertThat(((FontTextView) dialog.findViewById(R.id.confirm)).getCurrentTextColor()).isEqualTo(getColor(R.color.simple_background_red));
+        assertThat(((CategorySelectDialog.CategoryListAdapter) recyclerView.getAdapter()).getSelectItem()).isNotNull();
+    }
+
+    @Test
+    public void givenShareConfirmDialogShowingAndClickFirstCategory_whenClickSecondCategory_thenChangeRadioButtonState() throws Exception {
+        // given
+        AlertDialog dialog = showSelectCategoryDialog();
+        AppCompatRadioButton radioButton1 = selectCategoryRadioButtonAt(dialog, 0);
+
+        assertThat(radioButton1.isChecked()).isTrue();
+
+        // when
+        AppCompatRadioButton radioButton2 = selectCategoryRadioButtonAt(dialog, 1);
+
+        assertThat(radioButton1.isChecked()).isFalse();
+        assertThat(radioButton2.isChecked()).isTrue();
+    }
+
+    @Test
+    public void givenShareConfirmDialogShowing_whenClickFirstCategoryAndClickSaveButton_thenSaveCard() throws Exception {
+        AlertDialog dialog = showSelectCategoryDialog();
+        selectCategoryRadioButtonAt(dialog, 0);
         FontTextView confirmView = (FontTextView) dialog.findViewById(R.id.confirm);
         confirmView.performClick();
         verify(cardRepository).createSingleCardModel(any(CardModel.class));
     }
 
     @Test
-    public void givenShareConfirmDialogShowing_whenClickSaveButton_thenMoveToViewCardPage() throws Exception {
-        subject.downloadCard();
-        ImageView saveButton = (ImageView) subject.findViewById(R.id.card_save_button);
-        saveButton.performClick();
-        AlertDialog dialog = (AlertDialog) ShadowAlertDialog.getLatestDialog();
+    public void givenShareConfirmDialogShowing_whenClickFirstCategoryAndClickSaveButton_thenMoveToViewCardPage() throws Exception {
+        AlertDialog dialog = showSelectCategoryDialog();
+        selectCategoryRadioButtonAt(dialog, 0);
         FontTextView confirmView= (FontTextView) dialog.findViewById(R.id.confirm);
         confirmView.performClick();
 
@@ -180,6 +210,21 @@ public class ShareCardActivityTest extends UITest {
         ShadowActivity shadowActivity = shadowOf(subject);
         Intent nextStartedActivity = shadowActivity.getNextStartedActivity();
         assertThat(nextStartedActivity.getComponent().getClassName()).isEqualTo(CategoryMenuActivity.class.getCanonicalName());
+    }
+
+    private AlertDialog showSelectCategoryDialog() {
+        subject.downloadCard();
+        ImageView saveButton = (ImageView) subject.findViewById(R.id.card_save_button);
+        saveButton.performClick();
+        return (AlertDialog) ShadowAlertDialog.getLatestDialog();
+    }
+
+    @NonNull
+    private AppCompatRadioButton selectCategoryRadioButtonAt(AlertDialog dialog, int position) {
+        RecyclerView recyclerView = (RecyclerView) dialog.findViewById(R.id.category_list_recycler_view);
+        AppCompatRadioButton radioButton = (AppCompatRadioButton) recyclerView.getChildAt(position).findViewById(R.id.category_item_radio);
+        radioButton.performClick();
+        return radioButton;
     }
 
     private List<CategoryModel> getCategoryList(int listSize) {

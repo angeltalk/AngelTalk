@@ -9,4 +9,10 @@
         <item name="android:statusBarColor">@color/status_bar_color</item>
     </style>
 
+    <style name="CategorySelectRadioButton" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorAccent">@color/category_select_list_radiobutton_select</item>
+        <item name="colorPrimary">@color/category_select_list_radiobutton_default</item>
+        <item name="android:textColorSecondary">@color/category_select_list_radiobutton_default</item>
+    </style>
+
 </resources>
