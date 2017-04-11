@@ -36,4 +36,6 @@
     <color name="simple_background_purple">#8F42D6</color>
 
     <color name="card_list_horizontal_border">#e2e2e2</color>
+    <color name="category_select_list_radiobutton_select">#78cfc7</color>
+    <color name="category_select_list_radiobutton_default">#dedede</color>
 </resources>

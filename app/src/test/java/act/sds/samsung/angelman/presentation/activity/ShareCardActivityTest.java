@@ -3,6 +3,7 @@ package act.sds.samsung.angelman.presentation.activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -57,7 +58,6 @@ public class ShareCardActivityTest extends UITest {
 
     ShareCardActivity subject;
 
-
     @Inject
     CategoryRepository categoryRepository;
 
@@ -84,6 +84,7 @@ public class ShareCardActivityTest extends UITest {
 
             }
         }).when(subject.cardTransfer).downloadCard(any(String.class), any(OnDownloadCompleteListener.class));
+        when(categoryRepository.getCategoryAllList()).thenReturn(getCategoryList(6));
     }
 
     @Test
@@ -103,12 +104,21 @@ public class ShareCardActivityTest extends UITest {
     }
 
     @Test
-    public void whenClickDownloadButton_thenShowShareConfirmDialog() throws Exception {
+    public void whenClickDownloadButton_thenShowCategorySelectDialog() throws Exception {
+        // when
         subject.downloadCard();
         ImageView saveButton = (ImageView) subject.findViewById(R.id.card_save_button);
         saveButton.performClick();
+
+        // then
         AlertDialog dialog = (AlertDialog) ShadowAlertDialog.getLatestDialog();
         assertThat(dialog.isShowing()).isTrue();
+
+        FontTextView infoText = ((FontTextView) dialog.findViewById(R.id.text_select_category_guide));
+        assertThat(infoText.getText().toString()).isEqualTo("저장하실 카테고리를 선택해주세요");
+
+        RecyclerView listView = ((RecyclerView) dialog.findViewById(R.id.category_list_recycler_view));
+        assertThat(listView.getChildCount()).isEqualTo(6);
     }
 
     @Test
@@ -125,21 +135,17 @@ public class ShareCardActivityTest extends UITest {
 
     @Test
     public void givenShareConfirmDialogShowing_whenClickSaveButton_thenSaveCard() throws Exception {
-        when(categoryRepository.getCategoryAllList()).thenReturn(getCategoryList(6));
         subject.downloadCard();
         ImageView saveButton = (ImageView) subject.findViewById(R.id.card_save_button);
         saveButton.performClick();
         AlertDialog dialog = (AlertDialog) ShadowAlertDialog.getLatestDialog();
-        FontTextView confirmView= (FontTextView) dialog.findViewById(R.id.confirm);
+        FontTextView confirmView = (FontTextView) dialog.findViewById(R.id.confirm);
         confirmView.performClick();
         verify(cardRepository).createSingleCardModel(any(CardModel.class));
-
     }
 
     @Test
     public void givenShareConfirmDialogShowing_whenClickSaveButton_thenMoveToViewCardPage() throws Exception {
-        when(categoryRepository.getCategoryAllList()).thenReturn(getCategoryList(6));
-
         subject.downloadCard();
         ImageView saveButton = (ImageView) subject.findViewById(R.id.card_save_button);
         saveButton.performClick();
