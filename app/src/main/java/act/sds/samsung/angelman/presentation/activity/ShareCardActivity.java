@@ -35,7 +35,7 @@ import act.sds.samsung.angelman.network.transfer.CardTransfer;
 import act.sds.samsung.angelman.presentation.adapter.CardImageAdapter;
 import act.sds.samsung.angelman.presentation.custom.CardCategoryLayout;
 import act.sds.samsung.angelman.presentation.custom.CardViewPager;
-import act.sds.samsung.angelman.presentation.custom.CustomConfirmDialog;
+import act.sds.samsung.angelman.presentation.custom.CategorySelectDialog;
 import act.sds.samsung.angelman.presentation.listener.OnDownloadCompleteListener;
 import act.sds.samsung.angelman.presentation.manager.ApplicationConstants;
 import act.sds.samsung.angelman.presentation.manager.ApplicationManager;
@@ -74,8 +74,7 @@ public class ShareCardActivity extends AppCompatActivity {
     @BindView(R.id.on_loading_view)
     LinearLayout loadingViewLayout;
 
-
-    private CustomConfirmDialog saveConfirmDialog;
+    private CategorySelectDialog categorySelectDialog;
 
     private RequestManager glide;
     private String receiveKey;
@@ -163,33 +162,30 @@ public class ShareCardActivity extends AppCompatActivity {
 
     @OnClick(R.id.card_save_button)
     public void onClickCardSaveButton(View view) {
-        saveConfirmDialog = new CustomConfirmDialog(this, context.getApplicationContext().getResources().getString(R.string.save_confirm_message), new View.OnClickListener() {
+        categorySelectDialog = new CategorySelectDialog(ShareCardActivity.this, categoryRepository.getCategoryAllList(), new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                if(shareCardModel != null){
+            public void onClick(View v) {
+                if (shareCardModel != null) {
                     try {
                         FileUtil.unzip(shareFilePath, ContentsUtil.getTempFolder());
-                        CardModel cardModel = saveNewSharedCard(shareCardModel);
-
+                        CategoryModel selectItem = categorySelectDialog.getSelectItem();
+                        CardModel cardModel = saveNewSharedCard(shareCardModel, selectItem.index);
                         ContentsUtil.copySharedFiles(cardModel);
-
                         FileUtil.removeFilesIn(ContentsUtil.getTempFolder());
-                        CategoryModel categoryModel = categoryRepository.getCategoryAllList().get(0);
-                        moveToCategoryViewPagerActivity(categoryModel, ApplicationConstants.INTENT_KEY_SHARE_CARD);
+                        moveToCategoryViewPagerActivity(selectItem, ApplicationConstants.INTENT_KEY_SHARE_CARD);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                }else{
-                    Toast.makeText(context, R.string.cannot_share_card_save_message,Toast.LENGTH_SHORT);
+                } else {
+                    Toast.makeText(context, R.string.cannot_share_card_save_message, Toast.LENGTH_SHORT);
                 }
             }
         }, new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                saveConfirmDialog.dismiss();
+            public void onClick(View v) {
+                categorySelectDialog.dismiss();
             }
         });
-
     }
 
     private void moveToCategoryMenuActivity() {
@@ -208,8 +204,7 @@ public class ShareCardActivity extends AppCompatActivity {
         finish();
     }
 
-
-    private CardModel saveNewSharedCard(CardTransferModel cardTransferModel) {
+    private CardModel saveNewSharedCard(CardTransferModel cardTransferModel, int categoryIndex) {
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
         CardModel.CardType cardType = CardModel.CardType.valueOf(cardTransferModel.cardType);
@@ -221,7 +216,7 @@ public class ShareCardActivity extends AppCompatActivity {
                 .contentPath(contentPath)
                 .voicePath(ContentsUtil.getVoicePath())
                 .firstTime(dateFormat.format(date))
-                .categoryId(categoryRepository.getCategoryAllList().get(0).index)
+                .categoryId(categoryIndex)
                 .cardType(cardType).thumbnailPath(cardType == CardModel.CardType.VIDEO_CARD ? ContentsUtil.getThumbnailPath(contentPath) : null)
                 .hide(false)
                 .build();
