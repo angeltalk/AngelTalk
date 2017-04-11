@@ -167,8 +167,11 @@ public class ShareCardActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (shareCardModel != null) {
                     try {
-                        FileUtil.unzip(shareFilePath, ContentsUtil.getTempFolder());
                         CategoryModel selectItem = categorySelectDialog.getSelectItem();
+                        if(selectItem == null) {
+                            return;
+                        }
+                        FileUtil.unzip(shareFilePath, ContentsUtil.getTempFolder());
                         CardModel cardModel = saveNewSharedCard(shareCardModel, selectItem.index);
                         ContentsUtil.copySharedFiles(cardModel);
                         FileUtil.removeFilesIn(ContentsUtil.getTempFolder());
