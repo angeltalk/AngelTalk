@@ -17,6 +17,7 @@ import act.sds.samsung.angelman.R;
 import act.sds.samsung.angelman.domain.model.CardModel;
 import act.sds.samsung.angelman.domain.repository.CardRepository;
 import act.sds.samsung.angelman.presentation.adapter.CardListRecyclerViewAdapter;
+import act.sds.samsung.angelman.presentation.custom.CardListTabButton;
 import act.sds.samsung.angelman.presentation.custom.FontTextView;
 import act.sds.samsung.angelman.presentation.listener.OnDataChangeListener;
 import act.sds.samsung.angelman.presentation.manager.ApplicationConstants;
@@ -37,17 +38,21 @@ public class CardListActivity extends AppCompatActivity {
     @BindView(R.id.category_item_title)
     FontTextView categoryItemTitle;
 
-    @BindView(R.id.change_order_bar)
-    View changeOrderBar;
-
     @BindView(R.id.title_layout)
     RelativeLayout titleLayout;
 
     @BindView(R.id.card_list_recycler_view)
     RecyclerView cardListRecyclerView;
 
-    private CardListRecyclerViewAdapter cardListRecyclerViewAdapter;
+    @BindView(R.id.show_hide_tab_button)
+    CardListTabButton showHideTabButton;
+
+    @BindView(R.id.change_order_tab_button)
+    CardListTabButton changeOrderTabButton;
+
     private List<CardModel> cardList;
+    private CardListRecyclerViewAdapter cardListRecyclerViewAdapter;
+    private CardListRecyclerViewAdapter cardListRecyclerViewChangeOrderAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,13 +62,18 @@ public class CardListActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         cardList = cardRepository.getSingleCardListWithCategoryId(applicationManager.getCategoryModel().index);
-        cardListRecyclerViewAdapter = new CardListRecyclerViewAdapter(cardList, applicationManager.getCategoryModelColor(), getApplicationContext(), new OnDataChangeListener(){
+
+        OnDataChangeListener dataChangeListener = new OnDataChangeListener() {
             @Override
             public void onHideChange(int position, boolean hide) {
                 cardList.get(position).hide = hide;
                 cardRepository.updateSingleCardModelHide(cardList.get(position));
             }
-        });
+        };
+
+        cardListRecyclerViewAdapter = new CardListRecyclerViewAdapter(cardList, applicationManager.getCategoryModelColor(), true, getApplicationContext(), dataChangeListener);
+        cardListRecyclerViewChangeOrderAdapter = new CardListRecyclerViewAdapter(cardList, applicationManager.getCategoryModelColor(), false, getApplicationContext(), dataChangeListener);
+
         initView();
     }
 
@@ -73,11 +83,34 @@ public class CardListActivity extends AppCompatActivity {
         finish();
     }
 
-
     @OnClick(R.id.back_button)
     public void onClickBackButton(View v) {
         moveToCardViewPagerActivity();
         finish();
+    }
+
+    @OnClick(R.id.add_card_button)
+    public void onClickAddCardButton(View view) {
+        Intent intent = new Intent(this, CameraGallerySelectionActivity.class);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.show_hide_tab_button)
+    public void onClickShowHideTabButton(View view) {
+        if(!showHideTabButton.isSelected()) {
+            showHideTabButton.setSelected(true);
+            changeOrderTabButton.setSelected(false);
+            cardListRecyclerView.setAdapter(cardListRecyclerViewAdapter);
+        }
+    }
+
+    @OnClick(R.id.change_order_tab_button)
+    public void onClickChangeOrderTabButton(View view) {
+        if(!changeOrderTabButton.isSelected()) {
+            showHideTabButton.setSelected(false);
+            changeOrderTabButton.setSelected(true);
+            cardListRecyclerView.setAdapter(cardListRecyclerViewChangeOrderAdapter);
+        }
     }
 
     private void initView() {
@@ -87,9 +120,6 @@ public class CardListActivity extends AppCompatActivity {
                 )
         );
         categoryItemTitle.setText(applicationManager.getCategoryModel().title);
-
-        changeOrderBar.setVisibility(View.INVISIBLE);
-
         cardListRecyclerView.setAdapter(cardListRecyclerViewAdapter);
         cardListRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
     }

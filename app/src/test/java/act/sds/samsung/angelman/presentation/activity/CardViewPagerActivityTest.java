@@ -112,7 +112,7 @@ public class CardViewPagerActivityTest extends UITest {
 
         assertThat(subject.buttonContainer).isGone();
 
-        assertThat(subject.listCardButton).isGone();
+        assertThat(subject.cardTitleLayout.listCardButton).isVisible();
         assertThat(((CardImageAdapter) subject.mViewPager.getAdapter()).getItemAt(0)).isInstanceOf(AddCardView.class);
     }
 
@@ -305,7 +305,7 @@ public class CardViewPagerActivityTest extends UITest {
 
     @Test
     public void whenClickedListButton_thenMovesToCardListActivity() throws Exception {
-        subject.listCardButton.performClick();
+        subject.cardTitleLayout.listCardButton.performClick();
 
         ShadowActivity shadowActivity = shadowOf(subject);
         Intent nextStartedActivity = shadowActivity.getNextStartedActivity();

@@ -1,5 +1,6 @@
 package act.sds.samsung.angelman.presentation.activity;
 
+import android.view.View;
 import android.widget.ImageView;
 
 import com.google.common.collect.Lists;
@@ -10,6 +11,7 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
+import org.robolectric.shadows.ShadowActivity;
 
 import java.io.File;
 import java.util.List;
@@ -122,6 +124,69 @@ public class CardListActivityTest extends UITest{
         assertThat(subject.isFinishing()).isTrue();
     }
 
+    @Test
+    public void whenClickAddCardButton_thenMoveToCameraGallerySelectionActivity() throws Exception {
+        // when
+        subject.findViewById(R.id.add_card_button).performClick();
+
+        // then
+        ShadowActivity shadowActivity = shadowOf(subject);
+        assertThat(shadowActivity.getNextStartedActivity().getComponent().getClassName()).isEqualTo(CameraGallerySelectionActivity.class.getCanonicalName());
+    }
+
+    @Test
+    public void whenLaunched_thenSetShowHideTabButtonSelectedAndChangeOrderButtonUnselected() throws Exception {
+        assertThat(subject.showHideTabButton.isSelected()).isTrue();
+        assertThat(subject.changeOrderTabButton.isSelected()).isFalse();
+    }
+
+    @Test
+    public void givenLaunched_whenClickChangeOrderTabButton_thenSetShowHideTabButtonUnSelectedAndChangeOrderButtonSelected() throws Exception {
+        // when
+        subject.changeOrderTabButton.performClick();
+
+        // then
+        assertThat(subject.showHideTabButton.isSelected()).isFalse();
+        assertThat(subject.changeOrderTabButton.isSelected()).isTrue();
+    }
+
+
+    @Test
+    public void givenLaunched_whenClickChangeOrderTabButton_thenHideShowAndHideIconAndShowItemMoveIcon() throws Exception {
+        // when
+        subject.changeOrderTabButton.performClick();
+
+        // then
+        ImageView showHideIconView = ((ImageView) subject.cardListRecyclerView.getChildAt(2).findViewById(R.id.show_hide_icon));
+        ImageView itemMoveIcon = ((ImageView) subject.cardListRecyclerView.getChildAt(0).findViewById(R.id.item_move_icon));
+        assertThat(showHideIconView.getVisibility()).isEqualTo(View.GONE);
+        assertThat(itemMoveIcon.getVisibility()).isEqualTo(View.VISIBLE);
+    }
+
+    @Test
+    public void givenChangeOrderTabButtonSelected_whenClickShowHideTabButton_thenSetShowHideTabButtonUnSelectedAndChangeOrderButtonUnselected() throws Exception {
+        // given
+        subject.changeOrderTabButton.performClick();
+        // when
+        subject.showHideTabButton.performClick();
+        // then
+        assertThat(subject.showHideTabButton.isSelected()).isTrue();
+        assertThat(subject.changeOrderTabButton.isSelected()).isFalse();
+    }
+
+    @Test
+    public void givenChangeOrderTabButtonSelected_whenClickShowHideTabButton_thenShowShowAndHideIconAndHideItemMoveIcon() throws Exception {
+        // given
+        subject.changeOrderTabButton.performClick();
+        // when
+        subject.showHideTabButton.performClick();
+        // then
+        ImageView showHideIconView = ((ImageView) subject.cardListRecyclerView.getChildAt(2).findViewById(R.id.show_hide_icon));
+        ImageView itemMoveIcon = ((ImageView) subject.cardListRecyclerView.getChildAt(0).findViewById(R.id.item_move_icon));
+        assertThat(showHideIconView.getVisibility()).isEqualTo(View.VISIBLE);
+        assertThat(itemMoveIcon.getVisibility()).isEqualTo(View.GONE);
+    }
+
     private CategoryModel getCategoryModel() {
         CategoryModel categoryModel = new CategoryModel();
         categoryModel.index = 0;
@@ -146,7 +211,4 @@ public class CardListActivityTest extends UITest{
 
         return list;
     }
-
-
-
 }

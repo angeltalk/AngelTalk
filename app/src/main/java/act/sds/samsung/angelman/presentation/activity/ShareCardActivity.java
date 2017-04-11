@@ -33,7 +33,7 @@ import act.sds.samsung.angelman.domain.repository.CardRepository;
 import act.sds.samsung.angelman.domain.repository.CategoryRepository;
 import act.sds.samsung.angelman.network.transfer.CardTransfer;
 import act.sds.samsung.angelman.presentation.adapter.CardImageAdapter;
-import act.sds.samsung.angelman.presentation.custom.CardCategoryLayout;
+import act.sds.samsung.angelman.presentation.custom.CardTitleLayout;
 import act.sds.samsung.angelman.presentation.custom.CardViewPager;
 import act.sds.samsung.angelman.presentation.custom.CategorySelectDialog;
 import act.sds.samsung.angelman.presentation.listener.OnDownloadCompleteListener;
@@ -60,7 +60,7 @@ public class ShareCardActivity extends AppCompatActivity {
     ApplicationManager applicationManager;
 
     @BindView(R.id.title_container)
-    CardCategoryLayout titleLayout;
+    CardTitleLayout titleLayout;
 
     @BindView(R.id.view_pager)
     CardViewPager mViewPager;
@@ -176,8 +176,8 @@ public class ShareCardActivity extends AppCompatActivity {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                } else {
-                    Toast.makeText(context, R.string.cannot_share_card_save_message, Toast.LENGTH_SHORT);
+                }else{
+                    Toast.makeText(context, R.string.cannot_share_card_save_message,Toast.LENGTH_SHORT).show();
                 }
             }
         }, new View.OnClickListener() {

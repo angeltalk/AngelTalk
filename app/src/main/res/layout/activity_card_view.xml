@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     >
 
-    <act.sds.samsung.angelman.presentation.custom.CardCategoryLayout
+    <act.sds.samsung.angelman.presentation.custom.CardTitleLayout
         android:id="@+id/title_container"
         android:layout_width="match_parent"
         app:layout_heightPercent="20%"

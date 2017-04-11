@@ -16,22 +16,25 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class CardCategoryLayout extends RelativeLayout {
+public class CardTitleLayout extends RelativeLayout {
 
     @BindView(R.id.list_card_button)
-    public ImageView listCardText;
+    public ImageView listCardButton;
 
     @BindView(R.id.category_item_count)
     public TextView cardCount;
 
+    @BindView(R.id.category_item_title)
+    public TextView categoryTitle;
+
     private String categoryModelTitle;
 
-    public CardCategoryLayout(Context context) {
+    public CardTitleLayout(Context context) {
         super(context);
         initUI();
     }
 
-    public CardCategoryLayout(Context context, AttributeSet attrs) {
+    public CardTitleLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
         initUI();
     }
@@ -75,7 +78,7 @@ public class CardCategoryLayout extends RelativeLayout {
         findViewById(R.id.back_button).setOnClickListener(onClickListener);
     }
 
-    public CardCategoryLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+    public CardTitleLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initUI();
     }
@@ -95,10 +98,6 @@ public class CardCategoryLayout extends RelativeLayout {
         } else {
             cardCount.setVisibility(View.VISIBLE);
         }
-    }
-
-    public void setAddCardTextButtonVisible(int visible) {
-        listCardText.setVisibility(visible);
     }
 
     public void setCardCountVisible(int visible) {
