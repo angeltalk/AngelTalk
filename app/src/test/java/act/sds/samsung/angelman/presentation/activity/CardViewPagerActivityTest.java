@@ -150,7 +150,7 @@ public class CardViewPagerActivityTest extends UITest {
     @Test
     public void whenClickedDeleteButton_thenShowsAlertDialogMessage() throws Exception {
         ShadowAlertDialog shadowDialog = getShadowAlertDialog();
-        shadowDialog.getView().findViewById(R.id.confirm).performClick();
+        shadowDialog.getView().findViewById(R.id.confirm_button).performClick();
 
         assertThat(((TextView) shadowDialog.getView().findViewById(R.id.alert_message)).getText()).contains("카드를 삭제하시겠습니까?");
     }
@@ -178,7 +178,7 @@ public class CardViewPagerActivityTest extends UITest {
         when(repository.getSingleCardListWithCategoryId(anyInt(), anyBoolean())).thenReturn(cardListWithCategoryId);
 
         ShadowAlertDialog shadowDialog = getShadowAlertDialog();
-        shadowDialog.getView().findViewById(R.id.confirm).performClick();
+        shadowDialog.getView().findViewById(R.id.confirm_button).performClick();
 
         assertThat(viewPager.getAdapter().getCount()).isEqualTo(4);
         assertThat(((CardView) ((CardImageAdapter) viewPager.getAdapter()).getItemAt(2)).cardTitle.getText()).isEqualTo(cardListWithCategoryId.get(2).name);
@@ -414,20 +414,6 @@ public class CardViewPagerActivityTest extends UITest {
 
         assertThat(subject.mViewPager.getCurrentItem()).isNotEqualTo(1);
         assertThat(subject.mViewPager.getCurrentItem()).isEqualTo(0);
-    }
-
-    @Test
-    public void whenFinishedToShareCard_thenShowsNewSharedCardAtFirstInCardViewPager() throws Exception {
-        Intent intent = new Intent();
-
-        intent.putExtra(ApplicationConstants.INTENT_KEY_SHARE_CARD, true);
-
-        when(repository.getSingleCardListWithCategoryId(anyInt())).thenReturn(getCardListWithCategoryId());
-
-        subject = setupActivityWithIntent(CardViewPagerActivity.class, intent);
-
-        assertThat(subject.mViewPager.getCurrentItem()).isNotEqualTo(0);
-        assertThat(subject.mViewPager.getCurrentItem()).isEqualTo(1);
     }
 
     @Test

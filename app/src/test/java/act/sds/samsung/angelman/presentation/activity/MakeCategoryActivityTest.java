@@ -301,7 +301,7 @@ public class MakeCategoryActivityTest extends UITest {
         editCategoryTitle.setText("test");
         subject.onBackPressed();
 
-        ShadowAlertDialog.getLatestAlertDialog().findViewById(R.id.confirm).performClick();
+        ShadowAlertDialog.getLatestAlertDialog().findViewById(R.id.confirm_button).performClick();
         assertThat(subject.isFinishing()).isTrue();
     }
 
@@ -318,7 +318,7 @@ public class MakeCategoryActivityTest extends UITest {
 
         subject.onBackPressed();
 
-        ShadowAlertDialog.getLatestAlertDialog().findViewById(R.id.confirm).performClick();
+        ShadowAlertDialog.getLatestAlertDialog().findViewById(R.id.confirm_button).performClick();
         assertThat(subject.isFinishing()).isTrue();
     }
 

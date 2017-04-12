@@ -53,7 +53,7 @@
         android:background="@color/white">
 
         <act.sds.samsung.angelman.presentation.custom.FontTextView
-            android:id="@+id/confirm"
+            android:id="@+id/confirm_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -63,8 +63,8 @@
             android:text="@string/confirm"
             app:font="@string/font_medium"
             android:textColor="@color/category_select_list_radiobutton_default"
-            android:textSize="16sp" />
-
+            android:textSize="16sp"
+            android:enabled="false" />
 
         <View
             android:layout_width="match_parent"
@@ -72,12 +72,12 @@
             android:background="@color/card_list_horizontal_border" />
 
         <act.sds.samsung.angelman.presentation.custom.FontTextView
-            android:id="@+id/cancel"
+            android:id="@+id/cancel_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:text="@string/cancel"
-            android:layout_toLeftOf="@id/confirm"
+            android:layout_toLeftOf="@id/confirm_button"
             app:font="@string/font_medium"
             android:textColor="#d41468"
             android:textSize="16sp" />

@@ -23,7 +23,6 @@ import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowActivity;
 import org.robolectric.shadows.ShadowAlertDialog;
-import org.robolectric.shadows.ShadowIntent;
 
 import java.util.List;
 
@@ -59,19 +58,19 @@ import static org.robolectric.Shadows.shadowOf;
 @Config(constants = BuildConfig.class)
 public class ShareCardActivityTest extends UITest {
 
-    ShareCardActivity subject;
-
     @Inject
     CategoryRepository categoryRepository;
 
     @Inject
     CardRepository cardRepository;
 
+    private ShareCardActivity subject;
 
     @Before
     public void setUp() throws Exception {
         ((TestAngelmanApplication) RuntimeEnvironment.application).getAngelmanTestComponent().inject(this);
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.kakao_scheme) + "://" + getString(R.string.kakaolink_host)));
+
         subject = setupActivityWithIntent(ShareCardActivity.class, intent);
         doAnswer(new Answer() {
             @Override
@@ -91,7 +90,8 @@ public class ShareCardActivityTest extends UITest {
     }
 
     @Test
-    public void whenKaKaoIntentReceived_thenShowLoadingAnimation() throws Exception {
+    public void givenWhenLaunchedAndKaKaoIntentReceived_thenShowLoadingAnimation() throws Exception {
+        // then
         LinearLayout loadingViewLayout = (LinearLayout) subject.findViewById(R.id.on_loading_view);
         assertThat(loadingViewLayout.getVisibility()).isEqualTo(View.VISIBLE);
     }
@@ -100,16 +100,20 @@ public class ShareCardActivityTest extends UITest {
     public void whenDownloadCardComplete_thenHideLoadingAnimationAndShowShareCard() throws Exception {
         LinearLayout loadingViewLayout = (LinearLayout) subject.findViewById(R.id.on_loading_view);
         assertThat(loadingViewLayout.getVisibility()).isEqualTo(View.VISIBLE);
+
+        // when
         subject.downloadCard();
+
+        // then
         assertThat(loadingViewLayout.getVisibility()).isEqualTo(View.GONE);
         TextView shareCardTextView = (TextView) subject.mViewPager.getChildAt(subject.mViewPager.getCurrentItem()).findViewById(R.id.card_image_title);
         assertThat(shareCardTextView.getText()).isEqualTo("TESTCARD");
     }
 
     @Test
-    public void whenClickDownloadButton_thenShowCategorySelectDialog() throws Exception {
+    public void whenClickDownloadButton_thenShowCategorySelectDialogAndContentsOfDialogCorrectly() throws Exception {
         // when
-        AlertDialog dialog = showSelectCategoryDialog();
+        AlertDialog dialog = clickSaveButtonAndShowSelectCategoryDialog();
 
         // then
         assertThat(dialog.isShowing()).isTrue();
@@ -122,79 +126,88 @@ public class ShareCardActivityTest extends UITest {
     }
 
     @Test
-    public void givenShareConfirmDialogShowing_whenClickCancelButton_thenDismissDialog() throws Exception {
-        AlertDialog dialog = showSelectCategoryDialog();
-
-        FontTextView cancelView = (FontTextView) dialog.findViewById(R.id.cancel);
+    public void givenCategorySelectDialogShowing_whenClickCancelButton_thenDismissDialog() throws Exception {
+        // given
+        AlertDialog dialog = clickSaveButtonAndShowSelectCategoryDialog();
+        FontTextView cancelView = (FontTextView) dialog.findViewById(R.id.cancel_button);
         assertThat(dialog.isShowing()).isTrue();
+        // when
         cancelView.performClick();
+        // then
         assertThat(dialog.isShowing()).isFalse();
     }
 
     @Test
-    public void givenShareConfirmDialogShowing_whenClickSaveButton_thenSaveCard() throws Exception {
-        AlertDialog dialog = showSelectCategoryDialog();
-
-        FontTextView confirmView = (FontTextView) dialog.findViewById(R.id.confirm);
-        confirmView.performClick();
+    public void givenCategorySelectDialogShowing_whenClickSaveButton_thenSaveCard() throws Exception {
+        // given
+        AlertDialog dialog = clickSaveButtonAndShowSelectCategoryDialog();
+        // when
+        dialog.findViewById(R.id.confirm_button).performClick();
+        // then
         assertThat(dialog.isShowing()).isTrue();
     }
 
     @Test
-    public void givenShareConfirmDialogShowing_whenClickFirstCategory_thenChangeConfirmButtonTextColor() throws Exception {
+    public void givenCategorySelectDialogShowing_whenClickFirstCategory_thenSetConfirmButtonEnabledAndChangeTextColor() throws Exception {
         // given
-        AlertDialog dialog = showSelectCategoryDialog();
+        AlertDialog dialog = clickSaveButtonAndShowSelectCategoryDialog();
+        FontTextView confirmButton = (FontTextView) dialog.findViewById(R.id.confirm_button);
+        assertThat(confirmButton.isEnabled()).isFalse();
+        // when
         selectCategoryRadioButtonAt(dialog, 0);
-
         // then
         RecyclerView recyclerView = (RecyclerView) dialog.findViewById(R.id.category_list_recycler_view);
-        assertThat(((FontTextView) dialog.findViewById(R.id.confirm)).getCurrentTextColor()).isEqualTo(getColor(R.color.simple_background_red));
+        assertThat(confirmButton.isEnabled()).isTrue();
+        assertThat(confirmButton.getCurrentTextColor()).isEqualTo(getColor(R.color.simple_background_red));
         assertThat(((CategorySelectDialog.CategoryListAdapter) recyclerView.getAdapter()).getSelectItem()).isNotNull();
     }
 
     @Test
-    public void givenShareConfirmDialogShowingAndClickFirstCategory_whenClickSecondCategory_thenChangeRadioButtonState() throws Exception {
+    public void givenCategorySelectDialogShowingAndClickFirstCategory_whenClickSecondCategory_thenChangeRadioButtonState() throws Exception {
         // given
-        AlertDialog dialog = showSelectCategoryDialog();
+        AlertDialog dialog = clickSaveButtonAndShowSelectCategoryDialog();
         AppCompatRadioButton radioButton1 = selectCategoryRadioButtonAt(dialog, 0);
-
         assertThat(radioButton1.isChecked()).isTrue();
-
         // when
         AppCompatRadioButton radioButton2 = selectCategoryRadioButtonAt(dialog, 1);
-
+        // then
         assertThat(radioButton1.isChecked()).isFalse();
         assertThat(radioButton2.isChecked()).isTrue();
     }
 
     @Test
-    public void givenShareConfirmDialogShowing_whenClickFirstCategoryAndClickSaveButton_thenSaveCard() throws Exception {
-        AlertDialog dialog = showSelectCategoryDialog();
+    public void givenCategorySelectDialogShowing_whenClickFirstCategoryAndClickConfirmButton_thenSaveCard() throws Exception {
+        // given
+        AlertDialog dialog = clickSaveButtonAndShowSelectCategoryDialog();
         selectCategoryRadioButtonAt(dialog, 0);
-        FontTextView confirmView = (FontTextView) dialog.findViewById(R.id.confirm);
-        confirmView.performClick();
+        // when
+        dialog.findViewById(R.id.confirm_button).performClick();
+        // then
         verify(cardRepository).createSingleCardModel(any(CardModel.class));
     }
 
     @Test
-    public void givenShareConfirmDialogShowing_whenClickFirstCategoryAndClickSaveButton_thenMoveToViewCardPage() throws Exception {
-        AlertDialog dialog = showSelectCategoryDialog();
+    public void givenCategorySelectDialogShowing_whenClickFirstCategoryAndClickSaveButton_thenSetCategoryModelAndMoveToCardListActivity() throws Exception {
+        // given
+        AlertDialog dialog = clickSaveButtonAndShowSelectCategoryDialog();
+        // when
         selectCategoryRadioButtonAt(dialog, 0);
-        FontTextView confirmView= (FontTextView) dialog.findViewById(R.id.confirm);
-        confirmView.performClick();
+        dialog.findViewById(R.id.confirm_button).performClick();
 
+        // then
+        verify(subject.applicationManager).setCategoryModel(any(CategoryModel.class));
         ShadowActivity shadowActivity = shadowOf(subject);
-        Intent startedIntent = shadowActivity.getNextStartedActivity();
-        ShadowIntent shadowIntent = shadowOf(startedIntent);
-        assertThat(shadowIntent.getIntentClass()).isEqualTo(CardViewPagerActivity.class);
+        Intent nextStartedActivity = shadowActivity.getNextStartedActivity();
+        assertThat(nextStartedActivity.getComponent().getClassName()).isEqualTo(CardListActivity.class.getCanonicalName());
     }
 
 
     @Test
-    public void whenClickBackButton_thenMoveToCategoryMenuActivity() throws Exception {
+    public void givenLaunchedAndDownloadCardCompleted_whenClickBackButton_thenMoveToCategoryMenuActivity() throws Exception {
+        // given
+        subject.downloadCard();
         // when
         subject.findViewById(R.id.back_button).performClick();
-
         // then
         ShadowActivity shadowActivity = shadowOf(subject);
         Intent nextStartedActivity = shadowActivity.getNextStartedActivity();
@@ -205,14 +218,13 @@ public class ShareCardActivityTest extends UITest {
     public void whenOnBackPressed_thenMoveToCategoryMenuActivity() throws Exception {
         // when
         subject.onBackPressed();
-
         // then
         ShadowActivity shadowActivity = shadowOf(subject);
         Intent nextStartedActivity = shadowActivity.getNextStartedActivity();
         assertThat(nextStartedActivity.getComponent().getClassName()).isEqualTo(CategoryMenuActivity.class.getCanonicalName());
     }
 
-    private AlertDialog showSelectCategoryDialog() {
+    private AlertDialog clickSaveButtonAndShowSelectCategoryDialog() {
         subject.downloadCard();
         ImageView saveButton = (ImageView) subject.findViewById(R.id.card_save_button);
         saveButton.performClick();

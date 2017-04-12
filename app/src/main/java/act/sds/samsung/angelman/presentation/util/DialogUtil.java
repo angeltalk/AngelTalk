@@ -10,8 +10,8 @@ public class DialogUtil {
 
     public static AlertDialog buildCustomDialog(Context context, View innerView, View.OnClickListener positiveClickListener, View.OnClickListener negativeClickListener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        innerView.findViewById(R.id.confirm).setOnClickListener(positiveClickListener);
-        innerView.findViewById(R.id.cancel).setOnClickListener(negativeClickListener);
+        innerView.findViewById(R.id.confirm_button).setOnClickListener(positiveClickListener);
+        innerView.findViewById(R.id.cancel_button).setOnClickListener(negativeClickListener);
         builder.setView(innerView);
 
         return builder.create();

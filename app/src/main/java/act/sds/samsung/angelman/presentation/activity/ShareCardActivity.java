@@ -37,7 +37,6 @@ import act.sds.samsung.angelman.presentation.custom.CardTitleLayout;
 import act.sds.samsung.angelman.presentation.custom.CardViewPager;
 import act.sds.samsung.angelman.presentation.custom.CategorySelectDialog;
 import act.sds.samsung.angelman.presentation.listener.OnDownloadCompleteListener;
-import act.sds.samsung.angelman.presentation.manager.ApplicationConstants;
 import act.sds.samsung.angelman.presentation.manager.ApplicationManager;
 import act.sds.samsung.angelman.presentation.util.ContentsUtil;
 import act.sds.samsung.angelman.presentation.util.FileUtil;
@@ -175,7 +174,10 @@ public class ShareCardActivity extends AppCompatActivity {
                         CardModel cardModel = saveNewSharedCard(shareCardModel, selectItem.index);
                         ContentsUtil.copySharedFiles(cardModel);
                         FileUtil.removeFilesIn(ContentsUtil.getTempFolder());
-                        moveToCategoryViewPagerActivity(selectItem, ApplicationConstants.INTENT_KEY_SHARE_CARD);
+
+                        applicationManager.setCategoryModel(selectItem);
+
+                        moveToCardListActivity();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -197,12 +199,9 @@ public class ShareCardActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void moveToCategoryViewPagerActivity(CategoryModel categoryModel, String intentKey) {
-        Intent intent = new Intent(getApplicationContext(), CardViewPagerActivity.class);
-        applicationManager.setCategoryModel(categoryModel);
+    private void moveToCardListActivity() {
+        Intent intent = new Intent(getApplicationContext(), CardListActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra(ApplicationConstants.CATEGORY_COLOR, categoryModel.color);
-        intent.putExtra(intentKey, true);
         getApplicationContext().startActivity(intent);
         finish();
     }

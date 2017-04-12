@@ -186,8 +186,8 @@ public class CategoryMenuActivityTest extends UITest {
 
         AlertDialog latestAlertDialog = ShadowAlertDialog.getLatestAlertDialog();
         assertThat(latestAlertDialog).isNotNull();
-        assertThat(((TextView) latestAlertDialog.findViewById(R.id.confirm)).getText()).isEqualTo("확인");
-        assertThat(((TextView) latestAlertDialog.findViewById(R.id.cancel)).getText()).isEqualTo("취소");
+        assertThat(((TextView) latestAlertDialog.findViewById(R.id.confirm_button)).getText()).isEqualTo("확인");
+        assertThat(((TextView) latestAlertDialog.findViewById(R.id.cancel_button)).getText()).isEqualTo("취소");
         assertThat((((TextView) latestAlertDialog.findViewById(R.id.alert_message)).getText())).contains("먹을 것");
     }
 
@@ -203,8 +203,8 @@ public class CategoryMenuActivityTest extends UITest {
 
         AlertDialog latestAlertDialog = ShadowAlertDialog.getLatestAlertDialog();
         assertThat(latestAlertDialog).isNotNull();
-        assertThat(((TextView) latestAlertDialog.findViewById(R.id.confirm)).getText()).isEqualTo("확인");
-        assertThat(((TextView) latestAlertDialog.findViewById(R.id.cancel)).getText()).isEqualTo("취소");
+        assertThat(((TextView) latestAlertDialog.findViewById(R.id.confirm_button)).getText()).isEqualTo("확인");
+        assertThat(((TextView) latestAlertDialog.findViewById(R.id.cancel_button)).getText()).isEqualTo("취소");
         assertThat(((TextView) latestAlertDialog.findViewById(R.id.alert_message)).getText()).isEqualTo("카테고리는 최소 1개 이상이어야 합니다. 삭제 후 새 카테고리를 만드시겠습니까?");
     }
 
@@ -219,7 +219,7 @@ public class CategoryMenuActivityTest extends UITest {
         shadowCategoryList.performItemClick(0);
 
         AlertDialog latestAlertDialog = ShadowAlertDialog.getLatestAlertDialog();
-        latestAlertDialog.findViewById(R.id.confirm).performClick();
+        latestAlertDialog.findViewById(R.id.confirm_button).performClick();
 
         ShadowActivity shadowActivity = shadowOf(subject);
         Intent startedIntent = shadowActivity.getNextStartedActivity();
@@ -246,7 +246,7 @@ public class CategoryMenuActivityTest extends UITest {
         shadowCategoryList.performItemClick(0);
 
         AlertDialog latestAlertDialog = ShadowAlertDialog.getLatestAlertDialog();
-        latestAlertDialog.findViewById(R.id.confirm).performClick();
+        latestAlertDialog.findViewById(R.id.confirm_button).performClick();
 
         verify(cardRepository).deleteSingleCardsWithCategory(0);
         verify(categoryRepository).deleteCategory(0);

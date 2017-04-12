@@ -65,12 +65,12 @@ public class CardViewPagerTest {
         onView(cardDeleteButtonMatcher()).perform(click());
 
         onView(deleteConfirmDialogMatcher()).check(matches(withText("'색칠 놀이 해요' 카드를 삭제하시겠습니까?")));
-        ViewInteraction cancelButton = onView(withId(R.id.cancel));
+        ViewInteraction cancelButton = onView(withId(R.id.cancel_button));
         cancelButton.check(matches(withText("취소")));
         cancelButton.perform(click());
 
         onView(cardDeleteButtonMatcher()).perform(click());
-        ViewInteraction confirmButton = onView(withId(R.id.confirm));
+        ViewInteraction confirmButton = onView(withId(R.id.confirm_button));
         confirmButton.check(matches(withText("확인")));
         confirmButton.perform(click());
 
