@@ -62,7 +62,7 @@ public class SingleCardSqliteDataStoreTest {
 
         @Cleanup
         Cursor c = mockDb.query(CardColumns.TABLE_NAME, columns, null,null, null, null, CardColumns.CARD_INDEX + " desc");
-        List<CardModel> list = dataStore.getAllCardList();
+        List<CardModel> list = dataStore.getCardListWithCategoryId(0);
 
         verify(mockDbHelper).getReadableDatabase();
 
