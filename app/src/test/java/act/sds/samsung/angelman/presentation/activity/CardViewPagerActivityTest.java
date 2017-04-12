@@ -333,9 +333,14 @@ public class CardViewPagerActivityTest extends UITest {
     @Test
     public void whenClickBackButton_thenMoveToCategoryMenuActivity() throws Exception {
         // when
+        CardImageAdapter mockImageAdapter = mock(CardImageAdapter.class);
+        subject.mViewPager.setAdapter(mockImageAdapter);
+        subject.cardImageAdapter = mockImageAdapter;
         subject.findViewById(R.id.back_button).performClick();
 
         // then
+        verify(((CardImageAdapter) subject.mViewPager.getAdapter())).releaseSpeakHandler();
+        verify(((CardImageAdapter) subject.mViewPager.getAdapter())).stopVideoView();
         ShadowActivity shadowActivity = shadowOf(subject);
         Intent nextStartedActivity = shadowActivity.getNextStartedActivity();
         assertThat(nextStartedActivity.getComponent().getClassName()).isEqualTo(CategoryMenuActivity.class.getCanonicalName());
@@ -344,9 +349,14 @@ public class CardViewPagerActivityTest extends UITest {
     @Test
     public void whenOnBackPressed_thenMoveToCategoryMenuActivity() throws Exception {
         // when
+        CardImageAdapter mockImageAdapter = mock(CardImageAdapter.class);
+        subject.mViewPager.setAdapter(mockImageAdapter);
+        subject.cardImageAdapter = mockImageAdapter;
         subject.onBackPressed();
 
         // then
+        verify(((CardImageAdapter) subject.mViewPager.getAdapter())).releaseSpeakHandler();
+        verify(((CardImageAdapter) subject.mViewPager.getAdapter())).stopVideoView();
         ShadowActivity shadowActivity = shadowOf(subject);
         Intent nextStartedActivity = shadowActivity.getNextStartedActivity();
         assertThat(nextStartedActivity.getComponent().getClassName()).isEqualTo(CategoryMenuActivity.class.getCanonicalName());
