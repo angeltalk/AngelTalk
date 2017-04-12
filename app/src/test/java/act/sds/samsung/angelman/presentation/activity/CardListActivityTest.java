@@ -1,5 +1,6 @@
 package act.sds.samsung.angelman.presentation.activity;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
@@ -28,7 +29,9 @@ import act.sds.samsung.angelman.domain.model.CardModel;
 import act.sds.samsung.angelman.domain.model.CategoryModel;
 import act.sds.samsung.angelman.domain.repository.CardRepository;
 import act.sds.samsung.angelman.presentation.custom.FontTextView;
+import act.sds.samsung.angelman.presentation.manager.ApplicationConstants;
 import act.sds.samsung.angelman.presentation.manager.ApplicationManager;
+import act.sds.samsung.angelman.presentation.shadow.ShadowSnackbar;
 import act.sds.samsung.angelman.presentation.util.ContentsUtil;
 import act.sds.samsung.angelman.presentation.util.ResourcesUtil;
 
@@ -40,7 +43,7 @@ import static org.mockito.Mockito.when;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class)
+@Config(constants = BuildConfig.class, shadows = {ShadowSnackbar.class})
 public class CardListActivityTest extends UITest{
 
     @Inject
@@ -251,6 +254,19 @@ public class CardListActivityTest extends UITest{
         ImageView itemMoveIcon = ((ImageView) subject.showHideRecyclerView.getChildAt(0).findViewById(R.id.item_move_icon));
         assertThat(showHideIconView.getVisibility()).isEqualTo(View.VISIBLE);
         assertThat(itemMoveIcon.getVisibility()).isEqualTo(View.GONE);
+    }
+
+
+    @Test
+    public void givenIntentFromShareCardActivity_whenLaunched_thenShowSnackBar() throws Exception {
+        // given
+        Intent intent = new Intent(RuntimeEnvironment.application, CardListActivity.class);
+        intent.putExtra(ApplicationConstants.INTENT_KEY_SHARE_CARD, true);
+        // when
+        setupActivityWithIntent(CardListActivity.class, intent);
+        // then
+        assertThat(ShadowSnackbar.getLatestSnackbar()).isNotNull();
+        assertThat(ShadowSnackbar.getTextOfLatestSnackbar()).isEqualTo("공유 받은 카드가 추가되었습니다.");
     }
 
     private CategoryModel getCategoryModel() {
