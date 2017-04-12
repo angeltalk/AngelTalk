@@ -9,13 +9,19 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
+
 import act.sds.samsung.angelman.R;
 import act.sds.samsung.angelman.domain.model.CardModel;
 import act.sds.samsung.angelman.presentation.manager.ApplicationConstants;
 import act.sds.samsung.angelman.presentation.util.ContentsUtil;
 import act.sds.samsung.angelman.presentation.util.FontUtil;
+import act.sds.samsung.angelman.presentation.util.ResolutionUtil;
 
 public class PhotoEditorActivity extends AbstractActivity {
+
+    RequestManager glide;
 
     private ImageView imageCapture;
     private ImageView confirmButton;
@@ -24,7 +30,7 @@ public class PhotoEditorActivity extends AbstractActivity {
     private TextView pictureGuide;
 
     protected ScaleGestureDetector scaleGestureDetector;
-    private Float scale = 1f;
+    private float scale = 1f;
     private float px = 0, py = 0;
 
     private View.OnClickListener onClickListener = new View.OnClickListener() {
@@ -66,12 +72,13 @@ public class PhotoEditorActivity extends AbstractActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_editor);
 
+        glide = Glide.with(this);
+
         imageCapture = (ImageView) findViewById(R.id.image_capture);
         confirmButton = (ImageView) findViewById(R.id.photo_edit_confirm);
         rotateButton = (ImageView) findViewById(R.id.rotate_image);
         frameImage = findViewById(R.id.camera_frame);
         pictureGuide = ((TextView) findViewById(R.id.picture_guide));
-
         pictureGuide.setTypeface(FontUtil.setFont(this, FontUtil.FONT_DEMILIGHT));
 
         setImageIntoImageCaptureView();
@@ -80,7 +87,6 @@ public class PhotoEditorActivity extends AbstractActivity {
 
         confirmButton.setOnClickListener(onClickListener);
         rotateButton.setOnClickListener(onClickListener);
-
     }
 
     public String saveEditedImage() {
@@ -99,7 +105,12 @@ public class PhotoEditorActivity extends AbstractActivity {
     }
     private void setImageIntoImageCaptureView() {
         Uri imagePath = getIntent().getParcelableExtra(ApplicationConstants.IMAGE_PATH_EXTRA);
-        imageCapture.setImageURI(imagePath);
+        int loadingImageSize = ResolutionUtil.getDpToPix(getApplicationContext(), 360);
+
+        glide.load(imagePath)
+                .asBitmap()
+                .override(loadingImageSize, loadingImageSize)
+                .into(imageCapture);
     }
 
     boolean isScaling = false;
