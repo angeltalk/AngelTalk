@@ -15,8 +15,9 @@ public class ResourcesUtil {
     public static final int GREEN = 3;
     public static final int BLUE = 4;
     public static final int PURPLE = 5;
+    public static final int HIDING = -1;
 
-    @IntDef(flag = true, value = {RED, ORANGE, YELLOW, GREEN, BLUE, PURPLE})
+    @IntDef(flag = true, value = {RED, ORANGE, YELLOW, GREEN, BLUE, PURPLE, HIDING})
     public @interface BackgroundColors { }
 
     public static int getCardViewLayoutBackgroundBy(@BackgroundColors int color) {
@@ -139,6 +140,115 @@ public class ResourcesUtil {
                 break;
             case PURPLE:
                 drawable = R.drawable.ic_video_purple;
+                break;
+        }
+        return drawable;
+    }
+
+    public static int getTitleBackgroundColor(@BackgroundColors int color) {
+        int backgroundColor=-1;
+        switch (color){
+            case RED:
+                backgroundColor = R.color.simple_background_red;
+                break;
+            case ORANGE:
+                backgroundColor = R.color.simple_background_orange;
+                break;
+            case YELLOW:
+                backgroundColor = R.color.simple_background_yellow;
+                break;
+            case GREEN:
+                backgroundColor = R.color.simple_background_green;
+                break;
+            case BLUE:
+                backgroundColor = R.color.simple_background_blue;
+                break;
+            case PURPLE:
+                backgroundColor = R.color.simple_background_purple;
+                break;
+        }
+        return backgroundColor;
+    }
+
+    public static int getShowHideItemBarBy(@BackgroundColors int color) {
+        int drawable;
+        switch (color){
+            case RED:
+                drawable = R.drawable.show_red;
+                break;
+            case ORANGE:
+                drawable = R.drawable.show_orange;
+                break;
+            case YELLOW:
+                drawable = R.drawable.show_yellow;
+                break;
+            case GREEN:
+                drawable = R.drawable.show_green;
+                break;
+            case BLUE:
+                drawable = R.drawable.show_blue;
+                break;
+            case PURPLE:
+                drawable = R.drawable.show_purple;
+                break;
+            default:
+                drawable = R.drawable.hide;
+                break;
+        }
+        return drawable;
+    }
+
+    public static int getShowHideIconBy(@BackgroundColors int color) {
+        int drawable;
+        switch (color){
+            case RED:
+                drawable = R.drawable.ic_show_red;
+                break;
+            case ORANGE:
+                drawable = R.drawable.ic_show_orange;
+                break;
+            case YELLOW:
+                drawable = R.drawable.ic_show_yellow;
+                break;
+            case GREEN:
+                drawable = R.drawable.ic_show_green;
+                break;
+            case BLUE:
+                drawable = R.drawable.ic_show_blue;
+                break;
+            case PURPLE:
+                drawable = R.drawable.ic_show_purple;
+                break;
+            default:
+                drawable = R.drawable.ic_hide;
+                break;
+        }
+        return drawable;
+    }
+
+    public static int getItemMoveIconBy(@BackgroundColors int color) {
+        int drawable;
+        switch (color){
+            case RED:
+                drawable = R.drawable.ic_list_red;
+                break;
+            case ORANGE:
+                drawable = R.drawable.ic_list_orange;
+                break;
+            case YELLOW:
+                drawable = R.drawable.ic_list_yellow;
+                break;
+            case GREEN:
+                drawable = R.drawable.ic_list_green;
+                break;
+            case BLUE:
+                drawable = R.drawable.ic_list_blue;
+                break;
+            case PURPLE:
+                drawable = R.drawable.ic_list_purple;
+                break;
+            default:
+                drawable = R.drawable.ic_list_red;
                 break;
         }
         return drawable;

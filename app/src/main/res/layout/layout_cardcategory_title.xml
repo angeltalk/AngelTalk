@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/title_container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/back_button"
@@ -11,10 +11,10 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginStart="25dp"
-        android:paddingStart="5dp"
-        android:paddingEnd="20dp"
-        android:paddingTop="20dp"
         android:paddingBottom="20dp"
+        android:paddingEnd="20dp"
+        android:paddingStart="5dp"
+        android:paddingTop="20dp"
         android:src="@drawable/ic_back_arrow" />
 
     <act.sds.samsung.angelman.presentation.custom.FontTextView
@@ -24,35 +24,31 @@
         android:layout_centerInParent="true"
         android:text="잠금화면"
         android:textColor="@color/white"
-        app:font="@string/font_regular"
-        android:textSize="30dp" />
+        android:textSize="30dp"
+        app:font="@string/font_regular" />
 
     <act.sds.samsung.angelman.presentation.custom.FontTextView
         android:id="@+id/category_item_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/category_item_title"
         android:layout_alignParentBottom="true"
+        android:layout_below="@id/category_item_title"
+        android:layout_centerHorizontal="true"
+        android:alpha="0.8"
         android:gravity="bottom"
         android:paddingBottom="5dp"
-        android:layout_centerHorizontal="true"
         android:text="0개 카드"
         android:textColor="@color/white"
-        android:alpha="0.8"
-        app:font="@string/font_medium"
-        android:textSize="16dp" />
+        android:textSize="16dp"
+        app:font="@string/font_medium" />
 
-    <act.sds.samsung.angelman.presentation.custom.FontTextView
-        android:id="@+id/add_card_button_text"
+    <ImageView
+        android:id="@+id/list_card_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:padding="22.5dp"
         android:layout_centerVertical="true"
-        android:text="@string/new_card"
-        android:textColor="@color/white"
-        android:visibility="gone"
-        app:font="@string/font_regular"
-        android:textSize="18dp"/>
+        android:padding="22.5dp"
+        android:src="@drawable/btn_list" />
 
 </RelativeLayout>

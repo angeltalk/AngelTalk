@@ -14,6 +14,7 @@ import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.common.collect.Lists;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -33,9 +34,9 @@ import org.robolectric.shadows.ShadowToast;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -60,10 +61,10 @@ import act.sds.samsung.angelman.presentation.util.ContentsUtil;
 import act.sds.samsung.angelman.presentation.util.PlayUtil;
 import act.sds.samsung.angelman.presentation.util.ResourcesUtil;
 
-import static junit.framework.Assert.assertTrue;
 import static org.assertj.android.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doNothing;
@@ -87,7 +88,7 @@ public class CardViewPagerActivityTest extends UITest {
     @Before
     public void setUp() throws Exception {
         ((TestAngelmanApplication) RuntimeEnvironment.application).getAngelmanTestComponent().inject(this);
-        when(repository.getSingleCardListWithCategoryId(anyInt())).thenReturn(getCardListWithCategoryId());
+        when(repository.getSingleCardListWithCategoryId(anyInt(), anyBoolean())).thenReturn(getCardListWithCategoryId());
         when(applicationManager.getCategoryModel()).thenReturn(getCategoryModel());
         when(applicationManager.getCategoryModelColor()).thenReturn(getCategoryModelColor());
         subject = setupActivity(CardViewPagerActivity.class);
@@ -111,7 +112,7 @@ public class CardViewPagerActivityTest extends UITest {
 
         assertThat(subject.buttonContainer).isGone();
 
-        assertThat(subject.addCardButtonText).isGone();
+        assertThat(subject.cardTitleLayout.listCardButton).isVisible();
         assertThat(((CardImageAdapter) subject.mViewPager.getAdapter()).getItemAt(0)).isInstanceOf(AddCardView.class);
     }
 
@@ -149,7 +150,7 @@ public class CardViewPagerActivityTest extends UITest {
     @Test
     public void whenClickedDeleteButton_thenShowsAlertDialogMessage() throws Exception {
         ShadowAlertDialog shadowDialog = getShadowAlertDialog();
-        shadowDialog.getView().findViewById(R.id.confirm).performClick();
+        shadowDialog.getView().findViewById(R.id.confirm_button).performClick();
 
         assertThat(((TextView) shadowDialog.getView().findViewById(R.id.alert_message)).getText()).contains("카드를 삭제하시겠습니까?");
     }
@@ -172,26 +173,15 @@ public class CardViewPagerActivityTest extends UITest {
         assertThat(subject.cardDeleteButton.getVisibility()).isEqualTo(View.VISIBLE);
 
         when(repository.deleteSingleCardWithCardIndex(anyInt(), anyInt())).thenReturn(true);
-        final ArrayList<CardModel> cardListWithCategoryId = getCardListWithCategoryId();
+        final List<CardModel> cardListWithCategoryId = getCardListWithCategoryId();
         cardListWithCategoryId.remove(2);
-        when(repository.getSingleCardListWithCategoryId(anyInt())).thenReturn(cardListWithCategoryId);
+        when(repository.getSingleCardListWithCategoryId(anyInt(), anyBoolean())).thenReturn(cardListWithCategoryId);
 
         ShadowAlertDialog shadowDialog = getShadowAlertDialog();
-        shadowDialog.getView().findViewById(R.id.confirm).performClick();
+        shadowDialog.getView().findViewById(R.id.confirm_button).performClick();
 
         assertThat(viewPager.getAdapter().getCount()).isEqualTo(4);
         assertThat(((CardView) ((CardImageAdapter) viewPager.getAdapter()).getItemAt(2)).cardTitle.getText()).isEqualTo(cardListWithCategoryId.get(2).name);
-    }
-
-    @Test
-    public void whenClickedBackButton_thenFinishesCardViewPagerActivity() throws Exception {
-        ImageView backButton = (ImageView) subject.findViewById(R.id.back_button);
-
-        assertThat(backButton).isVisible();
-        backButton.performClick();
-
-        ShadowActivity activityShadow = shadowOf(subject);
-        assertTrue(activityShadow.isFinishing());
     }
 
     @Test
@@ -314,13 +304,14 @@ public class CardViewPagerActivityTest extends UITest {
     }
 
     @Test
-    public void whenClickedAddButton_thenMovesToCameraGallerySelectionActivity() throws Exception {
-        subject.addCardButtonText.performClick();
+    public void whenClickedListButton_thenMovesToCardListActivity() throws Exception {
+        subject.cardTitleLayout.listCardButton.performClick();
 
         ShadowActivity shadowActivity = shadowOf(subject);
         Intent nextStartedActivity = shadowActivity.getNextStartedActivity();
-        assertThat(nextStartedActivity.getComponent().getClassName()).isEqualTo(CameraGallerySelectionActivity.class.getCanonicalName());
+        assertThat(nextStartedActivity.getComponent().getClassName()).isEqualTo(CardListActivity.class.getCanonicalName());
     }
+
 
     @Test
     public void whenSetCardDataCompleted_firstCardIsAddCardView() throws Exception {
@@ -341,13 +332,35 @@ public class CardViewPagerActivityTest extends UITest {
     }
 
     @Test
-    public void whenClickAddCardButton_thenShowMainActivity() throws Exception {
+    public void whenClickBackButton_thenMoveToCategoryMenuActivity() throws Exception {
+        // when
+        CardImageAdapter mockImageAdapter = mock(CardImageAdapter.class);
+        subject.mViewPager.setAdapter(mockImageAdapter);
+        subject.cardImageAdapter = mockImageAdapter;
+        subject.findViewById(R.id.back_button).performClick();
 
-        subject.addCardButtonText.performClick();
-
+        // then
+        verify(((CardImageAdapter) subject.mViewPager.getAdapter())).releaseSpeakHandler();
+        verify(((CardImageAdapter) subject.mViewPager.getAdapter())).stopVideoView();
         ShadowActivity shadowActivity = shadowOf(subject);
         Intent nextStartedActivity = shadowActivity.getNextStartedActivity();
-        assertThat(nextStartedActivity.getComponent().getClassName()).isEqualTo(CameraGallerySelectionActivity.class.getCanonicalName());
+        assertThat(nextStartedActivity.getComponent().getClassName()).isEqualTo(CategoryMenuActivity.class.getCanonicalName());
+    }
+
+    @Test
+    public void whenOnBackPressed_thenMoveToCategoryMenuActivity() throws Exception {
+        // when
+        CardImageAdapter mockImageAdapter = mock(CardImageAdapter.class);
+        subject.mViewPager.setAdapter(mockImageAdapter);
+        subject.cardImageAdapter = mockImageAdapter;
+        subject.onBackPressed();
+
+        // then
+        verify(((CardImageAdapter) subject.mViewPager.getAdapter())).releaseSpeakHandler();
+        verify(((CardImageAdapter) subject.mViewPager.getAdapter())).stopVideoView();
+        ShadowActivity shadowActivity = shadowOf(subject);
+        Intent nextStartedActivity = shadowActivity.getNextStartedActivity();
+        assertThat(nextStartedActivity.getComponent().getClassName()).isEqualTo(CategoryMenuActivity.class.getCanonicalName());
     }
 
     @Test
@@ -387,16 +400,58 @@ public class CardViewPagerActivityTest extends UITest {
     }
 
     @Test
-    public void whenFinishedToMakeNewCard_thenShowsNewAddedCardAtFirstInCardViewPager() throws Exception {
+    public void whenFinishedToMakeNewCard_thenShowsNewAddedCardAtFirstCardInViewPager() throws Exception {
         Intent intent = new Intent();
 
         intent.putExtra(ApplicationConstants.INTENT_KEY_NEW_CARD, true);
 
-        when(repository.getSingleCardListWithCategoryId(anyInt())).thenReturn(getCardListWithCategoryId());
+        when(repository.getSingleCardListWithCategoryId(anyInt(), anyBoolean())).thenReturn(getCardListWithCategoryId());
 
         subject = setupActivityWithIntent(CardViewPagerActivity.class, intent);
 
         assertThat(subject.mViewPager.getCurrentItem()).isNotEqualTo(0);
+        assertThat(subject.mViewPager.getCurrentItem()).isEqualTo(1);
+    }
+
+    @Test
+    public void whenStartWithRefreshCardIntent_thenShowsAddCardItemInCardViewPager() throws Exception {
+        Intent intent = new Intent();
+
+        intent.putExtra(ApplicationConstants.INTENT_KEY_REFRESH_CARD, true);
+
+        when(repository.getSingleCardListWithCategoryId(anyInt(), anyBoolean())).thenReturn(getCardListWithCategoryId());
+
+        subject = setupActivityWithIntent(CardViewPagerActivity.class, intent);
+
+        assertThat(subject.mViewPager.getCurrentItem()).isNotEqualTo(1);
+        assertThat(subject.mViewPager.getCurrentItem()).isEqualTo(0);
+    }
+
+    @Test
+    public void whenFinishedCardListActivityAndCurrentCardIsShow_thenShowTheCard() throws Exception {
+        Intent intent = new Intent();
+        intent.putExtra(ApplicationConstants.INTENT_KEY_LIST_BACK, true);
+
+        when(repository.getSingleCardListWithCategoryId(anyInt(), anyBoolean())).thenReturn(getCardListWithCategoryId());
+        when(applicationManager.getCurrentCardIndex()).thenReturn(2);
+
+        subject = setupActivityWithIntent(CardViewPagerActivity.class, intent);
+
+        assertThat(subject.mViewPager.getCurrentItem()).isNotEqualTo(1);
+        assertThat(subject.mViewPager.getCurrentItem()).isEqualTo(3);
+    }
+
+    @Test
+    public void whenFinishedCardListActivityAndCurrentCardIsHide_thenShowFirstCardInViewPager() throws Exception {
+        Intent intent = new Intent();
+
+        intent.putExtra(ApplicationConstants.INTENT_KEY_LIST_BACK, true);
+
+        when(repository.getSingleCardListWithCategoryId(anyInt(), anyBoolean())).thenReturn(getCardListWithCategoryId());
+        when(applicationManager.getCurrentCardIndex()).thenReturn(8);
+
+        subject = setupActivityWithIntent(CardViewPagerActivity.class, intent);
+
         assertThat(subject.mViewPager.getCurrentItem()).isEqualTo(1);
     }
 
@@ -445,6 +500,13 @@ public class CardViewPagerActivityTest extends UITest {
         assertThat(ShadowToast.getTextOfLatestToast()).isEqualTo("카드 공유가 실패하였습니다.");
     }
 
+    @Test
+    public void whenViewPageChanged_thenSetApplicationMangerCurrentIndex() throws Exception {
+        int juiceViewPageIndex = 3;
+        subject.mViewPager.setCurrentItem(juiceViewPageIndex);
+        verify(applicationManager).setCurrentCardIndex(2);
+    }
+
     public boolean equals(Bitmap bitmap1, Bitmap bitmap2) {
         ByteBuffer buffer1 = ByteBuffer.allocate(bitmap1.getHeight() * bitmap1.getRowBytes());
         bitmap1.copyPixelsToBuffer(buffer1);
@@ -455,22 +517,22 @@ public class CardViewPagerActivityTest extends UITest {
         return Arrays.equals(buffer1.array(), buffer2.array());
     }
 
-    private ArrayList<CardModel> getCardListWithCategoryId() {
+    private List<CardModel> getCardListWithCategoryId() {
 
         String contentFolder = ContentsUtil.getContentFolder() + File.separator;
 
-        ArrayList<CardModel> ret = new ArrayList<>();
-        addSingleCardModel(ret, "물", contentFolder+"water.png", "20010928_120020", 0, 0, CardModel.CardType.PHOTO_CARD);
-        addSingleCardModel(ret, "우유", contentFolder+"milk.png", "20010928_120019", 0, 1, CardModel.CardType.PHOTO_CARD);
-        addSingleCardModel(ret, "쥬스", contentFolder+"juice.png", "20010928_120015", 0, 2, CardModel.CardType.PHOTO_CARD);
-        addSingleCardModel(ret, "젤리", contentFolder+"haribo.mp4", "20010928_120015", 0, 3, CardModel.CardType.VIDEO_CARD);
+        List<CardModel> ret = Lists.newArrayList(
+                makeSingleCardModel( "물", contentFolder+"water.png", "20010928_120020", 0, 0, CardModel.CardType.PHOTO_CARD, null, false),
+                makeSingleCardModel( "우유", contentFolder+"milk.png", "20010928_120019", 0, 1, CardModel.CardType.PHOTO_CARD, null, false),
+                makeSingleCardModel( "쥬스", contentFolder+"juice.png", "20010928_120015", 0, 2, CardModel.CardType.PHOTO_CARD, null, false),
+                makeSingleCardModel( "젤리", contentFolder+"haribo.mp4", "20010928_120015", 0, 3, CardModel.CardType.VIDEO_CARD, contentFolder+"haribo.jpg", false)
+        );
 
         return ret;
     }
 
-    public void addSingleCardModel(ArrayList<CardModel> list, String name, String path, String time, int categoryId, int cardIndex, CardModel.CardType cardType) {
-        CardModel model = new CardModel(name, path, time, categoryId, cardIndex, cardType);
-        list.add(model);
+    public CardModel makeSingleCardModel(String name, String path, String time, int categoryId, int cardIndex, CardModel.CardType cardType, String thumbnailPath , boolean hide) {
+        return CardModel.builder().name(name).contentPath(path).firstTime(time).categoryId(categoryId).cardIndex(cardIndex).cardType(cardType).thumbnailPath(thumbnailPath).hide(hide).build();
     }
 
     private ShadowAlertDialog getShadowAlertDialog() {

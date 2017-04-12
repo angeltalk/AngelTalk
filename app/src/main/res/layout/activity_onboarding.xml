@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:attrs="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:orientation="vertical">
+
     <android.support.v4.view.ViewPager
         android:id="@+id/onboarding_view_pager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="80dp"
-        android:layout_alignParentTop="true"/>
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="80dp" />
 
     <com.rd.PageIndicatorView
         android:id="@+id/onboarding_indicator"
@@ -19,13 +20,13 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="40dp"
-        attrs:piv_viewPager="@id/onboarding_view_pager"
+        attrs:piv_animationType="scale"
+        attrs:piv_interactiveAnimation="true"
         attrs:piv_radius="5dp"
         attrs:piv_selectedColor="#78cfc7"
         attrs:piv_unselectedColor="#989898"
-        attrs:piv_animationType="scale"
-        attrs:piv_interactiveAnimation="true"/>
-    
+        attrs:piv_viewPager="@id/onboarding_view_pager" />
+
     <ImageView
         android:id="@+id/onboarding_finish"
         android:layout_width="100dp"
@@ -34,7 +35,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="23dp"
         android:src="@drawable/ic_onboarding_finish"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <RelativeLayout
         android:id="@+id/onboarding_first_page"
@@ -42,26 +43,28 @@
         android:layout_height="match_parent"
         android:background="@drawable/background_gradient_red"
         android:visibility="visible">
+
         <act.sds.samsung.angelman.presentation.custom.FontTextView
             android:id="@+id/onboarding_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/onboarding_title"
-            attrs:font="@string/font_regular"
-            android:textSize="16dp"
-            android:textColor="@color/white"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="60dp"
+            android:text="@string/onboarding_title"
             android:textAlignment="center"
-            />
+            android:textColor="@color/white"
+            android:textSize="16dp"
+            attrs:font="@string/font_regular" />
+
         <ImageView
             android:id="@+id/onboaring_angelee"
-            android:layout_below="@id/onboarding_title"
             android:layout_width="191dp"
             android:layout_height="162dp"
+            android:layout_below="@id/onboarding_title"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="77dp"
-            android:scaleType="fitXY"/>
+            android:scaleType="fitXY" />
+
         <ImageButton
             android:id="@+id/onboarding_start"
             android:layout_width="wrap_content"
@@ -69,9 +72,8 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="131dp"
-            android:background="@drawable/ic_onboarding_logo"/>
+            android:background="@drawable/ic_onboarding_logo" />
 
     </RelativeLayout>
-
 
 </RelativeLayout>

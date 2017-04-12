@@ -14,10 +14,12 @@
     <color name="white">#FFFFFF</color>
     <color name="white_32">#32FFFFFF</color>
     <color name="white_3A">#3AFFFFFF</color>
+    <color name="white_B2">#B2FFFFFF</color>
     <color name="white_fa">#FAFAFA</color>
     <color name="black_99">#99000000</color>
     <color name="black_cc">#cc000000</color>
     <color name="black_33">#33000000</color>
+    <color name="black_4C">#4C000000</color>
     <color name="black_00">#000000</color>
 
     <color name="background_red">#e43939</color>
@@ -25,4 +27,15 @@
     <color name="background_yellow">#ffe567</color>
     <color name="background_green">#16a085</color>
     <color name="background_blue">#412c82</color>
+
+    <color name="simple_background_red">#D41468</color>
+    <color name="simple_background_orange">#FC7C42</color>
+    <color name="simple_background_yellow">#F9B235</color>
+    <color name="simple_background_green">#5EB274</color>
+    <color name="simple_background_blue">#467095</color>
+    <color name="simple_background_purple">#8F42D6</color>
+
+    <color name="card_list_horizontal_border">#e2e2e2</color>
+    <color name="category_select_list_radiobutton_select">#78cfc7</color>
+    <color name="category_select_list_radiobutton_default">#dedede</color>
 </resources>

@@ -15,31 +15,24 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import act.sds.samsung.angelman.AngelmanApplication;
 import act.sds.samsung.angelman.R;
-import act.sds.samsung.angelman.network.transfer.CardTransfer;
 import act.sds.samsung.angelman.domain.model.CardModel;
-import act.sds.samsung.angelman.domain.model.CardTransferModel;
 import act.sds.samsung.angelman.domain.model.CategoryModel;
 import act.sds.samsung.angelman.domain.repository.CardRepository;
 import act.sds.samsung.angelman.domain.repository.CategoryRepository;
+import act.sds.samsung.angelman.network.transfer.CardTransfer;
 import act.sds.samsung.angelman.presentation.adapter.CategoryAdapter;
-import act.sds.samsung.angelman.presentation.manager.ApplicationConstants;
 import act.sds.samsung.angelman.presentation.custom.CustomConfirmDialog;
-import act.sds.samsung.angelman.presentation.listener.OnDownloadCompleteListener;
-import act.sds.samsung.angelman.presentation.receiver.NotificationActionReceiver;
+import act.sds.samsung.angelman.presentation.manager.ApplicationConstants;
 import act.sds.samsung.angelman.presentation.manager.ApplicationManager;
-import act.sds.samsung.angelman.presentation.util.ContentsUtil;
-import act.sds.samsung.angelman.presentation.util.FileUtil;
 import act.sds.samsung.angelman.presentation.manager.NotificationActionManager;
+import act.sds.samsung.angelman.presentation.receiver.NotificationActionReceiver;
+import act.sds.samsung.angelman.presentation.util.FileUtil;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -90,8 +83,6 @@ public class CategoryMenuActivity extends AbstractActivity {
     private PopupWindow easterEggPopup;
     private GestureDetector logoGestureDetector;
 
-    String receiveKey ;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,12 +93,6 @@ public class CategoryMenuActivity extends AbstractActivity {
         initEasterEggPopup();
         setCategoryGridView();
         launchNotification();
-
-        if (getString(R.string.kakao_scheme).equals(getIntent().getScheme())) {
-            Uri uri = getIntent().getData();
-            receiveKey = uri.getQueryParameter("key");
-            showDownloadConfirmDialog();
-        }
     }
 
     @Override
@@ -236,7 +221,7 @@ public class CategoryMenuActivity extends AbstractActivity {
     }
 
     private void moveToNewCategoryActivity() {
-        Intent intent = new Intent(this, NewCategoryActivity.class);
+        Intent intent = new Intent(this, MakeCategoryActivity.class);
         startActivity(intent);
     }
 
@@ -284,60 +269,4 @@ public class CategoryMenuActivity extends AbstractActivity {
         NotificationActionManager notificationActionManager = new NotificationActionManager(this);
         notificationActionManager.generateNotification(new Intent(this, NotificationActionReceiver.class));
     }
-
-
-    private void showDownloadConfirmDialog() {
-        String message = getString(R.string.save_confirm_message);
-        dialog = new CustomConfirmDialog(this, message, saveCardClickListener , cancelClickListener);
-    }
-
-    private View.OnClickListener saveCardClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            cardTransfer.downloadCard(receiveKey, new OnDownloadCompleteListener(){
-                @Override
-                public void onSuccess(CardTransferModel cardTransferModel, String filePath){
-                    try {
-                        FileUtil.unzip(filePath, ContentsUtil.getTempFolder());
-                        CardModel cardModel = saveNewSharedCard(cardTransferModel);
-                        ContentsUtil.copySharedFiles(cardModel);
-                        FileUtil.removeFilesIn(ContentsUtil.getTempFolder());
-
-                        CategoryModel categoryModel = categoryRepository.getCategoryAllList().get(0);
-                        moveToCategoryViewPagerActivity(categoryModel, ApplicationConstants.INTENT_KEY_SHARE_CARD);
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-                @Override
-                public void onFail(){
-                    FileUtil.removeFilesIn(ContentsUtil.getTempFolder());
-                }
-            });
-
-            dialog.dismiss();
-        }
-    };
-
-    private CardModel saveNewSharedCard(CardTransferModel cardTransferModel) {
-        Date date = new Date();
-        DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
-        CardModel.CardType cardType = CardModel.CardType.valueOf(cardTransferModel.cardType);
-
-        String contentPath = cardType == CardModel.CardType.VIDEO_CARD ? ContentsUtil.getVideoPath() : ContentsUtil.getImagePath();
-
-        CardModel cardModel = new CardModel(cardTransferModel.name,
-                contentPath,
-                ContentsUtil.getVoicePath(),
-                dateFormat.format(date),
-                0,
-                cardType,
-                cardType == CardModel.CardType.VIDEO_CARD  ? ContentsUtil.getThumbnailPath(contentPath) : null);
-
-        cardRepository.createSingleCardModel(cardModel);
-
-        return cardModel;
-    }
-
 }

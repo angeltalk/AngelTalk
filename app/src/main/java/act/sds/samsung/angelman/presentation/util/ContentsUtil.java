@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import act.sds.samsung.angelman.domain.model.CardModel;
+import act.sds.samsung.angelman.domain.model.CardTransferModel;
 
 import static act.sds.samsung.angelman.presentation.util.FileUtil.copyFile;
 
@@ -155,6 +156,28 @@ public class ContentsUtil {
         return file;
     }
 
+    public static CardModel getTempCardModel(String folderPath, CardTransferModel cardTransferModel) {
+        CardModel cardModel = new CardModel();
+        cardModel.name = cardTransferModel.name;
+        cardModel.cardType = CardModel.CardType.valueOf(cardTransferModel.cardType);
+
+        File[] files = new File(folderPath).listFiles();
+        for (File file : files) {
+            if (file.getAbsolutePath().contains("mp4")) {
+                cardModel.contentPath = file.getAbsolutePath();
+            } else if (file.getAbsolutePath().contains("jpg") || file.getAbsolutePath().contains("png")) {
+                if (CardModel.CardType.valueOf(cardTransferModel.cardType) == CardModel.CardType.VIDEO_CARD) {
+                    cardModel.thumbnailPath = file.getAbsolutePath();
+                } else {
+                    cardModel.contentPath = file.getAbsolutePath();
+                }
+            } else if (file.getAbsolutePath().contains("3gdp")) {
+                cardModel.voicePath = file.getAbsolutePath();
+            }
+        }
+        return  cardModel;
+    }
+
     public static void copySharedFiles(CardModel cardModel) {
         File[] files = new File(getTempFolder()).listFiles();
         for (File file : files) {
@@ -175,4 +198,5 @@ public class ContentsUtil {
             }
         }
     }
+
 }

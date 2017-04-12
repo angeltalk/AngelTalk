@@ -10,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.common.collect.Lists;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,7 +20,7 @@ import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowAlertDialog;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -33,8 +35,8 @@ import act.sds.samsung.angelman.presentation.adapter.NewCategoryItemAdapter;
 import act.sds.samsung.angelman.presentation.manager.ApplicationConstants;
 import act.sds.samsung.angelman.presentation.util.ResourceMapper;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.android.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -42,9 +44,9 @@ import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class)
-public class NewCategoryActivityTest extends UITest {
+public class MakeCategoryActivityTest extends UITest {
 
-    private NewCategoryActivity subject;
+    private MakeCategoryActivity subject;
     private EditText editCategoryTitle;
     private Button saveButton;
     private ImageView cancelButton;
@@ -60,7 +62,7 @@ public class NewCategoryActivityTest extends UITest {
         initIconList();
         initColorList();
 
-        subject = setupActivity(NewCategoryActivity.class);
+        subject = setupActivity(MakeCategoryActivity.class);
         editCategoryTitle = (EditText) subject.findViewById(R.id.edit_category_title);
         saveButton = (Button) subject.findViewById(R.id.new_category_save_button);
         cancelButton = (ImageView) subject.findViewById(R.id.category_title_cancel);
@@ -299,7 +301,7 @@ public class NewCategoryActivityTest extends UITest {
         editCategoryTitle.setText("test");
         subject.onBackPressed();
 
-        ShadowAlertDialog.getLatestAlertDialog().findViewById(R.id.confirm).performClick();
+        ShadowAlertDialog.getLatestAlertDialog().findViewById(R.id.confirm_button).performClick();
         assertThat(subject.isFinishing()).isTrue();
     }
 
@@ -316,7 +318,7 @@ public class NewCategoryActivityTest extends UITest {
 
         subject.onBackPressed();
 
-        ShadowAlertDialog.getLatestAlertDialog().findViewById(R.id.confirm).performClick();
+        ShadowAlertDialog.getLatestAlertDialog().findViewById(R.id.confirm_button).performClick();
         assertThat(subject.isFinishing()).isTrue();
     }
 
@@ -332,7 +334,7 @@ public class NewCategoryActivityTest extends UITest {
 
 
     private void initIconList() {
-        ArrayList<CategoryItemModel> mockItemList = new ArrayList<>();
+        List<CategoryItemModel> mockItemList = Lists.newArrayList();
 
         CategoryItemModel mock1 = new CategoryItemModel();
         mock1.status = ResourceMapper.IconState.DEFAULT.ordinal();
@@ -359,7 +361,7 @@ public class NewCategoryActivityTest extends UITest {
     }
 
     private void initColorList() {
-        ArrayList<CategoryItemModel> mockItemList = new ArrayList<>();
+        List<CategoryItemModel> mockItemList = Lists.newArrayList();
 
         CategoryItemModel mock1 = new CategoryItemModel();
         mock1.status = ResourceMapper.ColorState.MENU.ordinal();

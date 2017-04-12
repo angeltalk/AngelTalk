@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.FrameLayout;
 
+import com.google.common.collect.Lists;
+
 import org.robolectric.annotation.Implementation;
 import org.robolectric.annotation.Implements;
 import org.robolectric.annotation.RealObject;
@@ -19,13 +21,12 @@ import org.robolectric.internal.ShadowExtractor;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings({"UnusedDeclaration", "Unchecked"})
 @Implements(Snackbar.class)
 public class ShadowSnackbar {
-    static List<ShadowSnackbar> shadowSnackbars = new ArrayList<>();
+    static List<ShadowSnackbar> shadowSnackbars = Lists.newArrayList();
 
     @RealObject
     Snackbar snackbar;

@@ -218,7 +218,7 @@ public class Camera2Activity extends AbstractActivity implements View.OnClickLis
     private static String fileName;
 
     /**
-     * This a callback object for the {@link ImageReader}. "onImageAvailable" will be called when a
+     * This a itemTouchHelperCallback object for the {@link ImageReader}. "onImageAvailable" will be called when a
      * still image is ready to be saved.
      */
     private final ImageReader.OnImageAvailableListener mOnImageAvailableListener = new ImageReader.OnImageAvailableListener() {
@@ -743,8 +743,6 @@ public class Camera2Activity extends AbstractActivity implements View.OnClickLis
                 public void onCaptureCompleted(@NonNull CameraCaptureSession session,
                                                @NonNull CaptureRequest request,
                                                @NonNull TotalCaptureResult result) {
-//                    showToast("Saved: " + mFile);
-//                    Log.d(TAG, mFile.toString());
 
                     if (mState != STATE_PICTURE_FINISHED) {
                         unlockFocus();

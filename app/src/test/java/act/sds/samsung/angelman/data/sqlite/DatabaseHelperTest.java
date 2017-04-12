@@ -45,7 +45,9 @@ public class DatabaseHelperTest {
             CardColumns.FIRST_TIME + " TEXT," +
             CardColumns.CARD_TYPE + " TEXT," +
             CardColumns.THUMBNAIL_PATH + " TEXT," +
+            CardColumns.HIDE + " INTEGER," +
             CardColumns.CARD_INDEX + " INTEGER)";
+
     private static final String SQL_CREATE_CATEGORY_LIST = "CREATE TABLE " + CategoryColumns.TABLE_NAME + "(" +
             CategoryColumns._ID + " INTEGER_PRIMARY_KEY," +
             CategoryColumns.TITLE + " TEXT," +

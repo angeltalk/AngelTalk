@@ -1,14 +1,15 @@
 package act.sds.samsung.angelman.presentation.activity;
 
 import android.content.Context;
-import android.net.Uri;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.percent.PercentFrameLayout;
+import android.support.percent.PercentRelativeLayout;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,18 +26,18 @@ import javax.inject.Inject;
 
 import act.sds.samsung.angelman.AngelmanApplication;
 import act.sds.samsung.angelman.R;
-import act.sds.samsung.angelman.network.transfer.CardTransfer;
-import act.sds.samsung.angelman.network.transfer.KaKaoTransfer;
 import act.sds.samsung.angelman.domain.model.CardModel;
 import act.sds.samsung.angelman.domain.model.CategoryModel;
 import act.sds.samsung.angelman.domain.repository.CardRepository;
+import act.sds.samsung.angelman.network.transfer.CardTransfer;
+import act.sds.samsung.angelman.network.transfer.KaKaoTransfer;
 import act.sds.samsung.angelman.presentation.adapter.CardImageAdapter;
-import act.sds.samsung.angelman.presentation.manager.ApplicationConstants;
-import act.sds.samsung.angelman.presentation.custom.CardCategoryLayout;
+import act.sds.samsung.angelman.presentation.custom.CardTitleLayout;
 import act.sds.samsung.angelman.presentation.custom.CardView;
 import act.sds.samsung.angelman.presentation.custom.CardViewPager;
 import act.sds.samsung.angelman.presentation.custom.CustomConfirmDialog;
 import act.sds.samsung.angelman.presentation.custom.CustomSnackBar;
+import act.sds.samsung.angelman.presentation.manager.ApplicationConstants;
 import act.sds.samsung.angelman.presentation.manager.ApplicationManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -58,7 +59,7 @@ public class CardViewPagerActivity extends AbstractActivity {
     KaKaoTransfer kaKaoTransfer;
 
     @BindView(R.id.title_container)
-    CardCategoryLayout titleLayout;
+    CardTitleLayout cardTitleLayout;
 
     @BindView(R.id.button_container)
     LinearLayout buttonContainer;
@@ -72,13 +73,12 @@ public class CardViewPagerActivity extends AbstractActivity {
     @BindView(R.id.view_pager)
     CardViewPager mViewPager;
 
-    @BindView(R.id.category_item_title)
-    TextView categoryTitle;
+    @BindView(R.id.on_loading_view)
+    LinearLayout loadingViewLayout;
 
-    @BindView(R.id.add_card_button_text)
-    TextView addCardButtonText;
+    @BindView(R.id.image_angelee_gif)
+    ImageView imageLoadingGif;
 
-    private Uri downloadUrl;
 
     @OnClick(R.id.card_delete_button)
     public void deleteButtonOnClick() {
@@ -89,35 +89,36 @@ public class CardViewPagerActivity extends AbstractActivity {
     public void shareButtonOnClick() {
 
         final CardModel cardModel = getCardModel(mViewPager.getCurrentItem());
-
+        showLoadingAnimation();
         cardTransfer.uploadCard(cardModel, new OnSuccessListener<Map<String,String>>() {
             @Override
             public void onSuccess(Map<String, String> resultMap) {
                 String thumbnailUrl = resultMap.get("url");
                 String key = resultMap.get("key");
-                kaKaoTransfer.sendKakaoLinkMessage(context, key, thumbnailUrl, cardModel);
 
+                kaKaoTransfer.sendKakaoLinkMessage(context, key, thumbnailUrl, cardModel);
+                loadingViewLayout.setVisibility(View.GONE);
             }
 
         }, new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                loadingViewLayout.setVisibility(View.GONE);
                 Toast.makeText(context, R.string.share_fail_message,Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     List<CardModel> allCardListInSelectedCategory;
-    int currentCardIndex = 0;
 
     private CategoryModel selectedCategoryModel;
-    private CardImageAdapter adapter;
+    public CardImageAdapter cardImageAdapter;
     private CustomConfirmDialog dialog;
     private RequestManager glide;
     Context context;
 
     public CardModel getCardModel(int index) {
-        CardView card = (CardView) adapter.viewCollection.get(index);
+        CardView card = (CardView) cardImageAdapter.viewCollection.get(index);
         return card.dataModel;
     }
 
@@ -136,10 +137,25 @@ public class CardViewPagerActivity extends AbstractActivity {
             mViewPager.setCurrentItem(1);
         }
 
-        if (getIntent().getBooleanExtra(ApplicationConstants.INTENT_KEY_SHARE_CARD, false)) {
-            showSnackBarMessage(ApplicationConstants.INTENT_KEY_SHARE_CARD);
+        if (getIntent().getBooleanExtra(ApplicationConstants.INTENT_KEY_REFRESH_CARD, false)) {
+            mViewPager.setCurrentItem(0);
+        }
+
+        if (getIntent().getBooleanExtra(ApplicationConstants.INTENT_KEY_LIST_BACK, false)) {
+            for(int i=0;i<allCardListInSelectedCategory.size();i++) {
+                if(allCardListInSelectedCategory.get(i).cardIndex == applicationManager.getCurrentCardIndex()) {
+                    mViewPager.setCurrentItem(i);
+                    return;
+                }
+            }
             mViewPager.setCurrentItem(1);
         }
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        moveToCategoryMenuActivity();
     }
 
     private void initializeView() {
@@ -150,18 +166,32 @@ public class CardViewPagerActivity extends AbstractActivity {
 
         selectedCategoryModel = applicationManager.getCategoryModel();
 
-        allCardListInSelectedCategory = cardRepository.getSingleCardListWithCategoryId(selectedCategoryModel.index);
-        titleLayout.setCategoryModelTitle(applicationManager.getCategoryModel().title);
-        titleLayout.refreshCardCountText(0, allCardListInSelectedCategory.size() + 1);
-        categoryTitle.setText(selectedCategoryModel.title);
+        allCardListInSelectedCategory = cardRepository.getSingleCardListWithCategoryId(selectedCategoryModel.index,false);
+        cardTitleLayout.setCategoryModelTitle(applicationManager.getCategoryModel().title);
+        cardTitleLayout.refreshCardCountText(0, allCardListInSelectedCategory.size() + 1);
+        cardTitleLayout.categoryTitle.setText(selectedCategoryModel.title);
 
-        adapter = new CardImageAdapter(this, allCardListInSelectedCategory, glide, applicationManager);
-        adapter.addNewCardViewAtFirst();
-        mViewPager.setAdapter(adapter);
+        cardImageAdapter = new CardImageAdapter(this, allCardListInSelectedCategory, glide, applicationManager);
+        cardImageAdapter.addNewCardViewAtFirst();
+        mViewPager.setAdapter(cardImageAdapter);
         OverScrollDecoratorHelper.setUpOverScroll(mViewPager);
         mViewPager.addOnPageChangeListener(viewPagerOnPageChangeListener);
 
-        titleLayout.refreshCardCountText(0, allCardListInSelectedCategory.size());
+        cardTitleLayout.refreshCardCountText(0, allCardListInSelectedCategory.size());
+        cardTitleLayout.setBackButtonOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                moveToCategoryMenuActivity();
+            }
+        });
+    }
+
+    private void moveToCategoryMenuActivity() {
+        cardImageAdapter.releaseSpeakHandler();
+        cardImageAdapter.stopVideoView();
+        Intent intent = new Intent(context, CategoryMenuActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 
     private ViewPager.OnPageChangeListener viewPagerOnPageChangeListener = new ViewPager.OnPageChangeListener() {
@@ -171,11 +201,11 @@ public class CardViewPagerActivity extends AbstractActivity {
 
         @Override
         public void onPageSelected(int pos) {
-            adapter.releaseSpeakHandler();
-            adapter.stopVideoView();
+            cardImageAdapter.releaseSpeakHandler();
+            cardImageAdapter.stopVideoView();
             showAndHideButtonContainerBy(pos);
-            currentCardIndex = pos;
-            titleLayout.refreshCardCountText(pos, mViewPager.getAdapter().getCount());
+            applicationManager.setCurrentCardIndex(allCardListInSelectedCategory.get(pos).cardIndex);
+            cardTitleLayout.refreshCardCountText(pos, mViewPager.getAdapter().getCount());
         }
 
         @Override
@@ -186,15 +216,13 @@ public class CardViewPagerActivity extends AbstractActivity {
     private void showAndHideButtonContainerBy(int pos) {
         if (pos == 0) {
             buttonContainer.setVisibility(View.GONE);
-            titleLayout.setAddCardTextButtonVisible(View.GONE);
         } else {
             buttonContainer.setVisibility(View.VISIBLE);
-            titleLayout.setAddCardTextButtonVisible(View.VISIBLE);
         }
     }
 
     private void deleteCard() {
-        final CardView card = (CardView) adapter.viewCollection.get(mViewPager.getCurrentItem());
+        final CardView card = (CardView) cardImageAdapter.viewCollection.get(mViewPager.getCurrentItem());
         String cardTitle = card.cardTitle.getText().toString();
         final int cardIndex = card.dataModel.cardIndex;
         String message = getResources().getString(R.string.delete_alert_message, cardTitle);
@@ -204,14 +232,14 @@ public class CardViewPagerActivity extends AbstractActivity {
             public void onClick(View v) {
                 int currentItem = setCurrentItem();
                 if (deleteSelectedCard(cardIndex)) {
-                    List<CardModel> cardList = cardRepository.getSingleCardListWithCategoryId((applicationManager.getCategoryModel().index));
+                    List<CardModel> cardList = cardRepository.getSingleCardListWithCategoryId((applicationManager.getCategoryModel().index),false);
                     mViewPager.removeAllViews();
-                    adapter = new CardImageAdapter(CardViewPagerActivity.this, cardList, glide, applicationManager);
-                    adapter.addNewCardViewAtFirst();
-                    mViewPager.setAdapter(adapter);
+                    cardImageAdapter = new CardImageAdapter(CardViewPagerActivity.this, cardList, glide, applicationManager);
+                    cardImageAdapter.addNewCardViewAtFirst();
+                    mViewPager.setAdapter(cardImageAdapter);
                     mViewPager.setCurrentItem(currentItem);
                     showAndHideButtonContainerBy(currentItem);
-                    titleLayout.refreshCardCountText(mViewPager.getCurrentItem(), adapter.getCount());
+                    cardTitleLayout.refreshCardCountText(mViewPager.getCurrentItem(), cardImageAdapter.getCount());
                 }
                 dialog.dismiss();
             }
@@ -234,7 +262,7 @@ public class CardViewPagerActivity extends AbstractActivity {
 
     private int setCurrentItem() {
         int currentItem = mViewPager.getCurrentItem();
-        if (currentItem == adapter.getCount() - 1) {
+        if (currentItem == cardImageAdapter.getCount() - 1) {
             currentItem--;
         }
         return currentItem;
@@ -245,12 +273,19 @@ public class CardViewPagerActivity extends AbstractActivity {
     }
 
     private void showSnackBarMessage(String intentKey) {
-        PercentFrameLayout rootLayout = (PercentFrameLayout) findViewById(R.id.category_item_container);
+        PercentRelativeLayout rootLayout = (PercentRelativeLayout) findViewById(R.id.category_item_container);
         if(ApplicationConstants.INTENT_KEY_NEW_CARD.equals(intentKey)) {
-            CustomSnackBar.snackBarWithDuration(rootLayout, getApplicationContext().getResources().getString(R.string.add_new_card_success));
-        }else if(ApplicationConstants.INTENT_KEY_SHARE_CARD.equals(intentKey)){
-            CustomSnackBar.snackBarWithDuration(rootLayout, getApplicationContext().getResources().getString(R.string.add_share_card_success));
+            CustomSnackBar.styledSnackBarWithDuration(this, rootLayout, getApplicationContext().getResources().getString(R.string.add_new_card_success), 2000);
         }
+    }
+
+    private void showLoadingAnimation(){
+        loadingViewLayout.setVisibility(View.VISIBLE);
+        Glide.with(CardViewPagerActivity.this)
+                .load(R.drawable.angelee)
+                .asGif()
+                .crossFade()
+                .into(imageLoadingGif);
     }
 
 }

@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.firebase.database.DataSnapshot;
@@ -145,7 +146,8 @@ public class CardTransfer {
     @NonNull
     private String makeShareZipFile(CardModel cardModel, String key) {
         List<String> filePathList = Lists.newArrayList(getAbsoluteContentsPath(cardModel.contentPath));
-        if (cardModel.voicePath != null) {
+
+        if (!Strings.isNullOrEmpty(cardModel.voicePath) && getAbsoluteContentsPath(cardModel.voicePath) != null) {
             filePathList.add(getAbsoluteContentsPath(cardModel.voicePath));
         }
         if (cardModel.cardType == CardModel.CardType.VIDEO_CARD) {
@@ -162,7 +164,12 @@ public class CardTransfer {
     }
 
     private String getAbsoluteContentsPath(String filePath) {
-        return ContentsUtil.getContentFile(filePath).getAbsolutePath();
+        File contentFile = ContentsUtil.getContentFile(filePath);
+        if(contentFile != null){
+            return ContentsUtil.getContentFile(filePath).getAbsolutePath();
+        }else{
+            return null;
+        }
     }
 
     private void setCardModealData(CardTransferModel newCardModel, DataSnapshot snapshot) {
@@ -175,7 +182,6 @@ public class CardTransfer {
         }
     }
 
-    // TODO : deviceID unique key 확인
     private String generateShareKey() {
         String deviceId = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
         return deviceId + System.currentTimeMillis();

@@ -5,11 +5,13 @@ import javax.inject.Singleton;
 import act.sds.samsung.angelman.dagger.modules.AngelmanModule;
 import act.sds.samsung.angelman.data.sqlite.DatabaseHelperTest;
 import act.sds.samsung.angelman.presentation.activity.CameraGallerySelectionActivityTest;
+import act.sds.samsung.angelman.presentation.activity.CardListActivityTest;
 import act.sds.samsung.angelman.presentation.activity.CardViewPagerActivityTest;
 import act.sds.samsung.angelman.presentation.activity.CategoryMenuActivityTest;
 import act.sds.samsung.angelman.presentation.activity.MakeCardActivityTest;
-import act.sds.samsung.angelman.presentation.activity.NewCategoryActivityTest;
+import act.sds.samsung.angelman.presentation.activity.MakeCategoryActivityTest;
 import act.sds.samsung.angelman.presentation.activity.OnboardingActivityTest;
+import act.sds.samsung.angelman.presentation.activity.ShareCardActivityTest;
 import act.sds.samsung.angelman.presentation.activity.VideoActivityTest;
 import act.sds.samsung.angelman.presentation.adapter.CardImageAdapterTest;
 import act.sds.samsung.angelman.presentation.custom.AddCardViewTest;
@@ -26,7 +28,7 @@ public interface AngelmanTestComponent extends AngelmanComponent {
     void inject(CardViewPagerActivityTest activity);
     void inject(CategoryMenuLayoutTest view);
     void inject(CardViewPagerLayoutTest view);
-    void inject(NewCategoryActivityTest activity);
+    void inject(MakeCategoryActivityTest activity);
     void inject(DatabaseHelperTest activity);
     void inject(AddCardViewTest addCardViewTest);
     void inject(CameraGallerySelectionActivityTest cameraGallerySelectionActivityTest);
@@ -34,4 +36,6 @@ public interface AngelmanTestComponent extends AngelmanComponent {
     void inject(VideoActivityTest videoActivityTest);
     void inject(CardImageAdapterTest cardImageAdapterTest);
     void inject(ScreenReceiverTest screenReceiverTest);
+    void inject(ShareCardActivityTest shareCardActivityTest);
+    void inject(CardListActivityTest cardListActivityTest);
 }
