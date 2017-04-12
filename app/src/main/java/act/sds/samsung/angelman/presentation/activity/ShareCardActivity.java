@@ -111,6 +111,7 @@ public class ShareCardActivity extends AppCompatActivity {
         showLoadingAnimation();
         titleLayout.setCategoryModelTitle(getApplicationContext().getString(R.string.new_card_title));
         titleLayout.hideCardCountText(true);
+        titleLayout.hideListCardButton(true);
         titleLayout.setBackButtonOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

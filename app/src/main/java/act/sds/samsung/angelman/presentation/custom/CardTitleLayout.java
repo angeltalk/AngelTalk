@@ -99,8 +99,12 @@ public class CardTitleLayout extends RelativeLayout {
             cardCount.setVisibility(View.VISIBLE);
         }
     }
-
-    public void setCardCountVisible(int visible) {
-        cardCount.setVisibility(visible);
+    public void hideListCardButton(boolean hide) {
+        if(hide){
+            listCardButton.setVisibility(View.GONE);
+        } else {
+            listCardButton.setVisibility(View.VISIBLE);
+        }
     }
+
 }

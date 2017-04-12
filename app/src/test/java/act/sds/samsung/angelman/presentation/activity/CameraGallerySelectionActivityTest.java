@@ -2,6 +2,7 @@ package act.sds.samsung.angelman.presentation.activity;
 
 import android.content.Intent;
 import android.os.Build;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -46,6 +47,12 @@ public class CameraGallerySelectionActivityTest extends UITest {
         when(applicationManager.getCategoryModel()).thenReturn(getCategoryModel());
         when(applicationManager.getCategoryModelColor()).thenReturn(getCategoryModelColor());
         subject = setupActivity(CameraGallerySelectionActivity.class);
+    }
+
+    @Test
+    public void whenLaunched_thenHideCardCountTitleAndListCardButton() throws Exception {
+        assertThat(subject.titleLayout.cardCount.getVisibility()).isEqualTo(View.GONE);
+        assertThat(subject.titleLayout.listCardButton.getVisibility()).isEqualTo(View.GONE);
     }
 
     @Test
