@@ -35,7 +35,6 @@ public class CategorySelectDialog {
         adapter = new CategoryListAdapter(context, categoryList);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-//        adapter.selectCategoryRadioButton(0);
 
         dialog = DialogUtil.buildCustomDialog(context, innerView, positiveOnClickListener, negativeOnClickListener);
         dialog.show();
@@ -66,17 +65,15 @@ public class CategorySelectDialog {
             return (mCheckPosition < 0) ? null : categoryList.get(mCheckPosition);
         }
 
-        public void selectCategoryRadioButton(int position) {
-            selectCategoryRadioButton(recyclerView.getChildAt(position).findViewById(R.id.category_item_radio));
-        }
-
         private void selectCategoryRadioButton(View selectedRadioButton) {
             View itemRadioButton;
             for(int i=0; i<recyclerView.getChildCount(); i++) {
                 itemRadioButton = recyclerView.getChildAt(i).findViewById(R.id.category_item_radio);
                 ((AppCompatRadioButton) itemRadioButton).setChecked(itemRadioButton.equals(selectedRadioButton));
             }
-            ((FontTextView) dialog.findViewById(R.id.confirm)).setTextColor(context.getResources().getColor(R.color.simple_background_red));
+            FontTextView confirmButton = (FontTextView) dialog.findViewById(R.id.confirm_button);
+            confirmButton.setTextColor(context.getResources().getColor(R.color.simple_background_red));
+            confirmButton.setEnabled(true);
         }
 
         @Override

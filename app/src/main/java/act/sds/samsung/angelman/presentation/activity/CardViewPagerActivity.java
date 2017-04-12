@@ -141,11 +141,6 @@ public class CardViewPagerActivity extends AbstractActivity {
         if (getIntent().getBooleanExtra(ApplicationConstants.INTENT_KEY_REFRESH_CARD, false)) {
             mViewPager.setCurrentItem(0);
         }
-
-        if (getIntent().getBooleanExtra(ApplicationConstants.INTENT_KEY_SHARE_CARD, false)) {
-            showSnackBarMessage(ApplicationConstants.INTENT_KEY_SHARE_CARD);
-            mViewPager.setCurrentItem(1);
-        }
     }
 
     @Override
@@ -269,8 +264,6 @@ public class CardViewPagerActivity extends AbstractActivity {
         PercentRelativeLayout rootLayout = (PercentRelativeLayout) findViewById(R.id.category_item_container);
         if(ApplicationConstants.INTENT_KEY_NEW_CARD.equals(intentKey)) {
             CustomSnackBar.snackBarWithDuration(rootLayout, getApplicationContext().getResources().getString(R.string.add_new_card_success));
-        }else if(ApplicationConstants.INTENT_KEY_SHARE_CARD.equals(intentKey)){
-            CustomSnackBar.snackBarWithDuration(rootLayout, getApplicationContext().getResources().getString(R.string.add_share_card_success));
         }
     }
 

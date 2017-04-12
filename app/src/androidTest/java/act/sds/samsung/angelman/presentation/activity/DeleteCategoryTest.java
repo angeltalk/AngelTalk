@@ -73,7 +73,7 @@ public class DeleteCategoryTest {
         linearLayout.check(matches(isDisplayed()));
 
         ViewInteraction textView2 = onView(
-                allOf(withId(R.id.confirm), withText("확인"),
+                allOf(withId(R.id.confirm_button), withText("확인"),
                         childAtPosition(childAtPosition(
                                 childAtPosition(
                                         IsInstanceOf.<View>instanceOf(android.widget.FrameLayout.class),
@@ -83,7 +83,7 @@ public class DeleteCategoryTest {
         textView2.check(matches(withText("확인")));
 
         ViewInteraction textView3 = onView(
-                allOf(withId(R.id.cancel), withText("취소"),
+                allOf(withId(R.id.cancel_button), withText("취소"),
                         childAtPosition(childAtPosition(
                                 childAtPosition(
                                         IsInstanceOf.<View>instanceOf(android.widget.FrameLayout.class),
@@ -93,7 +93,7 @@ public class DeleteCategoryTest {
         textView3.check(matches(withText("취소")));
 
         ViewInteraction appCompatTextView2 = onView(
-                allOf(withId(R.id.confirm), withText("확인"), isDisplayed()));
+                allOf(withId(R.id.confirm_button), withText("확인"), isDisplayed()));
         appCompatTextView2.perform(click());
 
         ViewInteraction cardView4 = onView(
@@ -105,7 +105,7 @@ public class DeleteCategoryTest {
         cardView4.perform(click());
 
         ViewInteraction appCompatTextView3 = onView(
-                allOf(withId(R.id.confirm), withText("확인"), isDisplayed()));
+                allOf(withId(R.id.confirm_button), withText("확인"), isDisplayed()));
         appCompatTextView3.perform(click());
 
         ViewInteraction cardView5 = onView(
@@ -117,7 +117,7 @@ public class DeleteCategoryTest {
         cardView5.perform(click());
 
         ViewInteraction appCompatTextView4 = onView(
-                allOf(withId(R.id.confirm), withText("확인"), isDisplayed()));
+                allOf(withId(R.id.confirm_button), withText("확인"), isDisplayed()));
         appCompatTextView4.perform(click());
 
         ViewInteraction cardView6 = onView(
@@ -129,7 +129,7 @@ public class DeleteCategoryTest {
         cardView6.perform(click());
 
         ViewInteraction appCompatTextView5 = onView(
-                allOf(withId(R.id.confirm), withText("확인"), isDisplayed()));
+                allOf(withId(R.id.confirm_button), withText("확인"), isDisplayed()));
         appCompatTextView5.perform(click());
 
         ViewInteraction cardView8 = onView(
@@ -141,7 +141,7 @@ public class DeleteCategoryTest {
         cardView8.perform(click());
 
         ViewInteraction appCompatTextView7 = onView(
-                allOf(withId(R.id.confirm), withText("확인"), isDisplayed()));
+                allOf(withId(R.id.confirm_button), withText("확인"), isDisplayed()));
         appCompatTextView7.perform(click());
 
 
@@ -164,7 +164,7 @@ public class DeleteCategoryTest {
         textView4.check(matches(withText("카테고리는 최소 1개 이상이어야 합니다. 삭제 후 새 카테고리를 만드시겠습니까?")));
 
         ViewInteraction appCompatTextView8 = onView(
-                allOf(withId(R.id.confirm), withText("확인"), isDisplayed()));
+                allOf(withId(R.id.confirm_button), withText("확인"), isDisplayed()));
         appCompatTextView8.perform(click());
 
         ViewInteraction textView6 = onView(
