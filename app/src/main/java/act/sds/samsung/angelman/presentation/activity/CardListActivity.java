@@ -95,6 +95,7 @@ public class CardListActivity extends AppCompatActivity {
                     keepView.setBackground(keepBackground);
                     keepView.setPadding(0, 0, 0, 0);
                     keepView.refreshDrawableState();
+                    setCurrentCardIndex();
                     cardRepository.updateCategoryCardIndex(cardList);
                 }
             } else if (actionState == ItemTouchHelper.ACTION_STATE_DRAG) {
@@ -103,6 +104,15 @@ public class CardListActivity extends AppCompatActivity {
                 viewHolder.itemView.setBackground(getResources().getDrawable(R.drawable.card_item_shadow));
             }
             super.onSelectedChanged(viewHolder, actionState);
+        }
+
+        private void setCurrentCardIndex() {
+            for(int i=0;i<cardList.size();i++){
+                if(cardList.get(i).cardIndex == applicationManager.getCurrentCardIndex()) {
+                    applicationManager.setCurrentCardIndex(cardList.size() - i);
+                    break;
+                }
+            }
         }
 
         @Override
@@ -206,7 +216,7 @@ public class CardListActivity extends AppCompatActivity {
     private void moveToCardViewPagerActivity() {
         Intent intent = new Intent(getApplicationContext(), CardViewPagerActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra(ApplicationConstants.INTENT_KEY_REFRESH_CARD, true);
+        intent.putExtra(ApplicationConstants.INTENT_KEY_LIST_BACK, true);
         getApplicationContext().startActivity(intent);
     }
 }

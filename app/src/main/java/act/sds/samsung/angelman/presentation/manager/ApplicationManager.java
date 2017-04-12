@@ -29,6 +29,7 @@ public class ApplicationManager {
     private static final String CATEGORY_MODEL_ICON = "categoryModelIcon";
     private static final String CATEGORY_MODEL_COLOR = "categoryModelColor";
     private static final String CATEGORY_MODEL_INDEX = "categoryModelIndex";
+    private static final String CURRENT_CARD_INDEX = "currentCardIndex";
     private static final String CHILD_MODE = "childMode";
 
     private SharedPreferences preferences;
@@ -64,8 +65,16 @@ public class ApplicationManager {
         categoryModel.color = preferences.getInt(CATEGORY_MODEL_COLOR, -1);
         return categoryModel;
     }
-    //@ResourcesUtil.BackgroundColors
-    //int cate
+
+    public void setCurrentCardIndex(int currentCardIndex){
+        SharedPreferences.Editor edit = preferences.edit();
+        edit.putInt(CURRENT_CARD_INDEX, currentCardIndex).apply();
+    }
+
+    public int getCurrentCardIndex(){
+        return preferences.getInt(CURRENT_CARD_INDEX,0);
+    }
+
 
     @ResourcesUtil.BackgroundColors
     public int getCategoryModelColor(){

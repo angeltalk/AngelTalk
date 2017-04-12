@@ -9,4 +9,5 @@ public class ApplicationConstants {
     public static final String FIRST_LAUNCH = "firstLaunch";
     public static final String PRIVATE_PREFERENCE_NAME = "act.sds.samsung.angelman";
     public static final String INTENT_KEY_REFRESH_CARD = "isRefreshCard";
+    public static final String INTENT_KEY_LIST_BACK = "listBack";
 }

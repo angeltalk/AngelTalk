@@ -164,6 +164,25 @@ public class CardListActivityTest extends UITest{
     }
 
     @Test
+    public void givenShowChangeOrderRecyclerView_whenItemOrderChanged_thenChangeCurrentIndex() throws Exception {
+        // given
+        subject.changeOrderTabButton.performClick();
+
+        // when
+        RecyclerView.ViewHolder source = subject.changeOrderRecyclerView.getChildViewHolder(subject.changeOrderRecyclerView.getChildAt(0));
+        RecyclerView.ViewHolder target = subject.changeOrderRecyclerView.getChildViewHolder(subject.changeOrderRecyclerView.getChildAt(1));
+
+        when(applicationManager.getCurrentCardIndex()).thenReturn(1);
+
+        subject.itemTouchHelperCallback.onSelectedChanged(source, ItemTouchHelper.ACTION_STATE_DRAG);
+        subject.itemTouchHelperCallback.onMove(subject.changeOrderRecyclerView, source, target);
+        subject.itemTouchHelperCallback.onSelectedChanged(target, ItemTouchHelper.ACTION_STATE_IDLE);
+
+        // then
+        verify(applicationManager).setCurrentCardIndex(8);
+    }
+
+    @Test
     public void givenChangeHideItemStatus_whenClickedChangeOrderTabButton_thenItemShowHideStatus() throws Exception {
         // given
         subject.showHideRecyclerView.getChildAt(0).performClick();
@@ -182,9 +201,6 @@ public class CardListActivityTest extends UITest{
         assertThat(cardName.getCurrentTextColor()).isEqualTo(subject.getResources().getColor(R.color.black_4C));
         assertThat(cardThumbnail.getImageAlpha()).isEqualTo(60);
     }
-
-
-
 
     @Test
     public void whenClickBackButton_thenFinishActivity() throws Exception {
