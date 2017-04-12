@@ -34,7 +34,6 @@ public class CameraGallerySelectionActivity extends AbstractActivity {
     public RelativeLayout videoCard;
 
     private static final int SELECT_PICTURE = 1;
-    static final int REQUEST_VIDEO_CAPTURE = 1;
 
     CardCategoryLayout titleLayout;
 

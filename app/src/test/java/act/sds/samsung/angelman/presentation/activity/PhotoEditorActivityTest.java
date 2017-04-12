@@ -15,7 +15,6 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowActivity;
-import org.robolectric.shadows.ShadowDrawable;
 import org.robolectric.shadows.ShadowScaleGestureDetector;
 
 import java.io.File;
@@ -51,15 +50,6 @@ public class PhotoEditorActivityTest extends UITest{
 
         assertThat(intent).hasExtra(ApplicationConstants.IMAGE_PATH_EXTRA);
         assertThat(intent.getParcelableExtra(ApplicationConstants.IMAGE_PATH_EXTRA)).isNotNull();
-    }
-
-    @Test
-    public void whenLaunched_thenImageSettingsCorrectly() throws Exception {
-        ImageView imageCapture = (ImageView) subject.findViewById(R.id.image_capture);
-
-        ShadowDrawable shadowDrawable = shadowOf(imageCapture.getDrawable());
-
-        assertThat(shadowDrawable.getInputStream().toString()).contains("ic_camera.png");
     }
 
     @Test
