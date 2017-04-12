@@ -263,7 +263,7 @@ public class CardViewPagerActivity extends AbstractActivity {
     private void showSnackBarMessage(String intentKey) {
         PercentRelativeLayout rootLayout = (PercentRelativeLayout) findViewById(R.id.category_item_container);
         if(ApplicationConstants.INTENT_KEY_NEW_CARD.equals(intentKey)) {
-            CustomSnackBar.snackBarWithDuration(rootLayout, getApplicationContext().getResources().getString(R.string.add_new_card_success));
+            CustomSnackBar.styledSnackBarWithDuration(this, rootLayout, getApplicationContext().getResources().getString(R.string.add_new_card_success), 2000);
         }
     }
 

@@ -18,6 +18,7 @@ import act.sds.samsung.angelman.domain.model.CardModel;
 import act.sds.samsung.angelman.domain.repository.CardRepository;
 import act.sds.samsung.angelman.presentation.adapter.CardListRecyclerViewAdapter;
 import act.sds.samsung.angelman.presentation.custom.CardListTabButton;
+import act.sds.samsung.angelman.presentation.custom.CustomSnackBar;
 import act.sds.samsung.angelman.presentation.custom.FontTextView;
 import act.sds.samsung.angelman.presentation.listener.OnDataChangeListener;
 import act.sds.samsung.angelman.presentation.manager.ApplicationConstants;
@@ -75,6 +76,11 @@ public class CardListActivity extends AppCompatActivity {
         cardListRecyclerViewChangeOrderAdapter = new CardListRecyclerViewAdapter(cardList, applicationManager.getCategoryModelColor(), false, getApplicationContext(), dataChangeListener);
 
         initView();
+
+        if (getIntent().getBooleanExtra(ApplicationConstants.INTENT_KEY_SHARE_CARD, false)) {
+            CustomSnackBar.styledSnackBarWithDuration(this, findViewById(R.id.activity_card_list),
+                    getApplicationContext().getResources().getString(R.string.add_share_card_success), 2000);
+        }
     }
 
     @Override

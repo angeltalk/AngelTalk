@@ -37,6 +37,7 @@ import act.sds.samsung.angelman.presentation.custom.CardTitleLayout;
 import act.sds.samsung.angelman.presentation.custom.CardViewPager;
 import act.sds.samsung.angelman.presentation.custom.CategorySelectDialog;
 import act.sds.samsung.angelman.presentation.listener.OnDownloadCompleteListener;
+import act.sds.samsung.angelman.presentation.manager.ApplicationConstants;
 import act.sds.samsung.angelman.presentation.manager.ApplicationManager;
 import act.sds.samsung.angelman.presentation.util.ContentsUtil;
 import act.sds.samsung.angelman.presentation.util.FileUtil;
@@ -202,7 +203,8 @@ public class ShareCardActivity extends AppCompatActivity {
     private void moveToCardListActivity() {
         Intent intent = new Intent(getApplicationContext(), CardListActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        getApplicationContext().startActivity(intent);
+        intent.putExtra(ApplicationConstants.INTENT_KEY_SHARE_CARD, true);
+        startActivity(intent);
         finish();
     }
 
