@@ -40,6 +40,7 @@ public class CardViewPagerLayout extends RelativeLayout {
     public CardViewPager mViewPager;
     private Context context;
     private OnClickBackButtonListener onClickBackButtonListener;
+    private CardImageAdapter cardImageAdapter;
     int currentCardIndex = 0;
 
     RequestManager glide;
@@ -58,6 +59,10 @@ public class CardViewPagerLayout extends RelativeLayout {
         findViewById(R.id.back_button).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(cardImageAdapter != null) {
+                    cardImageAdapter.releaseSpeakHandler();
+                    cardImageAdapter.stopVideoView();
+                }
                 onClickBackButtonListener.clickBackButton();
             }
         });
@@ -81,7 +86,7 @@ public class CardViewPagerLayout extends RelativeLayout {
 
         allCardListInSelectedCategory = cardRepository.getSingleCardListWithCategoryId(categoryModel.index, false);
 
-        final CardImageAdapter cardImageAdapter = new CardImageAdapter(context, allCardListInSelectedCategory, glide, applicationManager);
+        cardImageAdapter = new CardImageAdapter(context, allCardListInSelectedCategory, glide, applicationManager);
         mViewPager.setAdapter(cardImageAdapter);
         OverScrollDecoratorHelper.setUpOverScroll(mViewPager);
 

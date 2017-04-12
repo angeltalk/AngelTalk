@@ -18,11 +18,7 @@ public class CardDataRepository implements CardRepository {
     public CardDataRepository(Context context) {
         this.context = context;
     }
-    @Override
-    public List<CardModel> getSingleCardAllList() {
-        SingleCardDataStore dataStore = new SingleCardSqliteDataStore(context);
-        return getDataModels(dataStore.getAllCardList());
-    }
+
 
     @Override
     public long createSingleCardModel(CardModel cardModel) {
@@ -70,6 +66,12 @@ public class CardDataRepository implements CardRepository {
     public boolean updateSingleCardModelHide(CardModel cardModel) {
         SingleCardDataStore dataStore = new SingleCardSqliteDataStore(context);
         return dataStore.updateSingleCardModelHide(cardModel.categoryId, cardModel.cardIndex, cardModel.hide);
+    }
+
+    @Override
+    public boolean updateCategoryCardIndex(List<CardModel> cardModelList) {
+        SingleCardDataStore dataStore = new SingleCardSqliteDataStore(context);
+        return dataStore.updateCategoryCardIndex(cardModelList);
     }
 
     private List<CardModel> getDataModels(List <CardModel> cardModels){

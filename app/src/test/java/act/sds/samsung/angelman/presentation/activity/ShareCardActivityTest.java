@@ -90,6 +90,12 @@ public class ShareCardActivityTest extends UITest {
     }
 
     @Test
+    public void whenLaunched_thenHideCardCountTitleAndListCardButton() throws Exception {
+        assertThat(subject.titleLayout.cardCount.getVisibility()).isEqualTo(View.GONE);
+        assertThat(subject.titleLayout.listCardButton.getVisibility()).isEqualTo(View.GONE);
+    }
+
+    @Test
     public void givenWhenLaunchedAndKaKaoIntentReceived_thenShowLoadingAnimation() throws Exception {
         // then
         LinearLayout loadingViewLayout = (LinearLayout) subject.findViewById(R.id.on_loading_view);

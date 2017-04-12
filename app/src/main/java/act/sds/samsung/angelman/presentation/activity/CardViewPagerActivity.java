@@ -113,13 +113,13 @@ public class CardViewPagerActivity extends AbstractActivity {
     int currentCardIndex = 0;
 
     private CategoryModel selectedCategoryModel;
-    private CardImageAdapter adapter;
+    public CardImageAdapter cardImageAdapter;
     private CustomConfirmDialog dialog;
     private RequestManager glide;
     Context context;
 
     public CardModel getCardModel(int index) {
-        CardView card = (CardView) adapter.viewCollection.get(index);
+        CardView card = (CardView) cardImageAdapter.viewCollection.get(index);
         return card.dataModel;
     }
 
@@ -161,9 +161,9 @@ public class CardViewPagerActivity extends AbstractActivity {
         cardTitleLayout.refreshCardCountText(0, allCardListInSelectedCategory.size() + 1);
         cardTitleLayout.categoryTitle.setText(selectedCategoryModel.title);
 
-        adapter = new CardImageAdapter(this, allCardListInSelectedCategory, glide, applicationManager);
-        adapter.addNewCardViewAtFirst();
-        mViewPager.setAdapter(adapter);
+        cardImageAdapter = new CardImageAdapter(this, allCardListInSelectedCategory, glide, applicationManager);
+        cardImageAdapter.addNewCardViewAtFirst();
+        mViewPager.setAdapter(cardImageAdapter);
         OverScrollDecoratorHelper.setUpOverScroll(mViewPager);
         mViewPager.addOnPageChangeListener(viewPagerOnPageChangeListener);
 
@@ -177,6 +177,8 @@ public class CardViewPagerActivity extends AbstractActivity {
     }
 
     private void moveToCategoryMenuActivity() {
+        cardImageAdapter.releaseSpeakHandler();
+        cardImageAdapter.stopVideoView();
         Intent intent = new Intent(context, CategoryMenuActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
@@ -189,8 +191,8 @@ public class CardViewPagerActivity extends AbstractActivity {
 
         @Override
         public void onPageSelected(int pos) {
-            adapter.releaseSpeakHandler();
-            adapter.stopVideoView();
+            cardImageAdapter.releaseSpeakHandler();
+            cardImageAdapter.stopVideoView();
             showAndHideButtonContainerBy(pos);
             currentCardIndex = pos;
             cardTitleLayout.refreshCardCountText(pos, mViewPager.getAdapter().getCount());
@@ -210,7 +212,7 @@ public class CardViewPagerActivity extends AbstractActivity {
     }
 
     private void deleteCard() {
-        final CardView card = (CardView) adapter.viewCollection.get(mViewPager.getCurrentItem());
+        final CardView card = (CardView) cardImageAdapter.viewCollection.get(mViewPager.getCurrentItem());
         String cardTitle = card.cardTitle.getText().toString();
         final int cardIndex = card.dataModel.cardIndex;
         String message = getResources().getString(R.string.delete_alert_message, cardTitle);
@@ -222,12 +224,12 @@ public class CardViewPagerActivity extends AbstractActivity {
                 if (deleteSelectedCard(cardIndex)) {
                     List<CardModel> cardList = cardRepository.getSingleCardListWithCategoryId((applicationManager.getCategoryModel().index),false);
                     mViewPager.removeAllViews();
-                    adapter = new CardImageAdapter(CardViewPagerActivity.this, cardList, glide, applicationManager);
-                    adapter.addNewCardViewAtFirst();
-                    mViewPager.setAdapter(adapter);
+                    cardImageAdapter = new CardImageAdapter(CardViewPagerActivity.this, cardList, glide, applicationManager);
+                    cardImageAdapter.addNewCardViewAtFirst();
+                    mViewPager.setAdapter(cardImageAdapter);
                     mViewPager.setCurrentItem(currentItem);
                     showAndHideButtonContainerBy(currentItem);
-                    cardTitleLayout.refreshCardCountText(mViewPager.getCurrentItem(), adapter.getCount());
+                    cardTitleLayout.refreshCardCountText(mViewPager.getCurrentItem(), cardImageAdapter.getCount());
                 }
                 dialog.dismiss();
             }
@@ -250,7 +252,7 @@ public class CardViewPagerActivity extends AbstractActivity {
 
     private int setCurrentItem() {
         int currentItem = mViewPager.getCurrentItem();
-        if (currentItem == adapter.getCount() - 1) {
+        if (currentItem == cardImageAdapter.getCount() - 1) {
             currentItem--;
         }
         return currentItem;

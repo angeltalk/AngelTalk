@@ -15,37 +15,32 @@ import java.util.List;
 import act.sds.samsung.angelman.R;
 import act.sds.samsung.angelman.domain.model.CardModel;
 import act.sds.samsung.angelman.presentation.custom.FontTextView;
-import act.sds.samsung.angelman.presentation.listener.OnDataChangeListener;
 import act.sds.samsung.angelman.presentation.util.AngelManGlideTransform;
 import act.sds.samsung.angelman.presentation.util.ContentsUtil;
 import act.sds.samsung.angelman.presentation.util.ResourcesUtil;
 
-public class CardListRecyclerViewAdapter extends RecyclerView.Adapter<CardListRecyclerViewAdapter.CardListRecyclerViewHolder> {
+public class ChangeOrderRecyclerViewAdapter extends RecyclerView.Adapter<ChangeOrderRecyclerViewAdapter.ChangeOrderRecyclerViewHolder> {
 
     private final RequestManager glide;
     private final Context context;
     private final int categoryModelColor;
-    private final boolean isShowAndHideMode;
     private List<CardModel> cardModelList;
-    private OnDataChangeListener dataChangeListener;
 
-    public CardListRecyclerViewAdapter(List<CardModel> cardModelList, int categoryModelColor, boolean isShowAndHideMode, Context context, OnDataChangeListener dataChangeListener) {
-        this.dataChangeListener = dataChangeListener;
+    public ChangeOrderRecyclerViewAdapter(List<CardModel> cardModelList, int categoryModelColor, Context context) {
         this.cardModelList = cardModelList;
         this.context = context;
         this.categoryModelColor = categoryModelColor;
         this.glide = Glide.with(context);
-        this.isShowAndHideMode = isShowAndHideMode;
     }
 
     @Override
-    public CardListRecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ChangeOrderRecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_card_list, parent, false);
-        return new CardListRecyclerViewHolder(view);
+        return new ChangeOrderRecyclerViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final CardListRecyclerViewHolder holder, final int position) {
+    public void onBindViewHolder(final ChangeOrderRecyclerViewHolder holder, final int position) {
         CardModel cardModel = cardModelList.get(position);
         glide.load(ContentsUtil.getContentFile(getThumbnailPath(cardModel)))
                 .override(60, 60)
@@ -54,16 +49,9 @@ public class CardListRecyclerViewAdapter extends RecyclerView.Adapter<CardListRe
                 .into(holder.cardThumbnail);
         holder.cardName.setText(cardModel.name);
         setViewByHide(holder, cardModel.hide);
-        changeViewMode(holder, isShowAndHideMode);
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                boolean show = !cardModelList.get(position).hide;
-                dataChangeListener.onHideChange(position, show);
-                setViewByHide(holder, show);
-            }
-        });
+        holder.showHideIcon.setVisibility(View.GONE);
+        holder.itemMoveIcon.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -71,29 +59,17 @@ public class CardListRecyclerViewAdapter extends RecyclerView.Adapter<CardListRe
         return cardModelList.size();
     }
 
-    private void setViewByHide(final CardListRecyclerViewHolder holder, boolean hide) {
+    private void setViewByHide(final ChangeOrderRecyclerViewHolder holder, boolean hide) {
         if(hide) {
             holder.showHideItemBar.setImageResource(ResourcesUtil.getShowHideItemBarBy(ResourcesUtil.HIDING));
-            holder.showHideIcon.setImageResource(ResourcesUtil.getShowHideIconBy(ResourcesUtil.HIDING));
-            holder.itemMoveIcon.setImageResource(ResourcesUtil.getItemMoveIconBy(ResourcesUtil.HIDING));
+            holder.itemMoveIcon.setImageResource(ResourcesUtil.getItemMoveIconBy(categoryModelColor));
             holder.cardName.setTextColor(context.getResources().getColor(R.color.black_4C));
             holder.cardThumbnail.setImageAlpha(60);
         } else {
             holder.showHideItemBar.setImageResource(ResourcesUtil.getShowHideItemBarBy(categoryModelColor));
-            holder.showHideIcon.setImageResource(ResourcesUtil.getShowHideIconBy(categoryModelColor));
             holder.itemMoveIcon.setImageResource(ResourcesUtil.getItemMoveIconBy(categoryModelColor));
             holder.cardName.setTextColor(context.getResources().getColor(R.color.black_00));
             holder.cardThumbnail.setImageAlpha(255);
-        }
-    }
-
-    private void changeViewMode(final CardListRecyclerViewHolder holder, boolean isShowAndHideMode) {
-        if (isShowAndHideMode) {
-            holder.showHideIcon.setVisibility(View.VISIBLE);
-            holder.itemMoveIcon.setVisibility(View.GONE);
-        } else {
-            holder.showHideIcon.setVisibility(View.GONE);
-            holder.itemMoveIcon.setVisibility(View.VISIBLE);
         }
     }
 
@@ -107,14 +83,22 @@ public class CardListRecyclerViewAdapter extends RecyclerView.Adapter<CardListRe
         return thumbnailPath;
     }
 
-    static class CardListRecyclerViewHolder extends RecyclerView.ViewHolder {
+    public void onItemSelected() {
+
+    }
+
+    public void setCardModelList(List<CardModel> cardModelList) {
+        this.cardModelList = cardModelList;
+    }
+
+    public static class ChangeOrderRecyclerViewHolder extends RecyclerView.ViewHolder {
         ImageView cardThumbnail;
         FontTextView cardName;
         ImageView showHideIcon;
         ImageView showHideItemBar;
         ImageView itemMoveIcon;
 
-        public CardListRecyclerViewHolder(View view) {
+        public ChangeOrderRecyclerViewHolder(View view) {
             super(view);
             this.showHideItemBar = ((ImageView) view.findViewById(R.id.show_hide_item_bar));
             this.cardThumbnail = ((ImageView) view.findViewById(R.id.card_thumbnail));

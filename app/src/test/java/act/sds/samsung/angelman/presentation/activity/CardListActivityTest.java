@@ -1,6 +1,5 @@
 package act.sds.samsung.angelman.presentation.activity;
 
-import android.content.Intent;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -27,9 +26,7 @@ import act.sds.samsung.angelman.domain.model.CardModel;
 import act.sds.samsung.angelman.domain.model.CategoryModel;
 import act.sds.samsung.angelman.domain.repository.CardRepository;
 import act.sds.samsung.angelman.presentation.custom.FontTextView;
-import act.sds.samsung.angelman.presentation.manager.ApplicationConstants;
 import act.sds.samsung.angelman.presentation.manager.ApplicationManager;
-import act.sds.samsung.angelman.presentation.shadow.ShadowSnackbar;
 import act.sds.samsung.angelman.presentation.util.ContentsUtil;
 import act.sds.samsung.angelman.presentation.util.ResourcesUtil;
 
@@ -67,16 +64,16 @@ public class CardListActivityTest extends UITest{
 
     @Test
     public void whenLaunched_thenShowCardListInCategory() throws Exception {
-        assertThat(subject.cardListRecyclerView).isNotNull();
-        assertThat(subject.cardListRecyclerView.getChildCount()).isEqualTo(8);
+        assertThat(subject.showHideRecyclerView).isNotNull();
+        assertThat(subject.showHideRecyclerView.getChildCount()).isEqualTo(8);
     }
 
     @Test
     public void givenShowingCardInList_whenLaunched_thenShowIcon() throws Exception {
-        ImageView showHideBarView = ((ImageView) subject.cardListRecyclerView.getChildAt(0).findViewById(R.id.show_hide_item_bar));
-        ImageView showHideIconView = ((ImageView) subject.cardListRecyclerView.getChildAt(0).findViewById(R.id.show_hide_icon));
-        FontTextView cardName = ((FontTextView) subject.cardListRecyclerView.getChildAt(0).findViewById(R.id.card_name));
-        ImageView cardThumbnail = ((ImageView) subject.cardListRecyclerView.getChildAt(0).findViewById(R.id.card_thumbnail));
+        ImageView showHideBarView = ((ImageView) subject.showHideRecyclerView.getChildAt(0).findViewById(R.id.show_hide_item_bar));
+        ImageView showHideIconView = ((ImageView) subject.showHideRecyclerView.getChildAt(0).findViewById(R.id.show_hide_icon));
+        FontTextView cardName = ((FontTextView) subject.showHideRecyclerView.getChildAt(0).findViewById(R.id.card_name));
+        ImageView cardThumbnail = ((ImageView) subject.showHideRecyclerView.getChildAt(0).findViewById(R.id.card_thumbnail));
 
         assertThat(shadowOf(showHideBarView.getDrawable()).getCreatedFromResId()).isEqualTo(R.drawable.show_red);
         assertThat(shadowOf(showHideIconView.getDrawable()).getCreatedFromResId()).isEqualTo(R.drawable.ic_show_red);
@@ -86,10 +83,10 @@ public class CardListActivityTest extends UITest{
 
     @Test
     public void givenHidingCardInList_whenLaunched_thenHideIcon() throws Exception {
-        ImageView showHideBarView = ((ImageView) subject.cardListRecyclerView.getChildAt(2).findViewById(R.id.show_hide_item_bar));
-        ImageView showHideIconView = ((ImageView) subject.cardListRecyclerView.getChildAt(2).findViewById(R.id.show_hide_icon));
-        FontTextView cardName = ((FontTextView) subject.cardListRecyclerView.getChildAt(2).findViewById(R.id.card_name));
-        ImageView cardThumbnail = ((ImageView) subject.cardListRecyclerView.getChildAt(2).findViewById(R.id.card_thumbnail));
+        ImageView showHideBarView = ((ImageView) subject.showHideRecyclerView.getChildAt(2).findViewById(R.id.show_hide_item_bar));
+        ImageView showHideIconView = ((ImageView) subject.showHideRecyclerView.getChildAt(2).findViewById(R.id.show_hide_icon));
+        FontTextView cardName = ((FontTextView) subject.showHideRecyclerView.getChildAt(2).findViewById(R.id.card_name));
+        ImageView cardThumbnail = ((ImageView) subject.showHideRecyclerView.getChildAt(2).findViewById(R.id.card_thumbnail));
 
         assertThat(shadowOf(showHideBarView.getDrawable()).getCreatedFromResId()).isEqualTo(R.drawable.hide);
         assertThat(shadowOf(showHideIconView.getDrawable()).getCreatedFromResId()).isEqualTo(R.drawable.ic_hide);
@@ -98,19 +95,19 @@ public class CardListActivityTest extends UITest{
     }
 
     @Test
-    public void whenClickRecyclerViewItem_thenShowHideChangeAndDatabaseUpdate() throws Exception {
+    public void whenClickShowHideRecyclerViewItem_thenShowHideChangeAndDatabaseUpdate() throws Exception {
 
-        ImageView showHideBarView = ((ImageView) subject.cardListRecyclerView.getChildAt(0).findViewById(R.id.show_hide_item_bar));
+        ImageView showHideBarView = ((ImageView) subject.showHideRecyclerView.getChildAt(0).findViewById(R.id.show_hide_item_bar));
         assertThat(shadowOf(showHideBarView.getDrawable()).getCreatedFromResId()).isEqualTo(R.drawable.show_red);
 
         // when
-        subject.cardListRecyclerView.getChildAt(0).performClick();
+        subject.showHideRecyclerView.getChildAt(0).performClick();
 
         // then
-        showHideBarView = ((ImageView) subject.cardListRecyclerView.getChildAt(0).findViewById(R.id.show_hide_item_bar));
-        ImageView showHideIconView = ((ImageView) subject.cardListRecyclerView.getChildAt(0).findViewById(R.id.show_hide_icon));
-        FontTextView cardName = ((FontTextView) subject.cardListRecyclerView.getChildAt(0).findViewById(R.id.card_name));
-        ImageView cardThumbnail = ((ImageView) subject.cardListRecyclerView.getChildAt(0).findViewById(R.id.card_thumbnail));
+        showHideBarView = ((ImageView) subject.showHideRecyclerView.getChildAt(0).findViewById(R.id.show_hide_item_bar));
+        ImageView showHideIconView = ((ImageView) subject.showHideRecyclerView.getChildAt(0).findViewById(R.id.show_hide_icon));
+        FontTextView cardName = ((FontTextView) subject.showHideRecyclerView.getChildAt(0).findViewById(R.id.card_name));
+        ImageView cardThumbnail = ((ImageView) subject.showHideRecyclerView.getChildAt(0).findViewById(R.id.card_thumbnail));
 
         assertThat(shadowOf(showHideBarView.getDrawable()).getCreatedFromResId()).isEqualTo(R.drawable.hide);
         assertThat(shadowOf(showHideIconView.getDrawable()).getCreatedFromResId()).isEqualTo(R.drawable.ic_hide);
@@ -119,6 +116,68 @@ public class CardListActivityTest extends UITest{
 
         verify(cardRepository).updateSingleCardModelHide(any(CardModel.class));
     }
+
+
+    @Test
+    public void givenShowChangeOrderRecyclerView_whenItemOrderChanged_thenDatabaseUpdate() throws Exception {
+        // given
+        subject.changeOrderTabButton.performClick();
+
+        // when
+        RecyclerView.ViewHolder source = subject.changeOrderRecyclerView.getChildViewHolder(subject.changeOrderRecyclerView.getChildAt(0));
+        RecyclerView.ViewHolder target = subject.changeOrderRecyclerView.getChildViewHolder(subject.changeOrderRecyclerView.getChildAt(1));
+
+        subject.itemTouchHelperCallback.onSelectedChanged(source, ItemTouchHelper.ACTION_STATE_DRAG);
+        subject.itemTouchHelperCallback.onMove(subject.changeOrderRecyclerView, source, target);
+        subject.itemTouchHelperCallback.onSelectedChanged(target, ItemTouchHelper.ACTION_STATE_IDLE);
+
+        verify(cardRepository).updateCategoryCardIndex(any(List.class));
+    }
+
+    @Test
+    public void givenShowChangeOrderRecyclerView_whenItemOrderChanged_thenViewChanged() throws Exception {
+        // given
+        subject.changeOrderTabButton.performClick();
+
+        // when
+        RecyclerView.ViewHolder source = subject.changeOrderRecyclerView.getChildViewHolder(subject.changeOrderRecyclerView.getChildAt(0));
+        RecyclerView.ViewHolder target = subject.changeOrderRecyclerView.getChildViewHolder(subject.changeOrderRecyclerView.getChildAt(1));
+
+        assertThat(((FontTextView) source.itemView.findViewById(R.id.card_name)).getText()).isEqualTo("물0");
+        assertThat(((FontTextView) target.itemView.findViewById(R.id.card_name)).getText()).isEqualTo("물1");
+
+        subject.itemTouchHelperCallback.onSelectedChanged(source, ItemTouchHelper.ACTION_STATE_DRAG);
+        subject.itemTouchHelperCallback.onMove(subject.changeOrderRecyclerView, source, target);
+        subject.itemTouchHelperCallback.onSelectedChanged(target, ItemTouchHelper.ACTION_STATE_IDLE);
+
+        // then
+        RecyclerView.ViewHolder first = subject.changeOrderRecyclerView.getChildViewHolder(subject.changeOrderRecyclerView.getChildAt(0));
+        RecyclerView.ViewHolder second = subject.changeOrderRecyclerView.getChildViewHolder(subject.changeOrderRecyclerView.getChildAt(1));
+        assertThat(((FontTextView) first.itemView.findViewById(R.id.card_name)).getText()).isEqualTo("물1");
+        assertThat(((FontTextView) second.itemView.findViewById(R.id.card_name)).getText()).isEqualTo("물0");
+    }
+
+    @Test
+    public void givenChangeHideItemStatus_whenClickedChangeOrderTabButton_thenItemShowHideStatus() throws Exception {
+        // given
+        subject.showHideRecyclerView.getChildAt(0).performClick();
+
+        // when
+        subject.changeOrderTabButton.performClick();
+
+        // then
+        ImageView showHideBarView = ((ImageView) subject.changeOrderRecyclerView.getChildAt(0).findViewById(R.id.show_hide_item_bar));
+        ImageView itemMoveIcon = ((ImageView) subject.changeOrderRecyclerView.getChildAt(0).findViewById(R.id.item_move_icon));
+        FontTextView cardName = ((FontTextView) subject.changeOrderRecyclerView.getChildAt(0).findViewById(R.id.card_name));
+        ImageView cardThumbnail = ((ImageView) subject.changeOrderRecyclerView.getChildAt(0).findViewById(R.id.card_thumbnail));
+
+        assertThat(shadowOf(showHideBarView.getDrawable()).getCreatedFromResId()).isEqualTo(R.drawable.hide);
+        assertThat(shadowOf(itemMoveIcon.getDrawable()).getCreatedFromResId()).isEqualTo(R.drawable.ic_list_red);
+        assertThat(cardName.getCurrentTextColor()).isEqualTo(subject.getResources().getColor(R.color.black_4C));
+        assertThat(cardThumbnail.getImageAlpha()).isEqualTo(60);
+    }
+
+
 
 
     @Test
@@ -146,6 +205,7 @@ public class CardListActivityTest extends UITest{
     @Test
     public void givenLaunched_whenClickChangeOrderTabButton_thenSetShowHideTabButtonUnSelectedAndChangeOrderButtonSelected() throws Exception {
         // when
+        subject.showHideRecyclerView = mock(RecyclerView.class);
         subject.changeOrderTabButton.performClick();
 
         // then
@@ -155,14 +215,14 @@ public class CardListActivityTest extends UITest{
 
 
     @Test
-    public void givenLaunched_whenClickChangeOrderTabButton_thenHideShowAndHideIconAndShowItemMoveIcon() throws Exception {
+    public void givenLaunched_whenClickChangeOrderTabButton_thenShowChangeOrderRecycleViewAndShowItemMoveIcon() throws Exception {
         // when
         subject.changeOrderTabButton.performClick();
 
         // then
-        ImageView showHideIconView = ((ImageView) subject.cardListRecyclerView.getChildAt(2).findViewById(R.id.show_hide_icon));
-        ImageView itemMoveIcon = ((ImageView) subject.cardListRecyclerView.getChildAt(0).findViewById(R.id.item_move_icon));
-        assertThat(showHideIconView.getVisibility()).isEqualTo(View.GONE);
+        assertThat(subject.showHideRecyclerView.getVisibility()).isEqualTo(View.GONE);
+        assertThat(subject.changeOrderRecyclerView.getVisibility()).isEqualTo(View.VISIBLE);
+        ImageView itemMoveIcon = ((ImageView) subject.changeOrderRecyclerView.getChildAt(0).findViewById(R.id.item_move_icon));
         assertThat(itemMoveIcon.getVisibility()).isEqualTo(View.VISIBLE);
     }
 
@@ -184,8 +244,8 @@ public class CardListActivityTest extends UITest{
         // when
         subject.showHideTabButton.performClick();
         // then
-        ImageView showHideIconView = ((ImageView) subject.cardListRecyclerView.getChildAt(2).findViewById(R.id.show_hide_icon));
-        ImageView itemMoveIcon = ((ImageView) subject.cardListRecyclerView.getChildAt(0).findViewById(R.id.item_move_icon));
+        ImageView showHideIconView = ((ImageView) subject.showHideRecyclerView.getChildAt(2).findViewById(R.id.show_hide_icon));
+        ImageView itemMoveIcon = ((ImageView) subject.showHideRecyclerView.getChildAt(0).findViewById(R.id.item_move_icon));
         assertThat(showHideIconView.getVisibility()).isEqualTo(View.VISIBLE);
         assertThat(itemMoveIcon.getVisibility()).isEqualTo(View.GONE);
     }
