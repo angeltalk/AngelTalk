@@ -9,7 +9,8 @@ public interface CardRepository {
     boolean deleteSingleCardsWithCategory(int category);
     boolean deleteSingleCardWithCardIndex(int categoryId, int cardIndex);
     boolean updateSingleCardModelHide(CardModel cardModel);
-    List<CardModel> getSingleCardAllList();
+    boolean updateCategoryCardIndex(List<CardModel> cardModelList);
     List<CardModel> getSingleCardListWithCategoryId(int selectedCategoryId);
     List<CardModel> getSingleCardListWithCategoryId(int selectedCategoryId, boolean isHide);
+
 }
