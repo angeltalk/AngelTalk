@@ -312,6 +312,7 @@ public class CardViewPagerActivityTest extends UITest {
         assertThat(nextStartedActivity.getComponent().getClassName()).isEqualTo(CardListActivity.class.getCanonicalName());
     }
 
+
     @Test
     public void whenSetCardDataCompleted_firstCardIsAddCardView() throws Exception {
         assertThat(subject.mViewPager.getChildAt(0)).isInstanceOf(AddCardView.class);
@@ -399,12 +400,12 @@ public class CardViewPagerActivityTest extends UITest {
     }
 
     @Test
-    public void whenFinishedToMakeNewCard_thenShowsNewAddedCardAtFirstInCardViewPager() throws Exception {
+    public void whenFinishedToMakeNewCard_thenShowsNewAddedCardAtFirstCardInViewPager() throws Exception {
         Intent intent = new Intent();
 
         intent.putExtra(ApplicationConstants.INTENT_KEY_NEW_CARD, true);
 
-        when(repository.getSingleCardListWithCategoryId(anyInt())).thenReturn(getCardListWithCategoryId());
+        when(repository.getSingleCardListWithCategoryId(anyInt(), anyBoolean())).thenReturn(getCardListWithCategoryId());
 
         subject = setupActivityWithIntent(CardViewPagerActivity.class, intent);
 
@@ -413,17 +414,45 @@ public class CardViewPagerActivityTest extends UITest {
     }
 
     @Test
-    public void whenFinishedCardListActivity_thenShowsAddCardItemInCardViewPager() throws Exception {
+    public void whenStartWithRefreshCardIntent_thenShowsAddCardItemInCardViewPager() throws Exception {
         Intent intent = new Intent();
 
         intent.putExtra(ApplicationConstants.INTENT_KEY_REFRESH_CARD, true);
 
-        when(repository.getSingleCardListWithCategoryId(anyInt())).thenReturn(getCardListWithCategoryId());
+        when(repository.getSingleCardListWithCategoryId(anyInt(), anyBoolean())).thenReturn(getCardListWithCategoryId());
 
         subject = setupActivityWithIntent(CardViewPagerActivity.class, intent);
 
         assertThat(subject.mViewPager.getCurrentItem()).isNotEqualTo(1);
         assertThat(subject.mViewPager.getCurrentItem()).isEqualTo(0);
+    }
+
+    @Test
+    public void whenFinishedCardListActivityAndCurrentCardIsShow_thenShowTheCard() throws Exception {
+        Intent intent = new Intent();
+        intent.putExtra(ApplicationConstants.INTENT_KEY_LIST_BACK, true);
+
+        when(repository.getSingleCardListWithCategoryId(anyInt(), anyBoolean())).thenReturn(getCardListWithCategoryId());
+        when(applicationManager.getCurrentCardIndex()).thenReturn(2);
+
+        subject = setupActivityWithIntent(CardViewPagerActivity.class, intent);
+
+        assertThat(subject.mViewPager.getCurrentItem()).isNotEqualTo(1);
+        assertThat(subject.mViewPager.getCurrentItem()).isEqualTo(3);
+    }
+
+    @Test
+    public void whenFinishedCardListActivityAndCurrentCardIsHide_thenShowFirstCardInViewPager() throws Exception {
+        Intent intent = new Intent();
+
+        intent.putExtra(ApplicationConstants.INTENT_KEY_LIST_BACK, true);
+
+        when(repository.getSingleCardListWithCategoryId(anyInt(), anyBoolean())).thenReturn(getCardListWithCategoryId());
+        when(applicationManager.getCurrentCardIndex()).thenReturn(8);
+
+        subject = setupActivityWithIntent(CardViewPagerActivity.class, intent);
+
+        assertThat(subject.mViewPager.getCurrentItem()).isEqualTo(1);
     }
 
     @Test
@@ -469,6 +498,13 @@ public class CardViewPagerActivityTest extends UITest {
         // then
         assertThat(ShadowToast.getLatestToast()).isNotNull();
         assertThat(ShadowToast.getTextOfLatestToast()).isEqualTo("카드 공유가 실패하였습니다.");
+    }
+
+    @Test
+    public void whenViewPageChanged_thenSetApplicationMangerCurrentIndex() throws Exception {
+        int juiceViewPageIndex = 3;
+        subject.mViewPager.setCurrentItem(juiceViewPageIndex);
+        verify(applicationManager).setCurrentCardIndex(2);
     }
 
     public boolean equals(Bitmap bitmap1, Bitmap bitmap2) {

@@ -110,7 +110,6 @@ public class CardViewPagerActivity extends AbstractActivity {
     }
 
     List<CardModel> allCardListInSelectedCategory;
-    int currentCardIndex = 0;
 
     private CategoryModel selectedCategoryModel;
     public CardImageAdapter cardImageAdapter;
@@ -141,6 +140,17 @@ public class CardViewPagerActivity extends AbstractActivity {
         if (getIntent().getBooleanExtra(ApplicationConstants.INTENT_KEY_REFRESH_CARD, false)) {
             mViewPager.setCurrentItem(0);
         }
+
+        if (getIntent().getBooleanExtra(ApplicationConstants.INTENT_KEY_LIST_BACK, false)) {
+            for(int i=0;i<allCardListInSelectedCategory.size();i++) {
+                if(allCardListInSelectedCategory.get(i).cardIndex == applicationManager.getCurrentCardIndex()) {
+                    mViewPager.setCurrentItem(i);
+                    return;
+                }
+            }
+            mViewPager.setCurrentItem(1);
+        }
+
     }
 
     @Override
@@ -194,7 +204,7 @@ public class CardViewPagerActivity extends AbstractActivity {
             cardImageAdapter.releaseSpeakHandler();
             cardImageAdapter.stopVideoView();
             showAndHideButtonContainerBy(pos);
-            currentCardIndex = pos;
+            applicationManager.setCurrentCardIndex(allCardListInSelectedCategory.get(pos).cardIndex);
             cardTitleLayout.refreshCardCountText(pos, mViewPager.getAdapter().getCount());
         }
 
