@@ -403,6 +403,34 @@ public class CardViewPagerActivityTest extends UITest {
     }
 
     @Test
+    public void whenFinishedCardListActivity_thenShowsAddCardItemInCardViewPager() throws Exception {
+        Intent intent = new Intent();
+
+        intent.putExtra(ApplicationConstants.INTENT_KEY_REFRESH_CARD, true);
+
+        when(repository.getSingleCardListWithCategoryId(anyInt())).thenReturn(getCardListWithCategoryId());
+
+        subject = setupActivityWithIntent(CardViewPagerActivity.class, intent);
+
+        assertThat(subject.mViewPager.getCurrentItem()).isNotEqualTo(1);
+        assertThat(subject.mViewPager.getCurrentItem()).isEqualTo(0);
+    }
+
+    @Test
+    public void whenFinishedToShareCard_thenShowsNewSharedCardAtFirstInCardViewPager() throws Exception {
+        Intent intent = new Intent();
+
+        intent.putExtra(ApplicationConstants.INTENT_KEY_SHARE_CARD, true);
+
+        when(repository.getSingleCardListWithCategoryId(anyInt())).thenReturn(getCardListWithCategoryId());
+
+        subject = setupActivityWithIntent(CardViewPagerActivity.class, intent);
+
+        assertThat(subject.mViewPager.getCurrentItem()).isNotEqualTo(0);
+        assertThat(subject.mViewPager.getCurrentItem()).isEqualTo(1);
+    }
+
+    @Test
     public void whenClickShareButtonAndUploadSuccess_thenSendKakaoLinkMessage() throws Exception {
         subject.mViewPager.setCurrentItem(1);
         CardModel cardModel = subject.getCardModel(1);
