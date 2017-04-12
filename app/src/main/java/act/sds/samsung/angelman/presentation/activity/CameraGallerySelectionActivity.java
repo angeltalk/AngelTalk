@@ -33,10 +33,10 @@ public class CameraGallerySelectionActivity extends AbstractActivity {
     @BindView(R.id.layout_video)
     public RelativeLayout videoCard;
 
-    private static final int SELECT_PICTURE = 1;
-    static final int REQUEST_VIDEO_CAPTURE = 1;
-
+    @BindView(R.id.title_container)
     CardTitleLayout titleLayout;
+
+    private static final int SELECT_PICTURE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,17 +45,14 @@ public class CameraGallerySelectionActivity extends AbstractActivity {
         setContentView(R.layout.activity_camera_gallery_selection);
         ButterKnife.bind(this);
 
-
         applicationManager.setCategoryBackground(
                 findViewById(R.id.camera_gallery_selection_container),
                 applicationManager.getCategoryModelColor()
         );
 
-        titleLayout = (CardTitleLayout) findViewById(R.id.title_container);
         titleLayout.setCategoryModelTitle(applicationManager.getCategoryModel().title);
-        titleLayout.setCardCountVisible(View.GONE);
-
-
+        titleLayout.hideCardCountText(true);
+        titleLayout.hideListCardButton(true);
 
         setCameraGalleryIconColor();
 
