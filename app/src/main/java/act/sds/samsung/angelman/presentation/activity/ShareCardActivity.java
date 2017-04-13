@@ -178,7 +178,7 @@ public class ShareCardActivity extends AppCompatActivity {
                         FileUtil.removeFilesIn(ContentsUtil.getTempFolder());
 
                         applicationManager.setCategoryModel(selectItem);
-
+                        applicationManager.setCurrentCardIndex(cardModel.cardIndex);
                         moveToCardListActivity();
                     } catch (IOException e) {
                         e.printStackTrace();
