@@ -49,6 +49,7 @@ import static act.sds.samsung.angelman.presentation.util.ResourceMapper.IconType
 import static act.sds.samsung.angelman.presentation.util.ResourceMapper.IconType.SCHOOL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -193,7 +194,7 @@ public class ShareCardActivityTest extends UITest {
     }
 
     @Test
-    public void givenCategorySelectDialogShowing_whenClickFirstCategoryAndClickSaveButton_thenSetCategoryModelAndMoveToCardListActivity() throws Exception {
+    public void givenCategorySelectDialogShowing_whenClickFirstCategoryAndClickSaveButton_thenSetCategoryModelAndCurrentCardIndexAndMoveToCardListActivity() throws Exception {
         // given
         AlertDialog dialog = clickSaveButtonAndShowSelectCategoryDialog();
         // when
@@ -202,6 +203,7 @@ public class ShareCardActivityTest extends UITest {
 
         // then
         verify(subject.applicationManager).setCategoryModel(any(CategoryModel.class));
+        verify(subject.applicationManager).setCurrentCardIndex(anyInt());
         ShadowActivity shadowActivity = shadowOf(subject);
         Intent nextStartedActivity = shadowActivity.getNextStartedActivity();
         assertThat(nextStartedActivity.getComponent().getClassName()).isEqualTo(CardListActivity.class.getCanonicalName());
