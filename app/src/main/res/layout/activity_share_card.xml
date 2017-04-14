@@ -6,12 +6,12 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg_basic_1">
 
-    <act.sds.samsung.angelman.presentation.custom.CardTitleLayout
+    <act.angelman.presentation.custom.CardTitleLayout
         android:id="@+id/title_container"
         android:layout_width="match_parent"
         app:layout_heightPercent="13%" />
 
-    <act.sds.samsung.angelman.presentation.custom.CardViewPager
+    <act.angelman.presentation.custom.CardViewPager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_below="@id/title_container"
@@ -27,7 +27,7 @@
         android:orientation="vertical"
         app:layout_heightPercent="27.5%">
 
-        <act.sds.samsung.angelman.presentation.custom.FontTextView
+        <act.angelman.presentation.custom.FontTextView
             android:id="@+id/category_item_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -61,7 +61,7 @@
             android:layout_height="72dp"
             android:src="@drawable/angelee" />
 
-        <act.sds.samsung.angelman.presentation.custom.FontTextView
+        <act.angelman.presentation.custom.FontTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"

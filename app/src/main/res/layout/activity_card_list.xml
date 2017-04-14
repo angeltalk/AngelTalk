@@ -6,7 +6,7 @@
     android:id="@+id/activity_card_list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="act.sds.samsung.angelman.presentation.activity.CardListActivity" >
+    tools:context="act.angelman.presentation.activity.CardListActivity" >
 
     <RelativeLayout
         android:id="@+id/title_layout"
@@ -27,7 +27,7 @@
             android:paddingBottom="5dp"
             android:src="@drawable/ic_back_arrow" />
 
-        <act.sds.samsung.angelman.presentation.custom.FontTextView
+        <act.angelman.presentation.custom.FontTextView
             android:id="@+id/category_item_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -44,7 +44,7 @@
             android:layout_alignParentBottom="true"
             android:weightSum="2">
 
-            <act.sds.samsung.angelman.presentation.custom.CardListTabButton
+            <act.angelman.presentation.custom.CardListTabButton
                 android:id="@+id/show_hide_tab_button"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -52,7 +52,7 @@
                 app:selected="true"
                 app:buttonText="@string/show_hide_text"/>
 
-            <act.sds.samsung.angelman.presentation.custom.CardListTabButton
+            <act.angelman.presentation.custom.CardListTabButton
                 android:id="@+id/change_order_tab_button"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"

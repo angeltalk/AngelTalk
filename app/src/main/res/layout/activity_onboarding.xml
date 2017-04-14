@@ -44,7 +44,7 @@
         android:background="@drawable/background_gradient_red"
         android:visibility="visible">
 
-        <act.sds.samsung.angelman.presentation.custom.FontTextView
+        <act.angelman.presentation.custom.FontTextView
             android:id="@+id/onboarding_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

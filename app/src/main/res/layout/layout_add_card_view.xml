@@ -14,7 +14,7 @@
         app:layout_heightPercent="100%"
         app:layout_widthPercent="78%">
 
-        <act.sds.samsung.angelman.presentation.custom.FontTextView
+        <act.angelman.presentation.custom.FontTextView
             android:id="@+id/add_card_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

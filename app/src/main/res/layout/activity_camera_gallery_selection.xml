@@ -9,7 +9,7 @@
     android:background="@drawable/rectangle"
     tools:context=".presentation.activity.CameraGallerySelectionActivity">
 
-    <act.sds.samsung.angelman.presentation.custom.CardTitleLayout
+    <act.angelman.presentation.custom.CardTitleLayout
         android:id="@+id/title_container"
         android:layout_width="match_parent"
         app:layout_heightPercent="20%"
@@ -29,7 +29,7 @@
             android:layout_width="match_parent"
             app:layout_heightPercent="28.57%" >
 
-            <act.sds.samsung.angelman.presentation.custom.FontTextView
+            <act.angelman.presentation.custom.FontTextView
                 android:id="@+id/camera_start_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -64,7 +64,7 @@
                 android:layout_marginStart="33dp"
                 android:layout_centerVertical="true" />
 
-            <act.sds.samsung.angelman.presentation.custom.FontTextView
+            <act.angelman.presentation.custom.FontTextView
                 android:id="@+id/text_take_picture"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -99,7 +99,7 @@
                 android:layout_marginStart="33dp"
                 android:layout_centerVertical="true" />
 
-            <act.sds.samsung.angelman.presentation.custom.FontTextView
+            <act.angelman.presentation.custom.FontTextView
                 android:id="@+id/text_select_gallery"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -135,7 +135,7 @@
                 android:layout_marginStart="33dp"
                 android:layout_centerVertical="true" />
 
-            <act.sds.samsung.angelman.presentation.custom.FontTextView
+            <act.angelman.presentation.custom.FontTextView
                 android:id="@+id/text_take_video"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

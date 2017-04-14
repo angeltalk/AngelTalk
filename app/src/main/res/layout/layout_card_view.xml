@@ -28,7 +28,7 @@
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop" />
 
-                <act.sds.samsung.angelman.presentation.custom.VideoCardTextureView
+                <act.angelman.presentation.custom.VideoCardTextureView
                     android:id="@+id/card_video"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -48,7 +48,7 @@
         </RelativeLayout>
 
 
-        <act.sds.samsung.angelman.presentation.custom.FontTextView
+        <act.angelman.presentation.custom.FontTextView
             android:id="@+id/card_image_title"
             android:layout_width="match_parent"
             android:layout_alignParentBottom="true"
@@ -59,7 +59,7 @@
             app:font="@string/font_medium"
             app:layout_heightPercent="19%" />
 
-        <act.sds.samsung.angelman.presentation.custom.FontEditText
+        <act.angelman.presentation.custom.FontEditText
             android:id="@+id/card_image_title_edit"
             android:layout_width="match_parent"
             android:layout_alignParentBottom="true"
