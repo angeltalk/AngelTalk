@@ -1,4 +1,4 @@
-package act.sds.samsung.angelman.presentation.shadow;
+package act.angelman.presentation.shadow;
 
 import android.graphics.Bitmap;
 import android.media.ThumbnailUtils;
