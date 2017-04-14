@@ -151,6 +151,7 @@ public class CardViewPagerActivity extends AbstractActivity {
             mViewPager.setCurrentItem(1);
         }
 
+        applicationManager.setCurrentCardIndex(allCardListInSelectedCategory.get(mViewPager.getCurrentItem()).cardIndex);
     }
 
     @Override
