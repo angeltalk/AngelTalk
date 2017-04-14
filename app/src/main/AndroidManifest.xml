@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="act.sds.samsung.angelman">
+    package="act.angelman">
 
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
@@ -29,7 +29,7 @@
             android:value="@string/kakao_app_key" />
 
         <activity
-            android:name=".presentation.activity.OnboardingActivity"
+            android:name="act.angelman.presentation.activity.OnboardingActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,30 +37,30 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".presentation.activity.CameraGallerySelectionActivity"
+            android:name="act.angelman.presentation.activity.CameraGallerySelectionActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".presentation.activity.MakeCategoryActivity"
+            android:name="act.angelman.presentation.activity.MakeCategoryActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
-            android:name=".presentation.activity.Camera2Activity"
+            android:name="act.angelman.presentation.activity.Camera2Activity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".presentation.activity.CardListActivity"
+            android:name="act.angelman.presentation.activity.CardListActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".presentation.activity.MakeCardActivity"
+            android:name="act.angelman.presentation.activity.MakeCardActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".presentation.activity.CardViewPagerActivity"
+            android:name="act.angelman.presentation.activity.CardViewPagerActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".presentation.activity.PhotoEditorActivity"
+            android:name="act.angelman.presentation.activity.PhotoEditorActivity"
             android:screenOrientation="portrait" />
 
-        <activity android:name=".presentation.activity.ShareCardActivity"
+        <activity android:name="act.angelman.presentation.activity.ShareCardActivity"
             android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -72,17 +72,17 @@
         </activity>
 
         <activity
-            android:name=".presentation.activity.CategoryMenuActivity"
+            android:name="act.angelman.presentation.activity.CategoryMenuActivity"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".presentation.activity.VideoActivity"
+            android:name="act.angelman.presentation.activity.VideoActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"/>
 
-        <service android:name=".presentation.service.ScreenService" />
+        <service android:name="act.angelman.presentation.service.ScreenService" />
 
-        <receiver android:name=".presentation.service.ScreenReceiver">
+        <receiver android:name="act.angelman.presentation.service.ScreenReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.SCREEN_OFF" />
                 <action android:name="android.intent.action.PHONE_STATE" />
@@ -90,7 +90,7 @@
         </receiver>
 
         <receiver
-            android:name=".presentation.custom.AngelmanWidgetProvider"
+            android:name="act.angelman.presentation.custom.AngelmanWidgetProvider"
             android:label="엔젤톡">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -102,10 +102,10 @@
                 android:resource="@xml/widget_provider" />
         </receiver>
 
-        <receiver android:name=".presentation.receiver.NotificationActionReceiver"/>
+        <receiver android:name="act.angelman.presentation.receiver.NotificationActionReceiver"/>
 
         <receiver
-            android:name=".presentation.receiver.BootCompleteReceiver"
+            android:name="act.angelman.presentation.receiver.BootCompleteReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>

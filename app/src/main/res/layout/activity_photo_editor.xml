@@ -17,7 +17,7 @@
         android:layout_height="match_parent"
         android:background="@drawable/blurred_view" />
 
-    <act.sds.samsung.angelman.presentation.custom.FontTextView
+    <act.angelman.presentation.custom.FontTextView
         android:id="@+id/picture_guide"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

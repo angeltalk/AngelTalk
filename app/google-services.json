@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:264663053439:android:b7a28bd9922fdee3",
         "android_client_info": {
-          "package_name": "act.sds.samsung.angelman"
+          "package_name": "act.angelman"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "264663053439-mgktdprusibo5hqc6nm9csg3j077t6qi.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "act.sds.samsung.angelman",
+            "package_name": "act.angelman",
             "certificate_hash": "bcb818317cbc3dc91d3b0a36d5fe8630a583ad27"
           }
         },

@@ -17,13 +17,13 @@
             android:layout_width="match_parent"
             app:layout_heightPercent="15%" />
 
-        <act.sds.samsung.angelman.presentation.custom.CardView
+        <act.angelman.presentation.custom.CardView
             android:id="@+id/card_view_layout"
             android:layout_width="match_parent"
             android:layout_below="@id/test"
             app:layout_heightPercent="60%" />
 
-        <act.sds.samsung.angelman.presentation.custom.FontTextView
+        <act.angelman.presentation.custom.FontTextView
             android:layout_marginTop="24dp"
             android:id="@+id/recoding_guide"
             android:layout_width="wrap_content"
@@ -62,7 +62,7 @@
             android:layout_centerHorizontal="true"
             android:src="@drawable/mic_icon" />
 
-        <act.sds.samsung.angelman.presentation.custom.FontTextView
+        <act.angelman.presentation.custom.FontTextView
             android:id="@+id/waiting_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
