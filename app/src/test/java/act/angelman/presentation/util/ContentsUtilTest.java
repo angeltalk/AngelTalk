@@ -16,7 +16,7 @@ import java.io.File;
 import act.angelman.BuildConfig;
 import act.angelman.domain.model.CardModel;
 import act.angelman.domain.model.CardTransferModel;
-import act.sds.samsung.angelman.presentation.shadow.ShadowThumbnailUtil;
+import act.angelman.presentation.shadow.ShadowThumbnailUtil;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
