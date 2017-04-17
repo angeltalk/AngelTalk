@@ -3,7 +3,6 @@ package act.angelman.presentation.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.percent.PercentRelativeLayout;
 import android.support.v4.view.ViewPager;
@@ -12,15 +11,11 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -37,6 +32,7 @@ import act.angelman.presentation.custom.CardView;
 import act.angelman.presentation.custom.CardViewPager;
 import act.angelman.presentation.custom.CustomConfirmDialog;
 import act.angelman.presentation.custom.CustomSnackBar;
+import act.angelman.presentation.custom.ShareMessengerSelectDialog;
 import act.angelman.presentation.manager.ApplicationConstants;
 import act.angelman.presentation.manager.ApplicationManager;
 import butterknife.BindView;
@@ -88,25 +84,35 @@ public class CardViewPagerActivity extends AbstractActivity {
     @OnClick(R.id.card_share_button)
     public void shareButtonOnClick() {
 
-        final CardModel cardModel = getCardModel(mViewPager.getCurrentItem());
-        showLoadingAnimation();
-        cardTransfer.uploadCard(cardModel, new OnSuccessListener<Map<String,String>>() {
-            @Override
-            public void onSuccess(Map<String, String> resultMap) {
-                String thumbnailUrl = resultMap.get("url");
-                String key = resultMap.get("key");
 
-                kaKaoTransfer.sendKakaoLinkMessage(context, key, thumbnailUrl, cardModel);
-                loadingViewLayout.setVisibility(View.GONE);
-            }
-
-        }, new OnFailureListener() {
+        ShareMessengerSelectDialog dialog = new ShareMessengerSelectDialog(context, new View.OnClickListener() {
             @Override
-            public void onFailure(@NonNull Exception e) {
-                loadingViewLayout.setVisibility(View.GONE);
-                Toast.makeText(context, R.string.share_fail_message,Toast.LENGTH_SHORT).show();
+            public void onClick(View v) {
+                /*
+                final CardModel cardModel = getCardModel(mViewPager.getCurrentItem());
+                showLoadingAnimation();
+                cardTransfer.uploadCard(cardModel, new OnSuccessListener<Map<String,String>>() {
+                    @Override
+                    public void onSuccess(Map<String, String> resultMap) {
+                        String thumbnailUrl = resultMap.get("url");
+                        String key = resultMap.get("key");
+
+                        kaKaoTransfer.sendKakaoLinkMessage(context, key, thumbnailUrl, cardModel);
+                        loadingViewLayout.setVisibility(View.GONE);
+                    }
+
+                }, new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        loadingViewLayout.setVisibility(View.GONE);
+                        Toast.makeText(context, R.string.share_fail_message,Toast.LENGTH_SHORT).show();
+                    }
+                });
+                */
             }
         });
+
+
     }
 
     List<CardModel> allCardListInSelectedCategory;
