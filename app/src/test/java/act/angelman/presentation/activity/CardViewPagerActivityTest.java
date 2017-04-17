@@ -4,8 +4,10 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.support.v7.widget.AppCompatRadioButton;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -478,6 +480,27 @@ public class CardViewPagerActivityTest extends UITest {
         assertThat(shadowDialog.getView().findViewById(R.id.item_kakaotalk).getVisibility()).isEqualTo(View.GONE);
     }
 
+    @Test
+    public void whenMessengerItemClicked_thenConfirmButtonEnableAndTheOtherItemUnchecked() throws Exception{
+        subject.cardShareButton.performClick();
+        subject.pm = mock(PackageManager.class);
+        when(subject.pm.getPackageInfo("com.kakao.talk",PackageManager.GET_ACTIVITIES)).thenReturn(new PackageInfo());
+
+        AlertDialog alert = ShadowAlertDialog.getLatestAlertDialog();
+        ShadowAlertDialog shadowDialog = shadowOf(alert);
+
+        View innerView = shadowDialog.getView();
+        innerView.findViewById(R.id.item_kakaotalk).performClick();
+        assertThat(innerView.findViewById(R.id.confirm_button).isEnabled()).isTrue();
+        assertThat(((AppCompatRadioButton) innerView.findViewById(R.id.radio_kakaotalk)).isChecked()).isTrue();
+        assertThat(((AppCompatRadioButton) innerView.findViewById(R.id.radio_message)).isChecked()).isFalse();
+
+        innerView.findViewById(R.id.item_message).performClick();
+        assertThat(((AppCompatRadioButton) innerView.findViewById(R.id.radio_kakaotalk)).isChecked()).isFalse();
+        assertThat(((AppCompatRadioButton) innerView.findViewById(R.id.radio_message)).isChecked()).isTrue();
+
+
+    }
 
 
     @Test@Ignore
