@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.view.View;
 import android.widget.ImageView;
@@ -458,12 +459,26 @@ public class CardViewPagerActivityTest extends UITest {
 
     @Test
     public void whenShareButtonClick_thenShowAvailableMessengerList() throws Exception{
-
         subject.cardShareButton.performClick();
         AlertDialog alert = ShadowAlertDialog.getLatestAlertDialog();
         ShadowAlertDialog shadowDialog = shadowOf(alert);
         assertThat(shadowDialog).isNotNull();
     }
+
+    @Test
+    public void givenKakaotalkNotInstall_whenShareButtonClick_thenShowAvailableMessengerListWithOutKakaotalk() throws Exception{
+
+        subject.cardShareButton.performClick();
+        subject.pm = mock(PackageManager.class);
+        when(subject.pm.getPackageInfo("com.kakao.talk",PackageManager.GET_ACTIVITIES)).thenThrow(new PackageManager.NameNotFoundException());
+
+        AlertDialog alert = ShadowAlertDialog.getLatestAlertDialog();
+        ShadowAlertDialog shadowDialog = shadowOf(alert);
+        assertThat(shadowDialog).isNotNull();
+        assertThat(shadowDialog.getView().findViewById(R.id.item_kakaotalk).getVisibility()).isEqualTo(View.GONE);
+    }
+
+
 
     @Test@Ignore
     public void whenClickShareButtonAndUploadSuccess_thenSendKakaoLinkMessage() throws Exception {
