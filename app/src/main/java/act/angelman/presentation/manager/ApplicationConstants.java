@@ -10,4 +10,7 @@ public class ApplicationConstants {
     public static final String PRIVATE_PREFERENCE_NAME = "act.angelman";
     public static final String INTENT_KEY_REFRESH_CARD = "isRefreshCard";
     public static final String INTENT_KEY_LIST_BACK = "listBack";
+
+    public enum SHARE_MESSENGER_TYPE{ KAKAOTALK, MESSAGE }
+
 }
