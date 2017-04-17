@@ -1,35 +1,27 @@
 {
   "project_info": {
-    "project_number": "264663053439",
-    "firebase_url": "https://angeltalk-app.firebaseio.com",
-    "project_id": "angeltalk-app",
-    "storage_bucket": "angeltalk-app.appspot.com"
+    "project_number": "444811206873",
+    "firebase_url": "https://angeltalk-f0a5d.firebaseio.com",
+    "project_id": "angeltalk-f0a5d",
+    "storage_bucket": "angeltalk-f0a5d.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:264663053439:android:b7a28bd9922fdee3",
+        "mobilesdk_app_id": "1:444811206873:android:6cd89708b9dbd14c",
         "android_client_info": {
           "package_name": "act.angelman"
         }
       },
       "oauth_client": [
         {
-          "client_id": "264663053439-mgktdprusibo5hqc6nm9csg3j077t6qi.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "act.angelman",
-            "certificate_hash": "bcb818317cbc3dc91d3b0a36d5fe8630a583ad27"
-          }
-        },
-        {
-          "client_id": "264663053439-vdpoms5h7qnulrjfl2po9k49p3oesjgg.apps.googleusercontent.com",
+          "client_id": "444811206873-ujevhi7vc5e1tucqfj6eav4tgvknhfji.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAUTGWfIcZ1P0zJq5_Q3KCDKmKWmbdnllY"
+          "current_key": "AIzaSyDHWwdj4GPda-iSBFHrtbGpw-5RRJD9kvM"
         }
       ],
       "services": {
@@ -37,13 +29,8 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "264663053439-vdpoms5h7qnulrjfl2po9k49p3oesjgg.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "status": 1,
+          "other_platform_oauth_client": []
         },
         "ads_service": {
           "status": 2
