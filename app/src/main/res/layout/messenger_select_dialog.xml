@@ -48,7 +48,9 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="24dp"
+                    android:tag="radio"
                     android:theme="@style/CategorySelectRadioButton"
+                    android:clickable="false"
                     />
 
 
@@ -90,9 +92,9 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="24dp"
+                    android:tag="radio"
+                    android:clickable="false"
                     android:theme="@style/CategorySelectRadioButton" />
-
-
                 <ImageView
                     android:layout_width="35dp"
                     android:layout_height="35dp"
@@ -115,10 +117,7 @@
                     app:font="@string/font_regular" />
 
             </RelativeLayout>
-
         </LinearLayout>
-
-
     </LinearLayout>
 
 
