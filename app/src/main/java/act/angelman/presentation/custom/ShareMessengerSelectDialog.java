@@ -8,9 +8,9 @@ import android.view.View;
 import android.widget.RelativeLayout;
 
 import act.angelman.R;
+import act.angelman.presentation.manager.ApplicationConstants;
 import act.angelman.presentation.util.ContentsUtil;
 import act.angelman.presentation.util.DialogUtil;
-import butterknife.ButterKnife;
 
 public class ShareMessengerSelectDialog {
 
@@ -23,14 +23,8 @@ public class ShareMessengerSelectDialog {
     private RelativeLayout kakaotalkItem;
     private RelativeLayout messageItem;
     private FontTextView confirmButton;
-    private FontTextView cancelButton;
 
-    public enum MESSENGER_TYPE{
-        KAKAOTALK,
-        MESSAGE
-    }
-
-    private MESSENGER_TYPE messengerType;
+    private ApplicationConstants.SHARE_MESSENGER_TYPE messengerType;
 
 
 
@@ -38,13 +32,9 @@ public class ShareMessengerSelectDialog {
 
         this.context = context;
         View innerView = ((Activity) context).getLayoutInflater().inflate(R.layout.messenger_select_dialog, null);
-        ButterKnife.bind(innerView);
-
-
         kakaotalkItem = ((RelativeLayout) innerView.findViewById(R.id.item_kakaotalk));
         messageItem = ((RelativeLayout) innerView.findViewById(R.id.item_message));
         confirmButton = ((FontTextView) innerView.findViewById(R.id.confirm_button));
-        cancelButton = ((FontTextView) innerView.findViewById(R.id.cancel_button));
 
         if(!isKakaotalkInstalled){
             innerView.findViewById(R.id.item_kakaotalk).setVisibility(View.GONE);
@@ -53,7 +43,14 @@ public class ShareMessengerSelectDialog {
         kakaotalkItem.setOnClickListener(itemClickListener);
         messageItem.setOnClickListener(itemClickListener);
 
-        dialog = DialogUtil.buildCustomDialog(context, innerView, positiveOnClickListener, new View.OnClickListener() {
+        dialog = DialogUtil.buildCustomDialog(context, innerView, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                v.setTag(messengerType);
+                positiveOnClickListener.onClick(v);
+                dismiss();
+            }
+        }, new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -68,8 +65,6 @@ public class ShareMessengerSelectDialog {
         dialog.dismiss();
     }
 
-
-
     private final View.OnClickListener itemClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -78,19 +73,12 @@ public class ShareMessengerSelectDialog {
             if(v.getId() == R.id.item_kakaotalk){
                 ((AppCompatRadioButton) v.findViewById(R.id.radio_kakaotalk)).setChecked(true);
                 ((AppCompatRadioButton) dialog.findViewById(R.id.radio_message)).setChecked(false);
-                messengerType = MESSENGER_TYPE.KAKAOTALK;
+                messengerType = ApplicationConstants.SHARE_MESSENGER_TYPE.KAKAOTALK;
             }else{
                 ((AppCompatRadioButton) v.findViewById(R.id.radio_message)).setChecked(true);
                 ((AppCompatRadioButton) dialog.findViewById(R.id.radio_kakaotalk)).setChecked(false);
-                messengerType = MESSENGER_TYPE.MESSAGE;
+                messengerType = ApplicationConstants.SHARE_MESSENGER_TYPE.MESSAGE;
             }
         }
     };
-
-    public MESSENGER_TYPE getMessengerType(){
-        return messengerType;
-    }
-
-
-
 }
