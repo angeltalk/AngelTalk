@@ -2,6 +2,7 @@ package act.angelman.presentation.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.percent.PercentRelativeLayout;
@@ -75,6 +76,7 @@ public class CardViewPagerActivity extends AbstractActivity {
     @BindView(R.id.image_angelee_gif)
     ImageView imageLoadingGif;
 
+    public PackageManager pm;
 
     @OnClick(R.id.card_delete_button)
     public void deleteButtonOnClick() {
@@ -85,9 +87,22 @@ public class CardViewPagerActivity extends AbstractActivity {
     public void shareButtonOnClick() {
 
 
-        ShareMessengerSelectDialog dialog = new ShareMessengerSelectDialog(context, new View.OnClickListener() {
+        ShareMessengerSelectDialog dialog = new ShareMessengerSelectDialog(context, isKakaotalkInstalled(), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                /*PackageManager pm = getPackageManager();
+                try {
+                    pm.getPackageInfo(uri, PackageManager.GET_ACTIVITIES);
+                    return true;
+                } catch (PackageManager.NameNotFoundException e) {
+                }
+
+
+
+
+                return false;
+                */
                 /*
                 final CardModel cardModel = getCardModel(mViewPager.getCurrentItem());
                 showLoadingAnimation();
@@ -158,6 +173,7 @@ public class CardViewPagerActivity extends AbstractActivity {
         }
 
         applicationManager.setCurrentCardIndex(allCardListInSelectedCategory.get(mViewPager.getCurrentItem()).cardIndex);
+        pm = getPackageManager();
     }
 
     @Override
@@ -294,5 +310,16 @@ public class CardViewPagerActivity extends AbstractActivity {
                 .crossFade()
                 .into(imageLoadingGif);
     }
+
+    private boolean isKakaotalkInstalled() {
+        try {
+            String KAKAO_PACKAGE_NAME = "com.kakao.talk";
+            pm.getPackageInfo(KAKAO_PACKAGE_NAME, PackageManager.GET_ACTIVITIES);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+        }
+        return false;
+    }
+
 
 }
