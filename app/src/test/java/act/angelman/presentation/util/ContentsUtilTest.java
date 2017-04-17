@@ -115,4 +115,56 @@ public class ContentsUtilTest {
         assertThat(cardModel.thumbnailPath).isEqualTo(thumbnail.getAbsolutePath());
         assertThat(cardModel.voicePath).isEqualTo(voice.getAbsolutePath());
     }
+
+    @Test
+    public void givenPhotoCardAndTempFiles_whenCallCopySharedFiles_thenCopy() throws Exception {
+        // given
+        String folderPath = ContentsUtil.getTempFolder() + File.separator;
+        new File(folderPath + "test.jpg").createNewFile();
+        new File(folderPath + "test.3gdp").createNewFile();
+
+        CardModel cardModel = CardModel.builder()
+                .name("copyPhotoCard")
+                .cardType(CardModel.CardType.PHOTO_CARD)
+                .contentPath(ContentsUtil.getImagePath())
+                .voicePath(ContentsUtil.getVoicePath())
+                .build();
+
+        // when
+        ContentsUtil.copySharedFiles(cardModel);
+
+        // then
+        assertThat(cardModel.name).isEqualTo("copyPhotoCard");
+        assertThat(cardModel.cardType).isEqualTo(CardModel.CardType.PHOTO_CARD);
+        assertThat(new File(cardModel.contentPath).exists()).isTrue();
+        assertThat(new File(cardModel.voicePath).exists()).isTrue();
+    }
+
+    @Test
+    public void givenVideoCardAndTempFiles_whenCallCopySharedFiles_thenCopy() throws Exception {
+        // given
+        String folderPath = ContentsUtil.getTempFolder() + File.separator;
+        new File(folderPath + "test.mp4").createNewFile();
+        new File(folderPath + "test.jpg").createNewFile();
+        new File(folderPath + "test.3gdp").createNewFile();
+
+        String videoPath = ContentsUtil.getVideoPath();
+        CardModel cardModel = CardModel.builder()
+                .name("copyVideoCard")
+                .cardType(CardModel.CardType.VIDEO_CARD)
+                .contentPath(videoPath)
+                .thumbnailPath(ContentsUtil.getThumbnailPath(videoPath))
+                .voicePath(ContentsUtil.getVoicePath())
+                .build();
+
+        // when
+        ContentsUtil.copySharedFiles(cardModel);
+
+        // then
+        assertThat(cardModel.name).isEqualTo("copyVideoCard");
+        assertThat(cardModel.cardType).isEqualTo(CardModel.CardType.VIDEO_CARD);
+        assertThat(new File(cardModel.contentPath).exists()).isTrue();
+        assertThat(new File(cardModel.thumbnailPath).exists()).isTrue();
+        assertThat(new File(cardModel.voicePath).exists()).isTrue();
+    }
 }
