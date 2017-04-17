@@ -17,9 +17,12 @@ public class ShareMessengerSelectDialog {
     private final AlertDialog dialog;
 
 
-    public ShareMessengerSelectDialog(Context context, View.OnClickListener positiveOnClickListener) {
+    public ShareMessengerSelectDialog(Context context, boolean isKakaotalkInstalled, View.OnClickListener positiveOnClickListener) {
 
         View innerView = ((Activity) context).getLayoutInflater().inflate(R.layout.messenger_select_dialog, null);
+        if(!isKakaotalkInstalled){
+            innerView.findViewById(R.id.item_kakaotalk).setVisibility(View.GONE);
+        }
         dialog = DialogUtil.buildCustomDialog(context, innerView, positiveOnClickListener, new View.OnClickListener() {
 
             @Override
