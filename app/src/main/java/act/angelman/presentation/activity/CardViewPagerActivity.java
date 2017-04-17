@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.percent.PercentRelativeLayout;
 import android.support.v4.view.ViewPager;
@@ -12,11 +13,15 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -86,24 +91,10 @@ public class CardViewPagerActivity extends AbstractActivity {
     @OnClick(R.id.card_share_button)
     public void shareButtonOnClick() {
 
-
         ShareMessengerSelectDialog dialog = new ShareMessengerSelectDialog(context, isKakaotalkInstalled(), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                /*PackageManager pm = getPackageManager();
-                try {
-                    pm.getPackageInfo(uri, PackageManager.GET_ACTIVITIES);
-                    return true;
-                } catch (PackageManager.NameNotFoundException e) {
-                }
-
-
-
-
-                return false;
-                */
-                /*
+                final ApplicationConstants.SHARE_MESSENGER_TYPE selectType = ((ApplicationConstants.SHARE_MESSENGER_TYPE) v.getTag());
                 final CardModel cardModel = getCardModel(mViewPager.getCurrentItem());
                 showLoadingAnimation();
                 cardTransfer.uploadCard(cardModel, new OnSuccessListener<Map<String,String>>() {
@@ -111,11 +102,17 @@ public class CardViewPagerActivity extends AbstractActivity {
                     public void onSuccess(Map<String, String> resultMap) {
                         String thumbnailUrl = resultMap.get("url");
                         String key = resultMap.get("key");
-
-                        kaKaoTransfer.sendKakaoLinkMessage(context, key, thumbnailUrl, cardModel);
+                        if(selectType == ApplicationConstants.SHARE_MESSENGER_TYPE.KAKAOTALK){
+                            kaKaoTransfer.sendKakaoLinkMessage(context, key, thumbnailUrl, cardModel);
+                        }else{
+                            Intent sendIntent = new Intent(Intent.ACTION_VIEW);
+                            String smsBody = getResources().getString(R.string.share_sms_message, cardModel.name) + key;
+                            sendIntent.putExtra("sms_body", smsBody);
+                            sendIntent.setType("vnd.android-dir/mms-sms");
+                            startActivity(sendIntent);
+                        }
                         loadingViewLayout.setVisibility(View.GONE);
                     }
-
                 }, new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
@@ -123,7 +120,6 @@ public class CardViewPagerActivity extends AbstractActivity {
                         Toast.makeText(context, R.string.share_fail_message,Toast.LENGTH_SHORT).show();
                     }
                 });
-                */
             }
         });
 
