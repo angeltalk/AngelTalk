@@ -747,7 +747,7 @@ public class Camera2Activity extends AbstractActivity implements View.OnClickLis
                     if (mState != STATE_PICTURE_FINISHED) {
                         unlockFocus();
                         mState = STATE_PICTURE_FINISHED;
-                        Intent intent = new Intent(Camera2Activity.this, MakeCardActivity.class);
+                        Intent intent = new Intent(Camera2Activity.this, MakeCardPreviewActivity.class);
                         intent.putExtra(ContentsUtil.CONTENT_PATH, fileName);
                         intent.putExtra(ContentsUtil.CARD_TYPE, CardModel.CardType.PHOTO_CARD.getValue());
                         startActivity(intent);

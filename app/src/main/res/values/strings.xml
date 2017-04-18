@@ -62,8 +62,9 @@
     <string name="new_card_title">새로운 카드</string>
     <string name="cannot_share_card_save_message">카드를 저장할 수 없습니다.</string>
     <string name="select_category_to_save_new_card">저장하실 카테고리를 선택해주세요</string>
-    <string name="media_check_guide">찍은 영상을 확인해 보세요 </string>
+    <string name="video_content_check_guide">찍은 영상을 확인해 보세요 </string>
     <string name="msg_select_messenger">공유하실 메신저를 선택하세요</string>
     <string name="share_sms_message">앤젤톡 \'%s\' 카드 공유 \n http://angeltalk.bitbucket.io/</string>
+    <string name="photo_content_check_guide">찍은 사진을 확인해 보세요.</string>
 
 </resources>
