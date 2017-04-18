@@ -16,16 +16,10 @@
 
 package act.angelman.presentation.fragment;
 
-import android.Manifest;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.Configuration;
 import android.graphics.Matrix;
@@ -47,7 +41,6 @@ import android.os.HandlerThread;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.v13.app.FragmentCompat;
-import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
@@ -73,7 +66,7 @@ import java.util.concurrent.TimeUnit;
 
 import act.angelman.R;
 import act.angelman.domain.model.CardModel;
-import act.angelman.presentation.activity.MakeCardActivity;
+import act.angelman.presentation.activity.MakeCardPreviewActivity;
 import act.angelman.presentation.custom.AutoFitTextureView;
 import act.angelman.presentation.manager.ApplicationConstants;
 import act.angelman.presentation.util.ContentsUtil;
@@ -87,8 +80,6 @@ public class VideoFragment extends Fragment
     private static final SparseIntArray INVERSE_ORIENTATIONS = new SparseIntArray();
 
     private static final String TAG = "VideoFragment";
-    private static final int REQUEST_VIDEO_PERMISSIONS = 1;
-    private static final String FRAGMENT_DIALOG = "dialog";
     private static final int DOUBLE_CLICK_PREVENTING_TIME = 1700;
 
     private Integer mSensorOrientation;
@@ -103,12 +94,6 @@ public class VideoFragment extends Fragment
 
     ProgressBar progressBar;
     TextView textCount;
-
-
-    private static final String[] VIDEO_PERMISSIONS = {
-            Manifest.permission.CAMERA,
-            Manifest.permission.RECORD_AUDIO,
-    };
 
     static {
         DEFAULT_ORIENTATIONS.append(Surface.ROTATION_0, 90);
@@ -243,6 +228,7 @@ public class VideoFragment extends Fragment
             }
         }
 
+
     };
 
     public static VideoFragment newInstance(Context context) {
@@ -309,7 +295,7 @@ public class VideoFragment extends Fragment
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         textCount = (TextView) view.findViewById(R.id.text_count);
         mTextureView = (AutoFitTextureView) view.findViewById(R.id.texture);
-        mButtonVideo = (ImageView) view.findViewById(R.id.btn_record);
+        mButtonVideo = (ImageView) view.findViewById(R.id.record_button);
         mButtonVideo.setOnClickListener(this);
     }
 
@@ -351,7 +337,7 @@ public class VideoFragment extends Fragment
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.btn_record: {
+            case R.id.record_button: {
                 if (SystemClock.elapsedRealtime() - recordingButtonClickTime < DOUBLE_CLICK_PREVENTING_TIME){
                     return;
                 }
@@ -391,71 +377,9 @@ public class VideoFragment extends Fragment
     }
 
     /**
-     * Gets whether you should show UI with rationale for requesting permissions.
-     *
-     * @param permissions The permissions your app wants to request.
-     * @return Whether you can show permission rationale UI.
-     */
-    private boolean shouldShowRequestPermissionRationale(String[] permissions) {
-        for (String permission : permissions) {
-            if (FragmentCompat.shouldShowRequestPermissionRationale(this, permission)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Requests permissions needed for recording video.
-     */
-    private void requestVideoPermissions() {
-        if (shouldShowRequestPermissionRationale(VIDEO_PERMISSIONS)) {
-            new ConfirmationDialog().show(getChildFragmentManager(), FRAGMENT_DIALOG);
-        } else {
-            FragmentCompat.requestPermissions(this, VIDEO_PERMISSIONS, REQUEST_VIDEO_PERMISSIONS);
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        Log.d(TAG, "onRequestPermissionsResult");
-        if (requestCode == REQUEST_VIDEO_PERMISSIONS) {
-            if (grantResults.length == VIDEO_PERMISSIONS.length) {
-                for (int result : grantResults) {
-                    if (result != PackageManager.PERMISSION_GRANTED) {
-                        ErrorDialog.newInstance("aew")
-                                .show(getChildFragmentManager(), FRAGMENT_DIALOG);
-                        break;
-                    }
-                }
-            } else {
-                ErrorDialog.newInstance("aew")
-                        .show(getChildFragmentManager(), FRAGMENT_DIALOG);
-            }
-        } else {
-            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        }
-    }
-
-    private boolean hasPermissionsGranted(String[] permissions) {
-        for (String permission : permissions) {
-            if (ActivityCompat.checkSelfPermission(getActivity(), permission)
-                    != PackageManager.PERMISSION_GRANTED) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
      * Tries to open a {@link CameraDevice}. The result is listened by `mStateCallback`.
      */
     private void openCamera(int width, int height) {
-        if (!hasPermissionsGranted(VIDEO_PERMISSIONS)) {
-            requestVideoPermissions();
-            return;
-        }
         final Activity activity = getActivity();
         if (null == activity || activity.isFinishing()) {
             return;
@@ -492,10 +416,7 @@ public class VideoFragment extends Fragment
             Toast.makeText(activity, "Cannot access the camera.", Toast.LENGTH_SHORT).show();
             activity.finish();
         } catch (NullPointerException e) {
-            // Currently an NPE is thrown when the Camera2API is used but not supported on the
-            // device this code runs.
-            ErrorDialog.newInstance("aew")
-                    .show(getChildFragmentManager(), FRAGMENT_DIALOG);
+            Log.e("error", "camera device nullPointerException");
         } catch (InterruptedException e) {
             throw new RuntimeException("Interrupted while trying to lock camera opening.");
         }
@@ -673,8 +594,6 @@ public class VideoFragment extends Fragment
         }
     }
 
-    private int progressStatus = 0;
-
     private void startRecordingVideo() {
         if (null == mCameraDevice || !mTextureView.isAvailable() || null == mPreviewSize) {
             return;
@@ -782,7 +701,7 @@ public class VideoFragment extends Fragment
     }
 
     private void startMakeCardActivity() {
-        Intent intent = new Intent(getActivity(), MakeCardActivity.class);
+        Intent intent = new Intent(getActivity(), MakeCardPreviewActivity.class);
         intent.putExtra(ContentsUtil.CONTENT_PATH, mNextVideoAbsolutePath);
         intent.putExtra(ContentsUtil.CARD_TYPE, CardModel.CardType.VIDEO_CARD.getValue());
         startActivity(intent);
@@ -801,59 +720,4 @@ public class VideoFragment extends Fragment
         }
 
     }
-
-    public static class ErrorDialog extends DialogFragment {
-
-        private static final String ARG_MESSAGE = "message";
-
-        public static ErrorDialog newInstance(String message) {
-            ErrorDialog dialog = new ErrorDialog();
-            Bundle args = new Bundle();
-            args.putString(ARG_MESSAGE, message);
-            dialog.setArguments(args);
-            return dialog;
-        }
-
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            final Activity activity = getActivity();
-            return new AlertDialog.Builder(activity)
-                    .setMessage(getArguments().getString(ARG_MESSAGE))
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            activity.finish();
-                        }
-                    })
-                    .create();
-        }
-
-    }
-
-    public static class ConfirmationDialog extends DialogFragment {
-
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            final Fragment parent = getParentFragment();
-            return new AlertDialog.Builder(getActivity())
-                    .setMessage("")
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            FragmentCompat.requestPermissions(parent, VIDEO_PERMISSIONS,
-                                    REQUEST_VIDEO_PERMISSIONS);
-                        }
-                    })
-                    .setNegativeButton(android.R.string.cancel,
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    parent.getActivity().finish();
-                                }
-                            })
-                    .create();
-        }
-
-    }
-
 }
