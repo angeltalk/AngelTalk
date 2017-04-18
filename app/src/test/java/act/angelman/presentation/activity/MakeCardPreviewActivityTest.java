@@ -109,8 +109,9 @@ public class MakeCardPreviewActivityTest extends UITest {
         subject.findViewById(R.id.confirm_button).performClick();
 
         ShadowActivity shadowActivity = shadowOf(subject);
-        Intent startedIntent = shadowActivity.getNextStartedActivity();
-        assertThat(startedIntent.getComponent().getClassName()).isEqualTo(MakeCardActivity.class.getCanonicalName());
+        Intent intent = shadowActivity.getNextStartedActivity();
+        assertThat(intent.getComponent().getClassName()).isEqualTo(MakeCardActivity.class.getCanonicalName());
+        assertThat(intent.getStringExtra(ContentsUtil.CARD_TYPE)).isEqualTo(CardModel.CardType.VIDEO_CARD.getValue());
     }
 
     @Test
@@ -153,6 +154,18 @@ public class MakeCardPreviewActivityTest extends UITest {
         assertThat(new File(PHOTO_CONTENT_PATH)).exists();
         subject.onBackPressed();
         assertThat(new File(PHOTO_CONTENT_PATH)).doesNotExist();
+    }
+
+    @Test
+    public void givenPhotoCardIntent_whenConfirmButtonClick_thenGoToMakeCardActivity() throws Exception {
+        MakeCardPreviewActivity subject = setUpWithPhotoContent();
+
+        subject.findViewById(R.id.confirm_button).performClick();
+
+        ShadowActivity shadowActivity = shadowOf(subject);
+        Intent intent = shadowActivity.getNextStartedActivity();
+        assertThat(intent.getComponent().getClassName()).isEqualTo(MakeCardActivity.class.getCanonicalName());
+        assertThat(intent.getStringExtra(ContentsUtil.CARD_TYPE)).isEqualTo(CardModel.CardType.PHOTO_CARD.getValue());
     }
 
     private MakeCardPreviewActivity setUpWithVideoContent() {
