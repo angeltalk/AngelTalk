@@ -37,12 +37,12 @@ public class MakeCardPreviewActivity extends AppCompatActivity {
         contentPath = intent.getStringExtra(ContentsUtil.CONTENT_PATH);
         cardType = CardModel.CardType.valueOf(intent.getStringExtra(ContentsUtil.CARD_TYPE));
 
-        initPreview();
+        cardPreviewLayout.initLayout(cardType);
+        initPreviewContent();
     }
 
-    private void initPreview() {
+    private void initPreviewContent() {
         if(cardType == CardModel.CardType.PHOTO_CARD) {
-            cardPreviewLayout.initLayout(false);
             if (FileUtil.isFileExist(contentPath)) {
                 Glide.with(this)
                         .load(ContentsUtil.getContentFile(contentPath))
@@ -50,7 +50,6 @@ public class MakeCardPreviewActivity extends AppCompatActivity {
                         .into(cardPreviewLayout.photoCardPreview);
             }
         } else if(cardType == CardModel.CardType.VIDEO_CARD) {
-            cardPreviewLayout.initLayout(true);
             if (FileUtil.isFileExist(contentPath)) {
                 cardPreviewLayout.cameraTextureView.setScaleType(VideoCardTextureView.ScaleType.TOP);
                 cardPreviewLayout.cameraTextureView.setDataSource(contentPath);
