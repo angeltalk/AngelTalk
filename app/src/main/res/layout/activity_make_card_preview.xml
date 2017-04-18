@@ -1,38 +1,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:layout_height="match_parent" >
 
-    <act.angelman.presentation.custom.VideoCardTextureView
-        android:id="@+id/camera_recode_texture"
+    <act.angelman.presentation.custom.CardPreviewLayout
+        android:id="@+id/card_preview_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
-    <ImageView
-        android:id="@+id/preview_play_button"
-        android:layout_width="87dp"
-        android:layout_height="87dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="242.8dp"
-        android:alpha="0.5"
-        android:src="@drawable/btn_preview" />
-
-    <View
-        android:id="@+id/camera_recode_frame"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/black_frame_panel" />
-
-    <TextView
-        android:id="@+id/camera_recode_guide"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="160dp"
-        android:text="@string/media_check_guide"
-        android:textColor="@color/white"
-        android:textSize="17sp" />
 
     <FrameLayout
         android:id="@+id/camera_shutter"
