@@ -4,7 +4,6 @@ package act.angelman.presentation.activity;
 import android.content.Intent;
 import android.view.View;
 
-import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,59 +30,93 @@ import static org.robolectric.Shadows.shadowOf;
 @Config(constants = BuildConfig.class, shadows = ShadowFileUtil.class)
 public class MakeCardPreviewActivityTest extends UITest {
 
-    private MakeCardPreviewActivity subject;
-    private String CONTENT_PATH = "/storage/emulated/0/angelman/contents/amusementpark.mp4";
-
-    @Before
-    public void setUp() throws Exception {
-
-        Intent intent = new Intent();
-        intent.putExtra(ContentsUtil.CONTENT_PATH, CONTENT_PATH);
-        intent.putExtra(ContentsUtil.CARD_TYPE, CardModel.CardType.VIDEO_CARD.getValue());
-
-        ShadowMediaPlayer.addMediaInfo(DataSource.toDataSource(CONTENT_PATH), new ShadowMediaPlayer.MediaInfo(3000, -1));
-
-        subject = setupActivityWithIntent(MakeCardPreviewActivity.class, intent);
-    }
+    private String VIDEO_CONTENT_PATH = "/storage/emulated/0/angelman/contents/amusementpark.mp4";
+    private String PHOTO_CONTENT_PATH = "/storage/emulated/0/angelman/contents/bus.jpg";
 
     @Test
-    public void givenVideoCardPreview_whenStartActivity_thenShowRetakeButtonAndCheckButtonAndPlayButton() throws Exception {
-        assertThat(subject.findViewById(R.id.camera_recode_texture).getVisibility()).isEqualTo(View.VISIBLE);
-        assertThat(subject.findViewById(R.id.preview_play_button).getVisibility()).isEqualTo(View.VISIBLE);
+    public void givenVideoCardIntent_whenStartActivity_thenShowRetakeButtonAndCheckButtonAndPlayButton() throws Exception {
+        MakeCardPreviewActivity subject = setUpWithVideoContent();
+
+        assertThat(subject.cardPreviewLayout.cameraTextureView.getVisibility()).isEqualTo(View.VISIBLE);
+        assertThat(subject.cardPreviewLayout.playButton.getVisibility()).isEqualTo(View.VISIBLE);
+        assertThat(subject.cardPreviewLayout.cameraRecodeFrame.getVisibility()).isEqualTo(View.VISIBLE);
+        assertThat(subject.cardPreviewLayout.photoCardPreview.getVisibility()).isEqualTo(View.GONE);
+        assertThat(subject.cardPreviewLayout.photoCardPreviewBackground.getVisibility()).isEqualTo(View.GONE);
         assertThat(subject.findViewById(R.id.retake_button).getVisibility()).isEqualTo(View.VISIBLE);
         assertThat(subject.findViewById(R.id.confirm_button).getVisibility()).isEqualTo(View.VISIBLE);
+        assertThat(subject.cardPreviewLayout.cameraRecodeGuide.getText()).contains("영상");
     }
 
     @Test
     @Ignore("UI Test로 Cover 예정")
-    public void givenVideoCardPreview_whenClickPlayButton_thenHidePlayButtonAndMediaPlay() throws Exception {
+    public void givenVideoCardIntent_whenClickPlayButton_thenHidePlayButtonAndMediaPlay() throws Exception {
+        MakeCardPreviewActivity subject = setUpWithVideoContent();
+
         subject.findViewById(R.id.preview_play_button).performClick();
         assertThat(subject.findViewById(R.id.preview_play_button).getVisibility()).isEqualTo(View.GONE);
         Robolectric.getBackgroundThreadScheduler().advanceBy(1000, TimeUnit.MILLISECONDS);
     }
 
     @Test
-    public void givenVideoCardPreview_whenRetakeButtonClick_thenBackToVideoActivity() throws Exception {
+    public void givenVideoCardIntent_whenRetakeButtonClick_thenBackToVideoActivity() throws Exception {
+        MakeCardPreviewActivity subject = setUpWithVideoContent();
+
         subject.findViewById(R.id.retake_button).performClick();
-        assertEqualNextStartedActivity(VideoActivity.class.getCanonicalName());
-    }
 
-    @Test
-    public void givenVideoCardPreview_whenBackButtonClick_thenBackToVideoActivity() throws Exception {
-        subject.onBackPressed();
-        assertEqualNextStartedActivity(VideoActivity.class.getCanonicalName());
-    }
-
-    @Test
-    public void givenVideoCardPreview_whenConfirmButtonClick_thenGoToMakeCardActivity() throws Exception {
-        subject.findViewById(R.id.confirm_button).performClick();
-        assertEqualNextStartedActivity(MakeCardActivity.class.getCanonicalName());
-    }
-
-    private void assertEqualNextStartedActivity(String canonicalName) {
         ShadowActivity shadowActivity = shadowOf(subject);
         Intent startedIntent = shadowActivity.getNextStartedActivity();
-        assertThat(startedIntent.getComponent().getClassName()).isEqualTo(canonicalName);
+        assertThat(startedIntent.getComponent().getClassName()).isEqualTo(VideoActivity.class.getCanonicalName());
     }
 
+    @Test
+    public void givenVideoCardIntent_whenBackButtonClick_thenBackToVideoActivity() throws Exception {
+        MakeCardPreviewActivity subject = setUpWithVideoContent();
+
+        subject.onBackPressed();
+
+        ShadowActivity shadowActivity = shadowOf(subject);
+        Intent startedIntent = shadowActivity.getNextStartedActivity();
+        assertThat(startedIntent.getComponent().getClassName()).isEqualTo(VideoActivity.class.getCanonicalName());
+    }
+
+    @Test
+    public void givenVideoCardIntent_whenConfirmButtonClick_thenGoToMakeCardActivity() throws Exception {
+        MakeCardPreviewActivity subject = setUpWithVideoContent();
+
+        subject.findViewById(R.id.confirm_button).performClick();
+
+        ShadowActivity shadowActivity = shadowOf(subject);
+        Intent startedIntent = shadowActivity.getNextStartedActivity();
+        assertThat(startedIntent.getComponent().getClassName()).isEqualTo(MakeCardActivity.class.getCanonicalName());
+    }
+
+    @Test
+    public void givenPhotoCardIntent_whenLaunched_thenShowPhotoCardPreview() throws Exception {
+        MakeCardPreviewActivity subject = setUpWithPhotoContent();
+
+        assertThat(subject.cardPreviewLayout.photoCardPreview.getVisibility()).isEqualTo(View.VISIBLE);
+        assertThat(subject.cardPreviewLayout.photoCardPreviewBackground.getVisibility()).isEqualTo(View.VISIBLE);
+        assertThat(subject.cardPreviewLayout.cameraTextureView.getVisibility()).isEqualTo(View.GONE);
+        assertThat(subject.cardPreviewLayout.playButton.getVisibility()).isEqualTo(View.GONE);
+        assertThat(subject.cardPreviewLayout.cameraRecodeFrame.getVisibility()).isEqualTo(View.GONE);
+        assertThat(subject.cardPreviewLayout.cameraRecodeGuide.getText()).contains("사진");
+    }
+
+    private MakeCardPreviewActivity setUpWithVideoContent() {
+        Intent intent = new Intent();
+        intent.putExtra(ContentsUtil.CONTENT_PATH, VIDEO_CONTENT_PATH);
+        intent.putExtra(ContentsUtil.CARD_TYPE, CardModel.CardType.VIDEO_CARD.getValue());
+
+        ShadowMediaPlayer.addMediaInfo(DataSource.toDataSource(VIDEO_CONTENT_PATH), new ShadowMediaPlayer.MediaInfo(3000, -1));
+
+        return setupActivityWithIntent(MakeCardPreviewActivity.class, intent);
+    }
+
+    private MakeCardPreviewActivity setUpWithPhotoContent() {
+        Intent intent = new Intent();
+        intent.putExtra(ContentsUtil.CONTENT_PATH, PHOTO_CONTENT_PATH);
+        intent.putExtra(ContentsUtil.CARD_TYPE, CardModel.CardType.PHOTO_CARD.getValue());
+
+        return setupActivityWithIntent(MakeCardPreviewActivity.class, intent);
+    }
 }
