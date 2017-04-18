@@ -29,7 +29,7 @@ public class SmsTransfer {
         Map<String, Object> requestBodyMap = new ArrayMap<>();
         requestBodyMap.put("longUrl", context.getResources().getString(R.string.share_functions_url) + key);
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), (new JSONObject(requestBodyMap)).toString());
-        Call<ResponseBody> response = urlShortenerService.getShortenerUrl(context.getString(R.string.share_api_key), body);
+        Call<ResponseBody> response = urlShortenerService.getShortenerUrl(context.getString(R.string.shortener_api_key), body);
         response.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> rawResponse) {
