@@ -68,6 +68,8 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:host="@string/kakaolink_host"
                     android:scheme="@string/kakao_scheme" />
+                <data android:host="angeltalk"
+                      android:scheme="app" />
             </intent-filter>
         </activity>
 

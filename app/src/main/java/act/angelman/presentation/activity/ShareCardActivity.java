@@ -98,6 +98,9 @@ public class ShareCardActivity extends AppCompatActivity {
         if (getString(R.string.kakao_scheme).equals(getIntent().getScheme())) {
             Uri uri = getIntent().getData();
             receiveKey = uri.getQueryParameter("key");
+        }else if ("app".equals(getIntent().getScheme())) {
+            Uri uri = getIntent().getData();
+            receiveKey = uri.getQueryParameter("key");
         }
 
         downloadCard();
