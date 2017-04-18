@@ -184,7 +184,7 @@ public class CardTransfer {
 
     private String generateShareKey() {
         String deviceId = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
-        return deviceId + System.currentTimeMillis();
+        return deviceId.substring(deviceId.length()-3) + (System.currentTimeMillis()%(1000*60*60*24*365));
     }
 
 }
