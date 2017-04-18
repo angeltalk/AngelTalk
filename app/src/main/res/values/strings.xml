@@ -67,5 +67,5 @@
     <string name="photo_content_check_guide">찍은 사진을 확인해 보세요.</string>
     <string name="share_sms_message">엔젤톡 \'%s\' 카드공유\n</string>
     <string name="share_functions_url">https://us-central1-angeltalk-app-a26d8.cloudfunctions.net/redirectApp/</string>
-    <string name="share_api_key">AIzaSyAZQwhfKiXxAGMZx4aoKHv9A54YoFMLeBQ</string>
+    <string name="shortener_api_key">AIzaSyAZQwhfKiXxAGMZx4aoKHv9A54YoFMLeBQ</string>
 </resources>
