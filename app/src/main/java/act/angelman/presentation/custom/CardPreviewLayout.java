@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import act.angelman.R;
+import act.angelman.domain.model.CardModel;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -47,8 +48,8 @@ public class CardPreviewLayout extends RelativeLayout{
         inflateLayout(context);
     }
 
-    public void initLayout(boolean videoCard) {
-        if(videoCard) {
+    public void initLayout(CardModel.CardType cardType) {
+        if(cardType == CardModel.CardType.VIDEO_CARD) {
             cameraTextureView.setVisibility(View.VISIBLE);
             playButton.setVisibility(View.VISIBLE);
             cameraRecodeFrame.setVisibility(View.VISIBLE);
