@@ -62,5 +62,6 @@
     <string name="new_card_title">새로운 카드</string>
     <string name="cannot_share_card_save_message">카드를 저장할 수 없습니다.</string>
     <string name="select_category_to_save_new_card">저장하실 카테고리를 선택해주세요</string>
+    <string name="media_check_guide">찍은 영상을 확인해 보세요 </string>
 
 </resources>
