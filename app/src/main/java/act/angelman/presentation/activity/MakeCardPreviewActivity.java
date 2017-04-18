@@ -1,16 +1,17 @@
 package act.angelman.presentation.activity;
 
 import android.content.Intent;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
 
 import java.io.File;
 
 import act.angelman.R;
 import act.angelman.domain.model.CardModel;
+import act.angelman.presentation.custom.CardPreviewLayout;
 import act.angelman.presentation.custom.VideoCardTextureView;
 import act.angelman.presentation.util.ContentsUtil;
 import act.angelman.presentation.util.FileUtil;
@@ -20,13 +21,11 @@ import butterknife.OnClick;
 
 public class MakeCardPreviewActivity extends AppCompatActivity {
 
-    @BindView(R.id.camera_recode_texture)
-    public VideoCardTextureView cameraTextureView;
-
-    @BindView(R.id.preview_play_button)
-    public ImageView playButton;
+    @BindView(R.id.card_preview_layout)
+    public CardPreviewLayout cardPreviewLayout;
 
     private String contentPath;
+    private CardModel.CardType cardType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,14 +35,26 @@ public class MakeCardPreviewActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         contentPath = intent.getStringExtra(ContentsUtil.CONTENT_PATH);
+        cardType = CardModel.CardType.valueOf(intent.getStringExtra(ContentsUtil.CARD_TYPE));
 
         initPreview();
     }
 
     private void initPreview() {
-        if(FileUtil.isFileExist(contentPath)) {
-            cameraTextureView.setScaleType(VideoCardTextureView.ScaleType.TOP);
-            cameraTextureView.setDataSource(contentPath);
+        if(cardType == CardModel.CardType.PHOTO_CARD) {
+            cardPreviewLayout.initLayout(false);
+            if (FileUtil.isFileExist(contentPath)) {
+                Glide.with(this)
+                        .load(ContentsUtil.getContentFile(contentPath))
+                        .override(280, 280)
+                        .into(cardPreviewLayout.photoCardPreview);
+            }
+        } else if(cardType == CardModel.CardType.VIDEO_CARD) {
+            cardPreviewLayout.initLayout(true);
+            if (FileUtil.isFileExist(contentPath)) {
+                cardPreviewLayout.cameraTextureView.setScaleType(VideoCardTextureView.ScaleType.TOP);
+                cardPreviewLayout.cameraTextureView.setDataSource(contentPath);
+            }
         }
     }
 
@@ -75,17 +86,4 @@ public class MakeCardPreviewActivity extends AppCompatActivity {
         intent.putExtra(ContentsUtil.CARD_TYPE, CardModel.CardType.VIDEO_CARD.getValue());
         startActivity(intent);
     }
-
-    @OnClick(R.id.preview_play_button)
-    public void onClickPreviewPlayButton (View v) {
-        playButton.setVisibility(View.GONE);
-        cameraTextureView.play(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mediaPlayer) {
-                playButton.setVisibility(View.VISIBLE);
-                cameraTextureView.resetPlayer();
-            }
-        });
-    }
-
 }

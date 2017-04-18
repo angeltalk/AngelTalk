@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <act.angelman.presentation.custom.VideoCardTextureView
+        android:id="@+id/camera_recode_texture"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <ImageView
+        android:id="@+id/preview_play_button"
+        android:layout_width="87dp"
+        android:layout_height="87dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="242.8dp"
+        android:alpha="0.5"
+        android:src="@drawable/btn_preview" />
+
+    <ImageView
+        android:id="@+id/camera_recode_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/black_frame_panel" />
+
+    <ImageView
+        android:id="@+id/photo_card_preview_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black_00"/>
+
+    <ImageView
+        android:id="@+id/photo_card_preview"
+        android:layout_width="284dp"
+        android:layout_height="284dp"
+        android:scaleType="fitXY"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="120.2dp"/>
+
+    <act.angelman.presentation.custom.FontTextView
+        android:id="@+id/camera_recode_guide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="160dp"
+        android:text="@string/video_content_check_guide"
+        android:textColor="@color/white"
+        android:textSize="17sp"
+        app:font="@string/font_demilight" />
+
+</RelativeLayout>
