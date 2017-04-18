@@ -1,0 +1,61 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <act.angelman.presentation.custom.VideoCardTextureView
+        android:id="@+id/camera_recode_texture"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <ImageView
+        android:id="@+id/preview_play_button"
+        android:layout_width="87dp"
+        android:layout_height="87dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="242.8dp"
+        android:alpha="0.5"
+        android:src="@drawable/btn_preview" />
+
+    <View
+        android:id="@+id/camera_recode_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/combined_shape" />
+
+    <TextView
+        android:id="@+id/camera_recode_guide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="160dp"
+        android:text="@string/media_check_guide"
+        android:textColor="@color/white"
+        android:textSize="17sp" />
+
+    <FrameLayout
+        android:id="@+id/camera_shutter"
+        android:layout_width="236dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="35dp"
+        android:background="@color/black_00" >
+
+        <ImageView
+            android:id="@+id/retake_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center_vertical"
+            android:src="@drawable/btn_retake_video" />
+        <ImageView
+            android:id="@+id/confirm_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/btn_check" />
+    </FrameLayout>
+
+</RelativeLayout>
