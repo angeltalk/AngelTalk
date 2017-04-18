@@ -56,8 +56,6 @@ public class CardTransfer {
     public void uploadCard(final CardModel cardModel, final OnSuccessListener<Map<String, String>> onSuccessListener, final OnFailureListener onFailureListener) {
 
         final String key = generateShareKey();
-
-
         final String zipFilePath = makeShareZipFile(cardModel, key);
 
         storageReference.child(key).child(key + ".zip").putFile(Uri.fromFile(new File(zipFilePath))) // Zip File upload
@@ -184,7 +182,7 @@ public class CardTransfer {
 
     private String generateShareKey() {
         String deviceId = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
-        return deviceId.substring(deviceId.length()-3) + (System.currentTimeMillis()%(1000*60*60*24*365));
+        return deviceId + (System.currentTimeMillis()%(1000*60*60*24*365));
     }
 
 }
