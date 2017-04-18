@@ -60,8 +60,15 @@ public class MakeCardPreviewActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent intent = new Intent(this, VideoActivity.class);
-        startActivity(intent);
+
+        if(cardType == CardModel.CardType.PHOTO_CARD) {
+            Intent intent = new Intent(this, Camera2Activity.class);
+            startActivity(intent);
+        } else if(cardType == CardModel.CardType.VIDEO_CARD) {
+            Intent intent = new Intent(this, VideoActivity.class);
+            startActivity(intent);
+        }
+
         File contentFile = new File(contentPath);
         if (contentFile.exists()) {
             contentFile.delete();
