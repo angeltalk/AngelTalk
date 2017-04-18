@@ -65,60 +65,56 @@ public class ShareCardActivityTest extends UITest {
     @Inject
     CardRepository cardRepository;
 
-    private ShareCardActivity subject;
+    private ShareCardActivity kakaotalk_subject;
+    private ShareCardActivity message_subject;
 
     @Before
     public void setUp() throws Exception {
         ((TestAngelmanApplication) RuntimeEnvironment.application).getAngelmanTestComponent().inject(this);
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.kakao_scheme) + "://" + getString(R.string.kakaolink_host)));
-
-        subject = setupActivityWithIntent(ShareCardActivity.class, intent);
-        doAnswer(new Answer() {
-            @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-                OnDownloadCompleteListener onSuccessListener = ((OnDownloadCompleteListener) invocation.getArguments()[1]);
-                CardTransferModel cardTransferModel = new CardTransferModel();
-                cardTransferModel.name = "TESTCARD";
-                cardTransferModel.cardType = CardModel.CardType.PHOTO_CARD.getValue();
-                cardTransferModel.contentPath = "/content";
-                String filePath = "/";
-                onSuccessListener.onSuccess(cardTransferModel, filePath);
-                return null;
-
-            }
-        }).when(subject.cardTransfer).downloadCard(any(String.class), any(OnDownloadCompleteListener.class));
-        when(categoryRepository.getCategoryAllList()).thenReturn(getCategoryList(6));
     }
 
     @Test
     public void whenLaunched_thenHideCardCountTitleAndListCardButton() throws Exception {
-        assertThat(subject.titleLayout.cardCount.getVisibility()).isEqualTo(View.GONE);
-        assertThat(subject.titleLayout.listCardButton.getVisibility()).isEqualTo(View.GONE);
+        kakaotalk_subject = setupActivityWithIntent(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.kakao_scheme) + "://" + getString(R.string.kakaolink_host))));
+        assertThat(kakaotalk_subject.titleLayout.cardCount.getVisibility()).isEqualTo(View.GONE);
+        assertThat(kakaotalk_subject.titleLayout.listCardButton.getVisibility()).isEqualTo(View.GONE);
     }
 
     @Test
     public void givenWhenLaunchedAndKaKaoIntentReceived_thenShowLoadingAnimation() throws Exception {
         // then
-        LinearLayout loadingViewLayout = (LinearLayout) subject.findViewById(R.id.on_loading_view);
+        kakaotalk_subject = setupActivityWithIntent(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.kakao_scheme) + "://" + getString(R.string.kakaolink_host))));
+        LinearLayout loadingViewLayout = (LinearLayout) kakaotalk_subject.findViewById(R.id.on_loading_view);
+        assertThat(loadingViewLayout.getVisibility()).isEqualTo(View.VISIBLE);
+    }
+
+    @Test
+    public void givenWhenLaunchedAndSMSIntentReceived_thenShowLoadingAnimation() throws Exception {
+        // then
+        message_subject = setupActivityWithIntent(new Intent(Intent.ACTION_VIEW, Uri.parse("app://angeltalk?key=a1234")));
+        LinearLayout loadingViewLayout = (LinearLayout) message_subject.findViewById(R.id.on_loading_view);
         assertThat(loadingViewLayout.getVisibility()).isEqualTo(View.VISIBLE);
     }
 
     @Test
     public void whenDownloadCardComplete_thenHideLoadingAnimationAndShowShareCard() throws Exception {
-        LinearLayout loadingViewLayout = (LinearLayout) subject.findViewById(R.id.on_loading_view);
+        kakaotalk_subject = setupActivityWithIntent(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.kakao_scheme) + "://" + getString(R.string.kakaolink_host))));
+        LinearLayout loadingViewLayout = (LinearLayout) kakaotalk_subject.findViewById(R.id.on_loading_view);
         assertThat(loadingViewLayout.getVisibility()).isEqualTo(View.VISIBLE);
 
         // when
-        subject.downloadCard();
+        kakaotalk_subject.downloadCard();
 
         // then
         assertThat(loadingViewLayout.getVisibility()).isEqualTo(View.GONE);
-        TextView shareCardTextView = (TextView) subject.mViewPager.getChildAt(subject.mViewPager.getCurrentItem()).findViewById(R.id.card_image_title);
+        TextView shareCardTextView = (TextView) kakaotalk_subject.mViewPager.getChildAt(kakaotalk_subject.mViewPager.getCurrentItem()).findViewById(R.id.card_image_title);
         assertThat(shareCardTextView.getText()).isEqualTo("TESTCARD");
     }
 
     @Test
     public void whenClickDownloadButton_thenShowCategorySelectDialogAndContentsOfDialogCorrectly() throws Exception {
+        kakaotalk_subject = setupActivityWithIntent(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.kakao_scheme) + "://" + getString(R.string.kakaolink_host))));
+
         // when
         AlertDialog dialog = clickSaveButtonAndShowSelectCategoryDialog();
 
@@ -134,6 +130,8 @@ public class ShareCardActivityTest extends UITest {
 
     @Test
     public void givenCategorySelectDialogShowing_whenClickCancelButton_thenDismissDialog() throws Exception {
+        kakaotalk_subject = setupActivityWithIntent(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.kakao_scheme) + "://" + getString(R.string.kakaolink_host))));
+
         // given
         AlertDialog dialog = clickSaveButtonAndShowSelectCategoryDialog();
         FontTextView cancelView = (FontTextView) dialog.findViewById(R.id.cancel_button);
@@ -146,6 +144,8 @@ public class ShareCardActivityTest extends UITest {
 
     @Test
     public void givenCategorySelectDialogShowing_whenClickSaveButton_thenSaveCard() throws Exception {
+        kakaotalk_subject = setupActivityWithIntent(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.kakao_scheme) + "://" + getString(R.string.kakaolink_host))));
+
         // given
         AlertDialog dialog = clickSaveButtonAndShowSelectCategoryDialog();
         // when
@@ -156,6 +156,8 @@ public class ShareCardActivityTest extends UITest {
 
     @Test
     public void givenCategorySelectDialogShowing_whenClickFirstCategory_thenSetConfirmButtonEnabledAndChangeTextColor() throws Exception {
+        kakaotalk_subject = setupActivityWithIntent(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.kakao_scheme) + "://" + getString(R.string.kakaolink_host))));
+
         // given
         AlertDialog dialog = clickSaveButtonAndShowSelectCategoryDialog();
         FontTextView confirmButton = (FontTextView) dialog.findViewById(R.id.confirm_button);
@@ -171,6 +173,8 @@ public class ShareCardActivityTest extends UITest {
 
     @Test
     public void givenCategorySelectDialogShowingAndClickFirstCategory_whenClickSecondCategory_thenChangeRadioButtonState() throws Exception {
+        kakaotalk_subject = setupActivityWithIntent(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.kakao_scheme) + "://" + getString(R.string.kakaolink_host))));
+
         // given
         AlertDialog dialog = clickSaveButtonAndShowSelectCategoryDialog();
         AppCompatRadioButton radioButton1 = selectCategoryRadioButtonAt(dialog, 0);
@@ -184,6 +188,8 @@ public class ShareCardActivityTest extends UITest {
 
     @Test
     public void givenCategorySelectDialogShowing_whenClickFirstCategoryAndClickConfirmButton_thenSaveCard() throws Exception {
+        kakaotalk_subject = setupActivityWithIntent(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.kakao_scheme) + "://" + getString(R.string.kakaolink_host))));
+
         // given
         AlertDialog dialog = clickSaveButtonAndShowSelectCategoryDialog();
         selectCategoryRadioButtonAt(dialog, 0);
@@ -195,6 +201,8 @@ public class ShareCardActivityTest extends UITest {
 
     @Test
     public void givenCategorySelectDialogShowing_whenClickFirstCategoryAndClickSaveButton_thenSetCategoryModelAndCurrentCardIndexAndMoveToCardListActivity() throws Exception {
+        kakaotalk_subject = setupActivityWithIntent(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.kakao_scheme) + "://" + getString(R.string.kakaolink_host))));
+
         // given
         AlertDialog dialog = clickSaveButtonAndShowSelectCategoryDialog();
         // when
@@ -202,9 +210,9 @@ public class ShareCardActivityTest extends UITest {
         dialog.findViewById(R.id.confirm_button).performClick();
 
         // then
-        verify(subject.applicationManager).setCategoryModel(any(CategoryModel.class));
-        verify(subject.applicationManager).setCurrentCardIndex(anyInt());
-        ShadowActivity shadowActivity = shadowOf(subject);
+        verify(kakaotalk_subject.applicationManager).setCategoryModel(any(CategoryModel.class));
+        verify(kakaotalk_subject.applicationManager).setCurrentCardIndex(anyInt());
+        ShadowActivity shadowActivity = shadowOf(kakaotalk_subject);
         Intent nextStartedActivity = shadowActivity.getNextStartedActivity();
         assertThat(nextStartedActivity.getComponent().getClassName()).isEqualTo(CardListActivity.class.getCanonicalName());
     }
@@ -212,29 +220,33 @@ public class ShareCardActivityTest extends UITest {
 
     @Test
     public void givenLaunchedAndDownloadCardCompleted_whenClickBackButton_thenMoveToCategoryMenuActivity() throws Exception {
+        kakaotalk_subject = setupActivityWithIntent(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.kakao_scheme) + "://" + getString(R.string.kakaolink_host))));
+
         // given
-        subject.downloadCard();
+        kakaotalk_subject.downloadCard();
         // when
-        subject.findViewById(R.id.back_button).performClick();
+        kakaotalk_subject.findViewById(R.id.back_button).performClick();
         // then
-        ShadowActivity shadowActivity = shadowOf(subject);
+        ShadowActivity shadowActivity = shadowOf(kakaotalk_subject);
         Intent nextStartedActivity = shadowActivity.getNextStartedActivity();
         assertThat(nextStartedActivity.getComponent().getClassName()).isEqualTo(CategoryMenuActivity.class.getCanonicalName());
     }
 
     @Test
     public void whenOnBackPressed_thenMoveToCategoryMenuActivity() throws Exception {
+        kakaotalk_subject = setupActivityWithIntent(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.kakao_scheme) + "://" + getString(R.string.kakaolink_host))));
+
         // when
-        subject.onBackPressed();
+        kakaotalk_subject.onBackPressed();
         // then
-        ShadowActivity shadowActivity = shadowOf(subject);
+        ShadowActivity shadowActivity = shadowOf(kakaotalk_subject);
         Intent nextStartedActivity = shadowActivity.getNextStartedActivity();
         assertThat(nextStartedActivity.getComponent().getClassName()).isEqualTo(CategoryMenuActivity.class.getCanonicalName());
     }
 
     private AlertDialog clickSaveButtonAndShowSelectCategoryDialog() {
-        subject.downloadCard();
-        ImageView saveButton = (ImageView) subject.findViewById(R.id.card_save_button);
+        kakaotalk_subject.downloadCard();
+        ImageView saveButton = (ImageView) kakaotalk_subject.findViewById(R.id.card_save_button);
         saveButton.performClick();
         return (AlertDialog) ShadowAlertDialog.getLatestDialog();
     }
@@ -245,6 +257,27 @@ public class ShareCardActivityTest extends UITest {
         AppCompatRadioButton radioButton = (AppCompatRadioButton) recyclerView.getChildAt(position).findViewById(R.id.category_item_radio);
         radioButton.performClick();
         return radioButton;
+    }
+
+    private ShareCardActivity setupActivityWithIntent(Intent intent) {
+        ShareCardActivity subject = setupActivityWithIntent(ShareCardActivity.class, intent);
+        doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                OnDownloadCompleteListener onSuccessListener = ((OnDownloadCompleteListener) invocation.getArguments()[1]);
+                CardTransferModel cardTransferModel = new CardTransferModel();
+                cardTransferModel.name = "TESTCARD";
+                cardTransferModel.cardType = CardModel.CardType.PHOTO_CARD.getValue();
+                cardTransferModel.contentPath = "/content";
+                String filePath = "/";
+                onSuccessListener.onSuccess(cardTransferModel, filePath);
+                return null;
+
+            }
+        }).when(subject.cardTransfer).downloadCard(any(String.class), any(OnDownloadCompleteListener.class));
+        when(categoryRepository.getCategoryAllList()).thenReturn(getCategoryList(6));
+
+        return subject;
     }
 
     private List<CategoryModel> getCategoryList(int listSize) {
