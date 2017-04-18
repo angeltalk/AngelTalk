@@ -32,6 +32,7 @@ import act.angelman.domain.model.CategoryModel;
 import act.angelman.domain.repository.CardRepository;
 import act.angelman.network.transfer.CardTransfer;
 import act.angelman.network.transfer.KaKaoTransfer;
+import act.angelman.network.transfer.SmsTransfer;
 import act.angelman.presentation.adapter.CardImageAdapter;
 import act.angelman.presentation.custom.CardTitleLayout;
 import act.angelman.presentation.custom.CardView;
@@ -59,6 +60,9 @@ public class CardViewPagerActivity extends AbstractActivity {
 
     @Inject
     KaKaoTransfer kaKaoTransfer;
+
+    @Inject
+    SmsTransfer smsTransfer;
 
     @BindView(R.id.title_container)
     CardTitleLayout cardTitleLayout;
@@ -101,17 +105,18 @@ public class CardViewPagerActivity extends AbstractActivity {
                     @Override
                     public void onSuccess(Map<String, String> resultMap) {
                         String thumbnailUrl = resultMap.get("url");
-                        String key = resultMap.get("key");
+                        final String key = resultMap.get("key");
                         if(selectType == ApplicationConstants.SHARE_MESSENGER_TYPE.KAKAOTALK){
+                            loadingViewLayout.setVisibility(View.GONE);
                             kaKaoTransfer.sendKakaoLinkMessage(context, key, thumbnailUrl, cardModel);
-                        }else{
-                            Intent sendIntent = new Intent(Intent.ACTION_VIEW);
-                            String smsBody = getResources().getString(R.string.share_sms_message, cardModel.name) + key;
-                            sendIntent.putExtra("sms_body", smsBody);
-                            sendIntent.setType("vnd.android-dir/mms-sms");
-                            startActivity(sendIntent);
+                        }else if(selectType == ApplicationConstants.SHARE_MESSENGER_TYPE.MESSAGE){
+                            smsTransfer.sendSmsMessage(key, cardModel, new SmsTransfer.OnCompleteListener(){
+                                @Override
+                                public void onComplete() {
+                                    loadingViewLayout.setVisibility(View.GONE);
+                                }
+                            });
                         }
-                        loadingViewLayout.setVisibility(View.GONE);
                     }
                 }, new OnFailureListener() {
                     @Override

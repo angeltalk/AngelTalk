@@ -555,40 +555,6 @@ public class CardViewPagerActivityTest extends UITest {
     }
 
     @Test
-    public void whenClickShareButtonAndSelectSMSAndUploadSuccess_thenSendSMS() throws Exception {
-        subject.mViewPager.setCurrentItem(1);
-        CardModel cardModel = subject.getCardModel(1);
-
-        final Map<String, String> resultMap = new HashMap<>();
-        resultMap.put("url", "url string");
-        resultMap.put("key", "key string");
-
-        doAnswer(new Answer() {
-            @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-
-                OnSuccessListener<Map<String,String>> onSuccessListener = ((OnSuccessListener<Map<String, String>>) invocation.getArguments()[1]);
-                onSuccessListener.onSuccess(resultMap);
-                return null;
-            }
-        }).when(subject.cardTransfer).uploadCard(any(CardModel.class), any(OnSuccessListener.class), any(OnFailureListener.class));
-
-        // when
-        subject.cardShareButton.performClick();
-        AlertDialog alert = ShadowAlertDialog.getLatestAlertDialog();
-        ShadowAlertDialog shadowDialog = shadowOf(alert);
-        View innerView = shadowDialog.getView();
-        innerView.findViewById(R.id.item_message).performClick();
-        innerView.findViewById(R.id.confirm_button).performClick();
-
-        // then
-        ShadowActivity shadowActivity = shadowOf(subject);
-
-        Intent nextStartedActivity = shadowActivity.getNextStartedActivity();
-        assertThat(nextStartedActivity.getType()).isEqualTo("vnd.android-dir/mms-sms");
-    }
-
-    @Test
     public void whenViewPageChanged_thenSetApplicationMangerCurrentIndex() throws Exception {
         int juiceViewPageIndex = 3;
         subject.mViewPager.setCurrentItem(juiceViewPageIndex);
