@@ -62,6 +62,7 @@ public class VideoCardTextureView extends TextureView implements TextureView.Sur
 
     public void setScaleType(ScaleType scaleType) {
         mScaleType = scaleType;
+        updateTextureViewSize();
     }
 
     private void updateTextureViewSize() {
@@ -78,9 +79,9 @@ public class VideoCardTextureView extends TextureView implements TextureView.Sur
             scaleY = viewWidth / mVideoWidth;
             scaleX = viewHeight / mVideoHeight;
         } else if (viewWidth > mVideoWidth) {
-            scaleY = (viewWidth / mVideoWidth) / (viewHeight / mVideoHeight);
-        } else if (viewHeight > mVideoHeight) {
             scaleX = (viewHeight / mVideoHeight) / (viewWidth / mVideoWidth);
+        } else if (viewHeight > mVideoHeight) {
+            scaleY = (viewWidth / mVideoWidth) / (viewHeight / mVideoHeight);
         }
 
         // Calculate pivot points, in our case crop from center
