@@ -4,7 +4,10 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.support.v7.widget.AppCompatRadioButton;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -456,7 +459,48 @@ public class CardViewPagerActivityTest extends UITest {
     }
 
     @Test
-    public void whenClickShareButtonAndUploadSuccess_thenSendKakaoLinkMessage() throws Exception {
+    public void whenShareButtonClick_thenShowAvailableMessengerList() throws Exception{
+        subject.cardShareButton.performClick();
+        AlertDialog alert = ShadowAlertDialog.getLatestAlertDialog();
+        ShadowAlertDialog shadowDialog = shadowOf(alert);
+        assertThat(shadowDialog).isNotNull();
+    }
+
+    @Test
+    public void givenKakaotalkNotInstall_whenShareButtonClick_thenShowAvailableMessengerListWithOutKakaotalk() throws Exception{
+
+        subject.cardShareButton.performClick();
+        subject.pm = mock(PackageManager.class);
+        when(subject.pm.getPackageInfo("com.kakao.talk",PackageManager.GET_ACTIVITIES)).thenThrow(new PackageManager.NameNotFoundException());
+
+        AlertDialog alert = ShadowAlertDialog.getLatestAlertDialog();
+        ShadowAlertDialog shadowDialog = shadowOf(alert);
+        assertThat(shadowDialog).isNotNull();
+        assertThat(shadowDialog.getView().findViewById(R.id.item_kakaotalk).getVisibility()).isEqualTo(View.GONE);
+    }
+
+    @Test
+    public void whenMessengerItemClicked_thenConfirmButtonEnableAndTheOtherItemUnchecked() throws Exception{
+        subject.cardShareButton.performClick();
+        subject.pm = mock(PackageManager.class);
+        when(subject.pm.getPackageInfo("com.kakao.talk",PackageManager.GET_ACTIVITIES)).thenReturn(new PackageInfo());
+
+        AlertDialog alert = ShadowAlertDialog.getLatestAlertDialog();
+        ShadowAlertDialog shadowDialog = shadowOf(alert);
+
+        View innerView = shadowDialog.getView();
+        innerView.findViewById(R.id.item_kakaotalk).performClick();
+        assertThat(innerView.findViewById(R.id.confirm_button).isEnabled()).isTrue();
+        assertThat(((AppCompatRadioButton) innerView.findViewById(R.id.radio_kakaotalk)).isChecked()).isTrue();
+        assertThat(((AppCompatRadioButton) innerView.findViewById(R.id.radio_message)).isChecked()).isFalse();
+
+        innerView.findViewById(R.id.item_message).performClick();
+        assertThat(((AppCompatRadioButton) innerView.findViewById(R.id.radio_kakaotalk)).isChecked()).isFalse();
+        assertThat(((AppCompatRadioButton) innerView.findViewById(R.id.radio_message)).isChecked()).isTrue();
+    }
+
+    @Test
+    public void whenClickShareButtonAndSelectKakaotalkAndUploadSuccess_thenSendKakaoLinkMessage() throws Exception {
         subject.mViewPager.setCurrentItem(1);
         CardModel cardModel = subject.getCardModel(1);
 
@@ -476,13 +520,18 @@ public class CardViewPagerActivityTest extends UITest {
 
         // when
         subject.cardShareButton.performClick();
+        AlertDialog alert = ShadowAlertDialog.getLatestAlertDialog();
+        ShadowAlertDialog shadowDialog = shadowOf(alert);
+        View innerView = shadowDialog.getView();
+        innerView.findViewById(R.id.item_kakaotalk).performClick();
+        innerView.findViewById(R.id.confirm_button).performClick();
 
         // then
         verify(subject.kaKaoTransfer).sendKakaoLinkMessage(subject.context, "key string", "url string", cardModel);
     }
 
     @Test
-    public void whenClickShareButtonAndUploadFail_thenShowFailMessage() throws Exception {
+    public void whenClickShareButtonAndSelectKakaotalkAndUploadFail_thenShowFailMessage() throws Exception {
         doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -494,10 +543,49 @@ public class CardViewPagerActivityTest extends UITest {
 
         // when
         subject.cardShareButton.performClick();
+        AlertDialog alert = ShadowAlertDialog.getLatestAlertDialog();
+        ShadowAlertDialog shadowDialog = shadowOf(alert);
+        View innerView = shadowDialog.getView();
+        innerView.findViewById(R.id.item_kakaotalk).performClick();
+        innerView.findViewById(R.id.confirm_button).performClick();
 
         // then
         assertThat(ShadowToast.getLatestToast()).isNotNull();
         assertThat(ShadowToast.getTextOfLatestToast()).isEqualTo("카드 공유가 실패하였습니다.");
+    }
+
+    @Test
+    public void whenClickShareButtonAndSelectSMSAndUploadSuccess_thenSendSMS() throws Exception {
+        subject.mViewPager.setCurrentItem(1);
+        CardModel cardModel = subject.getCardModel(1);
+
+        final Map<String, String> resultMap = new HashMap<>();
+        resultMap.put("url", "url string");
+        resultMap.put("key", "key string");
+
+        doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+
+                OnSuccessListener<Map<String,String>> onSuccessListener = ((OnSuccessListener<Map<String, String>>) invocation.getArguments()[1]);
+                onSuccessListener.onSuccess(resultMap);
+                return null;
+            }
+        }).when(subject.cardTransfer).uploadCard(any(CardModel.class), any(OnSuccessListener.class), any(OnFailureListener.class));
+
+        // when
+        subject.cardShareButton.performClick();
+        AlertDialog alert = ShadowAlertDialog.getLatestAlertDialog();
+        ShadowAlertDialog shadowDialog = shadowOf(alert);
+        View innerView = shadowDialog.getView();
+        innerView.findViewById(R.id.item_message).performClick();
+        innerView.findViewById(R.id.confirm_button).performClick();
+
+        // then
+        ShadowActivity shadowActivity = shadowOf(subject);
+
+        Intent nextStartedActivity = shadowActivity.getNextStartedActivity();
+        assertThat(nextStartedActivity.getType()).isEqualTo("vnd.android-dir/mms-sms");
     }
 
     @Test

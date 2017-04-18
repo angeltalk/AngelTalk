@@ -2,6 +2,7 @@ package act.angelman.presentation.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -37,6 +38,7 @@ import act.angelman.presentation.custom.CardView;
 import act.angelman.presentation.custom.CardViewPager;
 import act.angelman.presentation.custom.CustomConfirmDialog;
 import act.angelman.presentation.custom.CustomSnackBar;
+import act.angelman.presentation.custom.ShareMessengerSelectDialog;
 import act.angelman.presentation.manager.ApplicationConstants;
 import act.angelman.presentation.manager.ApplicationManager;
 import butterknife.BindView;
@@ -79,6 +81,7 @@ public class CardViewPagerActivity extends AbstractActivity {
     @BindView(R.id.image_angelee_gif)
     ImageView imageLoadingGif;
 
+    public PackageManager pm;
 
     @OnClick(R.id.card_delete_button)
     public void deleteButtonOnClick() {
@@ -88,25 +91,39 @@ public class CardViewPagerActivity extends AbstractActivity {
     @OnClick(R.id.card_share_button)
     public void shareButtonOnClick() {
 
-        final CardModel cardModel = getCardModel(mViewPager.getCurrentItem());
-        showLoadingAnimation();
-        cardTransfer.uploadCard(cardModel, new OnSuccessListener<Map<String,String>>() {
+        ShareMessengerSelectDialog dialog = new ShareMessengerSelectDialog(context, isKakaotalkInstalled(), new View.OnClickListener() {
             @Override
-            public void onSuccess(Map<String, String> resultMap) {
-                String thumbnailUrl = resultMap.get("url");
-                String key = resultMap.get("key");
-
-                kaKaoTransfer.sendKakaoLinkMessage(context, key, thumbnailUrl, cardModel);
-                loadingViewLayout.setVisibility(View.GONE);
-            }
-
-        }, new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                loadingViewLayout.setVisibility(View.GONE);
-                Toast.makeText(context, R.string.share_fail_message,Toast.LENGTH_SHORT).show();
+            public void onClick(View v) {
+                final ApplicationConstants.SHARE_MESSENGER_TYPE selectType = ((ApplicationConstants.SHARE_MESSENGER_TYPE) v.getTag());
+                final CardModel cardModel = getCardModel(mViewPager.getCurrentItem());
+                showLoadingAnimation();
+                cardTransfer.uploadCard(cardModel, new OnSuccessListener<Map<String,String>>() {
+                    @Override
+                    public void onSuccess(Map<String, String> resultMap) {
+                        String thumbnailUrl = resultMap.get("url");
+                        String key = resultMap.get("key");
+                        if(selectType == ApplicationConstants.SHARE_MESSENGER_TYPE.KAKAOTALK){
+                            kaKaoTransfer.sendKakaoLinkMessage(context, key, thumbnailUrl, cardModel);
+                        }else{
+                            Intent sendIntent = new Intent(Intent.ACTION_VIEW);
+                            String smsBody = getResources().getString(R.string.share_sms_message, cardModel.name) + key;
+                            sendIntent.putExtra("sms_body", smsBody);
+                            sendIntent.setType("vnd.android-dir/mms-sms");
+                            startActivity(sendIntent);
+                        }
+                        loadingViewLayout.setVisibility(View.GONE);
+                    }
+                }, new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        loadingViewLayout.setVisibility(View.GONE);
+                        Toast.makeText(context, R.string.share_fail_message,Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
+
+
     }
 
     List<CardModel> allCardListInSelectedCategory;
@@ -152,6 +169,7 @@ public class CardViewPagerActivity extends AbstractActivity {
         }
 
         applicationManager.setCurrentCardIndex(allCardListInSelectedCategory.get(mViewPager.getCurrentItem()).cardIndex);
+        pm = getPackageManager();
     }
 
     @Override
@@ -288,5 +306,16 @@ public class CardViewPagerActivity extends AbstractActivity {
                 .crossFade()
                 .into(imageLoadingGif);
     }
+
+    private boolean isKakaotalkInstalled() {
+        try {
+            String KAKAO_PACKAGE_NAME = "com.kakao.talk";
+            pm.getPackageInfo(KAKAO_PACKAGE_NAME, PackageManager.GET_ACTIVITIES);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+        }
+        return false;
+    }
+
 
 }
