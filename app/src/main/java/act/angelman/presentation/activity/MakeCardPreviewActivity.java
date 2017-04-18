@@ -89,7 +89,7 @@ public class MakeCardPreviewActivity extends AppCompatActivity {
     public void onClickConfirmButton (View v) {
         Intent intent = new Intent(this, MakeCardActivity.class);
         intent.putExtra(ContentsUtil.CONTENT_PATH, contentPath);
-        intent.putExtra(ContentsUtil.CARD_TYPE, CardModel.CardType.VIDEO_CARD.getValue());
+        intent.putExtra(ContentsUtil.CARD_TYPE, cardType.getValue());
         startActivity(intent);
     }
 }
