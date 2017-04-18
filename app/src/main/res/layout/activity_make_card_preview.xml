@@ -21,7 +21,7 @@
         android:id="@+id/camera_recode_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/combined_shape" />
+        android:background="@drawable/black_frame_panel" />
 
     <TextView
         android:id="@+id/camera_recode_guide"
