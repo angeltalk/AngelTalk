@@ -58,7 +58,7 @@
         android:layout_marginBottom="35dp">
 
         <ImageView
-            android:id="@+id/btn_record"
+            android:id="@+id/record_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

@@ -45,7 +45,7 @@ public class VideoFragmentTest extends UITest {
 
     @Test
     public void whenShowVideoScreen_thenShowsRecordingButton() throws Exception{
-        ImageView recordingButton = (ImageView)subject.getView().findViewById(R.id.btn_record);
+        ImageView recordingButton = (ImageView)subject.getView().findViewById(R.id.record_button);
         assertThat(recordingButton.getVisibility()).isEqualTo(View.VISIBLE);
     }
 
