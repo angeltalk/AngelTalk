@@ -1,4 +1,4 @@
-package act.angelman.presentation.activity;
+package act.angelman.presentation.activity.v1;
 
 
 import android.support.annotation.NonNull;
@@ -9,6 +9,7 @@ import android.test.suitebuilder.annotation.LargeTest;
 import android.view.View;
 
 import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 import org.hamcrest.core.IsInstanceOf;
 import org.junit.Before;
 import org.junit.Rule;
@@ -16,8 +17,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import act.angelman.R;
+import act.angelman.presentation.activity.CategoryMenuActivity;
+import act.angelman.presentation.activity.TestUtil;
 
-import static act.angelman.presentation.activity.TestUtil.childAtPosition;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -36,7 +38,8 @@ public class DeleteCategoryTest {
 
     @Before
     public void setUp() throws Exception {
-        TestUtil.InitializeDatabase(mActivityTestRule.getActivity().getApplicationContext(), mActivityTestRule.getActivity().categoryRepository, mActivityTestRule.getActivity().cardRepository);
+        // package problem
+//        TestUtil.InitializeDatabase(mActivityTestRule.getActivity().getApplicationContext(), mActivityTestRule.getActivity().categoryRepository, mActivityTestRule.getActivity().cardRepository);
     }
 
     @Test
@@ -55,17 +58,17 @@ public class DeleteCategoryTest {
         onView(secondCategoryItemDeleteButton()).check(matches(isDisplayed()));
 
         ViewInteraction cardView3 = onView(
-                allOf(withId(R.id.category_item_card),
-                        childAtPosition(
+                Matchers.allOf(withId(R.id.category_item_card),
+                        TestUtil.childAtPosition(
                                 IsInstanceOf.<View>instanceOf(android.widget.GridView.class),
                                 4),
                         isDisplayed()));
         cardView3.perform(click());
 
         ViewInteraction linearLayout = onView(
-                allOf(childAtPosition(
-                        allOf(withId(android.R.id.custom),
-                                childAtPosition(
+                Matchers.allOf(TestUtil.childAtPosition(
+                        Matchers.allOf(withId(android.R.id.custom),
+                                TestUtil.childAtPosition(
                                         IsInstanceOf.<View>instanceOf(android.widget.FrameLayout.class),
                                         0)),
                         0),
@@ -73,9 +76,9 @@ public class DeleteCategoryTest {
         linearLayout.check(matches(isDisplayed()));
 
         ViewInteraction textView2 = onView(
-                allOf(withId(R.id.confirm_button), withText("확인"),
-                        childAtPosition(childAtPosition(
-                                childAtPosition(
+                Matchers.allOf(withId(R.id.confirm_button), withText("확인"),
+                        TestUtil.childAtPosition(TestUtil.childAtPosition(
+                                TestUtil.childAtPosition(
                                         IsInstanceOf.<View>instanceOf(android.widget.FrameLayout.class),
                                         0),
                                 1), 0),
@@ -83,9 +86,9 @@ public class DeleteCategoryTest {
         textView2.check(matches(withText("확인")));
 
         ViewInteraction textView3 = onView(
-                allOf(withId(R.id.cancel_button), withText("취소"),
-                        childAtPosition(childAtPosition(
-                                childAtPosition(
+                Matchers.allOf(withId(R.id.cancel_button), withText("취소"),
+                        TestUtil.childAtPosition(TestUtil.childAtPosition(
+                                TestUtil.childAtPosition(
                                         IsInstanceOf.<View>instanceOf(android.widget.FrameLayout.class),
                                         0),
                                 1), 1),
@@ -97,8 +100,8 @@ public class DeleteCategoryTest {
         appCompatTextView2.perform(click());
 
         ViewInteraction cardView4 = onView(
-                allOf(withId(R.id.category_item_card),
-                        childAtPosition(
+                Matchers.allOf(withId(R.id.category_item_card),
+                        TestUtil.childAtPosition(
                                 IsInstanceOf.<View>instanceOf(android.widget.GridView.class),
                                 3),
                         isDisplayed()));
@@ -109,8 +112,8 @@ public class DeleteCategoryTest {
         appCompatTextView3.perform(click());
 
         ViewInteraction cardView5 = onView(
-                allOf(withId(R.id.category_item_card),
-                        childAtPosition(
+                Matchers.allOf(withId(R.id.category_item_card),
+                        TestUtil.childAtPosition(
                                 IsInstanceOf.<View>instanceOf(android.widget.GridView.class),
                                 2),
                         isDisplayed()));
@@ -121,8 +124,8 @@ public class DeleteCategoryTest {
         appCompatTextView4.perform(click());
 
         ViewInteraction cardView6 = onView(
-                allOf(withId(R.id.category_item_card),
-                        childAtPosition(
+                Matchers.allOf(withId(R.id.category_item_card),
+                        TestUtil.childAtPosition(
                                 IsInstanceOf.<View>instanceOf(android.widget.GridView.class),
                                 1),
                         isDisplayed()));
@@ -133,8 +136,8 @@ public class DeleteCategoryTest {
         appCompatTextView5.perform(click());
 
         ViewInteraction cardView8 = onView(
-                allOf(withId(R.id.category_item_card),
-                        childAtPosition(
+                Matchers.allOf(withId(R.id.category_item_card),
+                        TestUtil.childAtPosition(
                                 IsInstanceOf.<View>instanceOf(android.widget.GridView.class),
                                 0),
                         isDisplayed()));
@@ -146,17 +149,17 @@ public class DeleteCategoryTest {
 
 
         ViewInteraction cardView7 = onView(
-                allOf(withId(R.id.category_item_card),
-                        childAtPosition(
+                Matchers.allOf(withId(R.id.category_item_card),
+                        TestUtil.childAtPosition(
                                 IsInstanceOf.<View>instanceOf(android.widget.GridView.class),
                                 0),
                         isDisplayed()));
         cardView7.perform(click());
 
         ViewInteraction textView4 = onView(
-                allOf(withId(R.id.alert_message),
-                        childAtPosition(
-                                childAtPosition(
+                Matchers.allOf(withId(R.id.alert_message),
+                        TestUtil.childAtPosition(
+                                TestUtil.childAtPosition(
                                         IsInstanceOf.<View>instanceOf(android.widget.FrameLayout.class),
                                         0),
                                 0),
@@ -168,10 +171,10 @@ public class DeleteCategoryTest {
         appCompatTextView8.perform(click());
 
         ViewInteraction textView6 = onView(
-                allOf(withText("새 카테고리"),
-                        childAtPosition(
-                                allOf(withId(R.id.new_category_header),
-                                        childAtPosition(
+                Matchers.allOf(withText("새 카테고리"),
+                        TestUtil.childAtPosition(
+                                Matchers.allOf(withId(R.id.new_category_header),
+                                        TestUtil.childAtPosition(
                                                 IsInstanceOf.<View>instanceOf(android.widget.RelativeLayout.class),
                                                 0)),
                                 1),
@@ -185,9 +188,9 @@ public class DeleteCategoryTest {
         appCompatImageView3.perform(click());
 
         ViewInteraction textView7 = onView(
-                allOf(withId(R.id.category_title),
-                        childAtPosition(childAtPosition(childAtPosition(childAtPosition(
-                                childAtPosition(
+                Matchers.allOf(withId(R.id.category_title),
+                        TestUtil.childAtPosition(TestUtil.childAtPosition(TestUtil.childAtPosition(TestUtil.childAtPosition(
+                                TestUtil.childAtPosition(
                                         IsInstanceOf.<View>instanceOf(android.widget.GridView.class),
                                         0),
                                 0), 0), 1), 1),
@@ -198,8 +201,8 @@ public class DeleteCategoryTest {
 
     @NonNull
     private Matcher<View> secondCategoryItemDeleteButton() {
-        return allOf(withId(R.id.delete_button),
-                childAtPosition(childAtPosition(childAtPosition(childAtPosition(
+        return Matchers.allOf(withId(R.id.delete_button),
+                TestUtil.childAtPosition(TestUtil.childAtPosition(TestUtil.childAtPosition(TestUtil.childAtPosition(
                         IsInstanceOf.<View>instanceOf(android.widget.GridView.class),
                         1),0),0),0));
     }

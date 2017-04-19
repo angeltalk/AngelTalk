@@ -1,4 +1,4 @@
-package act.angelman.presentation.activity;
+package act.angelman.presentation.activity.v1;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;

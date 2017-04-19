@@ -1,4 +1,4 @@
-package act.angelman.presentation.activity.senario;
+package act.angelman.presentation.activity;
 
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -13,7 +13,7 @@ import act.angelman.presentation.activity.CategoryMenuActivity;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class CreateANewCard {
+public class CreateNewCard {
 
     @Rule
     public ActivityTestRule<CategoryMenuActivity> mActivityTestRule = new ActivityTestRule<>(CategoryMenuActivity.class);
@@ -23,17 +23,17 @@ public class CreateANewCard {
     }
 
     @Test
-    public void byTakingAPicture() throws Exception {
+    public void byTakingPicture() throws Exception {
 
     }
 
     @Test
-    public void byBringingAPictureFromGallery() throws Exception {
+    public void byBringingPictureFromGallery() throws Exception {
 
     }
 
     @Test
-    public void byShootingAVideo() throws Exception {
+    public void byShootingVideo() throws Exception {
 
     }
 }

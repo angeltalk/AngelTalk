@@ -1,4 +1,4 @@
-package act.angelman.presentation.activity;
+package act.angelman.presentation.activity.v1;
 
 
 import android.content.Context;
@@ -11,15 +11,17 @@ import android.test.suitebuilder.annotation.LargeTest;
 import android.view.View;
 
 import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import act.angelman.R;
+import act.angelman.presentation.activity.OnboardingActivity;
+import act.angelman.presentation.activity.TestUtil;
 import act.angelman.presentation.manager.ApplicationConstants;
 
-import static act.angelman.presentation.activity.TestUtil.childAtPosition;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.swipeLeft;
@@ -78,10 +80,10 @@ public class OnboardingAndCategoryMenuViewTest {
 
     @NonNull
     private Matcher<View> newCategoryItemTitleMatcher() {
-        return allOf(
+        return Matchers.allOf(
                 withId(R.id.category_title),
-                childAtPosition(childAtPosition(childAtPosition(childAtPosition(
-                        childAtPosition(
+                TestUtil.childAtPosition(TestUtil.childAtPosition(TestUtil.childAtPosition(TestUtil.childAtPosition(
+                        TestUtil.childAtPosition(
                                 withId(R.id.category_list),
                                 5),
                         0), 0), 1), 1

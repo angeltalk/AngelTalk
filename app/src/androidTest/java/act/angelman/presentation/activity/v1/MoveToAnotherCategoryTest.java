@@ -1,4 +1,4 @@
-package act.angelman.presentation.activity;
+package act.angelman.presentation.activity.v1;
 
 
 import android.support.annotation.NonNull;
@@ -8,20 +8,21 @@ import android.test.suitebuilder.annotation.LargeTest;
 import android.view.View;
 
 import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import act.angelman.R;
+import act.angelman.presentation.activity.CategoryMenuActivity;
+import act.angelman.presentation.activity.TestUtil;
 
-import static act.angelman.presentation.activity.TestUtil.childAtPosition;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.Matchers.allOf;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
@@ -57,17 +58,17 @@ public class MoveToAnotherCategoryTest {
 
     @NonNull
     private Matcher<View> fourthCategoryItemMatcher() {
-        return allOf(
+        return Matchers.allOf(
                 withId(R.id.category_item_card),
-                childAtPosition(withId(R.id.category_list),3)
+                TestUtil.childAtPosition(withId(R.id.category_list),3)
         );
     }
 
     @NonNull
     private Matcher<View> secondCategoryItemMatcher() {
-        return allOf(
+        return Matchers.allOf(
                 withId(R.id.category_item_card),
-                childAtPosition(withId(R.id.category_list), 1)
+                TestUtil.childAtPosition(withId(R.id.category_list), 1)
         );
     }
 }
