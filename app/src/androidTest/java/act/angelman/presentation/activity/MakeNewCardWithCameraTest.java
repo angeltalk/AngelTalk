@@ -91,14 +91,14 @@ public class MakeNewCardWithCameraTest {
         onView(withId(R.id.waiting_count))
                 .check(matches(isDisplayed()))
                 .check(matches(withText("지금 말해주세요!")));
-        onView(withId(R.id.record_stop_btn))
+        onView(withId(R.id.record_stop_button))
                 .check(matches(isDisplayed()))
                 .perform(click());
 
         onView(withId(R.id.waiting_count))
                 .check(matches(isDisplayed()))
                 .check(matches(withText("녹음된 음성을 확인하세요")));
-        onView(withId(R.id.record_stop_btn))
+        onView(withId(R.id.record_stop_button))
                 .check(matches(isDisplayed()))
                 .perform(click());
 
