@@ -1,42 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/black_00"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <act.angelman.presentation.custom.VideoCardTextureView
-        android:id="@+id/camera_recode_texture"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <ImageView
-        android:id="@+id/preview_play_button"
-        android:layout_width="87dp"
-        android:layout_height="87dp"
+    <FrameLayout
+        app:layout_widthPercent="78.8%"
+        app:layout_heightPercent="44.4%"
+        app:layout_marginTopPercent="22.5%"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="242.8dp"
-        android:alpha="0.5"
-        android:src="@drawable/btn_preview" />
+        >
 
-    <ImageView
-        android:id="@+id/camera_recode_frame"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/black_frame_panel" />
+        <ImageView
+            android:id="@+id/camera_recode_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop" />
 
-    <ImageView
-        android:id="@+id/photo_card_preview_background"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/black_00"/>
+        <act.angelman.presentation.custom.VideoCardTextureView
+            android:id="@+id/camera_recode_video"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
 
-    <ImageView
-        android:id="@+id/photo_card_preview"
-        android:layout_width="284dp"
-        android:layout_height="284dp"
-        android:scaleType="fitXY"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="120.2dp"/>
+        <ImageView
+            android:id="@+id/preview_play_button"
+            android:layout_width="87dp"
+            android:layout_height="87dp"
+            android:layout_gravity="center"
+            android:alpha="0.5"
+            android:src="@drawable/btn_preview"
+            android:visibility="gone" />
+
+    </FrameLayout>
 
     <act.angelman.presentation.custom.FontTextView
         android:id="@+id/camera_recode_guide"
@@ -50,4 +46,4 @@
         android:textSize="17sp"
         app:font="@string/font_demilight" />
 
-</RelativeLayout>
+</android.support.percent.PercentRelativeLayout>
