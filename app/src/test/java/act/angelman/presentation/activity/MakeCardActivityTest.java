@@ -30,8 +30,8 @@ import act.angelman.UITest;
 import act.angelman.domain.model.CardModel;
 import act.angelman.domain.model.CategoryModel;
 import act.angelman.domain.repository.CardRepository;
-import act.angelman.presentation.manager.ApplicationConstants;
 import act.angelman.presentation.custom.CardView;
+import act.angelman.presentation.manager.ApplicationConstants;
 import act.angelman.presentation.manager.ApplicationManager;
 import act.angelman.presentation.util.ContentsUtil;
 import act.angelman.presentation.util.PlayUtil;
@@ -46,6 +46,7 @@ import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.robolectric.Shadows.shadowOf;
@@ -220,6 +221,32 @@ public class MakeCardActivityTest extends UITest{
         assertThat(subject.replayButton.getVisibility()).isEqualTo(View.VISIBLE);
         assertThat(subject.retakeButton.getVisibility()).isEqualTo(View.VISIBLE);
     }
+    @Test
+    public void givenVoiceRecordFinished_whenClickReplayButton_thenStartVoicePlay() throws Exception {
+        setupPhotoCard();
+        subject.recordUtil = mock(RecordUtil.class);
+        subject.playUtil = mock(PlayUtil.class);
+
+        Button micBtn = (Button) subject.findViewById(R.id.mic_btn);
+        micBtn.setVisibility(View.VISIBLE);
+        micBtn.performClick();
+
+        Robolectric.flushForegroundThreadScheduler();
+        Robolectric.flushForegroundThreadScheduler();
+        Robolectric.flushForegroundThreadScheduler();
+
+        Button recordStopBtn = (Button) subject.findViewById(R.id.record_stop_button);
+        recordStopBtn.performClick();
+
+        verify(subject.recordUtil).record(anyString(), any(RecordUtil.RecordCallback.class));
+
+        Button replayButton = (Button) subject.findViewById(R.id.replay_button);
+
+        assertThat(replayButton).isVisible();
+        verify(subject.playUtil, times(1)).play(anyString());
+        replayButton.performClick();
+        verify(subject.playUtil, times(2)).play(anyString());
+    }
 
     @Test
     public void whenStopRecord_thenShowsCheckRecordAndRetakeAndReplayButtonsAndText() throws Exception {
@@ -317,7 +344,7 @@ public class MakeCardActivityTest extends UITest{
     }
 
     @Test
-    public void givenClickedMicButtonAndFinishedToRecord_whenClickedHardwareBackButton_then() throws Exception {
+    public void givenVoiceRecordingFinished_whenClickedHardwareBackButton_thenInitialize() throws Exception {
         setupPhotoCard();
         subject.recordUtil = mock(RecordUtil.class);
         subject.playUtil = mock(PlayUtil.class);
@@ -341,6 +368,7 @@ public class MakeCardActivityTest extends UITest{
         assertThat(subject.state).isEqualTo(0);
 
         assertThat(shadowOf((subject.findViewById(R.id.record_stop_button)).getBackground()).getCreatedFromResId()).isEqualTo(R.drawable.record_stop);
+        verify(subject.playUtil).playStop();
     }
 
     @Test
