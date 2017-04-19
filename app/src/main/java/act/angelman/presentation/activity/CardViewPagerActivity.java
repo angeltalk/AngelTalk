@@ -85,16 +85,30 @@ public class CardViewPagerActivity extends AbstractActivity {
     @BindView(R.id.image_angelee_gif)
     ImageView imageLoadingGif;
 
+
+    @BindView(R.id.list_card_button)
+    ImageView listCardButton;
+
+
+    @OnClick(R.id.list_card_button)
+    public void onClickListCardButtonText(View v) {
+        stopPlayingCard();
+        Intent intent = new Intent(this, CardListActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
     public PackageManager pm;
 
     @OnClick(R.id.card_delete_button)
     public void deleteButtonOnClick() {
+        stopPlayingCard();
         deleteCard();
     }
 
     @OnClick(R.id.card_share_button)
     public void shareButtonOnClick() {
-
+        stopPlayingCard();
         ShareMessengerSelectDialog dialog = new ShareMessengerSelectDialog(context, isKakaotalkInstalled(), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -211,11 +225,15 @@ public class CardViewPagerActivity extends AbstractActivity {
     }
 
     private void moveToCategoryMenuActivity() {
-        cardImageAdapter.releaseSpeakHandler();
-        cardImageAdapter.stopVideoView();
+        stopPlayingCard();
         Intent intent = new Intent(context, CategoryMenuActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
+    }
+
+    private void stopPlayingCard() {
+        cardImageAdapter.releaseSpeakHandler();
+        cardImageAdapter.stopVideoView();
     }
 
     private ViewPager.OnPageChangeListener viewPagerOnPageChangeListener = new ViewPager.OnPageChangeListener() {
@@ -225,8 +243,7 @@ public class CardViewPagerActivity extends AbstractActivity {
 
         @Override
         public void onPageSelected(int pos) {
-            cardImageAdapter.releaseSpeakHandler();
-            cardImageAdapter.stopVideoView();
+            stopPlayingCard();
             showAndHideButtonContainerBy(pos);
             applicationManager.setCurrentCardIndex(allCardListInSelectedCategory.get(pos).cardIndex);
             cardTitleLayout.refreshCardCountText(pos, mViewPager.getAdapter().getCount());
@@ -315,6 +332,9 @@ public class CardViewPagerActivity extends AbstractActivity {
     private boolean isKakaotalkInstalled() {
         try {
             String KAKAO_PACKAGE_NAME = "com.kakao.talk";
+            if(pm == null){
+                pm = getPackageManager();
+            }
             pm.getPackageInfo(KAKAO_PACKAGE_NAME, PackageManager.GET_ACTIVITIES);
             return true;
         } catch (PackageManager.NameNotFoundException e) {

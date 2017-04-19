@@ -356,14 +356,88 @@ public class CardViewPagerActivityTest extends UITest {
         CardImageAdapter mockImageAdapter = mock(CardImageAdapter.class);
         subject.mViewPager.setAdapter(mockImageAdapter);
         subject.cardImageAdapter = mockImageAdapter;
+
         subject.onBackPressed();
 
         // then
         verify(((CardImageAdapter) subject.mViewPager.getAdapter())).releaseSpeakHandler();
         verify(((CardImageAdapter) subject.mViewPager.getAdapter())).stopVideoView();
+
         ShadowActivity shadowActivity = shadowOf(subject);
         Intent nextStartedActivity = shadowActivity.getNextStartedActivity();
         assertThat(nextStartedActivity.getComponent().getClassName()).isEqualTo(CategoryMenuActivity.class.getCanonicalName());
+    }
+
+    @Test
+    public void givenPlayingCard_whenOnBackPressed_thenStopPlayCard() throws Exception {
+        PlayUtil playUtilMock = mock(PlayUtil.class);
+        Field declaredField = CardImageAdapter.class.getDeclaredField("playUtil");
+        declaredField.setAccessible(true);
+        declaredField.set(subject.cardImageAdapter, playUtilMock);
+
+        subject.mViewPager.setCurrentItem(1);
+
+        View cardView = ((CardImageAdapter) subject.mViewPager.getAdapter()).getItemAt(1);
+        cardView.findViewById(R.id.card_container).performClick();
+
+        subject.onBackPressed();
+
+        verify(playUtilMock).playStop();
+        verify(playUtilMock).ttsStop();
+    }
+
+    @Test
+    public void givenPlayingCard_whenClickListCardButton_thenStopPlayCard() throws Exception {
+        PlayUtil playUtilMock = mock(PlayUtil.class);
+        Field declaredField = CardImageAdapter.class.getDeclaredField("playUtil");
+        declaredField.setAccessible(true);
+        declaredField.set(subject.cardImageAdapter, playUtilMock);
+
+        subject.mViewPager.setCurrentItem(1);
+
+        View cardView = ((CardImageAdapter) subject.mViewPager.getAdapter()).getItemAt(1);
+        cardView.findViewById(R.id.card_container).performClick();
+
+        subject.listCardButton.performClick();
+
+        verify(playUtilMock).playStop();
+        verify(playUtilMock).ttsStop();
+    }
+
+    @Test
+    public void givenPlayingCard_whenClickShareCardButton_thenStopPlayCard() throws Exception {
+        PlayUtil playUtilMock = mock(PlayUtil.class);
+        Field declaredField = CardImageAdapter.class.getDeclaredField("playUtil");
+        declaredField.setAccessible(true);
+        declaredField.set(subject.cardImageAdapter, playUtilMock);
+
+        subject.mViewPager.setCurrentItem(1);
+
+        View cardView = ((CardImageAdapter) subject.mViewPager.getAdapter()).getItemAt(1);
+        cardView.findViewById(R.id.card_container).performClick();
+
+        subject.cardShareButton.performClick();
+
+        verify(playUtilMock).playStop();
+        verify(playUtilMock).ttsStop();
+    }
+
+    @Test
+    public void givenPlayingCard_whenClickDeleteCardButton_thenStopPlayCard() throws Exception {
+        PlayUtil playUtilMock = mock(PlayUtil.class);
+        Field declaredField = CardImageAdapter.class.getDeclaredField("playUtil");
+        declaredField.setAccessible(true);
+        declaredField.set(subject.cardImageAdapter, playUtilMock);
+
+        subject.mViewPager.setCurrentItem(1);
+
+        View cardView = ((CardImageAdapter) subject.mViewPager.getAdapter()).getItemAt(1);
+        cardView.findViewById(R.id.card_container).performClick();
+
+        subject.cardDeleteButton.performClick();
+
+        verify(playUtilMock).playStop();
+        verify(playUtilMock).ttsStop();
     }
 
     @Test
