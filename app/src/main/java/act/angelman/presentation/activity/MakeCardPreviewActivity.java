@@ -41,18 +41,29 @@ public class MakeCardPreviewActivity extends AppCompatActivity {
         initPreviewContent();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        cardPreviewLayout.initLayout(cardType);
+        initPreviewContent();
+    }
+
     private void initPreviewContent() {
         if(cardType == CardModel.CardType.PHOTO_CARD) {
             if (FileUtil.isFileExist(contentPath)) {
                 Glide.with(this)
                         .load(ContentsUtil.getContentFile(contentPath))
                         .override(280, 280)
-                        .into(cardPreviewLayout.photoCardPreview);
+                        .into(cardPreviewLayout.cameraRecodeImage);
             }
         } else if(cardType == CardModel.CardType.VIDEO_CARD) {
             if (FileUtil.isFileExist(contentPath)) {
-                cardPreviewLayout.cameraTextureView.setScaleType(VideoCardTextureView.ScaleType.TOP);
-                cardPreviewLayout.cameraTextureView.setDataSource(contentPath);
+                Glide.with(this)
+                        .load(ContentsUtil.getContentFile(ContentsUtil.getThumbnailPath(contentPath)))
+                        .override(280, 280)
+                        .into(cardPreviewLayout.cameraRecodeImage);
+                cardPreviewLayout.cameraRecodeVideo.setScaleType(VideoCardTextureView.ScaleType.CENTER_CROP);
+                cardPreviewLayout.cameraRecodeVideo.setDataSource(contentPath);
             }
         }
     }
