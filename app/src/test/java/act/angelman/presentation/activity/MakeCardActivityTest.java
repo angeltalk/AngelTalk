@@ -387,6 +387,34 @@ public class MakeCardActivityTest extends UITest{
         assertThat(subject.findViewById(R.id.play_button)).isGone();
     }
 
+    @Test
+    public void givenVoiceRecordingFinished_whenClickRetakeButton_thenInitialize() throws Exception {
+        setupPhotoCard();
+        subject.recordUtil = mock(RecordUtil.class);
+        subject.playUtil = mock(PlayUtil.class);
+
+        Button micBtn = (Button) subject.findViewById(R.id.mic_btn);
+        micBtn.setVisibility(View.VISIBLE);
+
+        micBtn.performClick();
+
+        Robolectric.flushForegroundThreadScheduler();
+        Robolectric.flushForegroundThreadScheduler();
+        Robolectric.flushForegroundThreadScheduler();
+        Robolectric.flushForegroundThreadScheduler();
+
+        (subject.findViewById(R.id.record_stop_button)).performClick();
+        assertThat(subject.state).isEqualTo(1);
+
+        subject.retakeButton.performClick();
+
+        assertThat(subject.findViewById(counting_scene)).isGone();
+        assertThat(subject.state).isEqualTo(0);
+
+        assertThat(shadowOf((subject.findViewById(R.id.record_stop_button)).getBackground()).getCreatedFromResId()).isEqualTo(R.drawable.record_stop);
+        verify(subject.playUtil).playStop();
+    }
+
     private void recordComplete() {
         PlayUtil mockPlayUtil = mock(PlayUtil.class);
         doAnswer(new Answer<Void>() {
