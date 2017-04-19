@@ -212,6 +212,11 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
                 countHandler.postDelayed(countAction, COUNT_INTERVAL);
     }
 
+    @OnClick(R.id.replay_button)
+    public void onClickReplayButton(View view){
+        playRecordVoiceFile();
+    }
+
     private void playRecordVoiceFile() {
         waitCount.setText(R.string.check_recorded_voice);
         waitCount.setFontType(FontUtil.FONT_REGULAR);
@@ -283,6 +288,7 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
             recordStopButton.setVisibility(View.GONE);
             replayButton.setVisibility(View.GONE);
             retakeButton.setVisibility(View.GONE);
+            playUtil.playStop();
         }
     }
 
