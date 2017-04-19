@@ -47,11 +47,9 @@ public class MakeCardPreviewActivityTest extends UITest {
     public void givenVideoCardIntent_whenStartActivity_thenShowRetakeButtonAndCheckButtonAndPlayButton() throws Exception {
         MakeCardPreviewActivity subject = setUpWithVideoContent();
 
-        assertThat(subject.cardPreviewLayout.cameraTextureView.getVisibility()).isEqualTo(View.VISIBLE);
-        assertThat(subject.cardPreviewLayout.playButton.getVisibility()).isEqualTo(View.VISIBLE);
-        assertThat(subject.cardPreviewLayout.cameraRecodeFrame.getVisibility()).isEqualTo(View.VISIBLE);
-        assertThat(subject.cardPreviewLayout.photoCardPreview.getVisibility()).isEqualTo(View.GONE);
-        assertThat(subject.cardPreviewLayout.photoCardPreviewBackground.getVisibility()).isEqualTo(View.GONE);
+        assertThat(subject.cardPreviewLayout.cameraRecodeVideo.getVisibility()).isEqualTo(View.VISIBLE);
+        assertThat(subject.cardPreviewLayout.previewPlayButton.getVisibility()).isEqualTo(View.VISIBLE);
+        assertThat(subject.cardPreviewLayout.cameraRecodeImage.getVisibility()).isEqualTo(View.VISIBLE);
         assertThat(subject.findViewById(R.id.retake_button).getVisibility()).isEqualTo(View.VISIBLE);
         assertThat(subject.findViewById(R.id.confirm_button).getVisibility()).isEqualTo(View.VISIBLE);
         assertThat(subject.cardPreviewLayout.cameraRecodeGuide.getText()).contains("영상");
@@ -118,11 +116,9 @@ public class MakeCardPreviewActivityTest extends UITest {
     public void givenPhotoCardIntent_whenLaunched_thenShowPhotoCardPreview() throws Exception {
         MakeCardPreviewActivity subject = setUpWithPhotoContent();
 
-        assertThat(subject.cardPreviewLayout.photoCardPreview.getVisibility()).isEqualTo(View.VISIBLE);
-        assertThat(subject.cardPreviewLayout.photoCardPreviewBackground.getVisibility()).isEqualTo(View.VISIBLE);
-        assertThat(subject.cardPreviewLayout.cameraTextureView.getVisibility()).isEqualTo(View.GONE);
-        assertThat(subject.cardPreviewLayout.playButton.getVisibility()).isEqualTo(View.GONE);
-        assertThat(subject.cardPreviewLayout.cameraRecodeFrame.getVisibility()).isEqualTo(View.GONE);
+        assertThat(subject.cardPreviewLayout.cameraRecodeVideo.getVisibility()).isEqualTo(View.GONE);
+        assertThat(subject.cardPreviewLayout.previewPlayButton.getVisibility()).isEqualTo(View.GONE);
+        assertThat(subject.cardPreviewLayout.cameraRecodeImage.getVisibility()).isEqualTo(View.VISIBLE);
         assertThat(subject.cardPreviewLayout.cameraRecodeGuide.getText()).contains("사진");
     }
 
