@@ -104,7 +104,7 @@ public class CardImageAdapter extends PagerAdapter {
             cardView.cardTitle.setTypeface(FontUtil.setFont(context, FontUtil.FONT_MEDIUM));
             View cardContainer = cardView.findViewById(R.id.card_container);
 
-            if(singleSectionItems.cardType == CardModel.CardType.PHOTO_CARD) {
+            if (singleSectionItems.cardType == CardModel.CardType.PHOTO_CARD) {
                 cardView.findViewById(R.id.card_image).setVisibility(View.VISIBLE);
                 cardView.findViewById(R.id.card_video).setVisibility(View.GONE);
                 String imagePath = singleSectionItems.contentPath;
@@ -121,7 +121,7 @@ public class CardImageAdapter extends PagerAdapter {
                 cardVideoView.setVisibility(View.VISIBLE);
                 cardVideoView.setScaleType(VideoCardTextureView.ScaleType.CENTER_CROP);
                 File video = ContentsUtil.getContentFile(singleSectionItems.contentPath);
-                if(video != null) {
+                if (video != null) {
                     cardVideoView.setDataSource(video.getAbsolutePath());
                 }
             }
@@ -198,9 +198,9 @@ public class CardImageAdapter extends PagerAdapter {
             animSet.addAnimation(zoomOutAnimation);
             cardView.startAnimation(animSet);
 
-            if(cardView.dataModel.cardType == CardModel.CardType.VIDEO_CARD) {
+            if (cardView.dataModel.cardType == CardModel.CardType.VIDEO_CARD) {
                 final VideoCardTextureView cardVideoView = ((VideoCardTextureView) cardView.findViewById(R.id.card_video));
-                if(cardVideoView != null) {
+                if (cardVideoView != null) {
                     cardVideoView.play(new MediaPlayer.OnCompletionListener() {
                         @Override
                         public void onCompletion(MediaPlayer mediaPlayer) {
@@ -221,26 +221,28 @@ public class CardImageAdapter extends PagerAdapter {
         speakHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-            if (voiceFileExists(cardView)) {
-                playUtil.play(cardView.dataModel.voicePath);
-            } else {
-                playUtil.ttsSpeak(cardView.cardTitle.getText().toString());
-            }
+                if (voiceFileExists(cardView)) {
+                    playUtil.play(cardView.dataModel.voicePath);
+                } else {
+                    playUtil.ttsSpeak(cardView.cardTitle.getText().toString());
+                }
             }
         }, delayMillis);
     }
 
-    public void stopVideoView(){
-        if(lastSelectedCardView != null){
+    public void stopVideoView() {
+        if (lastSelectedCardView != null) {
             VideoCardTextureView cardVideoView = ((VideoCardTextureView) lastSelectedCardView.findViewById(R.id.card_video));
-            if(cardVideoView != null && cardVideoView.isPlaying()){
+            if (cardVideoView != null && cardVideoView.isPlaying()) {
                 cardVideoView.stop();
                 cardVideoView.seekTo(0);
             }
         }
     }
 
-    public void releaseSpeakHandler(){
+    public void releaseSpeakHandler() {
+        playUtil.playStop();
+        playUtil.ttsStop();
         speakHandler.removeCallbacksAndMessages(null);
     }
 

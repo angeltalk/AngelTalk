@@ -73,6 +73,7 @@ public class PlayUtil implements TextToSpeech.OnInitListener {
     }
 
     public void playStop() {
+        if(mediaPlayer == null) return;
         if(state == STATE_PLAYING){
             mediaPlayer.stop();
             mediaPlayer.reset();
