@@ -225,6 +225,7 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
     }
 
 
+
     private void showRecodingGuideAndMicButton() {
         findViewById(R.id.recoding_guide).setVisibility(View.VISIBLE);
         findViewById(R.id.mic_btn).setVisibility(View.VISIBLE);
@@ -280,9 +281,9 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
             micButton.setEnabled(true);
             recordStopButton.setBackground(ResourcesUtil.getDrawable(getApplicationContext(), R.drawable.record_stop));
             recordStopButton.setVisibility(View.GONE);
-
+            replayButton.setVisibility(View.GONE);
+            retakeButton.setVisibility(View.GONE);
         }
-
     }
 
     private boolean checkValidationForText() {
