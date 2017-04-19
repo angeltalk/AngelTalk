@@ -1,4 +1,4 @@
-package act.angelman.presentation.activity;
+package act.angelman.presentation.activity.v1;
 
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import act.angelman.R;
+import act.angelman.presentation.activity.CategoryMenuActivity;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;

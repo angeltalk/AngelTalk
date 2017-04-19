@@ -1,4 +1,4 @@
-package act.angelman.presentation.activity;
+package act.angelman.presentation.activity.v1;
 
 
 import android.support.annotation.NonNull;
@@ -6,7 +6,6 @@ import android.support.test.espresso.ViewInteraction;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
-import android.util.Log;
 import android.view.View;
 
 import org.hamcrest.Matcher;
@@ -15,46 +14,63 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import act.angelman.R;
+import act.angelman.presentation.activity.CategoryMenuActivity;
 
 import static act.angelman.presentation.activity.TestUtil.childAtPosition;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.pressImeActionButton;
 import static android.support.test.espresso.action.ViewActions.replaceText;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class Camera2PerformanceTest {
-
-    final static int TEST_TIMES = 2;
+public class UICamera2ActivityTest {
 
     @Rule
     public ActivityTestRule<CategoryMenuActivity> mActivityTestRule = new ActivityTestRule<>(CategoryMenuActivity.class);
 
     @Test
-    public void camera2PerformanceTest() throws Exception {
+    public void camera2ActivityTest() throws Exception {
         onView(firstCategoryItemViewMatcher()).perform(click());
-        onView(addCareViewMatcher()).perform(click());
+        onView(addCardViewMatcher()).perform(click());
+        onView(addPhotoCardButtonMatcher()).perform(click());
+        Thread.sleep(2000);
+        onView(cameraShutterMatcher()).perform(click());
+        Thread.sleep(2000);
 
-        for (int i = 0; i < TEST_TIMES; i++) {
-            Log.d("camera2PerformanceTest", "camera2PerformanceTest (" + i + "/" + TEST_TIMES + ")");
-            onView(addPhotoCardButtonMatcher()).perform(click());
-            onView(cameraShutterMatcher()).perform(click());
-            Thread.sleep(2000);
+        ViewInteraction cardImageTitleView = onView(cardImageTitleEditMatcher());
+        cardImageTitleView.perform(replaceText("pen"));
+        Thread.sleep(1000);
+        cardImageTitleView.check(matches(withText("pen")));
+        pressBack();
+        cardImageTitleView.perform(pressImeActionButton());
 
-            ViewInteraction cardImageTitleEditView = onView(cardImageTitleEditMatcher());
-            cardImageTitleEditView.perform(replaceText("pen"));
-            Thread.sleep(1000);
-            pressBack(); // To hide softKey
-            pressBack(); // Go Back To CameraGallerySelection Activity
-            Thread.sleep(1000);
-        }
+        onView(recordStartButtonMatcher()).perform(click());
+        Thread.sleep(4500);
+
+        ViewInteraction recordStopButton = onView(recordStopButtonMatcher());
+        recordStopButton.perform(click());  // stop recording
+        recordStopButton.perform(click());  // confirm save
+    }
+
+    @NonNull
+    private Matcher<View> recordStopButtonMatcher() {
+        return allOf(withId(R.id.record_stop_button),
+                isDisplayed());
+    }
+
+    @NonNull
+    private Matcher<View> recordStartButtonMatcher() {
+        return allOf(withId(R.id.mic_btn), isDisplayed());
     }
 
     @NonNull
@@ -76,19 +92,27 @@ public class Camera2PerformanceTest {
     }
 
     @NonNull
-    private Matcher<View> addCareViewMatcher() {
-        return allOf(withClassName(is("act.angelman.presentation.custom.AddCardView")),
-                withParent(allOf(withId(R.id.view_pager),
-                        withParent(withId(R.id.category_item_container)))),
-                isDisplayed());
+    private Matcher<View> addCardViewMatcher() {
+        return allOf(
+                withClassName(is("act.angelman.presentation.custom.AddCardView")),
+                withParent(allOf(
+                        withId(R.id.view_pager),
+                        withParent(withId(R.id.category_item_container))
+                        )
+                ),
+                isDisplayed()
+        );
     }
 
     @NonNull
     private Matcher<View> firstCategoryItemViewMatcher() {
-        return allOf(withId(R.id.category_item_card),
+        return allOf(
+                withId(R.id.category_item_card),
                 childAtPosition(
                         withId(R.id.category_list),
-                        0),
-                isDisplayed());
+                        0
+                ),
+                isDisplayed()
+        );
     }
 }

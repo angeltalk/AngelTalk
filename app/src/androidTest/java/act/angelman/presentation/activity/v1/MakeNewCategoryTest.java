@@ -1,4 +1,4 @@
-package act.angelman.presentation.activity;
+package act.angelman.presentation.activity.v1;
 
 
 import android.support.annotation.NonNull;
@@ -8,6 +8,7 @@ import android.test.suitebuilder.annotation.LargeTest;
 import android.view.View;
 
 import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 import org.hamcrest.core.IsInstanceOf;
 import org.junit.Before;
 import org.junit.Rule;
@@ -15,9 +16,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import act.angelman.R;
+import act.angelman.presentation.activity.CategoryMenuActivity;
+import act.angelman.presentation.activity.TestUtil;
 
-import static act.angelman.presentation.activity.TestUtil.childAtPosition;
-import static act.angelman.presentation.activity.TestUtil.withTextColor;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
@@ -27,7 +28,6 @@ import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.Matchers.allOf;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
@@ -38,7 +38,8 @@ public class MakeNewCategoryTest {
 
     @Before
     public void setUp() throws Exception {
-        TestUtil.InitializeDatabase(mActivityTestRule.getActivity().getApplicationContext(), mActivityTestRule.getActivity().categoryRepository, mActivityTestRule.getActivity().cardRepository);
+        // package problem
+//        TestUtil.InitializeDatabase(mActivityTestRule.getActivity().getApplicationContext(), mActivityTestRule.getActivity().categoryRepository, mActivityTestRule.getActivity().cardRepository);
     }
 
     @Test
@@ -50,7 +51,7 @@ public class MakeNewCategoryTest {
                 .check(matches(isDisplayed()))
                 .perform(click());
 
-        onView(childAtPosition(withId(R.id.new_category_header), 1))
+        onView(TestUtil.childAtPosition(withId(R.id.new_category_header), 1))
                 .check(matches(withText("새 카테고리")))
                 .check(matches(isDisplayed()));
         onView(withId(R.id.category_title))
@@ -75,7 +76,7 @@ public class MakeNewCategoryTest {
                 .check(matches(isDisplayed()))
                 .check(matches(withText("")));
         onView(withId(R.id.new_category_save_button))
-                .check(matches( withTextColor(getColorFromResources(R.color.white_32))));
+                .check(matches( TestUtil.withTextColor(getColorFromResources(R.color.white_32))));
 
         onView(withId(R.id.edit_category_title))
                 .check(matches(isDisplayed()))
@@ -83,7 +84,7 @@ public class MakeNewCategoryTest {
                 .perform(pressImeActionButton());
 
         onView(withId(R.id.new_category_save_button))
-                .check(matches( withTextColor(getColorFromResources(R.color.white))))
+                .check(matches( TestUtil.withTextColor(getColorFromResources(R.color.white))))
                 .check(matches(withText("등록")))
                 .check(matches(isDisplayed()))
                 .perform(click());
@@ -107,17 +108,17 @@ public class MakeNewCategoryTest {
 
     @NonNull
     private Matcher<View> newCategoryItemCard() {
-        return allOf(withId(R.id.category_item_card),
-                childAtPosition(
+        return Matchers.allOf(withId(R.id.category_item_card),
+                TestUtil.childAtPosition(
                         withId(R.id.category_list),
                         5));
     }
 
     @NonNull
     private Matcher<View> newCategoryItemTitle() {
-        return allOf(withId(R.id.category_title),
-                childAtPosition(childAtPosition(childAtPosition(childAtPosition(
-                        childAtPosition(
+        return Matchers.allOf(withId(R.id.category_title),
+                TestUtil.childAtPosition(TestUtil.childAtPosition(TestUtil.childAtPosition(TestUtil.childAtPosition(
+                        TestUtil.childAtPosition(
                                 IsInstanceOf.<View>instanceOf(android.widget.GridView.class),
                                 5),
                         0),0),1),1));
