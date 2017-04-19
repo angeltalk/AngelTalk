@@ -217,6 +217,11 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
         playRecordVoiceFile();
     }
 
+    @OnClick(R.id.retake_button)
+    public void onClickRetakeButton(View view) {
+        onBackPressed();
+    }
+
     private void playRecordVoiceFile() {
         waitCount.setText(R.string.check_recorded_voice);
         waitCount.setFontType(FontUtil.FONT_REGULAR);
