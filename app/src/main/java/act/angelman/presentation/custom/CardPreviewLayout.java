@@ -16,20 +16,14 @@ import butterknife.OnClick;
 
 public class CardPreviewLayout extends RelativeLayout{
 
-    @BindView(R.id.camera_recode_texture)
-    public VideoCardTextureView cameraTextureView;
+    @BindView(R.id.camera_recode_video)
+    public VideoCardTextureView cameraRecodeVideo;
 
     @BindView(R.id.preview_play_button)
-    public ImageView playButton;
+    public ImageView previewPlayButton;
 
-    @BindView(R.id.camera_recode_frame)
-    public ImageView cameraRecodeFrame;
-
-    @BindView(R.id.photo_card_preview)
-    public ImageView photoCardPreview;
-
-    @BindView(R.id.photo_card_preview_background)
-    public ImageView photoCardPreviewBackground;
+    @BindView(R.id.camera_recode_image)
+    public ImageView cameraRecodeImage;
 
     @BindView(R.id.camera_recode_guide)
     public FontTextView cameraRecodeGuide;
@@ -50,21 +44,15 @@ public class CardPreviewLayout extends RelativeLayout{
 
     public void initLayout(CardModel.CardType cardType) {
         if(cardType == CardModel.CardType.VIDEO_CARD) {
-            cameraTextureView.setVisibility(View.VISIBLE);
-            playButton.setVisibility(View.VISIBLE);
-            cameraRecodeFrame.setVisibility(View.VISIBLE);
-
-            photoCardPreview.setVisibility(View.GONE);
-            photoCardPreviewBackground.setVisibility(View.GONE);
+            cameraRecodeVideo.setVisibility(View.VISIBLE);
+            previewPlayButton.setVisibility(View.VISIBLE);
+            cameraRecodeImage.setVisibility(View.VISIBLE);
 
             cameraRecodeGuide.setText(context.getString(R.string.video_content_check_guide));
         } else {
-            cameraTextureView.setVisibility(View.GONE);
-            playButton.setVisibility(View.GONE);
-            cameraRecodeFrame.setVisibility(View.GONE);
-
-            photoCardPreview.setVisibility(View.VISIBLE);
-            photoCardPreviewBackground.setVisibility(View.VISIBLE);
+            cameraRecodeVideo.setVisibility(View.GONE);
+            previewPlayButton.setVisibility(View.GONE);
+            cameraRecodeImage.setVisibility(View.VISIBLE);
 
             cameraRecodeGuide.setText(context.getString(R.string.photo_content_check_guide));
         }
@@ -72,12 +60,12 @@ public class CardPreviewLayout extends RelativeLayout{
 
     @OnClick(R.id.preview_play_button)
     public void onClickPreviewPlayButton (View v) {
-        playButton.setVisibility(View.GONE);
-        cameraTextureView.play(new MediaPlayer.OnCompletionListener() {
+        previewPlayButton.setVisibility(View.GONE);
+        cameraRecodeVideo.play(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mediaPlayer) {
-                playButton.setVisibility(View.VISIBLE);
-                cameraTextureView.resetPlayer();
+                previewPlayButton.setVisibility(View.VISIBLE);
+                cameraRecodeVideo.resetPlayer();
             }
         });
     }
