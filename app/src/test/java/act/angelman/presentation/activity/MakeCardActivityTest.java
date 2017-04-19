@@ -191,7 +191,7 @@ public class MakeCardActivityTest extends UITest{
     }
 
     @Test
-    public void whenCountDown3To1_thenStartVoiceRecordAndShowRecordStopButton() throws Exception {
+    public void whenCountDown3To1_thenStartVoiceRecordAndShowsCheckRecordAndRetakeAndReplayButtonsAndText() throws Exception {
         setupPhotoCard();
         subject.recordUtil = mock(RecordUtil.class);
         subject.playUtil = mock(PlayUtil.class);
@@ -208,25 +208,28 @@ public class MakeCardActivityTest extends UITest{
 
         verify(subject.recordUtil).record(anyString(), any(RecordUtil.RecordCallback.class));
 
-        Button recordStopBtn = (Button) subject.findViewById(R.id.record_stop_btn);
+        Button recordStopBtn = (Button) subject.findViewById(R.id.record_stop_button);
 
         assertThat(recordStopBtn).isVisible();
 
         recordStopBtn.performClick();
         verify(subject.recordUtil).stopRecord();
 
-        assertThat(((TextView) subject.findViewById(R.id.waiting_count)).getText()).isEqualTo("녹음된 음성을 확인하세요");
-
+        assertThat(((TextView) subject.findViewById(R.id.waiting_count)).getText()).isEqualTo("음성을 확인하세요");
+        assertThat(subject.replayButton.getVisibility()).isEqualTo(View.VISIBLE);
+        assertThat(subject.retakeButton.getVisibility()).isEqualTo(View.VISIBLE);
     }
 
     @Test
-    public void whenStopRecord_thenShowsCheckRecordButtonAndText() throws Exception {
+    public void whenStopRecord_thenShowsCheckRecordAndRetakeAndReplayButtonsAndText() throws Exception {
         setupPhotoCard();
 
         recordComplete();
-        assertThat(((TextView) subject.findViewById(R.id.waiting_count)).getText()).isEqualTo("녹음된 음성을 확인하세요");
-        ShadowDrawable shadowDrawable = shadowOf(subject.findViewById(R.id.record_stop_btn).getBackground());
+        assertThat(((TextView) subject.findViewById(R.id.waiting_count)).getText()).isEqualTo("음성을 확인하세요");
+        ShadowDrawable shadowDrawable = shadowOf(subject.findViewById(R.id.record_stop_button).getBackground());
         assertThat(R.drawable.ic_check_button).isEqualTo(shadowDrawable.getCreatedFromResId());
+        assertThat(subject.replayButton.getVisibility()).isEqualTo(View.VISIBLE);
+        assertThat(subject.retakeButton.getVisibility()).isEqualTo(View.VISIBLE);
     }
 
     @Test
@@ -242,7 +245,7 @@ public class MakeCardActivityTest extends UITest{
         setupPhotoCard();
 
         recordComplete();
-        subject.findViewById(R.id.record_stop_btn).performClick();
+        subject.findViewById(R.id.record_stop_button).performClick();
         verify(cardRepository).createSingleCardModel((CardModel) anyObject());
     }
 
@@ -251,7 +254,7 @@ public class MakeCardActivityTest extends UITest{
         setupPhotoCard();
 
         recordComplete();
-        subject.findViewById(R.id.record_stop_btn).performClick();
+        subject.findViewById(R.id.record_stop_button).performClick();
 
         ShadowActivity shadowActivity = shadowOf(subject);
         Intent nextStartedActivity = shadowActivity.getNextStartedActivity();
@@ -327,7 +330,7 @@ public class MakeCardActivityTest extends UITest{
         Robolectric.flushForegroundThreadScheduler();
         Robolectric.flushForegroundThreadScheduler();
 
-        (subject.findViewById(R.id.record_stop_btn)).performClick();
+        (subject.findViewById(R.id.record_stop_button)).performClick();
         assertThat(subject.state).isEqualTo(1);
 
         subject.onBackPressed();
@@ -335,7 +338,7 @@ public class MakeCardActivityTest extends UITest{
         assertThat(subject.findViewById(counting_scene)).isGone();
         assertThat(subject.state).isEqualTo(0);
 
-        assertThat(shadowOf((subject.findViewById(R.id.record_stop_btn)).getBackground()).getCreatedFromResId()).isEqualTo(R.drawable.record_stop);
+        assertThat(shadowOf((subject.findViewById(R.id.record_stop_button)).getBackground()).getCreatedFromResId()).isEqualTo(R.drawable.record_stop);
     }
 
     @Test
@@ -365,8 +368,8 @@ public class MakeCardActivityTest extends UITest{
         subject.playUtil = mockPlayUtil;
 
         subject.findViewById(R.id.counting_scene).setVisibility(View.VISIBLE);
-        subject.findViewById(R.id.record_stop_btn).setVisibility(View.VISIBLE);
-        subject.findViewById(R.id.record_stop_btn).performClick();
+        subject.findViewById(R.id.record_stop_button).setVisibility(View.VISIBLE);
+        subject.findViewById(R.id.record_stop_button).performClick();
     }
 
     private void enterKey(EditText cardTitleEdit) {

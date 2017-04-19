@@ -74,14 +74,40 @@
             app:font="@string/font_medium"
             android:textSize="62dp" />
 
-        <Button
-            android:id="@+id/record_stop_btn"
-            android:layout_width="62dp"
+        <RelativeLayout
+            android:id="@+id/button_container"
+            android:layout_width="match_parent"
             android:layout_height="62dp"
-            app:layout_marginTopPercent="84%"
-            android:layout_centerHorizontal="true"
-            android:background="@drawable/record_stop"
-            android:visibility="gone" />
+            app:layout_marginTopPercent="84%" >
+
+            <Button
+                android:id="@+id/record_stop_button"
+                android:layout_width="62dp"
+                android:layout_height="62dp"
+                android:layout_centerInParent="true"
+                android:background="@drawable/record_stop" />
+
+            <Button
+                android:id="@+id/retake_button"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerVertical="true"
+                android:background="@drawable/btn_retake_camera"
+                android:layout_toLeftOf="@id/record_stop_button"
+                android:layout_marginRight="37dp"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/replay_button"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/record_stop_button"
+                android:layout_marginLeft="37dp"
+                android:background="@drawable/btn_play_voice"
+                android:visibility="gone" />
+
+        </RelativeLayout>
 
     </android.support.percent.PercentRelativeLayout>
 
