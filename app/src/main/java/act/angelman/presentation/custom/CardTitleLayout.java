@@ -2,7 +2,6 @@ package act.angelman.presentation.custom;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,10 +10,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import act.angelman.R;
-import act.angelman.presentation.activity.CardListActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class CardTitleLayout extends RelativeLayout {
 
@@ -63,15 +60,6 @@ public class CardTitleLayout extends RelativeLayout {
                 }
             }
         });
-    }
-
-    @OnClick(R.id.list_card_button)
-    public void onClickListCardButtonText(View v) {
-        Intent intent = new Intent(getContext(), CardListActivity.class);
-        getContext().startActivity(intent);
-        if (getContext() instanceof Activity) {
-            ((Activity) getContext()).finish();
-        }
     }
 
     public void setBackButtonOnClickListener(OnClickListener onClickListener) {
