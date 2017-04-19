@@ -216,6 +216,7 @@ public class MakeCardActivityTest extends UITest{
         verify(subject.recordUtil).stopRecord();
 
         assertThat(((TextView) subject.findViewById(R.id.waiting_count)).getText()).isEqualTo("음성을 확인하세요");
+        assertThat(subject.recordStopButton.getVisibility()).isEqualTo(View.VISIBLE);
         assertThat(subject.replayButton.getVisibility()).isEqualTo(View.VISIBLE);
         assertThat(subject.retakeButton.getVisibility()).isEqualTo(View.VISIBLE);
     }
@@ -228,6 +229,7 @@ public class MakeCardActivityTest extends UITest{
         assertThat(((TextView) subject.findViewById(R.id.waiting_count)).getText()).isEqualTo("음성을 확인하세요");
         ShadowDrawable shadowDrawable = shadowOf(subject.findViewById(R.id.record_stop_button).getBackground());
         assertThat(R.drawable.ic_check_button).isEqualTo(shadowDrawable.getCreatedFromResId());
+        assertThat(subject.recordStopButton.getVisibility()).isEqualTo(View.VISIBLE);
         assertThat(subject.replayButton.getVisibility()).isEqualTo(View.VISIBLE);
         assertThat(subject.retakeButton.getVisibility()).isEqualTo(View.VISIBLE);
     }

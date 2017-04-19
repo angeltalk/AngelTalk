@@ -85,7 +85,8 @@
                 android:layout_width="62dp"
                 android:layout_height="62dp"
                 android:layout_centerInParent="true"
-                android:background="@drawable/record_stop" />
+                android:background="@drawable/record_stop"
+                android:visibility="gone" />
 
             <Button
                 android:id="@+id/retake_button"
