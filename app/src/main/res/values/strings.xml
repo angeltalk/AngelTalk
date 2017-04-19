@@ -11,7 +11,7 @@
     <string name="choose_picture">Select Picture</string>
     <string name="inform_editing_picture">카드에 보여질 사진의 크기에 맞춰\n사진을 이동하거나 확대/축소 해주세요.</string>
     <string name="talk_now">지금 말해주세요!</string>
-    <string name="check_recorded_voice">녹음된 음성을 확인하세요</string>
+    <string name="check_recorded_voice">음성을 확인하세요</string>
     <string name="add_new_card_success">새로운 카드가 추가되었습니다.</string>
     <string name="add_share_card_success">공유 받은 카드가 추가되었습니다.</string>
     <string name="lock_guide">자물쇠를 원 밖으로 움직이세요</string>
