@@ -63,7 +63,7 @@ public class UICamera2ActivityTest {
 
     @NonNull
     private Matcher<View> recordStopButtonMatcher() {
-        return allOf(withId(R.id.record_stop_btn),
+        return allOf(withId(R.id.record_stop_button),
                 isDisplayed());
     }
 

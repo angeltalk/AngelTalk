@@ -75,8 +75,8 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
     @Inject
     ApplicationManager applicationManager;
 
-    @BindView(R.id.record_stop_btn)
-    Button recordStopBtn;
+    @BindView(R.id.record_stop_button)
+    Button recordStopButton;
 
     @BindView(R.id.mic_btn)
     Button micButton;
@@ -87,6 +87,11 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
     @BindView(R.id.counting_scene)
     PercentRelativeLayout countScene;
 
+    @BindView(R.id.retake_button)
+    Button retakeButton;
+
+    @BindView(R.id.replay_button)
+    Button replayButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -191,7 +196,7 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
         params = (RelativeLayout.LayoutParams) cardView.getLayoutParams();
     }
 
-    @OnClick(R.id.record_stop_btn)
+    @OnClick(R.id.record_stop_button)
     public void onClickRecStopButton(View view){
         if (state == STATE_RECORD_NOT_COMPLETE) {
             recordUtil.stopRecord();
@@ -211,12 +216,13 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
         waitCount.setText(R.string.check_recorded_voice);
         waitCount.setFontType(FontUtil.FONT_REGULAR);
 
-        recordStopBtn.setBackground(ResourcesUtil.getDrawable(getApplicationContext(), R.drawable.ic_check_button));
+        recordStopButton.setBackground(ResourcesUtil.getDrawable(getApplicationContext(), R.drawable.ic_check_button));
+        replayButton.setVisibility(View.VISIBLE);
+        retakeButton.setVisibility(View.VISIBLE);
 
         playUtil.play(voiceFile);
         state = STATE_RECORD_COMPLETE;
     }
-
 
 
     private void showRecodingGuideAndMicButton() {
@@ -272,8 +278,8 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
 
             countScene.setVisibility(View.GONE);
             micButton.setEnabled(true);
-            recordStopBtn.setBackground(ResourcesUtil.getDrawable(getApplicationContext(), R.drawable.record_stop));
-            recordStopBtn.setVisibility(View.GONE);
+            recordStopButton.setBackground(ResourcesUtil.getDrawable(getApplicationContext(), R.drawable.record_stop));
+            recordStopButton.setVisibility(View.GONE);
 
         }
 
@@ -313,7 +319,7 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
         waitCount.setFontType(FontUtil.FONT_REGULAR);
         waitCount.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 30);
 
-        recordStopBtn.setVisibility(View.VISIBLE);
+        recordStopButton.setVisibility(View.VISIBLE);
         recordUtil.record(voiceFile, this);
     }
 
