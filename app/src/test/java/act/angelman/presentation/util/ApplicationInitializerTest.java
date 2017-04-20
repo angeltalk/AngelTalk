@@ -1,10 +1,10 @@
 package act.angelman.presentation.util;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Environment;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
@@ -15,6 +15,7 @@ import org.robolectric.shadows.ShadowEnvironment;
 import java.io.File;
 
 import act.angelman.BuildConfig;
+import act.angelman.presentation.manager.ApplicationConstants;
 import act.angelman.presentation.manager.ApplicationInitializer;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -58,14 +59,21 @@ public class ApplicationInitializerTest {
     }
 
     @Test
-    @Ignore("ShadowPreference 처리")
     public void givenNotFirstLaunched_whenApplicationInitialize_thenSkipCopyDefaultAssetImagesToImageFolder() throws Exception {
         ShadowEnvironment.setExternalStorageState(Environment.MEDIA_MOUNTED);
         Context context = RuntimeEnvironment.application;
 
-        subject.initializeApplication();
+        SharedPreferences.Editor edit = context.getSharedPreferences(ApplicationConstants.PRIVATE_PREFERENCE_NAME, Context.MODE_PRIVATE).edit();
+        edit.putBoolean(ApplicationConstants.FIRST_LAUNCH, false);
+        edit.commit();
 
         File imageFolder = new File(ContentsUtil.getContentFolder());
-        assertThat(imageFolder.listFiles().length).isEqualTo(context.getAssets().list("contents").length);
+        for(File file : imageFolder.listFiles()) {
+            if(!file.isDirectory()){
+                file.delete();
+            }
+        }
+        subject.initializeApplication();
+        assertThat(imageFolder.listFiles().length).isEqualTo(0);
     }
 }
