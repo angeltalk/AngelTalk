@@ -10,6 +10,7 @@ import android.widget.TextClock;
 import com.google.common.collect.Lists;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RuntimeEnvironment;
@@ -42,7 +43,7 @@ import static org.mockito.Mockito.when;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(AngelmanTestRunner.WithKorean.class)
-//@RunWith(RobolectricGradleTestRunner.class)
+@Ignore
 @Config(constants = BuildConfig.class, shadows = ShadowKeyCharacterMap.class)
 public class CategoryMenuLayoutTest extends UITest {
 
