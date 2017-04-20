@@ -15,4 +15,9 @@ public class ShadowContentUtil {
     public static void saveImage(View decorView, String fileName) {
 
     }
+
+    @Implementation
+    public static String getImagePath() {
+        return "haribo.mp4";
+    }
 }

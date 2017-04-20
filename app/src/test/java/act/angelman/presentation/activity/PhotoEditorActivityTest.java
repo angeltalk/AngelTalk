@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.ImageView;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
@@ -24,6 +23,7 @@ import act.angelman.R;
 import act.angelman.UITest;
 import act.angelman.presentation.manager.ApplicationConstants;
 import act.angelman.presentation.shadow.ShadowContentUtil;
+import act.angelman.presentation.util.ContentsUtil;
 
 import static org.assertj.android.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -79,20 +79,13 @@ public class PhotoEditorActivityTest extends UITest{
     }
 
     @Test
-    @Ignore("ShadowContentUtil Verification")
     public void whenClickConfirmButton_thenSaveCroppedImageAndShowCardView() throws Exception {
-        // when
         subject.findViewById(R.id.photo_edit_confirm).performClick();
-
-        // then
-        //verify(ContentsUtil).saveImage(any(View.class), any(String.class));
-
-
         ShadowActivity shadowActivity = shadowOf(subject);
         Intent nextStartedActivity = shadowActivity.getNextStartedActivity();
+        assertThat(nextStartedActivity.getStringExtra(ContentsUtil.CONTENT_PATH)).isEqualTo("haribo.mp4");
         assertThat(nextStartedActivity.getComponent().getClassName()).isEqualTo(MakeCardActivity.class.getCanonicalName());
         assertThat(shadowActivity.isFinishing()).isTrue();
-
     }
 
     @Test

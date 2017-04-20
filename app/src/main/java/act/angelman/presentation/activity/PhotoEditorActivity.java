@@ -39,10 +39,8 @@ public class PhotoEditorActivity extends AbstractActivity {
             switch (v.getId()){
                 case R.id.photo_edit_confirm:
                     hideViews();
-
                     String fileName = saveEditedImage();
                     startShowCardActivity(fileName);
-
                     showViews();
                     finish();
                     break;
