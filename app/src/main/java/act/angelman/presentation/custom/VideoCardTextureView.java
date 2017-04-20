@@ -79,9 +79,9 @@ public class VideoCardTextureView extends TextureView implements TextureView.Sur
             scaleY = viewWidth / mVideoWidth;
             scaleX = viewHeight / mVideoHeight;
         } else if (viewWidth > mVideoWidth) {
-            scaleX = (viewHeight / mVideoHeight) / (viewWidth / mVideoWidth);
+            scaleX = viewWidth / mVideoWidth;
         } else if (viewHeight > mVideoHeight) {
-            scaleY = (viewWidth / mVideoWidth) / (viewHeight / mVideoHeight);
+            scaleY = viewHeight / mVideoHeight;
         }
 
         // Calculate pivot points, in our case crop from center
@@ -109,11 +109,6 @@ public class VideoCardTextureView extends TextureView implements TextureView.Sur
         matrix.setScale(scaleX, scaleY, pivotPointX, pivotPointY);
 
         setTransform(matrix);
-    }
-
-    public void setPivotPoints(int x, int y) {
-        this.pivotPointX = x;
-        this.pivotPointY = y;
     }
 
     private void initPlayer() {
