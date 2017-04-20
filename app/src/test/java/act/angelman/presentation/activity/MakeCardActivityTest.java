@@ -33,6 +33,7 @@ import act.angelman.domain.repository.CardRepository;
 import act.angelman.presentation.custom.CardView;
 import act.angelman.presentation.manager.ApplicationConstants;
 import act.angelman.presentation.manager.ApplicationManager;
+import act.angelman.presentation.shadow.ShadowViewTreeObserver;
 import act.angelman.presentation.util.ContentsUtil;
 import act.angelman.presentation.util.PlayUtil;
 import act.angelman.presentation.util.RecordUtil;
@@ -53,7 +54,7 @@ import static org.robolectric.Shadows.shadowOf;
 
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class)
+@Config(constants = BuildConfig.class, shadows = {ShadowViewTreeObserver.class})
 public class MakeCardActivityTest extends UITest{
 
     @Inject
