@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import java.util.List;
 
@@ -67,7 +68,7 @@ public class CategorySelectDialog {
 
         private void selectCategoryRadioButton(View selectedRadioButton) {
             View itemRadioButton;
-            for(int i=0; i<recyclerView.getChildCount(); i++) {
+            for (int i = 0; i < recyclerView.getChildCount(); i++) {
                 itemRadioButton = recyclerView.getChildAt(i).findViewById(R.id.category_item_radio);
                 ((AppCompatRadioButton) itemRadioButton).setChecked(itemRadioButton.equals(selectedRadioButton));
             }
@@ -86,6 +87,13 @@ public class CategorySelectDialog {
         public void onBindViewHolder(final CategorySelectRecyclerViewHolder holder, final int position) {
             CategoryModel categoryItem = categoryList.get(position);
             holder.categoryName.setText(categoryItem.title);
+            holder.categoryLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mCheckPosition = position;
+                    selectCategoryRadioButton(v.findViewById(R.id.category_item_radio));
+                }
+            });
             holder.selectRadioButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -102,11 +110,13 @@ public class CategorySelectDialog {
 
         class CategorySelectRecyclerViewHolder extends RecyclerView.ViewHolder {
 
+            private RelativeLayout categoryLayout;
             private FontTextView categoryName;
             private AppCompatRadioButton selectRadioButton;
 
             public CategorySelectRecyclerViewHolder(View view) {
                 super(view);
+                this.categoryLayout = ((RelativeLayout) view.findViewById(R.id.category_item_holder_layout));
                 this.categoryName = ((FontTextView) view.findViewById(R.id.category_item_name));
                 this.selectRadioButton = ((AppCompatRadioButton) view.findViewById(R.id.category_item_radio));
             }
