@@ -58,6 +58,7 @@ import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class)
+@Ignore
 public class ShareCardActivityTest extends UITest {
 
     @Inject
@@ -173,7 +174,6 @@ public class ShareCardActivityTest extends UITest {
     }
 
     @Test
-    @Ignore("Test time is over")
     public void givenCategorySelectDialogShowingAndClickFirstCategory_whenClickSecondCategory_thenChangeRadioButtonState() throws Exception {
         kakaotalk_subject = setupActivityWithIntent(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.kakao_scheme) + "://" + getString(R.string.kakaolink_host))));
 
