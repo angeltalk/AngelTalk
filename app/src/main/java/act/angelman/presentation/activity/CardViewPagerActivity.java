@@ -204,7 +204,7 @@ public class CardViewPagerActivity extends AbstractActivity {
         initializeView();
 
         if (getIntent().getBooleanExtra(ApplicationConstants.INTENT_KEY_NEW_CARD, false)) {
-            showSnackBarMessage(ApplicationConstants.INTENT_KEY_NEW_CARD);
+            showSnackBarMessage(getString(R.string.add_new_card_success));
             mViewPager.setCurrentItem(1);
         }
 
@@ -220,6 +220,11 @@ public class CardViewPagerActivity extends AbstractActivity {
                 }
             }
             mViewPager.setCurrentItem(1);
+        }
+
+        if (getIntent().getBooleanExtra(ApplicationConstants.INTENT_KEY_CARD_EDITED, false)) {
+            showSnackBarMessage(getString(R.string.card_edit_success_message));
+            mViewPager.setCurrentItem((allCardListInSelectedCategory.size()-1)-applicationManager.getCurrentCardIndex());
         }
 
         applicationManager.setCurrentCardIndex(allCardListInSelectedCategory.get(mViewPager.getCurrentItem()).cardIndex);
@@ -341,11 +346,9 @@ public class CardViewPagerActivity extends AbstractActivity {
         return cardRepository.deleteSingleCardWithCardIndex(selectedCategoryModel.index, cardIndex);
     }
 
-    private void showSnackBarMessage(String intentKey) {
+    private void showSnackBarMessage(String message) {
         PercentRelativeLayout rootLayout = (PercentRelativeLayout) findViewById(R.id.category_item_container);
-        if(ApplicationConstants.INTENT_KEY_NEW_CARD.equals(intentKey)) {
-            CustomSnackBar.styledSnackBarWithDuration(this, rootLayout, getApplicationContext().getResources().getString(R.string.add_new_card_success), 2000);
-        }
+        CustomSnackBar.styledSnackBarWithDuration(this, rootLayout, message, 2000);
     }
 
     private void showLoadingAnimation(){

@@ -119,7 +119,7 @@ public class MakeCardPreviewActivity extends AppCompatActivity {
             cardRepository.updateSingleCardContent(editCardId, previewCardType.getValue(), previewContentPath, thumbnailPath);
 
             Intent intent = new Intent(this, CardViewPagerActivity.class);
-            intent.putExtra(ApplicationConstants.INTENT_KEY_LIST_BACK, true);
+            intent.putExtra(ApplicationConstants.INTENT_KEY_CARD_EDITED, true);
             startActivity(intent);
         }
     }
