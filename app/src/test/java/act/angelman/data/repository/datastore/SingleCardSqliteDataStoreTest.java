@@ -41,7 +41,7 @@ public class SingleCardSqliteDataStoreTest {
                     CardColumns.THUMBNAIL_PATH + " TEXT," +
                     CardColumns.HIDE + " INTEGER," +
                     CardColumns.CARD_INDEX + " INTEGER)";
-    private String[] columns = {CardColumns.NAME, CardColumns.CONTENT_PATH,CardColumns.THUMBNAIL_PATH, CardColumns.VOICE_PATH, CardColumns.FIRST_TIME, CardColumns.CARD_TYPE, CardColumns.HIDE};
+    private String[] columns = {CardColumns._ID, CardColumns.NAME, CardColumns.CONTENT_PATH,CardColumns.THUMBNAIL_PATH, CardColumns.VOICE_PATH, CardColumns.FIRST_TIME, CardColumns.CARD_TYPE, CardColumns.HIDE};
 
     @Before
     public void setUp() throws Exception {
@@ -68,6 +68,28 @@ public class SingleCardSqliteDataStoreTest {
 
         assertThat(c.getCount()).isEqualTo(list.size());
         assertThat(list.get(0).name).isEqualTo("우유");
+    }
+
+    @Test
+    public void givenExistDataBase_whenGetSingleCard_thenReturnSingleCardModel() throws Exception {
+        DatabaseHelper mockDbHelper = mock(DatabaseHelper.class);
+
+        SingleCardSqliteDataStore dataStore = new SingleCardSqliteDataStore(RuntimeEnvironment.application);
+        dataStore.dbHelper = mockDbHelper;
+
+        when(mockDbHelper.getReadableDatabase()).thenReturn(mockDb);
+
+        mockDb.execSQL(SQL_CREATE_SINGLECARD_LIST);
+        insertData(mockDb);
+
+        @Cleanup
+        Cursor c = mockDb.query(CardColumns.TABLE_NAME, columns, null,null, null, null, CardColumns.CARD_INDEX + " desc");
+        CardModel cardModel = dataStore.getSingleCard("1");
+
+        verify(mockDbHelper).getReadableDatabase();
+
+        assertThat(cardModel._id).isEqualTo("1");
+        assertThat(cardModel.name).isEqualTo("물 먹고 싶어요");
     }
 
     @Test
