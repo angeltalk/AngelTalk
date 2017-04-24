@@ -63,6 +63,7 @@ public class SingleCardSqliteDataStore implements SingleCardDataStore {
         if (c.moveToFirst()) {
             do {
                 CardModel cardModel = new CardModel();
+                cardModel._id = c.getString(c.getColumnIndex(CardColumns._ID));
                 cardModel.name = c.getString(c.getColumnIndex(CardColumns.NAME));
                 cardModel.contentPath = c.getString(c.getColumnIndex(CardColumns.CONTENT_PATH));
                 cardModel.voicePath = c.getString(c.getColumnIndex(CardColumns.VOICE_PATH));
@@ -143,6 +144,7 @@ public class SingleCardSqliteDataStore implements SingleCardDataStore {
         c.moveToFirst();
 
         CardModel cardModel = CardModel.builder()
+                ._id(c.getString(c.getColumnIndex(CardColumns._ID)))
                 .name(c.getString(c.getColumnIndex(CardColumns.NAME)))
                 .contentPath(c.getString(c.getColumnIndex(CardColumns.CONTENT_PATH)))
                 .firstTime(c.getString(c.getColumnIndex(CardColumns.FIRST_TIME)))
