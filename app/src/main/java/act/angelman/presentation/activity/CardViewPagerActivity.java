@@ -51,7 +51,6 @@ import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 public class CardViewPagerActivity extends AbstractActivity {
 
     public PackageManager pm;
-    private static final String CARD_ID = "CARD_ID";
 
     @Inject
     CardRepository cardRepository;
@@ -73,6 +72,9 @@ public class CardViewPagerActivity extends AbstractActivity {
 
     @BindView(R.id.button_container)
     LinearLayout buttonContainer;
+
+    @BindView(R.id.card_edit_button)
+    ImageButton cardEditButton;
 
     @BindView(R.id.card_delete_button)
     ImageButton cardDeleteButton;
@@ -111,7 +113,7 @@ public class CardViewPagerActivity extends AbstractActivity {
     @OnClick(R.id.card_share_button)
     public void shareButtonOnClick() {
         stopPlayingCard();
-        ShareMessengerSelectDialog dialog = new ShareMessengerSelectDialog(context, isKakaotalkInstalled(), new View.OnClickListener() {
+        new ShareMessengerSelectDialog(context, isKakaotalkInstalled(), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final ApplicationConstants.SHARE_MESSENGER_TYPE selectType = ((ApplicationConstants.SHARE_MESSENGER_TYPE) v.getTag());
@@ -142,12 +144,12 @@ public class CardViewPagerActivity extends AbstractActivity {
                     }
                 });
             }
-        });
+        }).show();
     }
 
     @OnClick(R.id.card_edit_button)
     public void editButtonOnClick() {
-        CardEditSelectDialog dialog = new CardEditSelectDialog(context, new View.OnClickListener() {
+        new CardEditSelectDialog(context, new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 CardModel cardModel = ((CardView) cardImageAdapter.viewCollection.get(mViewPager.getCurrentItem())).dataModel;
@@ -159,16 +161,20 @@ public class CardViewPagerActivity extends AbstractActivity {
                     moveToVoiceEditActivity(cardModel);
                 }
             }
-        });
+        }).show();
     }
 
     private void moveToContentEditActivity(CardModel cardModel){
-
+        stopPlayingCard();
+        Intent intent = new Intent(context, CameraGallerySelectionActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.putExtra(ApplicationConstants.EDIT_CARD_ID, cardModel._id);
+        startActivity(intent);
     }
     private void moveToNameEditActivity(CardModel cardModel){
         String cardId = cardModel._id;
         Intent intent = new Intent(context, MakeCardActivity.class);
-        intent.putExtra(CARD_ID, cardId);
+        intent.putExtra(ApplicationConstants.EDIT_CARD_ID, cardId);
         startActivity(intent);
     }
     private void moveToVoiceEditActivity(CardModel cardModel){
@@ -315,19 +321,12 @@ public class CardViewPagerActivity extends AbstractActivity {
             }
         };
 
-        View.OnClickListener negativeListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        };
-
         View innerView = getLayoutInflater().inflate(R.layout.custom_confirm_dialog, null);
         TextView alertMessage = (TextView) innerView.findViewById(R.id.alert_message);
         alertMessage.setText(message);
 
-        dialog = new CustomConfirmDialog(this, message, positiveListener, negativeListener);
-
+        dialog = new CustomConfirmDialog(this, message, positiveListener);
+        dialog.show();
     }
 
     private int setCurrentItem() {

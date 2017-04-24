@@ -217,7 +217,8 @@ public class CategoryMenuActivity extends AbstractActivity {
         } else {
             message = String.format(getResources().getString(delete_category), categoryName);
         }
-        dialog = new CustomConfirmDialog(this, message, deleteCategoryClickListener, cancelClickListener);
+        dialog = new CustomConfirmDialog(this, message, deleteCategoryClickListener);
+        dialog.show();
     }
 
     private void moveToNewCategoryActivity() {
@@ -255,13 +256,6 @@ public class CategoryMenuActivity extends AbstractActivity {
                 changeCategoryMenuStatus(CategoryMenuStatus.CATEGORY_DEFAULT);
                 moveToNewCategoryActivity();
             }
-        }
-    };
-
-    private View.OnClickListener cancelClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            dialog.dismiss();
         }
     };
 
