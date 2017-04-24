@@ -149,6 +149,7 @@ public class CardViewPagerActivity extends AbstractActivity {
 
     @OnClick(R.id.card_edit_button)
     public void editButtonOnClick() {
+        stopPlayingCard();
         new CardEditSelectDialog(context, new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -165,7 +166,6 @@ public class CardViewPagerActivity extends AbstractActivity {
     }
 
     private void moveToContentEditActivity(CardModel cardModel){
-        stopPlayingCard();
         Intent intent = new Intent(context, CameraGallerySelectionActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.putExtra(ApplicationConstants.EDIT_CARD_ID, cardModel._id);
