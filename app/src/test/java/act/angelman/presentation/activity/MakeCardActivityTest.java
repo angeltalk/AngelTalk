@@ -87,6 +87,20 @@ public class MakeCardActivityTest extends UITest{
         subject = setupActivityWithIntent(MakeCardActivity.class, intent);
 
     }
+    private void setupEditCard() {
+        Intent intent = new Intent();
+        intent.putExtra("CARD_ID", "1");
+        CardModel editCardModel = CardModel.builder()._id("1").name("버스")
+                .contentPath("/Users/ssa009/workspace/angelman/app/src/main/assets/bus.jpg")
+                .cardType(CardModel.CardType.PHOTO_CARD)
+                .build();
+        when(cardRepository.getSingleCard(anyString())).thenReturn(editCardModel);
+        when(applicationManager.getCategoryModel()).thenReturn(getCategoryModel(
+
+        ));
+        when(applicationManager.getCategoryModelColor()).thenReturn(getCategoryModelColor());
+        subject = setupActivityWithIntent(MakeCardActivity.class, intent);
+    }
 
     @Test
     public void whenLaunchedApp_thenSetBackgroundColorChangedToRelatedInCategory() throws Exception {
@@ -414,6 +428,13 @@ public class MakeCardActivityTest extends UITest{
 
         assertThat(shadowOf((subject.findViewById(R.id.record_stop_button)).getBackground()).getCreatedFromResId()).isEqualTo(R.drawable.record_stop);
         verify(subject.playUtil).playStop();
+    }
+
+    @Test
+    public void givenEditCardId_whenLaunched_thenGetSingleCardWithCardId() throws Exception {
+        setupEditCard();
+
+        verify(cardRepository).getSingleCard(anyString());
     }
 
     private void recordComplete() {

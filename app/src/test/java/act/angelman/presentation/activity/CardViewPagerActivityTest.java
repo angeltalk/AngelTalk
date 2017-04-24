@@ -168,8 +168,11 @@ public class CardViewPagerActivityTest extends UITest {
 
     @Test
     public void whenClickedEditButton_thenShowsEditSelectDialog() throws Exception {
-        ShadowAlertDialog shadowDialog = getShadowAlertDialog();
-        assertThat(((TextView) shadowDialog.getView().findViewById(R.id.alert_message)).getText()).contains( "카드를 수정해보세요" );
+        subject.findViewById(R.id.card_edit_button).performClick();
+
+        AlertDialog alertDialog = ShadowAlertDialog.getLatestAlertDialog();
+        assertThat(alertDialog).isNotNull();
+        assertThat(((TextView) alertDialog.findViewById(R.id.card_edit_select_guide)).getText()).contains( "카드를 수정해보세요" );
     }
 
     @Test
@@ -641,6 +644,20 @@ public class CardViewPagerActivityTest extends UITest {
         verify(applicationManager).setCurrentCardIndex(2);
     }
 
+    @Test
+    public void givenShowingCardEditSelectPopup_whenClickCardNameEditButton_thenMoveToMakeCardActivityWithCardId() throws Exception {
+        // given
+        subject.findViewById(R.id.card_edit_button).performClick();
+        // when
+        AlertDialog dialog = (AlertDialog) ShadowAlertDialog.getLatestDialog();
+        dialog.findViewById(R.id.card_edit_name_text).performClick();
+        // then
+        ShadowActivity shadowActivity = shadowOf(subject);
+        Intent startedIntent = shadowActivity.getNextStartedActivity();
+        assertThat(startedIntent.getStringExtra("CARD_ID")).isNotEmpty();
+        assertThat(startedIntent.getComponent().getClassName()).isEqualTo(MakeCardActivity.class.getCanonicalName());
+    }
+
     public boolean equals(Bitmap bitmap1, Bitmap bitmap2) {
         ByteBuffer buffer1 = ByteBuffer.allocate(bitmap1.getHeight() * bitmap1.getRowBytes());
         bitmap1.copyPixelsToBuffer(buffer1);
@@ -665,8 +682,9 @@ public class CardViewPagerActivityTest extends UITest {
         return ret;
     }
 
+    int i = 0;
     public CardModel makeSingleCardModel(String name, String path, String time, int categoryId, int cardIndex, CardModel.CardType cardType, String thumbnailPath , boolean hide) {
-        return CardModel.builder().name(name).contentPath(path).firstTime(time).categoryId(categoryId).cardIndex(cardIndex).cardType(cardType).thumbnailPath(thumbnailPath).hide(hide).build();
+        return CardModel.builder()._id(String.valueOf(++i)).name(name).contentPath(path).firstTime(time).categoryId(categoryId).cardIndex(cardIndex).cardType(cardType).thumbnailPath(thumbnailPath).hide(hide).build();
     }
 
     private ShadowAlertDialog getShadowAlertDialog() {

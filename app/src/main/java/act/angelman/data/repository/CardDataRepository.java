@@ -1,5 +1,6 @@
 package act.angelman.data.repository;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
@@ -9,6 +10,7 @@ import java.util.List;
 
 import act.angelman.data.repository.datastore.SingleCardDataStore;
 import act.angelman.data.repository.datastore.SingleCardSqliteDataStore;
+import act.angelman.data.sqlite.CardColumns;
 import act.angelman.domain.model.CardModel;
 import act.angelman.domain.repository.CardRepository;
 
@@ -72,6 +74,30 @@ public class CardDataRepository implements CardRepository {
     public boolean updateCategoryCardIndex(List<CardModel> cardModelList) {
         SingleCardDataStore dataStore = new SingleCardSqliteDataStore(context);
         return dataStore.updateCategoryCardIndex(cardModelList);
+    }
+
+    @Override
+    public CardModel getSingleCard(String cardId) {
+        SingleCardDataStore dataStore = new SingleCardSqliteDataStore(context);
+        return dataStore.getSingleCard(cardId);
+    }
+
+    @Override
+    public boolean updateSingleCardName(String cardId, String cardName) {
+        SingleCardDataStore dataStore = new SingleCardSqliteDataStore(context);
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(CardColumns.NAME, cardName);
+        return dataStore.updateSingleCardModel(cardId, contentValues);
+    }
+
+    @Override
+    public boolean updateSingleCardContent(String cardId, String contentPath) {
+        return false;
+    }
+
+    @Override
+    public boolean updateSingleCardVoice(String cardId, String voicePath) {
+        return false;
     }
 
     private List<CardModel> getDataModels(List <CardModel> cardModels){
