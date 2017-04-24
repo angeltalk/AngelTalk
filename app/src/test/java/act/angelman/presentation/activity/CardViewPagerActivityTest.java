@@ -167,6 +167,12 @@ public class CardViewPagerActivityTest extends UITest {
     }
 
     @Test
+    public void whenClickedEditButton_thenShowsEditSelectDialog() throws Exception {
+        ShadowAlertDialog shadowDialog = getShadowAlertDialog();
+        assertThat(((TextView) shadowDialog.getView().findViewById(R.id.alert_message)).getText()).contains( "카드를 수정해보세요" );
+    }
+
+    @Test
     public void givenClickedDeleteButton_whenClickedConfirmButton_thenDeleteSelectedCardViewInViewPager() throws Exception {
         CardViewPager viewPager = subject.mViewPager;
         assertThat(viewPager.getAdapter().getCount()).isEqualTo(5);

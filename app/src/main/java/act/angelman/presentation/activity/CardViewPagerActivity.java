@@ -34,6 +34,7 @@ import act.angelman.network.transfer.CardTransfer;
 import act.angelman.network.transfer.KaKaoTransfer;
 import act.angelman.network.transfer.SmsTransfer;
 import act.angelman.presentation.adapter.CardImageAdapter;
+import act.angelman.presentation.custom.CardEditSelectDialog;
 import act.angelman.presentation.custom.CardTitleLayout;
 import act.angelman.presentation.custom.CardView;
 import act.angelman.presentation.custom.CardViewPager;
@@ -141,10 +142,34 @@ public class CardViewPagerActivity extends AbstractActivity {
                 });
             }
         });
-
-
     }
 
+    @OnClick(R.id.card_edit_button)
+    public void editButtonOnClick() {
+        CardEditSelectDialog dialog = new CardEditSelectDialog(context, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CardModel cardModel = ((CardView) cardImageAdapter.viewCollection.get(mViewPager.getCurrentItem())).dataModel;
+                if (view.getTag() == ApplicationConstants.CARD_EDIT_TYPE.CONTENT ) {
+                    moveToContentEditActivity(cardModel);
+                }else if(view.getTag() == ApplicationConstants.CARD_EDIT_TYPE.NAME ) {
+                    moveToNameEditActivity(cardModel);
+                }else if(view.getTag() == ApplicationConstants.CARD_EDIT_TYPE.VOICE ) {
+                    moveToVoiceEditActivity(cardModel);
+                }
+            }
+        });
+    }
+
+    private void moveToContentEditActivity(CardModel cardModel){
+
+    }
+    private void moveToNameEditActivity(CardModel cardModel){
+
+    }
+    private void moveToVoiceEditActivity(CardModel cardModel){
+
+    }
     List<CardModel> allCardListInSelectedCategory;
 
     private CategoryModel selectedCategoryModel;
