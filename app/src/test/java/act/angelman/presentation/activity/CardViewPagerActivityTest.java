@@ -661,6 +661,36 @@ public class CardViewPagerActivityTest extends UITest {
         verify(applicationManager).setCurrentCardIndex(2);
     }
 
+    @Test
+    public void givenShowingCardEditSelectPopup_whenClickCardNameEditButton_thenMoveToMakeCardActivityWithCardId() throws Exception {
+        // given
+        subject.findViewById(R.id.card_edit_button).performClick();
+        // when
+        AlertDialog dialog = (AlertDialog) ShadowAlertDialog.getLatestDialog();
+        dialog.findViewById(R.id.card_edit_name_text).performClick();
+        // then
+        ShadowActivity shadowActivity = shadowOf(subject);
+        Intent startedIntent = shadowActivity.getNextStartedActivity();
+        assertThat(startedIntent.getStringExtra(ApplicationConstants.EDIT_CARD_ID)).isNotEmpty();
+        assertThat(startedIntent.getStringExtra(ApplicationConstants.EDIT_TYPE)).isEqualTo(ApplicationConstants.CardEditType.NAME.value());
+        assertThat(startedIntent.getComponent().getClassName()).isEqualTo(MakeCardActivity.class.getCanonicalName());
+    }
+
+    @Test
+    public void givenShowingCardEditSelectPopup_whenClickVoiceEditButton_thenMoveToMakeCardActivityWithCardId() throws Exception {
+        // given
+        subject.findViewById(R.id.card_edit_button).performClick();
+        // when
+        AlertDialog dialog = (AlertDialog) ShadowAlertDialog.getLatestDialog();
+        dialog.findViewById(R.id.card_edit_voice_text).performClick();
+        // then
+        ShadowActivity shadowActivity = shadowOf(subject);
+        Intent startedIntent = shadowActivity.getNextStartedActivity();
+        assertThat(startedIntent.getStringExtra(ApplicationConstants.EDIT_CARD_ID)).isNotEmpty();
+        assertThat(startedIntent.getStringExtra(ApplicationConstants.EDIT_TYPE)).isEqualTo(ApplicationConstants.CardEditType.VOICE.value());
+        assertThat(startedIntent.getComponent().getClassName()).isEqualTo(MakeCardActivity.class.getCanonicalName());
+    }
+
     public boolean equals(Bitmap bitmap1, Bitmap bitmap2) {
         ByteBuffer buffer1 = ByteBuffer.allocate(bitmap1.getHeight() * bitmap1.getRowBytes());
         bitmap1.copyPixelsToBuffer(buffer1);

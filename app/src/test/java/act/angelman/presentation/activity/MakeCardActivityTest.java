@@ -87,17 +87,29 @@ public class MakeCardActivityTest extends UITest{
         subject = setupActivityWithIntent(MakeCardActivity.class, intent);
 
     }
-    private void setupEditCard() {
+    private void setupEditCardForRenaming() {
         Intent intent = new Intent();
         intent.putExtra(ApplicationConstants.EDIT_CARD_ID, "1");
+        intent.putExtra(ApplicationConstants.EDIT_TYPE, ApplicationConstants.CardEditType.NAME.value());
         CardModel editCardModel = CardModel.builder()._id("1").name("버스")
                 .contentPath("/Users/ssa009/workspace/angelman/app/src/main/assets/bus.jpg")
                 .cardType(CardModel.CardType.PHOTO_CARD)
                 .build();
         when(cardRepository.getSingleCard(anyString())).thenReturn(editCardModel);
-        when(applicationManager.getCategoryModel()).thenReturn(getCategoryModel(
-
-        ));
+        when(applicationManager.getCategoryModel()).thenReturn(getCategoryModel());
+        when(applicationManager.getCategoryModelColor()).thenReturn(getCategoryModelColor());
+        subject = setupActivityWithIntent(MakeCardActivity.class, intent);
+    }
+    private void setupEditCardForVoiceChange() {
+        Intent intent = new Intent();
+        intent.putExtra(ApplicationConstants.EDIT_CARD_ID, "1");
+        intent.putExtra(ApplicationConstants.EDIT_TYPE, ApplicationConstants.CardEditType.VOICE.value());
+        CardModel editCardModel = CardModel.builder()._id("1").name("버스")
+                .contentPath("/Users/ssa009/workspace/angelman/app/src/main/assets/bus.jpg")
+                .cardType(CardModel.CardType.PHOTO_CARD)
+                .build();
+        when(cardRepository.getSingleCard(anyString())).thenReturn(editCardModel);
+        when(applicationManager.getCategoryModel()).thenReturn(getCategoryModel());
         when(applicationManager.getCategoryModelColor()).thenReturn(getCategoryModelColor());
         subject = setupActivityWithIntent(MakeCardActivity.class, intent);
     }
@@ -179,8 +191,8 @@ public class MakeCardActivityTest extends UITest{
     }
 
     @Test
-    public void givenEditCard_whenCompleteEditing_thenUpdateCardModelAndMoveToCategoryViewPagerActivity() throws Exception {
-        setupEditCard();
+    public void givenEditCardForRenaming_whenCompleteEditing_thenUpdateCardModelAndMoveToCategoryViewPagerActivity() throws Exception {
+        setupEditCardForRenaming();
 
         EditText cardTitleEdit = (EditText) subject.findViewById(R.id.card_image_title_edit);
         cardTitleEdit.setText("TEST");
@@ -191,6 +203,15 @@ public class MakeCardActivityTest extends UITest{
         ShadowActivity shadowActivity = shadowOf(subject);
         Intent nextStartedActivity = shadowActivity.getNextStartedActivity();
         assertThat(nextStartedActivity.getComponent().getClassName()).isEqualTo(CardViewPagerActivity.class.getCanonicalName());
+    }
+
+    @Test
+    public void givenEditCardForVoiceChange_whenCompleteEditing_thenUpdateCardModelAndMoveToCategoryViewPagerActivity() throws Exception {
+        setupEditCardForVoiceChange();
+
+        recordComplete();
+        subject.findViewById(R.id.record_stop_button).performClick();
+        verify(cardRepository).updateSingleCardVoice(anyString(), anyString());
     }
 
     @Test
@@ -402,6 +423,17 @@ public class MakeCardActivityTest extends UITest{
     }
 
     @Test
+    public void givenEditCardForVoiceChange_whenOnBackPressed_thenMoveToCategoryViewPagerActivity() throws Exception {
+        setupEditCardForVoiceChange();
+
+        subject.onBackPressed();
+
+        ShadowActivity shadowActivity = shadowOf(subject);
+        Intent nextStartedActivity = shadowActivity.getNextStartedActivity();
+        assertThat(nextStartedActivity.getComponent().getClassName()).isEqualTo(CardViewPagerActivity.class.getCanonicalName());
+    }
+
+    @Test
     public void whenShowMakeVideoCardActivity_thenShowVideoPreviewAndPlayButton() throws Exception {
         setupVideoCard();
         assertThat(subject.findViewById(R.id.card_image)).isVisible();
@@ -446,9 +478,19 @@ public class MakeCardActivityTest extends UITest{
     }
 
     @Test
-    public void givenEditCardId_whenLaunched_thenGetSingleCardWithCardId() throws Exception {
-        setupEditCard();
+    public void givenEditCardId_whenLaunched_thenGetSingleCardWithCardIdAndShowVoiceRecordingView() throws Exception {
+        setupEditCardForRenaming();
         verify(cardRepository).getSingleCard(anyString());
+
+        Button micBtn = (Button) subject.findViewById(R.id.mic_btn);
+        micBtn.setVisibility(View.VISIBLE);
+    }
+
+    @Test
+    public void given() throws Exception {
+
+        setupEditCardForVoiceChange();
+
     }
 
     private void recordComplete() {

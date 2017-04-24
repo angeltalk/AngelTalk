@@ -97,7 +97,10 @@ public class CardDataRepository implements CardRepository {
 
     @Override
     public boolean updateSingleCardVoice(String cardId, String voicePath) {
-        return false;
+        SingleCardDataStore dataStore = new SingleCardSqliteDataStore(context);
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(CardColumns.VOICE_PATH, voicePath);
+        return dataStore.updateSingleCardModel(cardId, contentValues);
     }
 
     private List<CardModel> getDataModels(List <CardModel> cardModels){

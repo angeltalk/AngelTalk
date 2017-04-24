@@ -16,12 +16,14 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.google.common.base.Strings;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -36,6 +38,7 @@ import act.angelman.presentation.custom.CardView;
 import act.angelman.presentation.custom.FontTextView;
 import act.angelman.presentation.custom.VideoCardTextureView;
 import act.angelman.presentation.manager.ApplicationConstants;
+import act.angelman.presentation.manager.ApplicationConstants.CardEditType;
 import act.angelman.presentation.manager.ApplicationManager;
 import act.angelman.presentation.util.AngelManGlideTransform;
 import act.angelman.presentation.util.ContentsUtil;
@@ -107,6 +110,8 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
     @BindView(R.id.card_view_layout)
     CardView cardView;
 
+    private CardEditType editType;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,18 +131,35 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
 
         selectedCategoryId = applicationManager.getCategoryModel().index;
         Intent intent = getIntent();
+
         String editCardId = intent.getStringExtra(ApplicationConstants.EDIT_CARD_ID);
-        if(Strings.isNullOrEmpty(editCardId)){
-            contentPath = intent.getStringExtra(ContentsUtil.CONTENT_PATH);
-            cardType = CardModel.CardType.valueOf(intent.getStringExtra(ContentsUtil.CARD_TYPE));
-        }else{
+
+        if(isEditMode(editCardId)){
             editCardModel = cardRepository.getSingleCard(editCardId);
+            editType = CardEditType.valueOf(intent.getStringExtra(ApplicationConstants.EDIT_TYPE));
             contentPath = editCardModel.contentPath;
             cardType = editCardModel.cardType;
-        }
 
+            if(CardEditType.VOICE.equals(editType)){
+                initCardView();
+
+                cardView.cardTitle.setText(editCardModel.name);
+                cardView.cardTitle.setVisibility(View.VISIBLE);
+                cardView.cardTitleEdit.setVisibility(View.GONE);
+
+                showRecodingGuideAndMicButton();
+                return;
+            }
+        }else{
+            contentPath = intent.getStringExtra(ContentsUtil.CONTENT_PATH);
+            cardType = CardModel.CardType.valueOf(intent.getStringExtra(ContentsUtil.CARD_TYPE));
+        }
         initCardView();
         initKeyboardAction();
+    }
+
+    private boolean isEditMode(String editCardId) {
+        return !Strings.isNullOrEmpty(editCardId);
     }
 
     @Override
@@ -148,6 +170,12 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
 
     @Override
     public void onBackPressed() {
+        playUtil.playStop();
+
+        if(editType == CardEditType.VOICE) {
+            moveToCardViewPagerActivity();
+            return;
+        }
         if(countScene.getVisibility() == View.GONE){
             switch(cardView.status){
                 case CARD_TITLE_SHOWN:
@@ -180,7 +208,6 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
             recordStopButton.setVisibility(View.GONE);
             replayButton.setVisibility(View.GONE);
             retakeButton.setVisibility(View.GONE);
-            playUtil.playStop();
         }
     }
 
@@ -203,8 +230,20 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
         if (state == STATE_RECORD_NOT_COMPLETE) {
             recordUtil.stopRecord();
             playRecordVoiceFile();
+        } else {
+            if(editType == CardEditType.VOICE) {
+                if(editCardModel.voicePath != null ){
+                    File beforeVoiceFile = new File(editCardModel.voicePath);
+                    if(beforeVoiceFile.exists()) {
+                        beforeVoiceFile.delete();
+                    }
+                }
+                cardRepository.updateSingleCardVoice(editCardModel._id, voiceFile);
+                moveToCardViewPagerActivity();
+            } else {
+                saveCardAndMoveToNextActivity();
+            }
         }
-        else saveCardAndMoveToNextActivity();
     }
 
     @OnClick(R.id.mic_btn)
@@ -249,17 +288,19 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
         if(cardType.equals(CardModel.CardType.PHOTO_CARD)) {
             cardView.cardVideo.setVisibility(View.GONE);
             cardView.playButton.setVisibility(View.GONE);
+            cardView.cardImage.setScaleType(ImageView.ScaleType.FIT_XY);
             glide.load(ContentsUtil.getContentFile(contentPath))
                     .override(280, 280)
                     .bitmapTransform(new AngelManGlideTransform(this, ResolutionUtil.getDpToPix(this, 10), 0, AngelManGlideTransform.CornerType.TOP))
                     .into(cardView.cardImage);
+
         } else if (cardType.equals(CardModel.CardType.VIDEO_CARD)) {
             cardView.cardVideo.setVisibility(View.VISIBLE);
+            cardView.cardImage.setScaleType(ImageView.ScaleType.FIT_XY);
             glide.load(ContentsUtil.getContentFile(ContentsUtil.getThumbnailPath(contentPath)))
-                    .bitmapTransform(new AngelManGlideTransform(this, ResolutionUtil.getDpToPix(this, 10), 0, AngelManGlideTransform.CornerType.TOP))
+                    //.bitmapTransform(new AngelManGlideTransform(this, ResolutionUtil.getDpToPix(this, 10), 0, AngelManGlideTransform.CornerType.TOP))
                     .override(280, 280)
                     .into(cardView.cardImage);
-
             cardView.playButton.setVisibility(View.VISIBLE);
             cardView.playButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -420,6 +461,7 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
     }
 
     private void startVoiceRecording() {
+
         voiceFile = RecordUtil.getMediaFilePath();
 
         waitCount.setText(R.string.talk_now);
@@ -428,6 +470,7 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
 
         recordStopButton.setVisibility(View.VISIBLE);
         recordUtil.record(voiceFile, this);
+
     }
 
     private Runnable countAction = new Runnable() {
