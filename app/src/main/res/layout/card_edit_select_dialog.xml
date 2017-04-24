@@ -103,8 +103,7 @@
             android:text="@string/cancel"
             app:font="@string/font_medium"
             android:textColor="#d41468"
-            android:textSize="16sp"
-            android:enabled="false" />
+            android:textSize="16sp" />
 
         <View
             android:layout_width="match_parent"

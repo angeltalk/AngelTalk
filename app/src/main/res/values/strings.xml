@@ -72,4 +72,6 @@
     <string name="card_edit_content">사진 바꾸기</string>
     <string name="card_edit_name">이름 바꾸기</string>
     <string name="card_edit_voice">음성 바꾸기</string>
+    <string name="card_edit_title">카드 수정</string>
+    <string name="edit_content_guide_text">카드의 사진/동영상을\n수정해보세요</string>
 </resources>

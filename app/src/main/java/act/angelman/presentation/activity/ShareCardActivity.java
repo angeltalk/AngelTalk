@@ -190,12 +190,8 @@ public class ShareCardActivity extends AppCompatActivity {
                     Toast.makeText(context, R.string.cannot_share_card_save_message,Toast.LENGTH_SHORT).show();
                 }
             }
-        }, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                categorySelectDialog.dismiss();
-            }
         });
+        categorySelectDialog.show();
     }
 
     private void moveToCategoryMenuActivity() {
