@@ -12,5 +12,5 @@ public class ApplicationConstants {
     public static final String INTENT_KEY_LIST_BACK = "listBack";
 
     public enum SHARE_MESSENGER_TYPE{ KAKAOTALK, MESSAGE }
-
+    public enum CARD_EDIT_TYPE{ CONTENT, NAME, VOICE }
 }

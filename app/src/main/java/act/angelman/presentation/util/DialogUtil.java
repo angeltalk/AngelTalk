@@ -16,4 +16,12 @@ public class DialogUtil {
 
         return builder.create();
     }
+
+    public static AlertDialog buildCustomDialog(Context context, View innerView, View.OnClickListener negativeClickListener) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        innerView.findViewById(R.id.cancel_button).setOnClickListener(negativeClickListener);
+        builder.setView(innerView);
+
+        return builder.create();
+    }
 }
