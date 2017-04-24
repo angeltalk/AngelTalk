@@ -26,8 +26,6 @@ public class ShareMessengerSelectDialog {
 
     private ApplicationConstants.SHARE_MESSENGER_TYPE messengerType;
 
-
-
     public ShareMessengerSelectDialog(Context context, boolean isKakaotalkInstalled, final View.OnClickListener positiveOnClickListener) {
 
         this.context = context;
