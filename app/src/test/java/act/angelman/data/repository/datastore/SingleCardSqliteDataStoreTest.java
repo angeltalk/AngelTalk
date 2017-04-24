@@ -31,7 +31,7 @@ public class SingleCardSqliteDataStoreTest {
 
     private String SQL_CREATE_SINGLECARD_LIST =
             "CREATE TABLE " + CardColumns.TABLE_NAME + "(" +
-                    CardColumns._ID + " INTEGER_PRIMARY_KEY," +
+                    CardColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                     CardColumns.CATEGORY_ID + " INTEGER," +
                     CardColumns.NAME + " TEXT," +
                     CardColumns.CONTENT_PATH + " TEXT," +

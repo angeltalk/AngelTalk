@@ -37,7 +37,7 @@ public class DatabaseHelperTest {
     private CameraGallerySelectionActivity subject;
 
     private static final String SQL_CREATE_SINGLECARD_LIST = "CREATE TABLE " + CardColumns.TABLE_NAME + "(" +
-            CardColumns._ID + " INTEGER_PRIMARY_KEY," +
+            CardColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
             CardColumns.CATEGORY_ID + " INTEGER," +
             CardColumns.NAME + " TEXT," +
             CardColumns.CONTENT_PATH + " TEXT," +
@@ -49,7 +49,7 @@ public class DatabaseHelperTest {
             CardColumns.CARD_INDEX + " INTEGER)";
 
     private static final String SQL_CREATE_CATEGORY_LIST = "CREATE TABLE " + CategoryColumns.TABLE_NAME + "(" +
-            CategoryColumns._ID + " INTEGER_PRIMARY_KEY," +
+            CategoryColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
             CategoryColumns.TITLE + " TEXT," +
             CategoryColumns.ICON + " INTEGER," +
             CategoryColumns.COLOR + " INTEGER," +
