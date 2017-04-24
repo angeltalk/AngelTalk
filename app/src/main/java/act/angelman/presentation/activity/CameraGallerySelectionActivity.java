@@ -54,7 +54,7 @@ public class CameraGallerySelectionActivity extends AbstractActivity {
         titleLayout.hideCardCountText(true);
         titleLayout.hideListCardButton(true);
 
-        editCardId = getIntent().getStringExtra("CHANGE_TO_CONSTANT");
+        editCardId = getIntent().getStringExtra(ApplicationConstants.EDIT_CARD_ID);
         if(editCardId == null) {
             titleLayout.setCategoryModelTitle(applicationManager.getCategoryModel().title);
         } else {

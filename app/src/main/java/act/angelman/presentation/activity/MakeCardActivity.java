@@ -126,7 +126,7 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
 
         selectedCategoryId = applicationManager.getCategoryModel().index;
         Intent intent = getIntent();
-        String editCardId = intent.getStringExtra("CARD_ID");
+        String editCardId = intent.getStringExtra(ApplicationConstants.EDIT_CARD_ID);
         if(Strings.isNullOrEmpty(editCardId)){
             contentPath = intent.getStringExtra(ContentsUtil.CONTENT_PATH);
             cardType = CardModel.CardType.valueOf(intent.getStringExtra(ContentsUtil.CARD_TYPE));

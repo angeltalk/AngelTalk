@@ -51,7 +51,6 @@ import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 public class CardViewPagerActivity extends AbstractActivity {
 
     public PackageManager pm;
-    private static final String CARD_ID = "CARD_ID";
 
     @Inject
     CardRepository cardRepository;
@@ -169,13 +168,13 @@ public class CardViewPagerActivity extends AbstractActivity {
         stopPlayingCard();
         Intent intent = new Intent(context, CameraGallerySelectionActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        intent.putExtra("CHANGE_TO_CONSTANT", cardModel._id);
+        intent.putExtra(ApplicationConstants.EDIT_CARD_ID, cardModel._id);
         startActivity(intent);
     }
     private void moveToNameEditActivity(CardModel cardModel){
         String cardId = cardModel._id;
         Intent intent = new Intent(context, MakeCardActivity.class);
-        intent.putExtra(CARD_ID, cardId);
+        intent.putExtra(ApplicationConstants.EDIT_CARD_ID, cardId);
         startActivity(intent);
     }
     private void moveToVoiceEditActivity(CardModel cardModel){

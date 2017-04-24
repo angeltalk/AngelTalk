@@ -89,7 +89,7 @@ public class MakeCardActivityTest extends UITest{
     }
     private void setupEditCard() {
         Intent intent = new Intent();
-        intent.putExtra("CARD_ID", "1");
+        intent.putExtra("EDIT_CARD_ID", "1");
         CardModel editCardModel = CardModel.builder()._id("1").name("버스")
                 .contentPath("/Users/ssa009/workspace/angelman/app/src/main/assets/bus.jpg")
                 .cardType(CardModel.CardType.PHOTO_CARD)
