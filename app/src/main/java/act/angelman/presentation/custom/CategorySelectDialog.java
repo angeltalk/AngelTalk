@@ -15,31 +15,33 @@ import java.util.List;
 
 import act.angelman.R;
 import act.angelman.domain.model.CategoryModel;
-import act.angelman.presentation.util.ContentsUtil;
 import act.angelman.presentation.util.DialogUtil;
 
 public class CategorySelectDialog {
 
-
-    private static final int DEFAULT_WIDTH = 350;
-    private static final int DEFAULT_HEIGHT = 450;
     private final AlertDialog dialog;
-    private CategoryListAdapter adapter;
+    private final Context context;
+    private CategoryListAdapter categoryListAdapter;
     private final RecyclerView recyclerView;
 
 
-    public CategorySelectDialog(Context context, List<CategoryModel> categoryList, View.OnClickListener positiveOnClickListener, View.OnClickListener negativeOnClickListener) {
-
+    public CategorySelectDialog(Context context, List<CategoryModel> categoryList, View.OnClickListener positiveOnClickListener) {
+        this.context = context;
         View innerView = ((Activity) context).getLayoutInflater().inflate(R.layout.category_select_dialog, null);
-
         recyclerView = (RecyclerView) innerView.findViewById(R.id.category_list_recycler_view);
-        adapter = new CategoryListAdapter(context, categoryList);
-        recyclerView.setAdapter(adapter);
+        categoryListAdapter = new CategoryListAdapter(context, categoryList);
+        recyclerView.setAdapter(categoryListAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        dialog = DialogUtil.buildCustomDialog(context, innerView, positiveOnClickListener, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
+    }
 
-        dialog = DialogUtil.buildCustomDialog(context, innerView, positiveOnClickListener, negativeOnClickListener);
-        dialog.show();
-        dialog.getWindow().setLayout((int) ContentsUtil.convertDpToPixel(DEFAULT_WIDTH, context), (int) ContentsUtil.convertDpToPixel(DEFAULT_HEIGHT, context));
+    public void show() {
+        DialogUtil.show(context, dialog, 450);
     }
 
     public void dismiss() {
@@ -47,7 +49,7 @@ public class CategorySelectDialog {
     }
 
     public CategoryModel getSelectItem() {
-        return adapter.getSelectItem();
+        return categoryListAdapter.getSelectItem();
     }
 
     public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapter.CategorySelectRecyclerViewHolder> {

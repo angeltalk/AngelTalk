@@ -110,7 +110,7 @@ public class CardViewPagerActivity extends AbstractActivity {
     @OnClick(R.id.card_share_button)
     public void shareButtonOnClick() {
         stopPlayingCard();
-        ShareMessengerSelectDialog dialog = new ShareMessengerSelectDialog(context, isKakaotalkInstalled(), new View.OnClickListener() {
+        new ShareMessengerSelectDialog(context, isKakaotalkInstalled(), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final ApplicationConstants.SHARE_MESSENGER_TYPE selectType = ((ApplicationConstants.SHARE_MESSENGER_TYPE) v.getTag());
@@ -141,12 +141,12 @@ public class CardViewPagerActivity extends AbstractActivity {
                     }
                 });
             }
-        });
+        }).show();
     }
 
     @OnClick(R.id.card_edit_button)
     public void editButtonOnClick() {
-        CardEditSelectDialog dialog = new CardEditSelectDialog(context, new View.OnClickListener() {
+        new CardEditSelectDialog(context, new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 CardModel cardModel = ((CardView) cardImageAdapter.viewCollection.get(mViewPager.getCurrentItem())).dataModel;
@@ -158,7 +158,7 @@ public class CardViewPagerActivity extends AbstractActivity {
                     moveToVoiceEditActivity(cardModel);
                 }
             }
-        });
+        }).show();
     }
 
     private void moveToContentEditActivity(CardModel cardModel){
@@ -311,19 +311,12 @@ public class CardViewPagerActivity extends AbstractActivity {
             }
         };
 
-        View.OnClickListener negativeListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        };
-
         View innerView = getLayoutInflater().inflate(R.layout.custom_confirm_dialog, null);
         TextView alertMessage = (TextView) innerView.findViewById(R.id.alert_message);
         alertMessage.setText(message);
 
-        dialog = new CustomConfirmDialog(this, message, positiveListener, negativeListener);
-
+        dialog = new CustomConfirmDialog(this, message, positiveListener);
+        dialog.show();
     }
 
     private int setCurrentItem() {

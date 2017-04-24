@@ -164,7 +164,8 @@ public class MakeCategoryActivity extends AbstractActivity{
             View innerView = getLayoutInflater().inflate(R.layout.custom_confirm_dialog, null);
             TextView alertMessage = (TextView) innerView.findViewById(R.id.alert_message);
             alertMessage.setText(getString(R.string.inform_not_saved));
-            alertDialog  = new CustomConfirmDialog(this, getString(R.string.inform_not_saved), positiveListener, negativeListener);
+            alertDialog  = new CustomConfirmDialog(this, getString(R.string.inform_not_saved), positiveListener);
+            alertDialog.show();
         } else {
             finish();
         }
@@ -177,14 +178,6 @@ public class MakeCategoryActivity extends AbstractActivity{
             finish();
         }
     };
-
-    private OnClickListener negativeListener = new OnClickListener() {
-
-        public void onClick(View v) {
-            alertDialog.dismiss();
-        }
-    };
-
 
     private TextWatcher textChangeWatcher = new TextWatcher() {
         @Override

@@ -7,43 +7,23 @@ import android.view.View;
 
 import act.angelman.R;
 import act.angelman.presentation.manager.ApplicationConstants;
-import act.angelman.presentation.util.ContentsUtil;
 import act.angelman.presentation.util.DialogUtil;
 
 
 public class CardEditSelectDialog {
 
-    private static final int DEFAULT_WIDTH = 300;
-    private static final int DEFAULT_HEIGHT = 340;
     private final AlertDialog dialog;
-    private Context context;
+    private final Context context;
+    private final View.OnClickListener positiveOnClickListener;
 
-    public CardEditSelectDialog (Context context, final View.OnClickListener positiveOnClickListener) {
+    public CardEditSelectDialog (Context context, View.OnClickListener positiveOnClickListener) {
         this.context = context;
+        this.positiveOnClickListener = positiveOnClickListener;
+
         View innerView = ((Activity) context).getLayoutInflater().inflate(R.layout.card_edit_select_dialog, null);
-
-        View.OnClickListener onClickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                switch (view.getId()){
-                    case R.id.card_edit_content_text :
-                        view.setTag(ApplicationConstants.CARD_EDIT_TYPE.CONTENT);
-                        break;
-                    case R.id.card_edit_name_text :
-                        view.setTag(ApplicationConstants.CARD_EDIT_TYPE.NAME);
-                        break;
-                    case R.id.card_edit_voice_text :
-                        view.setTag(ApplicationConstants.CARD_EDIT_TYPE.VOICE);
-                        break;
-                }
-                positiveOnClickListener.onClick(view);
-                dismiss();
-            }
-        };
-
-        innerView.findViewById(R.id.card_edit_content_text).setOnClickListener(onClickListener);
-        innerView.findViewById(R.id.card_edit_name_text).setOnClickListener(onClickListener);
-        innerView.findViewById(R.id.card_edit_voice_text).setOnClickListener(onClickListener);
+        innerView.findViewById(R.id.card_edit_content_text).setOnClickListener(onItemClickListener);
+        innerView.findViewById(R.id.card_edit_name_text).setOnClickListener(onItemClickListener);
+        innerView.findViewById(R.id.card_edit_voice_text).setOnClickListener(onItemClickListener);
 
         dialog = DialogUtil.buildCustomDialog(context, innerView, new View.OnClickListener() {
             @Override
@@ -51,14 +31,33 @@ public class CardEditSelectDialog {
                 dismiss();
             }
         });
-        dialog.show();
-        dialog.getWindow().setLayout((int) ContentsUtil.convertDpToPixel(DEFAULT_WIDTH, context), (int) ContentsUtil.convertDpToPixel(DEFAULT_HEIGHT, context));
+    }
+
+    public void show() {
+        DialogUtil.show(context, dialog, 340);
     }
 
     public void dismiss() {
         dialog.dismiss();
     }
 
-
+    private View.OnClickListener onItemClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.card_edit_content_text :
+                view.setTag(ApplicationConstants.CARD_EDIT_TYPE.CONTENT);
+                break;
+            case R.id.card_edit_name_text :
+                view.setTag(ApplicationConstants.CARD_EDIT_TYPE.NAME);
+                break;
+            case R.id.card_edit_voice_text :
+                view.setTag(ApplicationConstants.CARD_EDIT_TYPE.VOICE);
+                break;
+        }
+        positiveOnClickListener.onClick(view);
+        dismiss();
+        }
+    };
 
 }
