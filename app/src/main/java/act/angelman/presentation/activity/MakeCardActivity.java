@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
+import com.google.common.base.Strings;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -71,6 +72,8 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
     RecordUtil recordUtil = RecordUtil.getInstance();
     PlayUtil playUtil;
 
+    private CardModel editCardModel;
+
     @Inject
     CardRepository cardRepository;
 
@@ -104,6 +107,7 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
     @BindView(R.id.card_view_layout)
     CardView cardView;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,8 +126,15 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
 
         selectedCategoryId = applicationManager.getCategoryModel().index;
         Intent intent = getIntent();
-        contentPath = intent.getStringExtra(ContentsUtil.CONTENT_PATH);
-        cardType = CardModel.CardType.valueOf(intent.getStringExtra(ContentsUtil.CARD_TYPE));
+        String editCardId = intent.getStringExtra("CARD_ID");
+        if(Strings.isNullOrEmpty(editCardId)){
+            contentPath = intent.getStringExtra(ContentsUtil.CONTENT_PATH);
+            cardType = CardModel.CardType.valueOf(intent.getStringExtra(ContentsUtil.CARD_TYPE));
+        }else{
+            editCardModel = cardRepository.getSingleCard(editCardId);
+            contentPath = editCardModel.contentPath;
+            cardType = editCardModel.cardType;
+        }
 
         initCardView();
         initKeyboardAction();
@@ -311,18 +322,32 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
             if (event == null && actionId == EditorInfo.IME_ACTION_DONE) {
                 if (checkValidationForText()) {
-                    cardView.changeCardViewStatus();
-                    hideKeyboard();
-                    showRecodingGuideAndMicButton();
+                    if(editCardModel != null){
+                        editCardModel.name = cardView.cardTitleEdit.getText().toString();
+                        cardRepository.updateSingleCardName(editCardModel._id, editCardModel.name);
+                        hideKeyboard();
+                        moveToCardViewPagerActivity();
+                    }else{
+                        cardView.changeCardViewStatus();
+                        hideKeyboard();
+                        showRecodingGuideAndMicButton();
+                    }
                 }
             } else if (event != null) {
                 switch (event.getKeyCode()) {
                     case KeyEvent.KEYCODE_ENTER:
                         if (event.getAction() == KeyEvent.ACTION_UP) {
                             if (checkValidationForText()) {
-                                cardView.changeCardViewStatus();
-                                hideKeyboard();
-                                showRecodingGuideAndMicButton();
+                                if(editCardModel != null){
+                                    editCardModel.name = cardView.cardTitleEdit.getText().toString();
+                                    cardRepository.updateSingleCardName(editCardModel._id, editCardModel.name);
+                                    hideKeyboard();
+                                    moveToCardViewPagerActivity();
+                                }else{
+                                    cardView.changeCardViewStatus();
+                                    hideKeyboard();
+                                    showRecodingGuideAndMicButton();
+                                }
                             }
                         }
                         break;
@@ -331,8 +356,16 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
                 }
             }
             return true;
+
         }
     };
+
+    private void moveToCardViewPagerActivity() {
+        Intent intent = new Intent(getApplicationContext(), CardViewPagerActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra(ApplicationConstants.INTENT_KEY_LIST_BACK, true);
+        getApplicationContext().startActivity(intent);
+    }
 
     private void playRecordVoiceFile() {
         waitCount.setText(R.string.check_recorded_voice);
