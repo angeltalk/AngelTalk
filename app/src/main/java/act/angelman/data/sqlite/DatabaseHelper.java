@@ -5,13 +5,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 12;
+    private static final int DATABASE_VERSION = 13;
 
     private static final String DATABASE_NAME = "AngelmanDatabase";
 
     private static final String SQL_CREATE_CARD_LIST =
             "CREATE TABLE " + CardColumns.TABLE_NAME + "(" +
-                    CardColumns._ID + " INTEGER_PRIMARY_KEY," +
+                    CardColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                     CardColumns.CATEGORY_ID + " INTEGER," +
                     CardColumns.NAME + " TEXT," +
                     CardColumns.CONTENT_PATH + " TEXT," +
@@ -24,7 +24,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String SQL_CREATE_CATEGORY_LIST =
             "CREATE TABLE " + CategoryColumns.TABLE_NAME + "(" +
-                    CategoryColumns._ID + " INTEGER_PRIMARY_KEY," +
+                    CategoryColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                     CategoryColumns.TITLE + " TEXT," +
                     CategoryColumns.ICON + " INTEGER," +
                     CategoryColumns.COLOR + " INTEGER," +
