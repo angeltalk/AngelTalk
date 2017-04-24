@@ -11,8 +11,9 @@ import javax.inject.Inject;
 
 import act.angelman.AngelmanApplication;
 import act.angelman.R;
-import act.angelman.presentation.manager.ApplicationConstants;
 import act.angelman.presentation.custom.CardTitleLayout;
+import act.angelman.presentation.custom.FontTextView;
+import act.angelman.presentation.manager.ApplicationConstants;
 import act.angelman.presentation.manager.ApplicationManager;
 import act.angelman.presentation.util.ResourcesUtil;
 import butterknife.BindView;
@@ -37,6 +38,7 @@ public class CameraGallerySelectionActivity extends AbstractActivity {
     CardTitleLayout titleLayout;
 
     private static final int SELECT_PICTURE = 1;
+    private String editCardId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,13 +51,18 @@ public class CameraGallerySelectionActivity extends AbstractActivity {
                 findViewById(R.id.camera_gallery_selection_container),
                 applicationManager.getCategoryModelColor()
         );
-
-        titleLayout.setCategoryModelTitle(applicationManager.getCategoryModel().title);
         titleLayout.hideCardCountText(true);
         titleLayout.hideListCardButton(true);
 
-        setCameraGalleryIconColor();
+        editCardId = getIntent().getStringExtra("CHANGE_TO_CONSTANT");
+        if(editCardId == null) {
+            titleLayout.setCategoryModelTitle(applicationManager.getCategoryModel().title);
+        } else {
+            titleLayout.setCategoryModelTitle(getString(R.string.card_edit_title));
+            ((FontTextView) findViewById(R.id.camera_start_text)).setText(R.string.edit_content_guide_text);
+        }
 
+        setCameraGalleryIconColor();
     }
 
     private void setCameraGalleryIconColor() {
