@@ -46,13 +46,13 @@ public class CardEditSelectDialog {
         public void onClick(View view) {
         switch (view.getId()){
             case R.id.card_edit_content_text :
-                view.setTag(ApplicationConstants.CARD_EDIT_TYPE.CONTENT);
+                view.setTag(ApplicationConstants.CardEditType.CONTENT);
                 break;
             case R.id.card_edit_name_text :
-                view.setTag(ApplicationConstants.CARD_EDIT_TYPE.NAME);
+                view.setTag(ApplicationConstants.CardEditType.NAME);
                 break;
             case R.id.card_edit_voice_text :
-                view.setTag(ApplicationConstants.CARD_EDIT_TYPE.VOICE);
+                view.setTag(ApplicationConstants.CardEditType.VOICE);
                 break;
         }
         positiveOnClickListener.onClick(view);
