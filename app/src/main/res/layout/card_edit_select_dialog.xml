@@ -19,9 +19,10 @@
         android:layout_below="@id/img_logo_popup"
         android:orientation="vertical"
         android:background="@color/white">
+
         <act.angelman.presentation.custom.FontTextView
             android:id="@+id/card_edit_select_guide"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="50dp"
             app:font="@string/font_regular"
             android:textColor="@color/black_99"
@@ -37,7 +38,7 @@
 
         <act.angelman.presentation.custom.FontTextView
             android:id="@+id/card_edit_content_text"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="50dp"
             app:font="@string/font_regular"
             android:textColor="@color/black_cc"
@@ -53,7 +54,7 @@
 
         <act.angelman.presentation.custom.FontTextView
             android:id="@+id/card_edit_name_text"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="50dp"
             app:font="@string/font_regular"
             android:textColor="@color/black_cc"
