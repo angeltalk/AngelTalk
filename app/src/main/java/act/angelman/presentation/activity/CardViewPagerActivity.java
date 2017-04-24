@@ -50,6 +50,9 @@ import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 
 public class CardViewPagerActivity extends AbstractActivity {
 
+    public PackageManager pm;
+    private static final String CARD_ID = "CARD_ID";
+
     @Inject
     CardRepository cardRepository;
 
@@ -98,8 +101,6 @@ public class CardViewPagerActivity extends AbstractActivity {
         startActivity(intent);
         finish();
     }
-
-    public PackageManager pm;
 
     @OnClick(R.id.card_delete_button)
     public void deleteButtonOnClick() {
@@ -165,7 +166,10 @@ public class CardViewPagerActivity extends AbstractActivity {
 
     }
     private void moveToNameEditActivity(CardModel cardModel){
-
+        String cardId = cardModel._id;
+        Intent intent = new Intent(context, MakeCardActivity.class);
+        intent.putExtra(CARD_ID, cardId);
+        startActivity(intent);
     }
     private void moveToVoiceEditActivity(CardModel cardModel){
 
