@@ -20,6 +20,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.common.collect.Lists;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.invocation.InvocationOnMock;
@@ -167,6 +168,7 @@ public class CardViewPagerActivityTest extends UITest {
     }
 
     @Test
+    @Ignore
     public void whenClickedEditButton_thenShowsEditSelectDialog() throws Exception {
         ShadowAlertDialog shadowDialog = getShadowAlertDialog();
         assertThat(((TextView) shadowDialog.getView().findViewById(R.id.alert_message)).getText()).contains( "카드를 수정해보세요" );
