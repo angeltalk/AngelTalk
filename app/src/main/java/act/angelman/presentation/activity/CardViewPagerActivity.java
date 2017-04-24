@@ -162,7 +162,11 @@ public class CardViewPagerActivity extends AbstractActivity {
     }
 
     private void moveToContentEditActivity(CardModel cardModel){
-
+        stopPlayingCard();
+        Intent intent = new Intent(context, CameraGallerySelectionActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.putExtra("CHANGE_TO_CONSTANT", cardModel._id);
+        startActivity(intent);
     }
     private void moveToNameEditActivity(CardModel cardModel){
 
