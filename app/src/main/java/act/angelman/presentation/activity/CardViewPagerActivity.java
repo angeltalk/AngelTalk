@@ -71,6 +71,9 @@ public class CardViewPagerActivity extends AbstractActivity {
     @BindView(R.id.button_container)
     LinearLayout buttonContainer;
 
+    @BindView(R.id.card_edit_button)
+    ImageButton cardEditButton;
+
     @BindView(R.id.card_delete_button)
     ImageButton cardDeleteButton;
 

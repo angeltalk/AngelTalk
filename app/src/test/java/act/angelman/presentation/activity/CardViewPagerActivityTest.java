@@ -20,7 +20,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.common.collect.Lists;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.invocation.InvocationOnMock;
@@ -168,10 +167,29 @@ public class CardViewPagerActivityTest extends UITest {
     }
 
     @Test
-    @Ignore
     public void whenClickedEditButton_thenShowsEditSelectDialog() throws Exception {
-        ShadowAlertDialog shadowDialog = getShadowAlertDialog();
-        assertThat(((TextView) shadowDialog.getView().findViewById(R.id.alert_message)).getText()).contains( "카드를 수정해보세요" );
+        subject.cardEditButton.performClick();
+        AlertDialog alert = ShadowAlertDialog.getLatestAlertDialog();
+        ShadowAlertDialog shadowDialog = shadowOf(alert);
+        assertThat(((TextView) shadowDialog.getView().findViewById(R.id.card_edit_select_guide)).getText()).contains( "카드를 수정해보세요" );
+    }
+
+    @Test
+    public void givenCardEditSelectDialogShow_whenClickEditContent_thenMoveToCameraGallerySelectionActivity() throws Exception {
+        // given
+        subject.mViewPager.setCurrentItem(1);
+        subject.cardEditButton.performClick();
+        AlertDialog alert = ShadowAlertDialog.getLatestAlertDialog();
+        ShadowAlertDialog shadowDialog = shadowOf(alert);
+
+        // when
+        shadowDialog.getView().findViewById(R.id.card_edit_content_text).performClick();
+
+        // then
+        ShadowActivity shadowActivity = shadowOf(subject);
+        Intent nextStartedActivity = shadowActivity.getNextStartedActivity();
+        assertThat(nextStartedActivity.getStringExtra("CHANGE_TO_CONSTANT")).isEqualTo("1");
+        assertThat(nextStartedActivity.getComponent().getClassName()).isEqualTo(CameraGallerySelectionActivity.class.getCanonicalName());
     }
 
     @Test
@@ -658,17 +676,17 @@ public class CardViewPagerActivityTest extends UITest {
         String contentFolder = ContentsUtil.getContentFolder() + File.separator;
 
         List<CardModel> ret = Lists.newArrayList(
-                makeSingleCardModel( "물", contentFolder+"water.png", "20010928_120020", 0, 0, CardModel.CardType.PHOTO_CARD, null, false),
-                makeSingleCardModel( "우유", contentFolder+"milk.png", "20010928_120019", 0, 1, CardModel.CardType.PHOTO_CARD, null, false),
-                makeSingleCardModel( "쥬스", contentFolder+"juice.png", "20010928_120015", 0, 2, CardModel.CardType.PHOTO_CARD, null, false),
-                makeSingleCardModel( "젤리", contentFolder+"haribo.mp4", "20010928_120015", 0, 3, CardModel.CardType.VIDEO_CARD, contentFolder+"haribo.jpg", false)
+                makeSingleCardModel("1", "물", contentFolder+"water.png", "20010928_120020", 0, 0, CardModel.CardType.PHOTO_CARD, null, false),
+                makeSingleCardModel("2",  "우유", contentFolder+"milk.png", "20010928_120019", 0, 1, CardModel.CardType.PHOTO_CARD, null, false),
+                makeSingleCardModel("3",  "쥬스", contentFolder+"juice.png", "20010928_120015", 0, 2, CardModel.CardType.PHOTO_CARD, null, false),
+                makeSingleCardModel("4",  "젤리", contentFolder+"haribo.mp4", "20010928_120015", 0, 3, CardModel.CardType.VIDEO_CARD, contentFolder+"haribo.jpg", false)
         );
 
         return ret;
     }
 
-    public CardModel makeSingleCardModel(String name, String path, String time, int categoryId, int cardIndex, CardModel.CardType cardType, String thumbnailPath , boolean hide) {
-        return CardModel.builder().name(name).contentPath(path).firstTime(time).categoryId(categoryId).cardIndex(cardIndex).cardType(cardType).thumbnailPath(thumbnailPath).hide(hide).build();
+    public CardModel makeSingleCardModel(String id, String name, String path, String time, int categoryId, int cardIndex, CardModel.CardType cardType, String thumbnailPath , boolean hide) {
+        return CardModel.builder()._id(id).name(name).contentPath(path).firstTime(time).categoryId(categoryId).cardIndex(cardIndex).cardType(cardType).thumbnailPath(thumbnailPath).hide(hide).build();
     }
 
     private ShadowAlertDialog getShadowAlertDialog() {
