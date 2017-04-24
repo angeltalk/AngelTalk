@@ -3,7 +3,7 @@ package act.angelman.data.sqlite;
 import android.provider.BaseColumns;
 
 public abstract class CardColumns implements BaseColumns {
-    public static final String _id  = "id";
+    public static final String _ID = "_id";
     public static final String TABLE_NAME  = "cardlist";
     public static final String NAME        = "name";
     public static final String CONTENT_PATH = "content_path";
