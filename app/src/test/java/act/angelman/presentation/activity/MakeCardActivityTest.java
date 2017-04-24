@@ -179,6 +179,21 @@ public class MakeCardActivityTest extends UITest{
     }
 
     @Test
+    public void givenEditCard_whenCompleteEditing_thenUpdateCardModelAndMoveToCategoryViewPagerActivity() throws Exception {
+        setupEditCard();
+
+        EditText cardTitleEdit = (EditText) subject.findViewById(R.id.card_image_title_edit);
+        cardTitleEdit.setText("TEST");
+
+        enterKey(cardTitleEdit);
+
+        verify(cardRepository).updateSingleCardName(anyString(), anyString());
+        ShadowActivity shadowActivity = shadowOf(subject);
+        Intent nextStartedActivity = shadowActivity.getNextStartedActivity();
+        assertThat(nextStartedActivity.getComponent().getClassName()).isEqualTo(CardViewPagerActivity.class.getCanonicalName());
+    }
+
+    @Test
     public void givenShowMicButton_whenClickMicButton_thenShowCountingScene() throws Exception {
         setupPhotoCard();
 
