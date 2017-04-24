@@ -188,7 +188,7 @@ public class CardViewPagerActivityTest extends UITest {
         // then
         ShadowActivity shadowActivity = shadowOf(subject);
         Intent nextStartedActivity = shadowActivity.getNextStartedActivity();
-        assertThat(nextStartedActivity.getStringExtra("CHANGE_TO_CONSTANT")).isEqualTo("1");
+        assertThat(nextStartedActivity.getStringExtra(ApplicationConstants.EDIT_CARD_ID)).isEqualTo("1");
         assertThat(nextStartedActivity.getComponent().getClassName()).isEqualTo(CameraGallerySelectionActivity.class.getCanonicalName());
     }
 
