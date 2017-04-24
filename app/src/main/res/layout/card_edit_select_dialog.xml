@@ -70,7 +70,7 @@
 
         <act.angelman.presentation.custom.FontTextView
             android:id="@+id/card_edit_voice_text"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="50dp"
             app:font="@string/font_regular"
             android:textColor="@color/black_cc"

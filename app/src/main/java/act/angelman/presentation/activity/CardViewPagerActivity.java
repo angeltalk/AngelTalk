@@ -153,11 +153,11 @@ public class CardViewPagerActivity extends AbstractActivity {
             @Override
             public void onClick(View view) {
                 CardModel cardModel = ((CardView) cardImageAdapter.viewCollection.get(mViewPager.getCurrentItem())).dataModel;
-                if (view.getTag() == ApplicationConstants.CARD_EDIT_TYPE.CONTENT ) {
+                if (view.getTag() == ApplicationConstants.CardEditType.CONTENT ) {
                     moveToContentEditActivity(cardModel);
-                }else if(view.getTag() == ApplicationConstants.CARD_EDIT_TYPE.NAME ) {
+                }else if(view.getTag() == ApplicationConstants.CardEditType.NAME ) {
                     moveToNameEditActivity(cardModel);
-                }else if(view.getTag() == ApplicationConstants.CARD_EDIT_TYPE.VOICE ) {
+                }else if(view.getTag() == ApplicationConstants.CardEditType.VOICE) {
                     moveToVoiceEditActivity(cardModel);
                 }
             }
@@ -169,16 +169,22 @@ public class CardViewPagerActivity extends AbstractActivity {
         Intent intent = new Intent(context, CameraGallerySelectionActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.putExtra(ApplicationConstants.EDIT_CARD_ID, cardModel._id);
+        intent.putExtra(ApplicationConstants.EDIT_TYPE, ApplicationConstants.CardEditType.CONTENT.value());
         startActivity(intent);
     }
     private void moveToNameEditActivity(CardModel cardModel){
         String cardId = cardModel._id;
         Intent intent = new Intent(context, MakeCardActivity.class);
         intent.putExtra(ApplicationConstants.EDIT_CARD_ID, cardId);
+        intent.putExtra(ApplicationConstants.EDIT_TYPE, ApplicationConstants.CardEditType.NAME.value());
         startActivity(intent);
     }
     private void moveToVoiceEditActivity(CardModel cardModel){
-
+        String cardId = cardModel._id;
+        Intent intent = new Intent(context, MakeCardActivity.class);
+        intent.putExtra(ApplicationConstants.EDIT_CARD_ID, cardId);
+        intent.putExtra(ApplicationConstants.EDIT_TYPE, ApplicationConstants.CardEditType.VOICE.value());
+        startActivity(intent);
     }
     List<CardModel> allCardListInSelectedCategory;
 
