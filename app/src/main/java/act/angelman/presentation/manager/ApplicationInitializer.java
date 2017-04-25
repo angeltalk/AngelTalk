@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import act.angelman.data.sqlite.DatabaseHelper;
 import act.angelman.presentation.util.ContentsUtil;
 import act.angelman.presentation.util.FileUtil;
 
@@ -27,7 +28,9 @@ public class ApplicationInitializer {
 
     public void initializeApplication() {
         initExternalStorageFolder();
-        if(isFirstLaunched()) {
+        DatabaseHelper databaseHelper = DatabaseHelper.getInstance(context);
+        databaseHelper.getWritableDatabase();
+        if(isFirstLaunched() && isNewInstall()){
             copyDefaultAssetImagesToImageFolder(context);
         }
     }
@@ -36,8 +39,13 @@ public class ApplicationInitializer {
         SharedPreferences preferences = context.getSharedPreferences(ApplicationConstants.PRIVATE_PREFERENCE_NAME, Context.MODE_PRIVATE);
         return preferences.getBoolean(ApplicationConstants.FIRST_LAUNCH, true);
     }
+    private boolean isNewInstall(){
+        SharedPreferences preferences = context.getSharedPreferences(ApplicationConstants.PRIVATE_PREFERENCE_NAME, Context.MODE_PRIVATE);
+        return preferences.getBoolean(ApplicationConstants.NEW_INSTALL, true);
+    }
 
     private void initExternalStorageFolder() {
+
         File rootFolder = new File(Environment.getExternalStorageDirectory() + File.separator + ContentsUtil.ANGELMAN_FOLDER);
 
         if (!rootFolder.exists()) {
