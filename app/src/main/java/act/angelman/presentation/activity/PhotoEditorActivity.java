@@ -12,8 +12,12 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 
+import javax.inject.Inject;
+
+import act.angelman.AngelmanApplication;
 import act.angelman.R;
 import act.angelman.domain.model.CardModel;
+import act.angelman.domain.repository.CardRepository;
 import act.angelman.presentation.manager.ApplicationConstants;
 import act.angelman.presentation.util.ContentsUtil;
 import act.angelman.presentation.util.FontUtil;
@@ -22,6 +26,9 @@ import act.angelman.presentation.util.ResolutionUtil;
 public class PhotoEditorActivity extends AbstractActivity {
 
     RequestManager glide;
+
+    @Inject
+    CardRepository cardRepository;
 
     private ImageView imageCapture;
     private ImageView confirmButton;
@@ -32,6 +39,7 @@ public class PhotoEditorActivity extends AbstractActivity {
     protected ScaleGestureDetector scaleGestureDetector;
     private float scale = 1f;
     private float px = 0, py = 0;
+    private String editCardId;
 
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
@@ -40,7 +48,12 @@ public class PhotoEditorActivity extends AbstractActivity {
                 case R.id.photo_edit_confirm:
                     hideViews();
                     String fileName = saveEditedImage();
-                    startShowCardActivity(fileName);
+                    if(editCardId == null) {
+                        startMakeCardActivity(fileName);
+                    } else {
+                        modifyCardImage(fileName);
+                        startCardViewPagerActivity();
+                    }
                     showViews();
                     finish();
                     break;
@@ -52,13 +65,24 @@ public class PhotoEditorActivity extends AbstractActivity {
         }
     };
 
+    private void modifyCardImage(String imagePath) {
+        ContentsUtil.deleteContentAndThumbnail(cardRepository.getSingleCard(editCardId).contentPath);
+        cardRepository.updateSingleCardContent(editCardId, CardModel.CardType.PHOTO_CARD.getValue(), imagePath, null);
+    }
+
+    private void startCardViewPagerActivity() {
+        Intent intent = new Intent(this, CardViewPagerActivity.class);
+        intent.putExtra(ApplicationConstants.INTENT_KEY_CARD_EDITED, true);
+        startActivity(intent);
+    }
+
     private void rotateImage() {
         float rotationDegree = (imageCapture.getRotation() - 90f) % 360f;
         imageCapture.setRotation(rotationDegree);
     }
 
 
-    private void startShowCardActivity(String fileName) {
+    private void startMakeCardActivity(String fileName) {
         Intent intent = new Intent(PhotoEditorActivity.this, MakeCardActivity.class);
         intent.putExtra(ContentsUtil.CONTENT_PATH, fileName);
         intent.putExtra(ContentsUtil.CARD_TYPE, CardModel.CardType.PHOTO_CARD.getValue());
@@ -68,7 +92,9 @@ public class PhotoEditorActivity extends AbstractActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ((AngelmanApplication) getApplication()).getAngelmanComponent().inject(this);
         setContentView(R.layout.activity_photo_editor);
+        editCardId = getIntent().getStringExtra(ApplicationConstants.EDIT_CARD_ID);
 
         glide = Glide.with(this);
 

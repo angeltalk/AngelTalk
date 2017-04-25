@@ -7,8 +7,6 @@ import android.view.View;
 
 import com.bumptech.glide.Glide;
 
-import java.io.File;
-
 import javax.inject.Inject;
 
 import act.angelman.AngelmanApplication;
@@ -93,7 +91,7 @@ public class MakeCardPreviewActivity extends AppCompatActivity {
             startActivity(intent);
         }
 
-        deleteContentAndThumbnail(previewContentPath);
+        ContentsUtil.deleteContentAndThumbnail(previewContentPath);
         finish();
     }
 
@@ -110,7 +108,7 @@ public class MakeCardPreviewActivity extends AppCompatActivity {
             intent.putExtra(ContentsUtil.CARD_TYPE, previewCardType.getValue());
             startActivity(intent);
         } else {
-            deleteContentAndThumbnail(cardRepository.getSingleCard(editCardId).contentPath);
+            ContentsUtil.deleteContentAndThumbnail(cardRepository.getSingleCard(editCardId).contentPath);
 
             String thumbnailPath = null;
             if(previewCardType == CardModel.CardType.VIDEO_CARD) {
@@ -124,14 +122,5 @@ public class MakeCardPreviewActivity extends AppCompatActivity {
         }
     }
 
-    private void deleteContentAndThumbnail(String contentPath) {
-        File contentFile = new File(contentPath);
-        if (contentFile.exists()) {
-            contentFile.delete();
-        }
-        File thumbnailFile = new File(ContentsUtil.getThumbnailPath(contentPath));
-        if(thumbnailFile.exists()) {
-            thumbnailFile.delete();
-        }
-    }
+
 }
