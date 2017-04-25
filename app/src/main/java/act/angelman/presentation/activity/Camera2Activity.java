@@ -400,7 +400,7 @@ public class Camera2Activity extends AbstractActivity implements View.OnClickLis
 
         ((TextView) findViewById(R.id.picture_guide)).setTypeface(FontUtil.setFont(this, FontUtil.FONT_DEMILIGHT));
 
-        fileName = ContentsUtil.getImagePath();
+        fileName = ContentsUtil.getImagePath(this);
         playUtil = PlayUtil.getInstance();
         editCardId = getIntent().getStringExtra(ApplicationConstants.EDIT_CARD_ID);
     }

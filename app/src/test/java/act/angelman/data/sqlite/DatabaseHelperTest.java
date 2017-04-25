@@ -80,7 +80,7 @@ public class DatabaseHelperTest {
         SQLiteDatabase mockDb = mock(SQLiteDatabase.class);
 
         DatabaseHelper dbHelper = DatabaseHelper.getInstance(subject.getApplicationContext());
-        dbHelper.onUpgrade(mockDb, 1, 2);
+        dbHelper.onUpgrade(mockDb, 9, 10);
 
         verify(mockDb).execSQL("drop table " + CardColumns.TABLE_NAME);
         verify(mockDb).execSQL("drop table " + CategoryColumns.TABLE_NAME);

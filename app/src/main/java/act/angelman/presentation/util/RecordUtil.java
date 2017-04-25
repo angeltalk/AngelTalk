@@ -1,5 +1,6 @@
 package act.angelman.presentation.util;
 
+import android.content.Context;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Handler;
@@ -31,8 +32,8 @@ public class RecordUtil {
     private MediaPlayer mediaPlayer;
     private MediaRecorder mediaRecorder;
 
-    public static String getMediaFilePath(){
-        return ContentsUtil.getVoiceFolder() + File.separator + DateUtil.getDateNow() +".3gdp";
+    public static String getMediaFilePath(Context context){
+        return ContentsUtil.getVoiceFolder(context) + File.separator + DateUtil.getDateNow() +".3gdp";
     }
 
     public void stopRecord() {

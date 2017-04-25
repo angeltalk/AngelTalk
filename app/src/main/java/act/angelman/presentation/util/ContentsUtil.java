@@ -5,7 +5,6 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.media.ThumbnailUtils;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -36,28 +35,28 @@ public class ContentsUtil {
     public static String CONTENT_PATH = "content path";
     public static String CARD_TYPE = "card type";
 
-    public static String getContentFolder() {
-        return Environment.getExternalStorageDirectory() + File.separator + CONTENT_FULL_PATH;
+    public static String getContentFolder(Context context) {
+        return context.getApplicationContext().getFilesDir() + File.separator + CONTENT_FULL_PATH;
     }
 
-    public static String getVoiceFolder() {
-        return Environment.getExternalStorageDirectory() + File.separator + VOICE_FULL_PATH;
+    public static String getVoiceFolder(Context context) {
+        return context.getApplicationContext().getFilesDir() + File.separator + VOICE_FULL_PATH;
+    }
+    public static String getTempFolder(Context context) {
+
+        return context.getApplicationContext().getFilesDir() + File.separator + TEMP_FULL_PATH;
     }
 
-    public static String getTempFolder() {
-        return Environment.getExternalStorageDirectory() + File.separator + TEMP_FULL_PATH;
+    public static String getImagePath(Context context) {
+        return getContentFolder(context) + File.separator + DateUtil.getDateNow() + ".jpg";
     }
 
-    public static String getImagePath() {
-        return getContentFolder() + File.separator + DateUtil.getDateNow() + ".jpg";
+    public static String getVideoPath(Context context) {
+        return getContentFolder(context) + File.separator + DateUtil.getDateNow() +".mp4";
     }
 
-    public static String getVideoPath() {
-        return getContentFolder() + File.separator + DateUtil.getDateNow() +".mp4";
-    }
-
-    public static String getVoicePath() {
-        return getVoiceFolder() + File.separator + DateUtil.getDateNow() + ".3gdp";
+    public static String getVoicePath(Context context) {
+        return getVoiceFolder(context) + File.separator + DateUtil.getDateNow() + ".3gdp";
     }
 
     public static String getThumbnailPath(String videoPath) {
@@ -196,8 +195,8 @@ public class ContentsUtil {
         return  cardModel;
     }
 
-    public static void copySharedFiles(CardModel cardModel) {
-        File[] files = new File(getTempFolder()).listFiles();
+    public static void copySharedFiles(Context context, CardModel cardModel) {
+        File[] files = new File(getTempFolder(context)).listFiles();
         for (File file : files) {
             try {
                 if (file.getAbsolutePath().contains("mp4")) {
