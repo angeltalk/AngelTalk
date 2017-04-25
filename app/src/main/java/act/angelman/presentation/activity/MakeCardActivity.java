@@ -63,11 +63,12 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
 
     private String contentPath;
     private RequestManager glide;
-
     private int selectedCategoryId;
     private String voiceFile;
     private Handler countHandler = new Handler();
     private CardModel.CardType cardType;
+    private CardEditType editType;
+    private String editCardId;
 
     protected int state = STATE_RECORD_NOT_COMPLETE;
     protected InputMethodManager imm;
@@ -110,9 +111,6 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
     @BindView(R.id.card_view_layout)
     CardView cardView;
 
-    private CardEditType editType;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -130,42 +128,9 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
         );
 
         selectedCategoryId = applicationManager.getCategoryModel().index;
-        Intent intent = getIntent();
 
-        String editCardId = intent.getStringExtra(ApplicationConstants.EDIT_CARD_ID);
-
-        if(isEditMode(editCardId)){
-            editCardModel = cardRepository.getSingleCard(editCardId);
-            editType = CardEditType.valueOf(intent.getStringExtra(ApplicationConstants.EDIT_TYPE));
-            contentPath = editCardModel.contentPath;
-            cardType = editCardModel.cardType;
-
-            if(CardEditType.VOICE.equals(editType)){
-                initCardView();
-
-                cardView.cardTitle.setText(editCardModel.name);
-                cardView.cardTitle.setVisibility(View.VISIBLE);
-                cardView.cardTitleEdit.setVisibility(View.GONE);
-
-                showRecodingGuideAndMicButton();
-                return;
-            }
-        }else{
-            contentPath = intent.getStringExtra(ContentsUtil.CONTENT_PATH);
-            cardType = CardModel.CardType.valueOf(intent.getStringExtra(ContentsUtil.CARD_TYPE));
-        }
+        initCardData();
         initCardView();
-        initKeyboardAction();
-    }
-
-    private boolean isEditMode(String editCardId) {
-        return !Strings.isNullOrEmpty(editCardId);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        rootLayout.getViewTreeObserver().removeOnGlobalLayoutListener(onGlobalLayoutListener);
     }
 
     @Override
@@ -209,6 +174,12 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
             replayButton.setVisibility(View.GONE);
             retakeButton.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        rootLayout.getViewTreeObserver().removeOnGlobalLayoutListener(onGlobalLayoutListener);
     }
 
     @Override
@@ -263,25 +234,6 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
         onBackPressed();
     }
 
-    private void initKeyboardAction() {
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                cardView.changeCardViewStatus();
-                setCardViewMarginBeforeShowingKeyboard();
-                showKeyboard();
-            }
-        }, 500);
-
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                rootLayout.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);
-            }
-        }, 1000);
-    }
-
     private void initCardView() {
         cardView.cardImage.setVisibility(View.VISIBLE);
         cardView.setCardViewLayoutMode(CardView.MODE_MAKE_CARD);
@@ -298,7 +250,6 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
             cardView.cardVideo.setVisibility(View.VISIBLE);
             cardView.cardImage.setScaleType(ImageView.ScaleType.FIT_XY);
             glide.load(ContentsUtil.getContentFile(ContentsUtil.getThumbnailPath(contentPath)))
-                    //.bitmapTransform(new AngelManGlideTransform(this, ResolutionUtil.getDpToPix(this, 10), 0, AngelManGlideTransform.CornerType.TOP))
                     .override(280, 280)
                     .into(cardView.cardImage);
             cardView.playButton.setVisibility(View.VISIBLE);
@@ -327,6 +278,54 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
         cardView.findViewById(R.id.card_image_title_edit).setVisibility(View.VISIBLE);
 
         cardView.cardTitleEdit.setOnEditorActionListener(cardTitleEditorActionListener);
+
+        if(CardEditType.VOICE.equals(editType)){
+            prepareVoiceEditing();
+        } else {
+            prepareNameEditing();
+        }
+    }
+
+    private void initCardData() {
+        Intent intent = getIntent();
+        editCardId = intent.getStringExtra(ApplicationConstants.EDIT_CARD_ID);
+
+        if(isCardEditing()){
+            editType = CardEditType.valueOf(intent.getStringExtra(ApplicationConstants.EDIT_TYPE));
+            editCardModel = cardRepository.getSingleCard(editCardId);
+            contentPath = editCardModel.contentPath;
+            cardType = editCardModel.cardType;
+        } else {
+            contentPath = intent.getStringExtra(ContentsUtil.CONTENT_PATH);
+            cardType = CardModel.CardType.valueOf(intent.getStringExtra(ContentsUtil.CARD_TYPE));
+        }
+    }
+
+    private void prepareVoiceEditing() {
+        cardView.cardTitle.setText(editCardModel.name);
+        cardView.cardTitle.setVisibility(View.VISIBLE);
+        cardView.cardTitleEdit.setVisibility(View.GONE);
+
+        showRecodingGuideAndMicButton();
+    }
+
+    private void prepareNameEditing() {
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                cardView.changeCardViewStatus();
+                setCardViewMarginBeforeShowingKeyboard();
+                showKeyboard();
+            }
+        }, 500);
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                rootLayout.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);
+            }
+        }, 1000);
     }
 
     private void setCardViewMarginBeforeShowingKeyboard() {
@@ -397,7 +396,6 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
                 }
             }
             return true;
-
         }
     };
 
@@ -485,5 +483,9 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
             }
         }
     };
+
+    private boolean isCardEditing() {
+        return !Strings.isNullOrEmpty(editCardId);
+    }
 }
 
