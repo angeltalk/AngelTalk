@@ -130,8 +130,6 @@ public class PhotoEditorActivityTest extends UITest{
         assertThat(nextStartedActivity.getBooleanExtra(ApplicationConstants.INTENT_KEY_CARD_EDITED, false)).isTrue();
         assertThat(nextStartedActivity.getComponent().getClassName()).isEqualTo(CardViewPagerActivity.class.getCanonicalName());
         assertThat(shadowActivity.isFinishing()).isTrue();
-
-
     }
 
 

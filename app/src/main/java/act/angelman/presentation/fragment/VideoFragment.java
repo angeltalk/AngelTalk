@@ -230,6 +230,7 @@ public class VideoFragment extends Fragment
 
 
     };
+    private String editCardId;
 
     public static VideoFragment newInstance(Context context) {
         return new VideoFragment();
@@ -287,6 +288,7 @@ public class VideoFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        editCardId = getActivity().getIntent().getStringExtra(ApplicationConstants.EDIT_CARD_ID);
         return inflater.inflate(R.layout.fragment_video, container, false);
     }
 
@@ -704,6 +706,7 @@ public class VideoFragment extends Fragment
         Intent intent = new Intent(getActivity(), MakeCardPreviewActivity.class);
         intent.putExtra(ContentsUtil.CONTENT_PATH, mNextVideoAbsolutePath);
         intent.putExtra(ContentsUtil.CARD_TYPE, CardModel.CardType.VIDEO_CARD.getValue());
+        intent.putExtra(ApplicationConstants.EDIT_CARD_ID, editCardId);
         startActivity(intent);
     }
 

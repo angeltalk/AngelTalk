@@ -97,11 +97,9 @@ public class CameraGallerySelectionActivity extends AbstractActivity {
 
     @OnClick({R.id.layout_video})
     public void onClickVideo(View view){
-        startNextActivity(VideoActivity.class);
-    }
-
-    private void startNextActivity(Class nextClass) {
-        Intent intent = new Intent(CameraGallerySelectionActivity.this, nextClass);
+        Intent intent = new Intent(this, VideoActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.putExtra(ApplicationConstants.EDIT_CARD_ID, editCardId);
         startActivity(intent);
     }
 
