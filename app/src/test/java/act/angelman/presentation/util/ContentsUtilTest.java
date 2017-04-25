@@ -9,6 +9,7 @@ import android.view.WindowManager;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
 import java.io.File;
@@ -28,7 +29,7 @@ public class ContentsUtilTest {
 
     @Test
     public void givenFileNameAndBitMapExists_whenCallImageSave_thenSaveImage() throws Exception {
-        String fileName = ContentsUtil.getImagePath();
+        String fileName = ContentsUtil.getImagePath(RuntimeEnvironment.application.getApplicationContext());
         Bitmap fakeBitmap = Bitmap.createBitmap(1440, 2560, Bitmap.Config.ARGB_8888);//mock(Bitmap.class);
         Window window = mock(Window.class);
         WindowManager windowManager = mock(WindowManager.class);
@@ -58,13 +59,13 @@ public class ContentsUtilTest {
     @Test
     public void givenVideoFile_whenCallSaveVideoThumbnail_thenMakeVideoThumbnailImage() throws Exception {
         // given
-        FileUtil.copyFile(new File(ContentsUtil.getContentFolder() + File.separator + "airplane.mp4"), new File(ContentsUtil.getTempFolder() + File.separator + "airplane.mp4"));
+        FileUtil.copyFile(new File(ContentsUtil.getContentFolder(RuntimeEnvironment.application.getApplicationContext()) + File.separator + "airplane.mp4"), new File(ContentsUtil.getTempFolder(RuntimeEnvironment.application.getApplicationContext()) + File.separator + "airplane.mp4"));
 
         // when
-        ContentsUtil.saveVideoThumbnail(ContentsUtil.getTempFolder() + File.separator + "airplane.mp4");
+        ContentsUtil.saveVideoThumbnail(ContentsUtil.getTempFolder(RuntimeEnvironment.application.getApplicationContext()) + File.separator + "airplane.mp4");
 
         // then
-        assertThat(new File(ContentsUtil.getTempFolder() + File.separator + "airplane.jpg").exists()).isTrue();
+        assertThat(new File(ContentsUtil.getTempFolder(RuntimeEnvironment.application.getApplicationContext()) + File.separator + "airplane.jpg").exists()).isTrue();
     }
 
     @Test
@@ -74,7 +75,7 @@ public class ContentsUtilTest {
         cardTransferModel.name = "sharedPhotoCard";
         cardTransferModel.cardType = "PHOTO_CARD";
 
-        String folderPath = ContentsUtil.getTempFolder() + File.separator;
+        String folderPath = ContentsUtil.getTempFolder(RuntimeEnvironment.application.getApplicationContext()) + File.separator;
         File content = new File(folderPath + "test.jpg");
         File voice = new File(folderPath + "test.3gdp");
         content.createNewFile();
@@ -97,7 +98,7 @@ public class ContentsUtilTest {
         cardTransferModel.name = "sharedVideoCard";
         cardTransferModel.cardType = "VIDEO_CARD";
 
-        String folderPath = ContentsUtil.getTempFolder() + File.separator;
+        String folderPath = ContentsUtil.getTempFolder(RuntimeEnvironment.application.getApplicationContext()) + File.separator;
         File content = new File(folderPath + "test.mp4");
         File thumbnail = new File(folderPath + "test.jpg");
         File voice = new File(folderPath + "test.3gdp");
@@ -119,19 +120,19 @@ public class ContentsUtilTest {
     @Test
     public void givenPhotoCardAndTempFiles_whenCallCopySharedFiles_thenCopy() throws Exception {
         // given
-        String folderPath = ContentsUtil.getTempFolder() + File.separator;
+        String folderPath = ContentsUtil.getTempFolder(RuntimeEnvironment.application.getApplicationContext()) + File.separator;
         new File(folderPath + "test.jpg").createNewFile();
         new File(folderPath + "test.3gdp").createNewFile();
 
         CardModel cardModel = CardModel.builder()
                 .name("copyPhotoCard")
                 .cardType(CardModel.CardType.PHOTO_CARD)
-                .contentPath(ContentsUtil.getImagePath())
-                .voicePath(ContentsUtil.getVoicePath())
+                .contentPath(ContentsUtil.getImagePath(RuntimeEnvironment.application.getApplicationContext()))
+                .voicePath(ContentsUtil.getVoicePath(RuntimeEnvironment.application.getApplicationContext()))
                 .build();
 
         // when
-        ContentsUtil.copySharedFiles(cardModel);
+        ContentsUtil.copySharedFiles(RuntimeEnvironment.application.getApplicationContext(), cardModel);
 
         // then
         assertThat(cardModel.name).isEqualTo("copyPhotoCard");
@@ -143,22 +144,22 @@ public class ContentsUtilTest {
     @Test
     public void givenVideoCardAndTempFiles_whenCallCopySharedFiles_thenCopy() throws Exception {
         // given
-        String folderPath = ContentsUtil.getTempFolder() + File.separator;
+        String folderPath = ContentsUtil.getTempFolder(RuntimeEnvironment.application.getApplicationContext()) + File.separator;
         new File(folderPath + "test.mp4").createNewFile();
         new File(folderPath + "test.jpg").createNewFile();
         new File(folderPath + "test.3gdp").createNewFile();
 
-        String videoPath = ContentsUtil.getVideoPath();
+        String videoPath = ContentsUtil.getVideoPath(RuntimeEnvironment.application.getApplicationContext());
         CardModel cardModel = CardModel.builder()
                 .name("copyVideoCard")
                 .cardType(CardModel.CardType.VIDEO_CARD)
                 .contentPath(videoPath)
                 .thumbnailPath(ContentsUtil.getThumbnailPath(videoPath))
-                .voicePath(ContentsUtil.getVoicePath())
+                .voicePath(ContentsUtil.getVoicePath(RuntimeEnvironment.application.getApplicationContext()))
                 .build();
 
         // when
-        ContentsUtil.copySharedFiles(cardModel);
+        ContentsUtil.copySharedFiles(RuntimeEnvironment.application.getApplicationContext(),cardModel);
 
         // then
         assertThat(cardModel.name).isEqualTo("copyVideoCard");

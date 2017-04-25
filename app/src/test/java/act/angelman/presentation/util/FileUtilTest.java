@@ -5,6 +5,7 @@ import android.os.Environment;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowEnvironment;
 
@@ -21,20 +22,20 @@ public class FileUtilTest {
     @Test
     public void getImageFolderTest() throws Exception {
         ShadowEnvironment.setExternalStorageState(Environment.MEDIA_MOUNTED);
-        File file = new File(Environment.getExternalStorageDirectory() + File.separator + ContentsUtil.CONTENT_FULL_PATH);
-        assertThat(ContentsUtil.getContentFolder()).isEqualTo(file.getAbsolutePath());
+        File file = new File(RuntimeEnvironment.application.getFilesDir() + File.separator + ContentsUtil.CONTENT_FULL_PATH);
+        assertThat(ContentsUtil.getContentFolder(RuntimeEnvironment.application.getApplicationContext())).isEqualTo(file.getAbsolutePath());
     }
 
     @Test
     public void getVoiceFolderTest() throws Exception {
         ShadowEnvironment.setExternalStorageState(Environment.MEDIA_MOUNTED);
-        File file = new File(Environment.getExternalStorageDirectory() + File.separator + ContentsUtil.VOICE_FULL_PATH);
-        assertThat(ContentsUtil.getVoiceFolder()).isEqualTo(file.getAbsolutePath());
+        File file = new File(RuntimeEnvironment.application.getFilesDir() + File.separator + ContentsUtil.VOICE_FULL_PATH);
+        assertThat(ContentsUtil.getVoiceFolder(RuntimeEnvironment.application.getApplicationContext())).isEqualTo(file.getAbsolutePath());
     }
 
     @Test
     public void removeFileTest() throws Exception {
-        File file = new File(ContentsUtil.getTempFolder() + File.separator + "file.in");
+        File file = new File(ContentsUtil.getTempFolder(RuntimeEnvironment.application.getApplicationContext()) + File.separator + "file.in");
         file.createNewFile();
 
         assertThat(file.exists()).isTrue();
@@ -45,8 +46,8 @@ public class FileUtilTest {
     @Test
     public void removeFilesInTest() throws Exception {
         ShadowEnvironment.setExternalStorageState(Environment.MEDIA_MOUNTED);
-        File fileFolder =  new File(ContentsUtil.getTempFolder());
-        File file = new File(ContentsUtil.getTempFolder() + File.separator + "file.in");
+        File fileFolder =  new File(ContentsUtil.getTempFolder(RuntimeEnvironment.application.getApplicationContext()));
+        File file = new File(ContentsUtil.getTempFolder(RuntimeEnvironment.application.getApplicationContext()) + File.separator + "file.in");
         file.createNewFile();
         assertThat(fileFolder.listFiles()).isNotEmpty();
         FileUtil.removeFilesIn(fileFolder.getAbsolutePath());
@@ -57,9 +58,9 @@ public class FileUtilTest {
     public void copyFileTest() throws Exception {
         ShadowEnvironment.setExternalStorageState(Environment.MEDIA_MOUNTED);
 
-        File fileIn = new File(ContentsUtil.getTempFolder() + File.separator + "file.in");
+        File fileIn = new File(ContentsUtil.getTempFolder(RuntimeEnvironment.application.getApplicationContext()) + File.separator + "file.in");
         fileIn.createNewFile();
-        File fileOut = new File(ContentsUtil.getTempFolder() + File.separator + "file.out");
+        File fileOut = new File(ContentsUtil.getTempFolder(RuntimeEnvironment.application.getApplicationContext()) + File.separator + "file.out");
 
         assertThat(fileOut).doesNotExist();
         FileUtil.copyFile(fileIn, fileOut);
@@ -71,7 +72,7 @@ public class FileUtilTest {
         // given
         ShadowEnvironment.setExternalStorageState(Environment.MEDIA_MOUNTED);
 
-        File imageFolder = new File(ContentsUtil.getContentFolder());
+        File imageFolder = new File(ContentsUtil.getContentFolder(RuntimeEnvironment.application.getApplicationContext()));
         String[] files = new String[imageFolder.listFiles().length];
 
         for (int i=0; i<files.length; i++) {
@@ -92,7 +93,7 @@ public class FileUtilTest {
         // given
         ShadowEnvironment.setExternalStorageState(Environment.MEDIA_MOUNTED);
 
-        File imageFolder = new File(ContentsUtil.getContentFolder());
+        File imageFolder = new File(ContentsUtil.getContentFolder(RuntimeEnvironment.application.getApplicationContext()));
         String[] files = new String[imageFolder.listFiles().length];
 
         for (int i=0; i<files.length; i++) {
@@ -104,7 +105,7 @@ public class FileUtilTest {
         FileUtil.zip(files, zipFile);
 
         // when
-        String tempFolder = ContentsUtil.getTempFolder();
+        String tempFolder = ContentsUtil.getTempFolder(RuntimeEnvironment.application.getApplicationContext());
         FileUtil.unzip(zipFile, tempFolder);
 
         // then

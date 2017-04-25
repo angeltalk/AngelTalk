@@ -731,7 +731,7 @@ public class CardViewPagerActivityTest extends UITest {
 
     private List<CardModel> getCardListWithCategoryId() {
 
-        String contentFolder = ContentsUtil.getContentFolder() + File.separator;
+        String contentFolder = ContentsUtil.getContentFolder(RuntimeEnvironment.application.getApplicationContext()) + File.separator;
 
         List<CardModel> ret = Lists.newArrayList(
                 makeSingleCardModel("1", "물", contentFolder+"water.png", "20010928_120020", 0, 0, CardModel.CardType.PHOTO_CARD, null, false),

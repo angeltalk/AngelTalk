@@ -37,10 +37,10 @@ public class ApplicationInitializerTest {
         ShadowEnvironment.setExternalStorageState(Environment.MEDIA_MOUNTED);
         subject.initializeApplication();
 
-        File rootFolder = new File(Environment.getExternalStorageDirectory() + File.separator + ContentsUtil.ANGELMAN_FOLDER);
-        File imageFolder = new File(ContentsUtil.getContentFolder());
-        File voiceFolder = new File(ContentsUtil.getVoiceFolder());
-        File tempFolder = new File(ContentsUtil.getTempFolder());
+        File rootFolder = new File(RuntimeEnvironment.application.getApplicationContext().getFilesDir() + File.separator + ContentsUtil.ANGELMAN_FOLDER);
+        File imageFolder = new File(ContentsUtil.getContentFolder(RuntimeEnvironment.application.getApplicationContext()));
+        File voiceFolder = new File(ContentsUtil.getVoiceFolder(RuntimeEnvironment.application.getApplicationContext()));
+        File tempFolder = new File(ContentsUtil.getTempFolder(RuntimeEnvironment.application.getApplicationContext()));
 
         assertThat(rootFolder).exists();
         assertThat(imageFolder).exists();
@@ -55,7 +55,7 @@ public class ApplicationInitializerTest {
 
         subject.initializeApplication();
 
-        File imageFolder = new File(ContentsUtil.getContentFolder());
+        File imageFolder = new File(ContentsUtil.getContentFolder(RuntimeEnvironment.application.getApplicationContext()));
         assertThat(imageFolder.listFiles().length).isEqualTo(context.getAssets().list("contents").length);
     }
 
@@ -69,7 +69,7 @@ public class ApplicationInitializerTest {
         edit.putBoolean(ApplicationConstants.FIRST_LAUNCH, false);
         edit.commit();
 
-        File imageFolder = new File(ContentsUtil.getContentFolder());
+        File imageFolder = new File(ContentsUtil.getContentFolder(RuntimeEnvironment.application.getApplicationContext()));
         for(File file : imageFolder.listFiles()) {
             if(!file.isDirectory()){
                 file.delete();

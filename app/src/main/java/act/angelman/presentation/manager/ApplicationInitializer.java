@@ -3,7 +3,6 @@ package act.angelman.presentation.manager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
-import android.os.Environment;
 import android.util.Log;
 
 import java.io.File;
@@ -46,24 +45,24 @@ public class ApplicationInitializer {
 
     private void initExternalStorageFolder() {
 
-        File rootFolder = new File(Environment.getExternalStorageDirectory() + File.separator + ContentsUtil.ANGELMAN_FOLDER);
+        File rootFolder = new File(context.getApplicationContext().getFilesDir() + File.separator + ContentsUtil.ANGELMAN_FOLDER);
 
         if (!rootFolder.exists()) {
             rootFolder.mkdir();
         }
 
-        File imageFolder = new File(ContentsUtil.getContentFolder());
+        File imageFolder = new File(ContentsUtil.getContentFolder(context));
 
         if (!imageFolder.exists()) {
             imageFolder.mkdir();
         }
 
-        File voiceFolder = new File(ContentsUtil.getVoiceFolder());
+        File voiceFolder = new File(ContentsUtil.getVoiceFolder(context));
         if (!voiceFolder.exists()) {
             voiceFolder.mkdir();
         }
 
-        File tempFolder = new File(ContentsUtil.getTempFolder());
+        File tempFolder = new File(ContentsUtil.getTempFolder(context));
         if(!tempFolder.exists()) {
             tempFolder.mkdir();
         }
@@ -82,7 +81,7 @@ public class ApplicationInitializer {
             OutputStream out = null;
             try {
                 in = assetManager.open("contents" + File.separator + fileName);
-                File outFile = new File(getContentFolder(), fileName);
+                File outFile = new File(getContentFolder(context), fileName);
                 out = new FileOutputStream(outFile);
                 FileUtil.copyFile(in, out);
             } catch(IOException e) {

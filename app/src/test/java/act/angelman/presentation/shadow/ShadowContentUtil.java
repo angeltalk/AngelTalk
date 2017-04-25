@@ -1,5 +1,6 @@
 package act.angelman.presentation.shadow;
 
+import android.content.Context;
 import android.view.View;
 
 import org.robolectric.annotation.Implementation;
@@ -17,7 +18,7 @@ public class ShadowContentUtil {
     }
 
     @Implementation
-    public static String getImagePath() {
+    public static String getImagePath(Context context) {
         return "haribo.mp4";
     }
 }
