@@ -236,7 +236,6 @@ public class MakeCardActivityTest extends UITest{
         ShadowActivity shadowActivity = shadowOf(subject);
         Intent nextStartedActivity = shadowActivity.getNextStartedActivity();
         assertThat(nextStartedActivity.getComponent().getClassName()).isEqualTo(CardViewPagerActivity.class.getCanonicalName());
-        assertThat(nextStartedActivity.getStringExtra(ApplicationConstants.INTENT_KEY_CARD_EDITED)).isEqualTo(true);
     }
 
     @Test
