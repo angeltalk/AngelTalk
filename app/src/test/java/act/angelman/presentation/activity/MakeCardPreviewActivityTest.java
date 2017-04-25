@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowActivity;
 import org.robolectric.shadows.ShadowEnvironment;
@@ -20,19 +21,29 @@ import org.robolectric.shadows.util.DataSource;
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 
+import javax.inject.Inject;
+
 import act.angelman.BuildConfig;
 import act.angelman.R;
+import act.angelman.TestAngelmanApplication;
 import act.angelman.UITest;
 import act.angelman.domain.model.CardModel;
+import act.angelman.domain.repository.CardRepository;
+import act.angelman.presentation.manager.ApplicationConstants;
 import act.angelman.presentation.shadow.ShadowFileUtil;
 import act.angelman.presentation.util.ContentsUtil;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.when;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class, shadows = ShadowFileUtil.class)
 public class MakeCardPreviewActivityTest extends UITest {
+
+    @Inject
+    CardRepository cardRepository;
 
     private String VIDEO_CONTENT_PATH = ContentsUtil.getContentFolder() + File.separator + "amusementpark.mp4";
     private String VIDEO_THUMBNAIL_PATH = ContentsUtil.getContentFolder() + File.separator + "amusementpark.jpg";
@@ -41,6 +52,7 @@ public class MakeCardPreviewActivityTest extends UITest {
     @Before
     public void setUp() throws Exception {
         ShadowEnvironment.setExternalStorageState(Environment.MEDIA_MOUNTED);
+        ((TestAngelmanApplication) RuntimeEnvironment.application).getAngelmanTestComponent().inject(this);
     }
 
     @Test
@@ -164,6 +176,28 @@ public class MakeCardPreviewActivityTest extends UITest {
         assertThat(intent.getStringExtra(ContentsUtil.CARD_TYPE)).isEqualTo(CardModel.CardType.PHOTO_CARD.getValue());
     }
 
+    @Test
+    public void givenPhotoCardEditIntent_whenConfirmButtonClick_thenDeleteContentFile() throws Exception {
+        MakeCardPreviewActivity subject = setUpWithPhotoContentEdit();
+        when(cardRepository.getSingleCard(anyString()))
+                .thenReturn(CardModel.builder().contentPath(PHOTO_CONTENT_PATH).build());
+        subject.findViewById(R.id.confirm_button).performClick();
+        File contentFile = new File(subject.getIntent().getStringExtra(ContentsUtil.CONTENT_PATH));
+        assertThat(contentFile.exists()).isFalse();
+    }
+
+    @Test
+    public void givenPhotoCardEditIntent_whenConfirmButtonClick_thenGoToCardViewActivity() throws Exception {
+        MakeCardPreviewActivity subject = setUpWithPhotoContentEdit();
+        when(cardRepository.getSingleCard(anyString()))
+                .thenReturn(CardModel.builder().contentPath(PHOTO_CONTENT_PATH).build());
+        subject.findViewById(R.id.confirm_button).performClick();
+        ShadowActivity shadowActivity = shadowOf(subject);
+        Intent intent = shadowActivity.getNextStartedActivity();
+        assertThat(intent.getComponent().getClassName()).isEqualTo(CardViewPagerActivity.class.getCanonicalName());
+    }
+
+
     private MakeCardPreviewActivity setUpWithVideoContent() {
         Intent intent = new Intent();
         intent.putExtra(ContentsUtil.CONTENT_PATH, VIDEO_CONTENT_PATH);
@@ -178,6 +212,15 @@ public class MakeCardPreviewActivityTest extends UITest {
         Intent intent = new Intent();
         intent.putExtra(ContentsUtil.CONTENT_PATH, PHOTO_CONTENT_PATH);
         intent.putExtra(ContentsUtil.CARD_TYPE, CardModel.CardType.PHOTO_CARD.getValue());
+
+        return setupActivityWithIntent(MakeCardPreviewActivity.class, intent);
+    }
+
+    private MakeCardPreviewActivity setUpWithPhotoContentEdit() {
+        Intent intent = new Intent();
+        intent.putExtra(ContentsUtil.CONTENT_PATH, PHOTO_CONTENT_PATH);
+        intent.putExtra(ContentsUtil.CARD_TYPE, CardModel.CardType.PHOTO_CARD.getValue());
+        intent.putExtra(ApplicationConstants.EDIT_CARD_ID, "1");
 
         return setupActivityWithIntent(MakeCardPreviewActivity.class, intent);
     }

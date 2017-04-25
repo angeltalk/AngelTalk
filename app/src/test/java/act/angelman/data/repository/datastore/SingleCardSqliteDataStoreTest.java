@@ -152,15 +152,56 @@ public class SingleCardSqliteDataStoreTest {
 
     }
 
-    private void insertData(SQLiteDatabase db){
-        int index = 0;
-        insertCategoryItemData(db,   0       , "물 먹고 싶어요"  , "water.mp4", "water.jpg",  "20161018_000002", CardModel.CardType.VIDEO_CARD, index++);
-        insertCategoryItemData(db,   0       , "쥬스"          , "juice.png",null, "20161019_120018", CardModel.CardType.PHOTO_CARD, index++);
-        insertCategoryItemData(db,   0       , "우유"          , "milk.png", null, "20161019_120017", CardModel.CardType.PHOTO_CARD, index++);
+    @Test
+    public void givenExistDataBase_whenUpdateSingleCardModelContent_thenVerifyChange() throws Exception {
+        DatabaseHelper mockDbHelper = mock(DatabaseHelper.class);
+
+        SingleCardSqliteDataStore dataStore = new SingleCardSqliteDataStore(RuntimeEnvironment.application);
+        dataStore.dbHelper = mockDbHelper;
+
+        when(mockDbHelper.getWritableDatabase()).thenReturn(mockDb);
+        when(mockDbHelper.getReadableDatabase()).thenReturn(mockDb);
+
+        mockDb.execSQL(SQL_CREATE_SINGLECARD_LIST);
+        insertData(mockDb);
+
+        for(CardModel cardModel  : dataStore.getCardListWithCategoryId(0)){
+            if("1".equals(cardModel._id)){
+                assertThat(cardModel.cardType).isEqualTo(CardModel.CardType.VIDEO_CARD);
+                assertThat(cardModel.contentPath).isEqualTo("water.mp4");
+                assertThat(cardModel.thumbnailPath).isEqualTo("water.jpg");
+            }
+        }
+
+        // when
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(CardColumns.CARD_TYPE, CardModel.CardType.PHOTO_CARD.getValue());
+        contentValues.put(CardColumns.CONTENT_PATH, "change.jpg");
+        String thumbnailPath = null;
+        contentValues.put(CardColumns.THUMBNAIL_PATH, thumbnailPath);
+        dataStore.updateSingleCardModel("1", contentValues);
+
+        // then
+        for(CardModel cardModel  : dataStore.getCardListWithCategoryId(0)){
+            if("1".equals(cardModel._id)){
+                assertThat(cardModel.cardType).isEqualTo(CardModel.CardType.PHOTO_CARD);
+                assertThat(cardModel.contentPath).isEqualTo("change.jpg");
+                assertThat(cardModel.thumbnailPath).isNull();
+            }
+        }
+
     }
 
-    private void insertCategoryItemData(SQLiteDatabase db, int categoryIndex, String item, String imagePath,String thumbnailPath, String firstTime, CardModel.CardType cardType, int index){
+    private void insertData(SQLiteDatabase db){
+        int index = 0;
+        insertCategoryItemData(db, "1",   0       , "물 먹고 싶어요"  , "water.mp4", "water.jpg",  "20161018_000002", CardModel.CardType.VIDEO_CARD, index++);
+        insertCategoryItemData(db, "2",   0       , "쥬스"          , "juice.png",null, "20161019_120018", CardModel.CardType.PHOTO_CARD, index++);
+        insertCategoryItemData(db, "3",   0       , "우유"          , "milk.png", null, "20161019_120017", CardModel.CardType.PHOTO_CARD, index++);
+    }
+
+    private void insertCategoryItemData(SQLiteDatabase db, String id, int categoryIndex, String item, String imagePath,String thumbnailPath, String firstTime, CardModel.CardType cardType, int index){
         ContentValues contentValues = new ContentValues();
+        contentValues.put(CardColumns._ID, id);
         contentValues.put(CardColumns.CATEGORY_ID, categoryIndex);
         contentValues.put(CardColumns.NAME, item);
         contentValues.put(CardColumns.CONTENT_PATH, imagePath);

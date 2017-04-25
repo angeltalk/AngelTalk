@@ -59,6 +59,7 @@ import act.angelman.presentation.custom.CardViewPager;
 import act.angelman.presentation.custom.VideoCardTextureView;
 import act.angelman.presentation.manager.ApplicationConstants;
 import act.angelman.presentation.manager.ApplicationManager;
+import act.angelman.presentation.shadow.ShadowSnackbar;
 import act.angelman.presentation.util.AngelManGlideTransform;
 import act.angelman.presentation.util.ContentsUtil;
 import act.angelman.presentation.util.PlayUtil;
@@ -77,7 +78,7 @@ import static org.mockito.Mockito.when;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class)
+@Config(constants = BuildConfig.class, shadows = {ShadowSnackbar.class})
 public class CardViewPagerActivityTest extends UITest {
 
     @Inject
@@ -470,18 +471,14 @@ public class CardViewPagerActivityTest extends UITest {
     public void whenLaunchActivity_thenShowWaterCardWithImage() throws Exception {
 
         RequestManager rm = Glide.with(subject.getApplicationContext());
-
         CardViewPager viewPager = (CardViewPager) subject.findViewById(R.id.view_pager);
 
         assertThat(viewPager.getAdapter()).isNotNull();
         assertThat(viewPager.getAdapter().getCount()).isNotEqualTo(0);
-
         assertThat(((CardView) ((CardImageAdapter) viewPager.getAdapter()).getItemAt(1)).cardTitle.getText()).isEqualTo("물");
 
         ImageView cardImageView = ((CardView) ((CardImageAdapter) viewPager.getAdapter()).getItemAt(1)).cardImage;
-
         Bitmap actualImage = null;
-
         if (cardImageView != null && cardImageView.getDrawable() != null) {
             actualImage = ((GlideBitmapDrawable) cardImageView.getDrawable()).getBitmap();
         }
@@ -496,7 +493,6 @@ public class CardViewPagerActivityTest extends UITest {
             Bitmap expectedImage = ((GlideBitmapDrawable)expectedImageView.getDrawable()).getBitmap();
             assertThat(equals(actualImage, expectedImage)).isTrue();
 
-
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -505,11 +501,9 @@ public class CardViewPagerActivityTest extends UITest {
     @Test
     public void whenFinishedToMakeNewCard_thenShowsNewAddedCardAtFirstCardInViewPager() throws Exception {
         Intent intent = new Intent();
-
         intent.putExtra(ApplicationConstants.INTENT_KEY_NEW_CARD, true);
 
         when(repository.getSingleCardListWithCategoryId(anyInt(), anyBoolean())).thenReturn(getCardListWithCategoryId());
-
         subject = setupActivityWithIntent(CardViewPagerActivity.class, intent);
 
         assertThat(subject.mViewPager.getCurrentItem()).isNotEqualTo(0);
@@ -519,11 +513,9 @@ public class CardViewPagerActivityTest extends UITest {
     @Test
     public void whenStartWithRefreshCardIntent_thenShowsAddCardItemInCardViewPager() throws Exception {
         Intent intent = new Intent();
-
         intent.putExtra(ApplicationConstants.INTENT_KEY_REFRESH_CARD, true);
 
         when(repository.getSingleCardListWithCategoryId(anyInt(), anyBoolean())).thenReturn(getCardListWithCategoryId());
-
         subject = setupActivityWithIntent(CardViewPagerActivity.class, intent);
 
         assertThat(subject.mViewPager.getCurrentItem()).isNotEqualTo(1);
@@ -547,15 +539,37 @@ public class CardViewPagerActivityTest extends UITest {
     @Test
     public void whenFinishedCardListActivityAndCurrentCardIsHide_thenShowFirstCardInViewPager() throws Exception {
         Intent intent = new Intent();
-
         intent.putExtra(ApplicationConstants.INTENT_KEY_LIST_BACK, true);
 
         when(repository.getSingleCardListWithCategoryId(anyInt(), anyBoolean())).thenReturn(getCardListWithCategoryId());
         when(applicationManager.getCurrentCardIndex()).thenReturn(8);
-
         subject = setupActivityWithIntent(CardViewPagerActivity.class, intent);
 
         assertThat(subject.mViewPager.getCurrentItem()).isEqualTo(1);
+    }
+
+    @Test
+    public void whenCardEditSuccess_thenShowTheCard() throws Exception {
+        Intent intent = new Intent();
+        intent.putExtra(ApplicationConstants.INTENT_KEY_CARD_EDITED, true);
+
+        when(repository.getSingleCardListWithCategoryId(anyInt(), anyBoolean())).thenReturn(getCardListWithCategoryId());
+        when(applicationManager.getCurrentCardIndex()).thenReturn(1);
+        subject = setupActivityWithIntent(CardViewPagerActivity.class, intent);
+
+        assertThat(subject.mViewPager.getCurrentItem()).isEqualTo(2);
+    }
+
+    @Test
+    public void whenCardEditSuccess_thenShowSnackBarMessage() throws Exception {
+        Intent intent = new Intent();
+        intent.putExtra(ApplicationConstants.INTENT_KEY_CARD_EDITED, true);
+
+        when(repository.getSingleCardListWithCategoryId(anyInt(), anyBoolean())).thenReturn(getCardListWithCategoryId());
+        subject = setupActivityWithIntent(CardViewPagerActivity.class, intent);
+
+        assertThat(ShadowSnackbar.getLatestSnackbar()).isNotNull();
+        assertThat(ShadowSnackbar.getTextOfLatestSnackbar()).isEqualTo("카드가 수정되었습니다");
     }
 
     @Test

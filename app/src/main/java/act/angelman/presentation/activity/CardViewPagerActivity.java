@@ -149,6 +149,7 @@ public class CardViewPagerActivity extends AbstractActivity {
 
     @OnClick(R.id.card_edit_button)
     public void editButtonOnClick() {
+        stopPlayingCard();
         new CardEditSelectDialog(context, new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -165,7 +166,6 @@ public class CardViewPagerActivity extends AbstractActivity {
     }
 
     private void moveToContentEditActivity(CardModel cardModel){
-        stopPlayingCard();
         Intent intent = new Intent(context, CameraGallerySelectionActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.putExtra(ApplicationConstants.EDIT_CARD_ID, cardModel._id);
@@ -210,7 +210,7 @@ public class CardViewPagerActivity extends AbstractActivity {
         initializeView();
 
         if (getIntent().getBooleanExtra(ApplicationConstants.INTENT_KEY_NEW_CARD, false)) {
-            showSnackBarMessage(ApplicationConstants.INTENT_KEY_NEW_CARD);
+            showSnackBarMessage(getString(R.string.add_new_card_success));
             mViewPager.setCurrentItem(1);
         }
 
@@ -219,13 +219,16 @@ public class CardViewPagerActivity extends AbstractActivity {
         }
 
         if (getIntent().getBooleanExtra(ApplicationConstants.INTENT_KEY_LIST_BACK, false)) {
-            for(int i=0;i<allCardListInSelectedCategory.size();i++) {
-                if(allCardListInSelectedCategory.get(i).cardIndex == applicationManager.getCurrentCardIndex()) {
-                    mViewPager.setCurrentItem(i);
-                    return;
-                }
+            if (!setViewPagerCurrentItem(applicationManager.getCurrentCardIndex())) {
+                mViewPager.setCurrentItem(1);
             }
-            mViewPager.setCurrentItem(1);
+        }
+
+        if (getIntent().getBooleanExtra(ApplicationConstants.INTENT_KEY_CARD_EDITED, false)) {
+            showSnackBarMessage(getString(R.string.card_edit_success_message));
+            if (!setViewPagerCurrentItem(applicationManager.getCurrentCardIndex())) {
+                mViewPager.setCurrentItem(1);
+            }
         }
 
         applicationManager.setCurrentCardIndex(allCardListInSelectedCategory.get(mViewPager.getCurrentItem()).cardIndex);
@@ -347,11 +350,9 @@ public class CardViewPagerActivity extends AbstractActivity {
         return cardRepository.deleteSingleCardWithCardIndex(selectedCategoryModel.index, cardIndex);
     }
 
-    private void showSnackBarMessage(String intentKey) {
+    private void showSnackBarMessage(String message) {
         PercentRelativeLayout rootLayout = (PercentRelativeLayout) findViewById(R.id.category_item_container);
-        if(ApplicationConstants.INTENT_KEY_NEW_CARD.equals(intentKey)) {
-            CustomSnackBar.styledSnackBarWithDuration(this, rootLayout, getApplicationContext().getResources().getString(R.string.add_new_card_success), 2000);
-        }
+        CustomSnackBar.styledSnackBarWithDuration(this, rootLayout, message, 2000);
     }
 
     private void showLoadingAnimation(){
@@ -376,5 +377,14 @@ public class CardViewPagerActivity extends AbstractActivity {
         return false;
     }
 
+    private boolean setViewPagerCurrentItem(int beforeCardIndex) {
+        for(int i=0;i<allCardListInSelectedCategory.size();i++) {
+            if(allCardListInSelectedCategory.get(i).cardIndex == beforeCardIndex) {
+                mViewPager.setCurrentItem(i);
+                return true;
+            }
+        }
+        return false;
+    }
 
 }

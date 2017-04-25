@@ -91,8 +91,13 @@ public class CardDataRepository implements CardRepository {
     }
 
     @Override
-    public boolean updateSingleCardContent(String cardId, String contentPath) {
-        return false;
+    public boolean updateSingleCardContent(String cardId, String cardType, String contentPath, String thumbnailPath) {
+        SingleCardDataStore dataStore = new SingleCardSqliteDataStore(context);
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(CardColumns.CARD_TYPE, cardType);
+        contentValues.put(CardColumns.CONTENT_PATH, contentPath);
+        contentValues.put(CardColumns.THUMBNAIL_PATH, thumbnailPath);
+        return dataStore.updateSingleCardModel(cardId, contentValues);
     }
 
     @Override

@@ -53,6 +53,7 @@ import java.util.concurrent.TimeUnit;
 import act.angelman.R;
 import act.angelman.domain.model.CardModel;
 import act.angelman.presentation.custom.AutoFitTextureView;
+import act.angelman.presentation.manager.ApplicationConstants;
 import act.angelman.presentation.util.FontUtil;
 import act.angelman.presentation.util.ContentsUtil;
 import act.angelman.presentation.util.PlayUtil;
@@ -325,6 +326,7 @@ public class Camera2Activity extends AbstractActivity implements View.OnClickLis
 
     };
     private FrameLayout shutterFrame;
+    private String editCardId;
 
     /**
      * Shows a {@link Toast} on the UI thread.
@@ -400,6 +402,7 @@ public class Camera2Activity extends AbstractActivity implements View.OnClickLis
 
         fileName = ContentsUtil.getImagePath();
         playUtil = PlayUtil.getInstance();
+        editCardId = getIntent().getStringExtra(ApplicationConstants.EDIT_CARD_ID);
     }
 
     @Override
@@ -749,6 +752,7 @@ public class Camera2Activity extends AbstractActivity implements View.OnClickLis
                         mState = STATE_PICTURE_FINISHED;
                         Intent intent = new Intent(Camera2Activity.this, MakeCardPreviewActivity.class);
                         intent.putExtra(ContentsUtil.CONTENT_PATH, fileName);
+                        intent.putExtra(ApplicationConstants.EDIT_CARD_ID, editCardId);
                         intent.putExtra(ContentsUtil.CARD_TYPE, CardModel.CardType.PHOTO_CARD.getValue());
                         startActivity(intent);
                         finish();
