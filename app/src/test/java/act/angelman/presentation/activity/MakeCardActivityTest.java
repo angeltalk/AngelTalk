@@ -191,18 +191,52 @@ public class MakeCardActivityTest extends UITest{
     }
 
     @Test
-    public void givenEditCardForRenaming_whenCompleteEditing_thenUpdateCardModelAndMoveToCategoryViewPagerActivity() throws Exception {
+    public void givenEditCardForRenaming_whenLaunched_thenShowDisabledConfirmButton() throws Exception {
+        // given when
         setupEditCardForRenaming();
 
-        EditText cardTitleEdit = (EditText) subject.findViewById(R.id.card_image_title_edit);
-        cardTitleEdit.setText("TEST");
+        // then
+        assertThat(subject.confirmButton).isShown();
+        assertThat(subject.confirmButton).isDisabled();
+        ShadowDrawable shadowDrawable = shadowOf(subject.confirmButton.getBackground());
+        assertThat(R.drawable.btn_check_disable).isEqualTo(shadowDrawable.getCreatedFromResId());
+    }
 
+    @Test
+    public void givenEditCardForRenaming_whenCompleteEditing_thenShowEnabledConfirmButton() throws Exception {
+        // given
+        setupEditCardForRenaming();
+
+        // when
+        EditText cardTitleEdit = (EditText) subject.findViewById(R.id.card_image_title_edit);
+        assertThat(subject.confirmButton).isDisabled();
+        cardTitleEdit.setText("TEST");
         enterKey(cardTitleEdit);
 
+        // then
+        assertThat(subject.confirmButton).isShown();
+        assertThat(subject.confirmButton).isEnabled();
+        ShadowDrawable shadowDrawable = shadowOf(subject.confirmButton.getBackground());
+        assertThat(R.drawable.btn_complete).isEqualTo(shadowDrawable.getCreatedFromResId());
+    }
+
+    @Test
+    public void givenCompleteEditingCardNameAndShownConfirmButton_whenClickConfirmButton_thenUpdateCardModelAndMoveToViewPagerActivity() throws Exception {
+        // given
+        setupEditCardForRenaming();
+        EditText cardTitleEdit = (EditText) subject.findViewById(R.id.card_image_title_edit);
+        cardTitleEdit.setText("TEST");
+        enterKey(cardTitleEdit);
+
+        // when
+        subject.confirmButton.performClick();
+
+        // then
         verify(cardRepository).updateSingleCardName(anyString(), anyString());
         ShadowActivity shadowActivity = shadowOf(subject);
         Intent nextStartedActivity = shadowActivity.getNextStartedActivity();
         assertThat(nextStartedActivity.getComponent().getClassName()).isEqualTo(CardViewPagerActivity.class.getCanonicalName());
+        assertThat(nextStartedActivity.getStringExtra(ApplicationConstants.INTENT_KEY_CARD_EDITED)).isEqualTo(true);
     }
 
     @Test
