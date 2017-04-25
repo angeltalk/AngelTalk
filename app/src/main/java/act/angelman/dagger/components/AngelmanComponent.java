@@ -15,14 +15,15 @@ import act.angelman.presentation.activity.MakeCardActivity;
 import act.angelman.presentation.activity.MakeCardPreviewActivity;
 import act.angelman.presentation.activity.MakeCategoryActivity;
 import act.angelman.presentation.activity.OnboardingActivity;
+import act.angelman.presentation.activity.PhotoEditorActivity;
 import act.angelman.presentation.activity.ShareCardActivity;
 import act.angelman.presentation.custom.AddCardView;
 import act.angelman.presentation.custom.CardTitleLayout;
 import act.angelman.presentation.custom.CardViewPagerLayout;
 import act.angelman.presentation.custom.CategoryMenuLayout;
-import act.angelman.presentation.service.ScreenReceiver;
 import act.angelman.presentation.manager.ApplicationInitializer;
 import act.angelman.presentation.manager.NotificationActionManager;
+import act.angelman.presentation.service.ScreenReceiver;
 import dagger.Component;
 
 @Singleton
@@ -48,4 +49,5 @@ public interface AngelmanComponent {
     void inject(CardListActivity cardListActivity);
     void inject(ShareCardActivity shareCardActivity);
     void inject(MakeCardPreviewActivity makeCardPreviewActivity);
+    void inject(PhotoEditorActivity photoEditorActivity);
 }
