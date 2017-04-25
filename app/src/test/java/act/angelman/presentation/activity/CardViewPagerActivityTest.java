@@ -557,7 +557,7 @@ public class CardViewPagerActivityTest extends UITest {
         when(applicationManager.getCurrentCardIndex()).thenReturn(1);
         subject = setupActivityWithIntent(CardViewPagerActivity.class, intent);
 
-        assertThat(subject.mViewPager.getCurrentItem()).isEqualTo(3);
+        assertThat(subject.mViewPager.getCurrentItem()).isEqualTo(2);
     }
 
     @Test
