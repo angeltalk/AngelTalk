@@ -7,6 +7,8 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.percent.PercentRelativeLayout;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
@@ -111,6 +113,9 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
     @BindView(R.id.card_view_layout)
     CardView cardView;
 
+    @BindView(R.id.confirm_button)
+    Button confirmButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -180,6 +185,7 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
     protected void onDestroy() {
         super.onDestroy();
         rootLayout.getViewTreeObserver().removeOnGlobalLayoutListener(onGlobalLayoutListener);
+        cardView.cardTitleEdit.removeTextChangedListener(cardTitleTextWatcher);
     }
 
     @Override
@@ -210,7 +216,7 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
                     }
                 }
                 cardRepository.updateSingleCardVoice(editCardModel._id, voiceFile);
-                moveToCardViewPagerActivity();
+                moveToCardViewPagerActivityAfterEditing();
             } else {
                 saveCardAndMoveToNextActivity();
             }
@@ -232,6 +238,13 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
     @OnClick(R.id.retake_button)
     public void onClickRetakeButton(View view) {
         onBackPressed();
+    }
+
+    @OnClick(R.id.confirm_button)
+    public void onClickConfirmButton(View view) {
+        editCardModel.name = cardView.cardTitleEdit.getText().toString();
+        cardRepository.updateSingleCardName(editCardModel._id, editCardModel.name);
+        moveToCardViewPagerActivityAfterEditing();
     }
 
     private void initCardView() {
@@ -278,6 +291,11 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
         cardView.findViewById(R.id.card_image_title_edit).setVisibility(View.VISIBLE);
 
         cardView.cardTitleEdit.setOnEditorActionListener(cardTitleEditorActionListener);
+        cardView.cardTitleEdit.addTextChangedListener(cardTitleTextWatcher);
+
+        if (isCardEditing() && CardEditType.NAME.equals(editType)) {
+            confirmButton.setVisibility(View.VISIBLE);
+        }
 
         if(CardEditType.VOICE.equals(editType)){
             prepareVoiceEditing();
@@ -357,38 +375,26 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
         }
     };
 
+    private void changeConfirmButtonByCardNameText() {
+        if (checkValidationForText()) {
+            confirmButton.setEnabled(true);
+            confirmButton.setBackground(getDrawable(R.drawable.btn_complete));
+        } else {
+            confirmButton.setEnabled(false);
+            confirmButton.setBackground(getDrawable(R.drawable.btn_check_disable));
+        }
+    }
+
     private TextView.OnEditorActionListener cardTitleEditorActionListener = new TextView.OnEditorActionListener() {
         @Override
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
             if (event == null && actionId == EditorInfo.IME_ACTION_DONE) {
-                if (checkValidationForText()) {
-                    if(editCardModel != null){
-                        editCardModel.name = cardView.cardTitleEdit.getText().toString();
-                        cardRepository.updateSingleCardName(editCardModel._id, editCardModel.name);
-                        hideKeyboard();
-                        moveToCardViewPagerActivity();
-                    }else{
-                        cardView.changeCardViewStatus();
-                        hideKeyboard();
-                        showRecodingGuideAndMicButton();
-                    }
-                }
+                completeCardNameEditing();
             } else if (event != null) {
                 switch (event.getKeyCode()) {
                     case KeyEvent.KEYCODE_ENTER:
                         if (event.getAction() == KeyEvent.ACTION_UP) {
-                            if (checkValidationForText()) {
-                                if(editCardModel != null){
-                                    editCardModel.name = cardView.cardTitleEdit.getText().toString();
-                                    cardRepository.updateSingleCardName(editCardModel._id, editCardModel.name);
-                                    hideKeyboard();
-                                    moveToCardViewPagerActivity();
-                                }else{
-                                    cardView.changeCardViewStatus();
-                                    hideKeyboard();
-                                    showRecodingGuideAndMicButton();
-                                }
-                            }
+                            completeCardNameEditing();
                         }
                         break;
                     default:
@@ -398,6 +404,38 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
             return true;
         }
     };
+
+    private TextWatcher cardTitleTextWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            changeConfirmButtonByCardNameText();
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+        }
+    };
+
+    private void completeCardNameEditing() {
+        if (checkValidationForText()) {
+            hideKeyboard();
+            if(!isCardEditing()){
+                cardView.changeCardViewStatus();
+                showRecodingGuideAndMicButton();
+            }
+        }
+    }
+
+    private void moveToCardViewPagerActivityAfterEditing() {
+        Intent intent = new Intent(getApplicationContext(), CardViewPagerActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra(ApplicationConstants.INTENT_KEY_CARD_EDITED, true);
+        getApplicationContext().startActivity(intent);
+    }
 
     private void moveToCardViewPagerActivity() {
         Intent intent = new Intent(getApplicationContext(), CardViewPagerActivity.class);

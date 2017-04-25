@@ -538,6 +538,19 @@ public class CardViewPagerActivityTest extends UITest {
     }
 
     @Test
+    public void whenFinishedCardListActivityAndLastCardIsShow_thenShowLastCard() throws Exception {
+        Intent intent = new Intent();
+        intent.putExtra(ApplicationConstants.INTENT_KEY_LIST_BACK, true);
+
+        when(repository.getSingleCardListWithCategoryId(anyInt(), anyBoolean())).thenReturn(getCardListWithCategoryId());
+        when(applicationManager.getCurrentCardIndex()).thenReturn(0);
+
+        subject = setupActivityWithIntent(CardViewPagerActivity.class, intent);
+
+        assertThat(subject.mViewPager.getCurrentItem()).isEqualTo(1);
+    }
+
+    @Test
     public void whenFinishedCardListActivityAndCurrentCardIsHide_thenShowFirstCardInViewPager() throws Exception {
         Intent intent = new Intent();
         intent.putExtra(ApplicationConstants.INTENT_KEY_LIST_BACK, true);
