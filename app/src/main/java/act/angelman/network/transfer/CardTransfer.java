@@ -104,7 +104,7 @@ public class CardTransfer {
                             setCardModealData(cardTransferModel, snapshot);
                         }
 
-                        final File localFile = new File(ContentsUtil.getTempFolder() + File.separator + "temp.zip");
+                        final File localFile = new File(ContentsUtil.getTempFolder(context) + File.separator + "temp.zip");
                         storage.getReferenceFromUrl(cardTransferModel.contentPath)
                                 .getFile(localFile)
                                 .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {

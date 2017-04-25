@@ -73,7 +73,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         createTables(db);
-        new DefaultDataGenerator().insertDefaultData(db);
+        new DefaultDataGenerator().insertDefaultData(context,db);
     }
 
     @Override
@@ -101,9 +101,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 }
 
                 for (CardModel cardModel : cardModelList) {
-                    fileMigration(cardModel);
+
+                    if(cardModel.contentPath.contains("DCIM")) {
+                        // made card
+                        fileMigration(cardModel);
+                    } else {
+                        // exist asset
+                        if(Strings.isNullOrEmpty(cardModel.contentPath)) {
+                            cardModel.contentPath = "blank.jpg";
+                        }
+                        copyDefaultOldAssetImageToImageFolder(cardModel.contentPath, context);
+                        cardModel.contentPath = ContentsUtil.getContentFolder(context) + File.separator + cardModel.contentPath;
+                    }
                     createNewVersionCardModel(db, cardModel);
                 }
+
+                File oldContentFolder = new File(Environment.getExternalStorageDirectory() + File.separator + ContentsUtil.ANGELMAN_FOLDER + File.separator + "DCIM");
+                oldContentFolder.delete();
+                File oldVoiceFolder = new File(Environment.getExternalStorageDirectory() + File.separator + ContentsUtil.ANGELMAN_FOLDER + File.separator + "voice");
+                oldVoiceFolder.delete();
+                File oldRootFolder = new File(Environment.getExternalStorageDirectory() + File.separator + ContentsUtil.ANGELMAN_FOLDER);
+                oldRootFolder.delete();
             }
 
         } catch (Exception ex) {
@@ -112,29 +130,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     private void fileMigration(CardModel cardModel) {
-        String oldFilePath;
-        String newFilePath;
+        String oldFilePath = cardModel.contentPath;
+        String newFilePath = ContentsUtil.getContentFolder(context) + File.separator + cardModel.contentPath.substring(cardModel.contentPath.lastIndexOf(File.separator)+1);
+        String oldVoiceFilePath = cardModel.voicePath;
+        String newVoiceFilePath = ContentsUtil.getVoiceFolder(context) + File.separator + cardModel.voicePath.substring(cardModel.voicePath.lastIndexOf(File.separator)+1);;
 
-        if(cardModel.contentPath.contains("DCIM")) {
-            oldFilePath = cardModel.contentPath;
-            newFilePath = cardModel.contentPath.replaceAll("DCIM", "contents");
-            File file = new File(oldFilePath);
-            if(file.exists()) {
-                file.renameTo(new File(newFilePath));
-            }
-        } else { // exist asset
-            if(Strings.isNullOrEmpty(cardModel.contentPath)) {
-                cardModel.contentPath = "blank.jpg";
-            }
-            copyDefaultOldAssetImageToImageFolder(cardModel.contentPath, context);
-            newFilePath = ContentsUtil.getContentFolder() + File.separator + cardModel.contentPath;
+        try {
+            FileUtil.copyFile(new File(oldFilePath), new File(newFilePath));
+            FileUtil.copyFile(new File(oldVoiceFilePath), new File(newVoiceFilePath));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
+        new File(oldFilePath).delete();
+        new File(oldVoiceFilePath).delete();
 
+        cardModel.voicePath = newVoiceFilePath;
         cardModel.contentPath = newFilePath;
-
-        File oldContentFolder = new File(Environment.getExternalStorageDirectory() + File.separator + ContentsUtil.ANGELMAN_FOLDER + File.separator + "DCIM");
-        oldContentFolder.delete();
     }
 
     public List<CardModel> getOldVersionCardModel(SQLiteDatabase db) {
@@ -235,7 +247,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         try {
             in = assetManager.open("oldContents" + File.separator + fileName);
-            File outFile = new File(getContentFolder(), fileName);
+            File outFile = new File(getContentFolder(context), fileName);
             out = new FileOutputStream(outFile);
             FileUtil.copyFile(in, out);
         } catch (IOException e) {
