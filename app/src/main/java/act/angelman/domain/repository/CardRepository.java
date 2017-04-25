@@ -10,7 +10,7 @@ public interface CardRepository {
     boolean deleteSingleCardWithCardIndex(int categoryId, int cardIndex);
     boolean updateSingleCardModelHide(CardModel cardModel);
     boolean updateSingleCardName(String cardId, String cardName);
-    boolean updateSingleCardContent(String cardId, String contentPath);
+    boolean updateSingleCardContent(String cardId, String cardType, String contentPath, String thumbnailPath);
     boolean updateSingleCardVoice(String cardId, String voicePath);
     boolean updateCategoryCardIndex(List<CardModel> cardModelList);
     CardModel getSingleCard(String cardId);
