@@ -46,6 +46,16 @@
             android:background="@drawable/mic"
             android:visibility="gone"/>
 
+        <Button
+            android:id="@+id/confirm_button"
+            android:layout_width="62dp"
+            android:layout_height="62dp"
+            app:layout_marginTopPercent="84%"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/btn_check_disable"
+            android:visibility="gone"
+            android:enabled="false" />
+
     </android.support.percent.PercentRelativeLayout>
 
     <android.support.percent.PercentRelativeLayout

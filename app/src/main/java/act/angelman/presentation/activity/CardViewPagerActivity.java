@@ -378,7 +378,7 @@ public class CardViewPagerActivity extends AbstractActivity {
     }
 
     private boolean setViewPagerCurrentItem(int beforeCardIndex) {
-        for(int i=0;i<allCardListInSelectedCategory.size();i++) {
+        for(int i=1;i<allCardListInSelectedCategory.size();i++) {
             if(allCardListInSelectedCategory.get(i).cardIndex == beforeCardIndex) {
                 mViewPager.setCurrentItem(i);
                 return true;

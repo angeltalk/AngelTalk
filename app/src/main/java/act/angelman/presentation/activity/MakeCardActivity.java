@@ -7,6 +7,8 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.percent.PercentRelativeLayout;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
@@ -63,11 +65,12 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
 
     private String contentPath;
     private RequestManager glide;
-
     private int selectedCategoryId;
     private String voiceFile;
     private Handler countHandler = new Handler();
     private CardModel.CardType cardType;
+    private CardEditType editType;
+    private String editCardId;
 
     protected int state = STATE_RECORD_NOT_COMPLETE;
     protected InputMethodManager imm;
@@ -110,8 +113,8 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
     @BindView(R.id.card_view_layout)
     CardView cardView;
 
-    private CardEditType editType;
-
+    @BindView(R.id.confirm_button)
+    Button confirmButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,42 +133,9 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
         );
 
         selectedCategoryId = applicationManager.getCategoryModel().index;
-        Intent intent = getIntent();
 
-        String editCardId = intent.getStringExtra(ApplicationConstants.EDIT_CARD_ID);
-
-        if(isEditMode(editCardId)){
-            editCardModel = cardRepository.getSingleCard(editCardId);
-            editType = CardEditType.valueOf(intent.getStringExtra(ApplicationConstants.EDIT_TYPE));
-            contentPath = editCardModel.contentPath;
-            cardType = editCardModel.cardType;
-
-            if(CardEditType.VOICE.equals(editType)){
-                initCardView();
-
-                cardView.cardTitle.setText(editCardModel.name);
-                cardView.cardTitle.setVisibility(View.VISIBLE);
-                cardView.cardTitleEdit.setVisibility(View.GONE);
-
-                showRecodingGuideAndMicButton();
-                return;
-            }
-        }else{
-            contentPath = intent.getStringExtra(ContentsUtil.CONTENT_PATH);
-            cardType = CardModel.CardType.valueOf(intent.getStringExtra(ContentsUtil.CARD_TYPE));
-        }
+        initCardData();
         initCardView();
-        initKeyboardAction();
-    }
-
-    private boolean isEditMode(String editCardId) {
-        return !Strings.isNullOrEmpty(editCardId);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        rootLayout.getViewTreeObserver().removeOnGlobalLayoutListener(onGlobalLayoutListener);
     }
 
     @Override
@@ -212,6 +182,13 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        rootLayout.getViewTreeObserver().removeOnGlobalLayoutListener(onGlobalLayoutListener);
+        cardView.cardTitleEdit.removeTextChangedListener(cardTitleTextWatcher);
+    }
+
+    @Override
     public void afterRecord() {
         playRecordVoiceFile();
     }
@@ -239,7 +216,7 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
                     }
                 }
                 cardRepository.updateSingleCardVoice(editCardModel._id, voiceFile);
-                moveToCardViewPagerActivity();
+                moveToCardViewPagerActivityAfterEditing();
             } else {
                 saveCardAndMoveToNextActivity();
             }
@@ -263,23 +240,11 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
         onBackPressed();
     }
 
-    private void initKeyboardAction() {
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                cardView.changeCardViewStatus();
-                setCardViewMarginBeforeShowingKeyboard();
-                showKeyboard();
-            }
-        }, 500);
-
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                rootLayout.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);
-            }
-        }, 1000);
+    @OnClick(R.id.confirm_button)
+    public void onClickConfirmButton(View view) {
+        editCardModel.name = cardView.cardTitleEdit.getText().toString();
+        cardRepository.updateSingleCardName(editCardModel._id, editCardModel.name);
+        moveToCardViewPagerActivityAfterEditing();
     }
 
     private void initCardView() {
@@ -298,7 +263,6 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
             cardView.cardVideo.setVisibility(View.VISIBLE);
             cardView.cardImage.setScaleType(ImageView.ScaleType.FIT_XY);
             glide.load(ContentsUtil.getContentFile(ContentsUtil.getThumbnailPath(contentPath)))
-                    //.bitmapTransform(new AngelManGlideTransform(this, ResolutionUtil.getDpToPix(this, 10), 0, AngelManGlideTransform.CornerType.TOP))
                     .override(280, 280)
                     .into(cardView.cardImage);
             cardView.playButton.setVisibility(View.VISIBLE);
@@ -327,6 +291,59 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
         cardView.findViewById(R.id.card_image_title_edit).setVisibility(View.VISIBLE);
 
         cardView.cardTitleEdit.setOnEditorActionListener(cardTitleEditorActionListener);
+        cardView.cardTitleEdit.addTextChangedListener(cardTitleTextWatcher);
+
+        if (isCardEditing() && CardEditType.NAME.equals(editType)) {
+            confirmButton.setVisibility(View.VISIBLE);
+        }
+
+        if(CardEditType.VOICE.equals(editType)){
+            prepareVoiceEditing();
+        } else {
+            prepareNameEditing();
+        }
+    }
+
+    private void initCardData() {
+        Intent intent = getIntent();
+        editCardId = intent.getStringExtra(ApplicationConstants.EDIT_CARD_ID);
+
+        if(isCardEditing()){
+            editType = CardEditType.valueOf(intent.getStringExtra(ApplicationConstants.EDIT_TYPE));
+            editCardModel = cardRepository.getSingleCard(editCardId);
+            contentPath = editCardModel.contentPath;
+            cardType = editCardModel.cardType;
+        } else {
+            contentPath = intent.getStringExtra(ContentsUtil.CONTENT_PATH);
+            cardType = CardModel.CardType.valueOf(intent.getStringExtra(ContentsUtil.CARD_TYPE));
+        }
+    }
+
+    private void prepareVoiceEditing() {
+        cardView.cardTitle.setText(editCardModel.name);
+        cardView.cardTitle.setVisibility(View.VISIBLE);
+        cardView.cardTitleEdit.setVisibility(View.GONE);
+
+        showRecodingGuideAndMicButton();
+    }
+
+    private void prepareNameEditing() {
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                cardView.changeCardViewStatus();
+                setCardViewMarginBeforeShowingKeyboard();
+                showKeyboard();
+            }
+        }, 500);
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                rootLayout.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);
+            }
+        }, 1000);
     }
 
     private void setCardViewMarginBeforeShowingKeyboard() {
@@ -358,38 +375,26 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
         }
     };
 
+    private void changeConfirmButtonByCardNameText() {
+        if (checkValidationForText()) {
+            confirmButton.setEnabled(true);
+            confirmButton.setBackground(getDrawable(R.drawable.btn_complete));
+        } else {
+            confirmButton.setEnabled(false);
+            confirmButton.setBackground(getDrawable(R.drawable.btn_check_disable));
+        }
+    }
+
     private TextView.OnEditorActionListener cardTitleEditorActionListener = new TextView.OnEditorActionListener() {
         @Override
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
             if (event == null && actionId == EditorInfo.IME_ACTION_DONE) {
-                if (checkValidationForText()) {
-                    if(editCardModel != null){
-                        editCardModel.name = cardView.cardTitleEdit.getText().toString();
-                        cardRepository.updateSingleCardName(editCardModel._id, editCardModel.name);
-                        hideKeyboard();
-                        moveToCardViewPagerActivity();
-                    }else{
-                        cardView.changeCardViewStatus();
-                        hideKeyboard();
-                        showRecodingGuideAndMicButton();
-                    }
-                }
+                completeCardNameEditing();
             } else if (event != null) {
                 switch (event.getKeyCode()) {
                     case KeyEvent.KEYCODE_ENTER:
                         if (event.getAction() == KeyEvent.ACTION_UP) {
-                            if (checkValidationForText()) {
-                                if(editCardModel != null){
-                                    editCardModel.name = cardView.cardTitleEdit.getText().toString();
-                                    cardRepository.updateSingleCardName(editCardModel._id, editCardModel.name);
-                                    hideKeyboard();
-                                    moveToCardViewPagerActivity();
-                                }else{
-                                    cardView.changeCardViewStatus();
-                                    hideKeyboard();
-                                    showRecodingGuideAndMicButton();
-                                }
-                            }
+                            completeCardNameEditing();
                         }
                         break;
                     default:
@@ -397,9 +402,40 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
                 }
             }
             return true;
-
         }
     };
+
+    private TextWatcher cardTitleTextWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            changeConfirmButtonByCardNameText();
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+        }
+    };
+
+    private void completeCardNameEditing() {
+        if (checkValidationForText()) {
+            hideKeyboard();
+            if(!isCardEditing()){
+                cardView.changeCardViewStatus();
+                showRecodingGuideAndMicButton();
+            }
+        }
+    }
+
+    private void moveToCardViewPagerActivityAfterEditing() {
+        Intent intent = new Intent(getApplicationContext(), CardViewPagerActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra(ApplicationConstants.INTENT_KEY_CARD_EDITED, true);
+        getApplicationContext().startActivity(intent);
+    }
 
     private void moveToCardViewPagerActivity() {
         Intent intent = new Intent(getApplicationContext(), CardViewPagerActivity.class);
@@ -485,5 +521,9 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
             }
         }
     };
+
+    private boolean isCardEditing() {
+        return !Strings.isNullOrEmpty(editCardId);
+    }
 }
 
