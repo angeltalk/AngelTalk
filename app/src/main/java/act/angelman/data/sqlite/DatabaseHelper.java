@@ -2,20 +2,32 @@ package act.angelman.data.sqlite;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
+import android.util.Log;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 
 import act.angelman.domain.model.CardModel;
 import act.angelman.domain.model.CategoryModel;
+import act.angelman.presentation.manager.ApplicationConstants;
 import act.angelman.presentation.util.ContentsUtil;
+import act.angelman.presentation.util.FileUtil;
 import lombok.Cleanup;
+
+import static act.angelman.presentation.util.ContentsUtil.getContentFolder;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 13;
@@ -44,9 +56,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     CategoryColumns.INDEX + " INTEGER)";
 
     private static DatabaseHelper databaseHelper;
+    private Context context;
 
     private DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.context = context;
     }
 
     public static DatabaseHelper getInstance(Context context){
@@ -65,34 +79,62 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         try {
-
-            // New version
             if(oldVersion > 8){
+                //New Version
                 db.execSQL("drop table " + CardColumns.TABLE_NAME);
                 db.execSQL("drop table " + CategoryColumns.TABLE_NAME);
                 onCreate(db);
-                return;
-            }
+            } else {
+                //Old Version
+                SharedPreferences.Editor edit = context.getSharedPreferences(ApplicationConstants.PRIVATE_PREFERENCE_NAME, Context.MODE_PRIVATE).edit();
+                edit.putBoolean(ApplicationConstants.NEW_INSTALL, false).apply();
 
-            //Card Model Migration
-            List<CategoryModel> categoryModelList = getOldVersionCategoryModel(db);
-            List<CardModel> cardModelList = getOldVersionCardModel(db);
+                List<CategoryModel> categoryModelList = getOldVersionCategoryModel(db);
+                List<CardModel> cardModelList = getOldVersionCardModel(db);
 
-            db.execSQL("drop table " + CardColumns.TABLE_NAME);
-            db.execSQL("drop table " + CategoryColumns.TABLE_NAME);
-            createTables(db);
+                db.execSQL("drop table " + CardColumns.TABLE_NAME);
+                db.execSQL("drop table " + CategoryColumns.TABLE_NAME);
+                createTables(db);
 
-            for(CategoryModel categoryModel : categoryModelList) {
-                createNewVersionCategoryModel(db, categoryModel);
-            }
+                for (CategoryModel categoryModel : categoryModelList) {
+                    createNewVersionCategoryModel(db, categoryModel);
+                }
 
-            for(CardModel cardModel : cardModelList){
-                createNewVersionCardModel(db,cardModel);
+                for (CardModel cardModel : cardModelList) {
+                    fileMigration(cardModel);
+                    createNewVersionCardModel(db, cardModel);
+                }
             }
 
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    private void fileMigration(CardModel cardModel) {
+        String oldFilePath;
+        String newFilePath;
+
+        if(cardModel.contentPath.contains("DCIM")) {
+            oldFilePath = cardModel.contentPath;
+            newFilePath = cardModel.contentPath.replaceAll("DCIM", "contents");
+            File file = new File(oldFilePath);
+            if(file.exists()) {
+                file.renameTo(new File(newFilePath));
+            }
+        } else { // exist asset
+            if(Strings.isNullOrEmpty(cardModel.contentPath)) {
+                cardModel.contentPath = "blank.jpg";
+            }
+            copyDefaultOldAssetImageToImageFolder(cardModel.contentPath, context);
+            newFilePath = ContentsUtil.getContentFolder() + File.separator + cardModel.contentPath;
+        }
+
+
+        cardModel.contentPath = newFilePath;
+
+        File oldContentFolder = new File(Environment.getExternalStorageDirectory() + File.separator + ContentsUtil.ANGELMAN_FOLDER + File.separator + "DCIM");
+        oldContentFolder.delete();
     }
 
     public List<CardModel> getOldVersionCardModel(SQLiteDatabase db) {
@@ -115,32 +157,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 cardModel.cardType = CardModel.CardType.PHOTO_CARD;
                 cardModel.hide = false;
 
-                if(cardModel.contentPath.contains("DCIM")) {
-                    String oldFilePath = cardModel.contentPath;
-                    String newFilePath = cardModel.contentPath.replaceAll("DCIM", "contents");
-
-                    File file = new File(oldFilePath);
-                    if(file.exists()) {
-                        file.renameTo(new File(newFilePath));
-                    }
-                    cardModel.contentPath = newFilePath;
-                } else {
-                    //Asset to Content
-                    String oldFilePath =  "file:///android_asset/"+"" + cardModel.contentPath;
-
-                    cardModel.contentPath = ContentsUtil.getContentFolder() + File.separator + cardModel.contentPath;
-
-                    File file = new File(oldFilePath);
-                    if(file.exists()) {
-                        file.renameTo(new File(cardModel.contentPath));
-                    }
-                }
-
                 cardModelList.add(cardModel);
             } while (c.moveToNext());
-
-            File oldContentFolder = new File(Environment.getExternalStorageDirectory() + File.separator + ContentsUtil.ANGELMAN_FOLDER + File.separator + "DCIM");
-            oldContentFolder.delete();
 
         }
         return cardModelList;
@@ -209,4 +227,35 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(SQL_CREATE_CATEGORY_LIST);
         db.execSQL(SQL_CREATE_CARD_LIST);
     }
+
+    private void copyDefaultOldAssetImageToImageFolder(String fileName ,Context context) {
+        AssetManager assetManager = context.getAssets();
+        InputStream in = null;
+        OutputStream out = null;
+
+        try {
+            in = assetManager.open("oldContents" + File.separator + fileName);
+            File outFile = new File(getContentFolder(), fileName);
+            out = new FileOutputStream(outFile);
+            FileUtil.copyFile(in, out);
+        } catch (IOException e) {
+            Log.e("AngelmanApplication", "Failed to copy asset file: " + fileName, e);
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    Log.e("AngelmanApplication", "Failed to close image input file.", e);
+                }
+            }
+            if (out != null) {
+                try {
+                    out.close();
+                } catch (IOException e) {
+                    Log.e("AngelmanApplication", "Failed to close image output file.", e);
+                }
+            }
+        }
+    }
+
 }
