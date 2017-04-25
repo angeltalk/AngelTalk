@@ -521,6 +521,16 @@ public class MakeCardActivityTest extends UITest{
     }
 
     @Test
+    public void givenEditCardVoice_whenClickRetake_thenShowRecodeButton() throws Exception {
+
+    }
+
+    @Test
+    public void givenEditCardVoice_whenClickBackButton_thenShowRecodeButton() throws Exception {
+
+    }
+
+    @Test
     public void given() throws Exception {
 
         setupEditCardForVoiceChange();

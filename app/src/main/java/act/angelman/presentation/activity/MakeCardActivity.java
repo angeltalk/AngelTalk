@@ -25,7 +25,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.google.common.base.Strings;
 
-import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -142,10 +141,6 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
     public void onBackPressed() {
         playUtil.playStop();
 
-        if(editType == CardEditType.VOICE) {
-            moveToCardViewPagerActivity();
-            return;
-        }
         if(countScene.getVisibility() == View.GONE){
             switch(cardView.status){
                 case CARD_TITLE_SHOWN:
@@ -208,12 +203,9 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
             recordUtil.stopRecord();
             playRecordVoiceFile();
         } else {
-            if(editType == CardEditType.VOICE) {
+            if(isCardEditing() && editType.equals(CardEditType.VOICE)) {
                 if(editCardModel.voicePath != null ){
-                    File beforeVoiceFile = new File(editCardModel.voicePath);
-                    if(beforeVoiceFile.exists()) {
-                        beforeVoiceFile.delete();
-                    }
+                    FileUtil.removeFile(editCardModel.voicePath);
                 }
                 cardRepository.updateSingleCardVoice(editCardModel._id, voiceFile);
                 moveToCardViewPagerActivityAfterEditing();
