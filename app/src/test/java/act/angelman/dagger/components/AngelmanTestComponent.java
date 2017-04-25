@@ -9,6 +9,7 @@ import act.angelman.presentation.activity.CardListActivityTest;
 import act.angelman.presentation.activity.CardViewPagerActivityTest;
 import act.angelman.presentation.activity.CategoryMenuActivityTest;
 import act.angelman.presentation.activity.MakeCardActivityTest;
+import act.angelman.presentation.activity.MakeCardPreviewActivityTest;
 import act.angelman.presentation.activity.MakeCategoryActivityTest;
 import act.angelman.presentation.activity.OnboardingActivityTest;
 import act.angelman.presentation.activity.ShareCardActivityTest;
@@ -38,4 +39,5 @@ public interface AngelmanTestComponent extends AngelmanComponent {
     void inject(ScreenReceiverTest screenReceiverTest);
     void inject(ShareCardActivityTest shareCardActivityTest);
     void inject(CardListActivityTest cardListActivityTest);
+    void inject(MakeCardPreviewActivityTest makeCardPreviewActivityTest);
 }

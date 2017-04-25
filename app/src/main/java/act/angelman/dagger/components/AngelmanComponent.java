@@ -12,6 +12,7 @@ import act.angelman.presentation.activity.CardListActivity;
 import act.angelman.presentation.activity.CardViewPagerActivity;
 import act.angelman.presentation.activity.CategoryMenuActivity;
 import act.angelman.presentation.activity.MakeCardActivity;
+import act.angelman.presentation.activity.MakeCardPreviewActivity;
 import act.angelman.presentation.activity.MakeCategoryActivity;
 import act.angelman.presentation.activity.OnboardingActivity;
 import act.angelman.presentation.activity.ShareCardActivity;
@@ -46,4 +47,5 @@ public interface AngelmanComponent {
     void inject(ApplicationInitializer applicationInitializer);
     void inject(CardListActivity cardListActivity);
     void inject(ShareCardActivity shareCardActivity);
+    void inject(MakeCardPreviewActivity makeCardPreviewActivity);
 }
