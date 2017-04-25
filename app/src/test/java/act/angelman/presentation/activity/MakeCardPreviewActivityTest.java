@@ -35,6 +35,8 @@ import act.angelman.presentation.util.ContentsUtil;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.robolectric.Shadows.shadowOf;
 
@@ -197,6 +199,25 @@ public class MakeCardPreviewActivityTest extends UITest {
         assertThat(intent.getComponent().getClassName()).isEqualTo(CardViewPagerActivity.class.getCanonicalName());
     }
 
+    @Test
+    public void givenPhotoCardEditIntent_whenConfirmButtonClick_thenDataChange() throws Exception {
+        MakeCardPreviewActivity subject = setUpWithPhotoContentEdit();
+        when(cardRepository.getSingleCard(anyString()))
+                .thenReturn(CardModel.builder().contentPath(PHOTO_CONTENT_PATH).build());
+        subject.findViewById(R.id.confirm_button).performClick();
+
+        verify(cardRepository).updateSingleCardContent(eq("1"), eq(CardModel.CardType.PHOTO_CARD.getValue()),eq(PHOTO_CONTENT_PATH),anyString());
+    }
+
+    @Test
+    public void givenVideoCardEditIntent_whenConfirmButtonClick_thenDataChange() throws Exception {
+        MakeCardPreviewActivity subject = setUpWithVideoContentEdit();
+        when(cardRepository.getSingleCard(anyString()))
+                .thenReturn(CardModel.builder().contentPath(PHOTO_CONTENT_PATH).build());
+        subject.findViewById(R.id.confirm_button).performClick();
+
+        verify(cardRepository).updateSingleCardContent(eq("1"), eq(CardModel.CardType.VIDEO_CARD.getValue()),eq(VIDEO_CONTENT_PATH),eq(VIDEO_THUMBNAIL_PATH));
+    }
 
     private MakeCardPreviewActivity setUpWithVideoContent() {
         Intent intent = new Intent();
@@ -221,6 +242,17 @@ public class MakeCardPreviewActivityTest extends UITest {
         intent.putExtra(ContentsUtil.CONTENT_PATH, PHOTO_CONTENT_PATH);
         intent.putExtra(ContentsUtil.CARD_TYPE, CardModel.CardType.PHOTO_CARD.getValue());
         intent.putExtra(ApplicationConstants.EDIT_CARD_ID, "1");
+
+        return setupActivityWithIntent(MakeCardPreviewActivity.class, intent);
+    }
+
+    private MakeCardPreviewActivity setUpWithVideoContentEdit() {
+        Intent intent = new Intent();
+        intent.putExtra(ContentsUtil.CONTENT_PATH, VIDEO_CONTENT_PATH);
+        intent.putExtra(ContentsUtil.CARD_TYPE, CardModel.CardType.VIDEO_CARD.getValue());
+        intent.putExtra(ApplicationConstants.EDIT_CARD_ID, "1");
+
+        ShadowMediaPlayer.addMediaInfo(DataSource.toDataSource(VIDEO_CONTENT_PATH), new ShadowMediaPlayer.MediaInfo(3000, -1));
 
         return setupActivityWithIntent(MakeCardPreviewActivity.class, intent);
     }
