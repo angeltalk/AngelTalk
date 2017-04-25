@@ -159,7 +159,7 @@ public class ShareCardActivity extends AppCompatActivity {
 
             @Override
             public void onFail() {
-                FileUtil.removeFilesIn(ContentsUtil.getTempFolder());
+                FileUtil.removeFilesIn(ContentsUtil.getTempFolder(context));
             }
         });
     }
@@ -175,10 +175,10 @@ public class ShareCardActivity extends AppCompatActivity {
                         if(selectItem == null) {
                             return;
                         }
-                        FileUtil.unzip(shareFilePath, ContentsUtil.getTempFolder());
+                        FileUtil.unzip(shareFilePath, ContentsUtil.getTempFolder(context));
                         CardModel cardModel = saveNewSharedCard(shareCardModel, selectItem.index);
-                        ContentsUtil.copySharedFiles(cardModel);
-                        FileUtil.removeFilesIn(ContentsUtil.getTempFolder());
+                        ContentsUtil.copySharedFiles(context, cardModel);
+                        FileUtil.removeFilesIn(ContentsUtil.getTempFolder(context));
 
                         applicationManager.setCategoryModel(selectItem);
                         applicationManager.setCurrentCardIndex(cardModel.cardIndex);
@@ -213,12 +213,12 @@ public class ShareCardActivity extends AppCompatActivity {
         DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss");
         CardModel.CardType cardType = CardModel.CardType.valueOf(cardTransferModel.cardType);
 
-        String contentPath = cardType == CardModel.CardType.VIDEO_CARD ? ContentsUtil.getVideoPath() : ContentsUtil.getImagePath();
+        String contentPath = cardType == CardModel.CardType.VIDEO_CARD ? ContentsUtil.getVideoPath(context) : ContentsUtil.getImagePath(context);
 
         CardModel cardModel = CardModel.builder()
                 .name(cardTransferModel.name)
                 .contentPath(contentPath)
-                .voicePath(ContentsUtil.getVoicePath())
+                .voicePath(ContentsUtil.getVoicePath(context))
                 .firstTime(dateFormat.format(date))
                 .categoryId(categoryIndex)
                 .cardType(cardType).thumbnailPath(cardType == CardModel.CardType.VIDEO_CARD ? ContentsUtil.getThumbnailPath(contentPath) : null)

@@ -1,6 +1,7 @@
 package act.angelman.data.sqlite;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.io.File;
@@ -21,9 +22,9 @@ import static act.angelman.presentation.util.ResourceMapper.IconType.SCHOOL;
 
 public class DefaultDataGenerator {
 
-    public void insertDefaultData(SQLiteDatabase db) {
+    public void insertDefaultData(Context context,SQLiteDatabase db) {
         insertDefaultCategory(db);
-        insertDefaultSingleCard(db);
+        insertDefaultSingleCard(context, db);
     }
 
     private void insertDefaultCategory(SQLiteDatabase db) {
@@ -34,8 +35,8 @@ public class DefaultDataGenerator {
         insertCategoryData(db, 4, "사람", FRIEND.ordinal(), BLUE.ordinal());
     }
 
-    private void insertDefaultSingleCard(SQLiteDatabase db) {
-        String contentFolder = ContentsUtil.getContentFolder() + File.separator;
+    private void insertDefaultSingleCard(Context context, SQLiteDatabase db) {
+        String contentFolder = ContentsUtil.getContentFolder(context) + File.separator;
 
         int index = 0;
         insertCategoryItemData(db,   0       , "물 먹고 싶어요"  , contentFolder+"water.mp4",contentFolder+"water.jpg", "20161018_000002", CardModel.CardType.VIDEO_CARD, index++);

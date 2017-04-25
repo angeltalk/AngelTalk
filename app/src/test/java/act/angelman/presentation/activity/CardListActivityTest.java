@@ -296,7 +296,7 @@ public class CardListActivityTest extends UITest{
     private List<CardModel> getCardModelList() {
         List<CardModel> list = Lists.newArrayList();
 
-        String contentFolder = ContentsUtil.getContentFolder() + File.separator;
+        String contentFolder = ContentsUtil.getContentFolder(RuntimeEnvironment.application.getApplicationContext()) + File.separator;
 
         list.add(CardModel.builder().name("물0").contentPath(contentFolder+"water.png").firstTime("20161018_000003").categoryId(0).cardIndex(0).cardType(CardModel.CardType.PHOTO_CARD).thumbnailPath("").hide(false).build());
         list.add(CardModel.builder().name("물1").contentPath(contentFolder+"water.png").firstTime("20161018_000003").categoryId(0).cardIndex(1).cardType(CardModel.CardType.PHOTO_CARD).thumbnailPath("").hide(true).build());

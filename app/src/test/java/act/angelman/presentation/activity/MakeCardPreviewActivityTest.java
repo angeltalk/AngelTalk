@@ -47,9 +47,9 @@ public class MakeCardPreviewActivityTest extends UITest {
     @Inject
     CardRepository cardRepository;
 
-    private String VIDEO_CONTENT_PATH = ContentsUtil.getContentFolder() + File.separator + "amusementpark.mp4";
-    private String VIDEO_THUMBNAIL_PATH = ContentsUtil.getContentFolder() + File.separator + "amusementpark.jpg";
-    private String PHOTO_CONTENT_PATH = ContentsUtil.getContentFolder() + File.separator + "bus.jpg";
+    private String VIDEO_CONTENT_PATH = ContentsUtil.getContentFolder(RuntimeEnvironment.application.getApplicationContext()) + File.separator + "amusementpark.mp4";
+    private String VIDEO_THUMBNAIL_PATH = ContentsUtil.getContentFolder(RuntimeEnvironment.application.getApplicationContext()) + File.separator + "amusementpark.jpg";
+    private String PHOTO_CONTENT_PATH = ContentsUtil.getContentFolder(RuntimeEnvironment.application.getApplicationContext()) + File.separator + "bus.jpg";
 
     @Before
     public void setUp() throws Exception {
