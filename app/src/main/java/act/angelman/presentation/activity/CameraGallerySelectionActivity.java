@@ -110,6 +110,7 @@ public class CameraGallerySelectionActivity extends AbstractActivity {
         if (data != null) {
             Intent intent = new Intent(CameraGallerySelectionActivity.this, PhotoEditorActivity.class);
             intent.putExtra(ApplicationConstants.IMAGE_PATH_EXTRA, data.getData());
+            intent.putExtra(ApplicationConstants.EDIT_CARD_ID, editCardId);
             startActivity(intent);
         }
     }

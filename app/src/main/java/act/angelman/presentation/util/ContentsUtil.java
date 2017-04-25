@@ -69,6 +69,24 @@ public class ContentsUtil {
 
         saveImage(bitmap, fileName, 490, 112);
     }
+    public static boolean deleteContentAndThumbnail(String contentPath) {
+        boolean result = true;
+        if(Strings.isNullOrEmpty(contentPath)){
+            return false;
+        }
+
+        File contentFile = new File(contentPath);
+        if (contentFile.exists()) {
+            result = contentFile.delete();
+        }
+        File thumbnailFile = new File(ContentsUtil.getThumbnailPath(contentPath));
+        if(thumbnailFile.exists()) {
+            result =  thumbnailFile.delete();
+        }
+
+        return result;
+    }
+
 
     public static void saveImage(Bitmap original, String fileName, int x, int y) {
         Matrix mtx = new Matrix();
