@@ -130,14 +130,14 @@ public class CardViewPagerLayoutTest extends UITest{
         when(repository.getSingleCardListWithCategoryId(anyInt(), anyBoolean())).thenReturn(getCardListWithCategoryId());
         subject.setCategoryData(setDefaultCategoryModel());
 
-        assertThat(subject.getBackground()).isEqualTo(getDrawable(R.drawable.background_gradient_red));
+        assertThat(subject.getBackground()).isEqualTo(getDrawable(R.drawable.background_gradient_yellow));
 
     }
 
     private CategoryModel setDefaultCategoryModel() {
         CategoryModel categoryModel = new CategoryModel();
         categoryModel.title = "먹을 것";
-        categoryModel.color = ResourcesUtil.RED;
+        categoryModel.color = ResourcesUtil.YELLOW;
         categoryModel.index = 0;
 
         return categoryModel;

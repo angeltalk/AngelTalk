@@ -9,7 +9,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.invocation.InvocationOnMock;
@@ -120,7 +119,7 @@ public class MakeCardActivityTest extends UITest{
     @Test
     public void whenLaunchedApp_thenSetBackgroundColorChangedToRelatedInCategory() throws Exception {
         setupPhotoCard();
-        assertThat(applicationManager.getCategoryModelColor()).isEqualTo(R.drawable.background_gradient_blue);
+        assertThat(applicationManager.getCategoryModelColor()).isEqualTo(R.drawable.background_gradient_orange);
     }
 
     @Test
@@ -559,7 +558,7 @@ public class MakeCardActivityTest extends UITest{
 
     private CategoryModel getCategoryModel() {
         CategoryModel categoryModel = new CategoryModel();
-        categoryModel.color =  ResourcesUtil.BLUE;
+        categoryModel.color =  ResourcesUtil.ORANGE;
         return categoryModel;
     }
 
