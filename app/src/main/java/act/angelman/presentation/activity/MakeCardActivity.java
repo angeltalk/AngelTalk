@@ -25,7 +25,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.google.common.base.Strings;
 
-import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -104,8 +103,8 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
     @BindView(R.id.counting_scene)
     PercentRelativeLayout countScene;
 
-    @BindView(R.id.retake_button)
-    Button retakeButton;
+    @BindView(R.id.rerecord_button)
+    Button rerecordButton;
 
     @BindView(R.id.replay_button)
     Button replayButton;
@@ -142,10 +141,11 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
     public void onBackPressed() {
         playUtil.playStop();
 
-        if(editType == CardEditType.VOICE) {
+        if(editType == CardEditType.VOICE && countScene.getVisibility() == View.GONE) {
             moveToCardViewPagerActivity();
             return;
         }
+
         if(countScene.getVisibility() == View.GONE){
             switch(cardView.status){
                 case CARD_TITLE_SHOWN:
@@ -159,26 +159,27 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
                     break;
             }
         } else {
-            if (state == STATE_RECORD_NOT_COMPLETE) {
-                recordUtil.stopRecord();
-            }
-            countHandler.removeCallbacks(countAction);
-
-            mCountDown = INIT_COUNT;
-
-            waitCount.setTextSize(TypedValue.COMPLEX_UNIT_DIP, COUNT_TEXT_SIZE);
-            waitCount.setText(String.valueOf(INIT_COUNT));
-
-            if(state == STATE_RECORD_COMPLETE)
-                state = STATE_RECORD_NOT_COMPLETE;
-
-            countScene.setVisibility(View.GONE);
-            micButton.setEnabled(true);
-            recordStopButton.setBackground(ResourcesUtil.getDrawable(getApplicationContext(), R.drawable.record_stop));
-            recordStopButton.setVisibility(View.GONE);
-            replayButton.setVisibility(View.GONE);
-            retakeButton.setVisibility(View.GONE);
+            prepareRerecording();
         }
+    }
+
+    private void prepareRerecording() {
+        if (state == STATE_RECORD_NOT_COMPLETE) {
+            recordUtil.stopRecord();
+        }
+        countHandler.removeCallbacks(countAction);
+
+        mCountDown = INIT_COUNT;
+        state = STATE_RECORD_NOT_COMPLETE;
+
+        waitCount.setTextSize(TypedValue.COMPLEX_UNIT_DIP, COUNT_TEXT_SIZE);
+        waitCount.setText(String.valueOf(INIT_COUNT));
+        countScene.setVisibility(View.GONE);
+        micButton.setEnabled(true);
+        recordStopButton.setBackground(ResourcesUtil.getDrawable(getApplicationContext(), R.drawable.record_stop));
+        recordStopButton.setVisibility(View.GONE);
+        replayButton.setVisibility(View.GONE);
+        rerecordButton.setVisibility(View.GONE);
     }
 
     @Override
@@ -208,12 +209,9 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
             recordUtil.stopRecord();
             playRecordVoiceFile();
         } else {
-            if(editType == CardEditType.VOICE) {
+            if(isCardEditing() && editType.equals(CardEditType.VOICE)) {
                 if(editCardModel.voicePath != null ){
-                    File beforeVoiceFile = new File(editCardModel.voicePath);
-                    if(beforeVoiceFile.exists()) {
-                        beforeVoiceFile.delete();
-                    }
+                    FileUtil.removeFile(editCardModel.voicePath);
                 }
                 cardRepository.updateSingleCardVoice(editCardModel._id, voiceFile);
                 moveToCardViewPagerActivityAfterEditing();
@@ -235,7 +233,7 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
         playRecordVoiceFile();
     }
 
-    @OnClick(R.id.retake_button)
+    @OnClick(R.id.rerecord_button)
     public void onClickRetakeButton(View view) {
         onBackPressed();
     }
@@ -450,7 +448,7 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
 
         recordStopButton.setBackground(ResourcesUtil.getDrawable(getApplicationContext(), R.drawable.ic_check_button));
         replayButton.setVisibility(View.VISIBLE);
-        retakeButton.setVisibility(View.VISIBLE);
+        rerecordButton.setVisibility(View.VISIBLE);
 
         playUtil.play(voiceFile);
         state = STATE_RECORD_COMPLETE;
