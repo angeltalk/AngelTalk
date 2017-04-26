@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.google.common.collect.Lists;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.invocation.InvocationOnMock;
@@ -58,7 +57,6 @@ import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class)
-@Ignore
 public class ShareCardActivityTest extends UITest {
 
     @Inject
