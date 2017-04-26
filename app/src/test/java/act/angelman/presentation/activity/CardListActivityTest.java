@@ -285,6 +285,22 @@ public class CardListActivityTest extends UITest{
         assertThat(ShadowSnackbar.getTextOfLatestSnackbar()).isEqualTo("공유 받은 카드가 추가되었습니다");
     }
 
+    @Test
+    public void whenScrolledBottom_thenGoneAddCardButton() throws Exception {
+        subject.showHideRecyclerView.scrollToPosition(subject.showHideRecyclerView.getChildCount()-1);
+        assertThat(subject.addCardButton.getVisibility()).isEqualTo(View.GONE);
+    }
+
+    @Test
+    public void givenLessThen6Cards_whenScrolledBottom_thenVisibleAddCardButton() throws Exception {
+        when(cardRepository.getSingleCardListWithCategoryId(applicationManager.getCategoryModel().index)).thenReturn(getSmallCardModelList());
+        subject = setupActivity(CardListActivity.class);
+
+        assertThat(subject.addCardButton.getVisibility()).isEqualTo(View.VISIBLE);
+        subject.showHideRecyclerView.scrollToPosition(subject.showHideRecyclerView.getChildCount()-1);
+        assertThat(subject.addCardButton.getVisibility()).isEqualTo(View.VISIBLE);
+    }
+
     private CategoryModel getCategoryModel() {
         CategoryModel categoryModel = new CategoryModel();
         categoryModel.index = 0;
@@ -306,6 +322,21 @@ public class CardListActivityTest extends UITest{
         list.add(CardModel.builder().name("물5").contentPath(contentFolder+"water.png").firstTime("20161018_000003").categoryId(0).cardIndex(5).cardType(CardModel.CardType.PHOTO_CARD).thumbnailPath("").hide(false).build());
         list.add(CardModel.builder().name("젤리0").contentPath(contentFolder+"haribo.mp4").firstTime("20161018_000003").categoryId(0).cardIndex(6).cardType(CardModel.CardType.VIDEO_CARD).thumbnailPath(contentFolder+"haribo.jpg").hide(false).build());
         list.add(CardModel.builder().name("젤리1").contentPath(contentFolder+"haribo.mp4").firstTime("20161018_000003").categoryId(0).cardIndex(7).cardType(CardModel.CardType.VIDEO_CARD).thumbnailPath(contentFolder+"haribo.jpg").hide(true).build());
+
+        return list;
+    }
+
+    private List<CardModel> getSmallCardModelList() {
+        List<CardModel> list = Lists.newArrayList();
+
+        String contentFolder = ContentsUtil.getContentFolder(RuntimeEnvironment.application.getApplicationContext()) + File.separator;
+
+        list.add(CardModel.builder().name("물0").contentPath(contentFolder+"water.png").firstTime("20161018_000003").categoryId(0).cardIndex(0).cardType(CardModel.CardType.PHOTO_CARD).thumbnailPath("").hide(false).build());
+        list.add(CardModel.builder().name("물1").contentPath(contentFolder+"water.png").firstTime("20161018_000003").categoryId(0).cardIndex(1).cardType(CardModel.CardType.PHOTO_CARD).thumbnailPath("").hide(true).build());
+        list.add(CardModel.builder().name("물2").contentPath(contentFolder+"water.png").firstTime("20161018_000003").categoryId(0).cardIndex(2).cardType(CardModel.CardType.PHOTO_CARD).thumbnailPath("").hide(true).build());
+        list.add(CardModel.builder().name("물3").contentPath(contentFolder+"water.png").firstTime("20161018_000003").categoryId(0).cardIndex(3).cardType(CardModel.CardType.PHOTO_CARD).thumbnailPath("").hide(false).build());
+        list.add(CardModel.builder().name("물4").contentPath(contentFolder+"water.png").firstTime("20161018_000003").categoryId(0).cardIndex(4).cardType(CardModel.CardType.PHOTO_CARD).thumbnailPath("").hide(false).build());
+        list.add(CardModel.builder().name("물5").contentPath(contentFolder+"water.png").firstTime("20161018_000003").categoryId(0).cardIndex(5).cardType(CardModel.CardType.PHOTO_CARD).thumbnailPath("").hide(false).build());
 
         return list;
     }
