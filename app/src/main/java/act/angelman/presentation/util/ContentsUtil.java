@@ -180,15 +180,15 @@ public class ContentsUtil {
 
         File[] files = new File(folderPath).listFiles();
         for (File file : files) {
-            if (file.getAbsolutePath().contains("mp4")) {
+            if (isVideoFile(file)) {
                 cardModel.contentPath = file.getAbsolutePath();
-            } else if (file.getAbsolutePath().contains("jpg") || file.getAbsolutePath().contains("png")) {
+            } else if (isImageFile(file)) {
                 if (CardModel.CardType.valueOf(cardTransferModel.cardType) == CardModel.CardType.VIDEO_CARD) {
                     cardModel.thumbnailPath = file.getAbsolutePath();
                 } else {
                     cardModel.contentPath = file.getAbsolutePath();
                 }
-            } else if (file.getAbsolutePath().contains("3gdp")) {
+            } else if (isVoiceFile(file)) {
                 cardModel.voicePath = file.getAbsolutePath();
             }
         }
@@ -199,21 +199,33 @@ public class ContentsUtil {
         File[] files = new File(getTempFolder(context)).listFiles();
         for (File file : files) {
             try {
-                if (file.getAbsolutePath().contains("mp4")) {
+                if (isVideoFile(file)) {
                     copyFile(file, new File(cardModel.contentPath));
-                } else if (file.getAbsolutePath().contains("jpg") || file.getAbsolutePath().contains("png")) {
+                } else if (isImageFile(file)) {
                     if (cardModel.cardType == CardModel.CardType.VIDEO_CARD) {
                         copyFile(file, new File(cardModel.thumbnailPath));
                     } else {
                         copyFile(file, new File(cardModel.contentPath));
                     }
-                } else if (file.getAbsolutePath().contains("3gdp")) {
+                } else if (isVoiceFile(file)) {
                     copyFile(file, new File(cardModel.voicePath));
                 }
             } catch (IOException e) {
                 Log.e("error", "copyShardFile error : " + e.getStackTrace());
             }
         }
+    }
+
+    private static boolean isVideoFile(File file) {
+        return file.getAbsolutePath().contains("mp4");
+    }
+
+    private static boolean isImageFile(File file) {
+        return file.getAbsolutePath().contains("jpg") || file.getAbsolutePath().contains("png") || file.getAbsolutePath().contains("jpeg");
+    }
+
+    private static boolean isVoiceFile(File file) {
+        return file.getAbsolutePath().contains("3gdp");
     }
 
 }
