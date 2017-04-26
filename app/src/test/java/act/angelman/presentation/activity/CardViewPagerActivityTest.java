@@ -20,7 +20,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.common.collect.Lists;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.invocation.InvocationOnMock;
@@ -168,7 +167,7 @@ public class CardViewPagerActivityTest extends UITest {
         assertThat(((TextView) shadowDialog.getView().findViewById(R.id.alert_message)).getText()).contains( "물" );
     }
 
-    @Test@Ignore
+    @Test
     public void whenClickedEditButton_thenShowsEditSelectDialog() throws Exception {
         subject.cardEditButton.performClick();
         AlertDialog alert = ShadowAlertDialog.getLatestAlertDialog();
@@ -176,7 +175,7 @@ public class CardViewPagerActivityTest extends UITest {
         assertThat(((TextView) shadowDialog.getView().findViewById(R.id.card_edit_select_guide)).getText()).contains( "카드를 수정해보세요" );
     }
 
-    @Test@Ignore
+    @Test
     public void givenCardEditSelectDialogShow_whenClickEditContent_thenMoveToCameraGallerySelectionActivity() throws Exception {
         // given
         subject.mViewPager.setCurrentItem(1);
@@ -194,7 +193,7 @@ public class CardViewPagerActivityTest extends UITest {
         assertThat(nextStartedActivity.getComponent().getClassName()).isEqualTo(CameraGallerySelectionActivity.class.getCanonicalName());
     }
 
-    @Test@Ignore
+    @Test
     public void givenClickedDeleteButton_whenClickedConfirmButton_thenDeleteSelectedCardViewInViewPager() throws Exception {
         CardViewPager viewPager = subject.mViewPager;
         assertThat(viewPager.getAdapter().getCount()).isEqualTo(5);

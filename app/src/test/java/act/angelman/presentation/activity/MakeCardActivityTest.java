@@ -56,7 +56,6 @@ import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class, shadows = {ShadowViewTreeObserver.class})
-@Ignore
 public class MakeCardActivityTest extends UITest{
 
     @Inject

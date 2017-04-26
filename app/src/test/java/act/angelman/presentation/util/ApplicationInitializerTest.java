@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Environment;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
@@ -60,7 +59,6 @@ public class ApplicationInitializerTest {
     }
 
     @Test
-    @Ignore
     public void givenNotFirstLaunched_whenApplicationInitialize_thenSkipCopyDefaultAssetImagesToImageFolder() throws Exception {
         ShadowEnvironment.setExternalStorageState(Environment.MEDIA_MOUNTED);
         Context context = RuntimeEnvironment.application;
