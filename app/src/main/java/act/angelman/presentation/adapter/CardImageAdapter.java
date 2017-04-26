@@ -150,7 +150,7 @@ public class CardImageAdapter extends PagerAdapter {
 
     public void addNewCardViewAtFirst() {
         hasNewCardView = true;
-        CardModel emptyModel = new CardModel();
+        CardModel emptyModel = CardModel.builder().cardIndex(-1).build();
         dataList.add(0, emptyModel);
     }
 

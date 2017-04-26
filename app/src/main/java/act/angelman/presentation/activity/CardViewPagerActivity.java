@@ -221,6 +221,8 @@ public class CardViewPagerActivity extends AbstractActivity {
         if (getIntent().getBooleanExtra(ApplicationConstants.INTENT_KEY_LIST_BACK, false)) {
             if (!setViewPagerCurrentItem(applicationManager.getCurrentCardIndex())) {
                 mViewPager.setCurrentItem(1);
+            }else{
+                return;
             }
         }
 
@@ -228,6 +230,8 @@ public class CardViewPagerActivity extends AbstractActivity {
             showSnackBarMessage(getString(R.string.card_edit_success_message));
             if (!setViewPagerCurrentItem(applicationManager.getCurrentCardIndex())) {
                 mViewPager.setCurrentItem(1);
+            }else{
+                return;
             }
         }
 
@@ -378,7 +382,7 @@ public class CardViewPagerActivity extends AbstractActivity {
     }
 
     private boolean setViewPagerCurrentItem(int beforeCardIndex) {
-        for(int i=1;i<allCardListInSelectedCategory.size();i++) {
+        for(int i=0;i<allCardListInSelectedCategory.size();i++) {
             if(allCardListInSelectedCategory.get(i).cardIndex == beforeCardIndex) {
                 mViewPager.setCurrentItem(i);
                 return true;
