@@ -64,6 +64,8 @@ public class MakeCardActivityTest extends UITest{
     ApplicationManager applicationManager;
 
     private MakeCardActivity subject;
+    private int STATE_RECORD_NOT_COMPLETE = 0;
+    private int STATE_RECORD_COMPLETE = 1;
 
     @Before
     public void setUp() throws Exception {
@@ -236,7 +238,6 @@ public class MakeCardActivityTest extends UITest{
         ShadowActivity shadowActivity = shadowOf(subject);
         Intent nextStartedActivity = shadowActivity.getNextStartedActivity();
         assertThat(nextStartedActivity.getComponent().getClassName()).isEqualTo(CardViewPagerActivity.class.getCanonicalName());
-        assertThat(nextStartedActivity.getStringExtra(ApplicationConstants.INTENT_KEY_CARD_EDITED)).isEqualTo(true);
     }
 
     @Test
@@ -304,7 +305,7 @@ public class MakeCardActivityTest extends UITest{
         assertThat(((TextView) subject.findViewById(R.id.waiting_count)).getText()).isEqualTo("음성을 확인하세요");
         assertThat(subject.recordStopButton.getVisibility()).isEqualTo(View.VISIBLE);
         assertThat(subject.replayButton.getVisibility()).isEqualTo(View.VISIBLE);
-        assertThat(subject.retakeButton.getVisibility()).isEqualTo(View.VISIBLE);
+        assertThat(subject.rerecordButton.getVisibility()).isEqualTo(View.VISIBLE);
     }
     @Test
     public void givenVoiceRecordFinished_whenClickReplayButton_thenStartVoicePlay() throws Exception {
@@ -343,7 +344,7 @@ public class MakeCardActivityTest extends UITest{
         assertThat(R.drawable.ic_check_button).isEqualTo(shadowDrawable.getCreatedFromResId());
         assertThat(subject.recordStopButton.getVisibility()).isEqualTo(View.VISIBLE);
         assertThat(subject.replayButton.getVisibility()).isEqualTo(View.VISIBLE);
-        assertThat(subject.retakeButton.getVisibility()).isEqualTo(View.VISIBLE);
+        assertThat(subject.rerecordButton.getVisibility()).isEqualTo(View.VISIBLE);
     }
 
     @Test
@@ -445,12 +446,12 @@ public class MakeCardActivityTest extends UITest{
         Robolectric.flushForegroundThreadScheduler();
 
         (subject.findViewById(R.id.record_stop_button)).performClick();
-        assertThat(subject.state).isEqualTo(1);
+        assertThat(subject.state).isEqualTo(STATE_RECORD_COMPLETE);
 
         subject.onBackPressed();
 
         assertThat(subject.findViewById(counting_scene)).isGone();
-        assertThat(subject.state).isEqualTo(0);
+        assertThat(subject.state).isEqualTo(STATE_RECORD_NOT_COMPLETE);
 
         assertThat(shadowOf((subject.findViewById(R.id.record_stop_button)).getBackground()).getCreatedFromResId()).isEqualTo(R.drawable.record_stop);
         verify(subject.playUtil).playStop();
@@ -500,12 +501,12 @@ public class MakeCardActivityTest extends UITest{
         Robolectric.flushForegroundThreadScheduler();
 
         (subject.findViewById(R.id.record_stop_button)).performClick();
-        assertThat(subject.state).isEqualTo(1);
+        assertThat(subject.state).isEqualTo(STATE_RECORD_COMPLETE);
 
-        subject.retakeButton.performClick();
+        subject.rerecordButton.performClick();
 
         assertThat(subject.findViewById(counting_scene)).isGone();
-        assertThat(subject.state).isEqualTo(0);
+        assertThat(subject.state).isEqualTo(STATE_RECORD_NOT_COMPLETE);
 
         assertThat(shadowOf((subject.findViewById(R.id.record_stop_button)).getBackground()).getCreatedFromResId()).isEqualTo(R.drawable.record_stop);
         verify(subject.playUtil).playStop();
@@ -521,20 +522,18 @@ public class MakeCardActivityTest extends UITest{
     }
 
     @Test
-    public void givenEditCardVoice_whenClickRetake_thenShowRecodeButton() throws Exception {
-
-    }
-
-    @Test
-    public void givenEditCardVoice_whenClickBackButton_thenShowRecodeButton() throws Exception {
-
-    }
-
-    @Test
-    public void given() throws Exception {
-
+    public void givenRecordFinished_whenClickRerecordButton_thenPrepareRerecording() throws Exception {
         setupEditCardForVoiceChange();
+        recordComplete();
 
+        subject.rerecordButton.performClick();
+
+        assertThat(subject.findViewById(counting_scene)).isGone();
+        assertThat(subject.state).isEqualTo(STATE_RECORD_NOT_COMPLETE);
+
+        assertThat(shadowOf((subject.findViewById(R.id.record_stop_button)).getBackground()).getCreatedFromResId()).isEqualTo(R.drawable.record_stop);
+        verify(subject.playUtil).playStop();
+        assertThat(subject.micButton.getVisibility()).isEqualTo(View.VISIBLE);
     }
 
     private void recordComplete() {
