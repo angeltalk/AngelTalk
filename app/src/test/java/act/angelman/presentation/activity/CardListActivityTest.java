@@ -282,7 +282,7 @@ public class CardListActivityTest extends UITest{
         setupActivityWithIntent(CardListActivity.class, intent);
         // then
         assertThat(ShadowSnackbar.getLatestSnackbar()).isNotNull();
-        assertThat(ShadowSnackbar.getTextOfLatestSnackbar()).isEqualTo("공유 받은 카드가 추가되었습니다.");
+        assertThat(ShadowSnackbar.getTextOfLatestSnackbar()).isEqualTo("공유 받은 카드가 추가되었습니다");
     }
 
     private CategoryModel getCategoryModel() {

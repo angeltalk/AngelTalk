@@ -65,7 +65,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:text="카드를 불러오고 있어요"
+            android:text="@string/card_loading_message"
             android:textColor="@color/white"
             android:textSize="17sp"
             app:font="@string/font_demilight" />
