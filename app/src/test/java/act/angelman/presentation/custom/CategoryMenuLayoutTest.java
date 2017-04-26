@@ -10,7 +10,6 @@ import android.widget.TextClock;
 import com.google.common.collect.Lists;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RuntimeEnvironment;
@@ -31,6 +30,7 @@ import act.angelman.UITest;
 import act.angelman.domain.model.CategoryModel;
 import act.angelman.domain.repository.CategoryRepository;
 import act.angelman.presentation.adapter.CategoryAdapter;
+import act.angelman.presentation.shadow.ShadowKeyCharacterMap;
 
 import static act.angelman.R.drawable.ic_food;
 import static org.assertj.android.api.Assertions.assertThat;
@@ -42,8 +42,7 @@ import static org.mockito.Mockito.when;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(AngelmanTestRunner.WithKorean.class)
-@Ignore
-@Config(constants = BuildConfig.class)
+@Config(constants = BuildConfig.class, shadows = ShadowKeyCharacterMap.class)
 public class CategoryMenuLayoutTest extends UITest {
 
     @Inject
