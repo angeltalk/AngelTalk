@@ -210,28 +210,25 @@ public class CardViewPagerActivity extends AbstractActivity {
         initializeView();
 
         if (getIntent().getBooleanExtra(ApplicationConstants.INTENT_KEY_NEW_CARD, false)) {
+
             showSnackBarMessage(getString(R.string.add_new_card_success));
             mViewPager.setCurrentItem(1);
-        }
 
-        if (getIntent().getBooleanExtra(ApplicationConstants.INTENT_KEY_REFRESH_CARD, false)) {
+        } else if (getIntent().getBooleanExtra(ApplicationConstants.INTENT_KEY_REFRESH_CARD, false)) {
+
             mViewPager.setCurrentItem(0);
-        }
 
-        if (getIntent().getBooleanExtra(ApplicationConstants.INTENT_KEY_LIST_BACK, false)) {
+        } else if (getIntent().getBooleanExtra(ApplicationConstants.INTENT_KEY_LIST_BACK, false)) {
+
             if (!setViewPagerCurrentItem(applicationManager.getCurrentCardIndex())) {
                 mViewPager.setCurrentItem(1);
-            }else{
-                return;
             }
-        }
 
-        if (getIntent().getBooleanExtra(ApplicationConstants.INTENT_KEY_CARD_EDITED, false)) {
+        } else if (getIntent().getBooleanExtra(ApplicationConstants.INTENT_KEY_CARD_EDITED, false)) {
+
             showSnackBarMessage(getString(R.string.card_edit_success_message));
             if (!setViewPagerCurrentItem(applicationManager.getCurrentCardIndex())) {
                 mViewPager.setCurrentItem(1);
-            }else{
-                return;
             }
         }
 
