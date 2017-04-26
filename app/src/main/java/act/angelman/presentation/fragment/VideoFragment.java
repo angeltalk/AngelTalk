@@ -611,7 +611,10 @@ public class VideoFragment extends Fragment
                 @Override
                 public void run() {
                     time += 30; //0 ~ 3000 time 1000 2000 3000
-                    textCount.setText("00:0"+(time/1000));
+                    if(time>3500){
+                        return;
+                    }
+                    textCount.setText("00:0"+(time/900));
                     progressBar.setProgress((int) time);
                     h.postDelayed(this, 30);
                 }
