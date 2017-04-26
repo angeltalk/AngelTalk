@@ -152,6 +152,12 @@ public class CategoryMenuActivity extends AbstractActivity  implements Navigatio
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        changeCategoryMenuStatus(CategoryMenuStatus.CATEGORY_DEFAULT);
+    }
+
+    @Override
     public void onBackPressed() {
         if (categoryAdapter.getCategoryMenuStatus() == CategoryMenuStatus.CATEGORY_DELETABLE) {
             changeCategoryMenuStatus(CategoryMenuStatus.CATEGORY_DEFAULT);
