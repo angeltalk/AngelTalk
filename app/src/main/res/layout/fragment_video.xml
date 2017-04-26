@@ -23,7 +23,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="107dp"
         android:indeterminate="false"
-        android:max="3000"
+        android:max="2800"
         android:progress="0"
         android:progressDrawable="@drawable/progress_bar" />
 
