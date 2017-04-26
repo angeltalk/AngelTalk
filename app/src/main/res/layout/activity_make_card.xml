@@ -100,7 +100,7 @@
                 android:visibility="gone" />
 
             <Button
-                android:id="@+id/retake_button"
+                android:id="@+id/rerecord_button"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_centerVertical="true"

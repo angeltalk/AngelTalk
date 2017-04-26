@@ -36,7 +36,7 @@ android {
             jacoco {
                 includeNoLocationClasses = true
             }
-
+            forkEvery = 10
         }
     }
 
