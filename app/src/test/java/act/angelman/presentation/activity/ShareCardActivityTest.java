@@ -122,7 +122,25 @@ public class ShareCardActivityTest extends UITest {
         assertThat(dialog.isShowing()).isTrue();
 
         FontTextView infoText = ((FontTextView) dialog.findViewById(R.id.text_select_category_guide));
-        assertThat(infoText.getText().toString()).isEqualTo("저장하실 카테고리를 선택해주세요");
+        assertThat(infoText.getText().toString()).isEqualTo("저장하실 카테고리를 선택해 주세요");
+
+        RecyclerView listView = ((RecyclerView) dialog.findViewById(R.id.category_list_recycler_view));
+        assertThat(listView.getChildCount()).isEqualTo(6);
+    }
+
+    @Test
+    @Config(qualifiers = "en")
+    public void whenClickDownloadButton_thenShowCategorySelectDialogAndContentsOfDialogCorrectly_en() throws Exception {
+        kakaotalk_subject = setupActivityWithIntent(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.kakao_scheme) + "://" + getString(R.string.kakaolink_host))));
+
+        // when
+        AlertDialog dialog = clickSaveButtonAndShowSelectCategoryDialog();
+
+        // then
+        assertThat(dialog.isShowing()).isTrue();
+
+        FontTextView infoText = ((FontTextView) dialog.findViewById(R.id.text_select_category_guide));
+        assertThat(infoText.getText().toString()).isEqualTo("Choose a category for this card");
 
         RecyclerView listView = ((RecyclerView) dialog.findViewById(R.id.category_list_recycler_view));
         assertThat(listView.getChildCount()).isEqualTo(6);

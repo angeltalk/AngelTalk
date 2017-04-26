@@ -74,7 +74,7 @@
             android:layout_marginTop="15dp"
             android:textSize="17sp"
             app:font="@string/font_demilight"
-            android:text="카드를 준비하고 있어요"/>
+            android:text="@string/card_share_preparing_message"/>
 
     </LinearLayout>
 

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.percent.PercentRelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/background_gradient_black"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    >
+
+    <LinearLayout
+        android:id="@+id/clock_layout"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="12dp"
+        android:layout_marginStart="38dp"
+        android:layout_marginEnd="10dp"
+        >
+        <act.angelman.presentation.custom.FontTextClock
+            android:layout_width="wrap_content"
+            android:id="@+id/clock_date"
+            android:layout_height="wrap_content"
+            android:format12Hour="@string/format_day"
+            android:format24Hour="@string/format_day"
+            android:gravity="center_horizontal"
+            android:textColor="@color/white"
+            app:font="@string/font_demilight"
+            android:textSize="15dp" />
+        <act.angelman.presentation.custom.FontTextClock
+            android:id="@+id/clock_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:format12Hour="hh:mm"
+            android:format24Hour="hh:mm"
+            android:gravity="center_horizontal"
+            android:layout_marginStart="5dp"
+            android:textColor="@color/white"
+            app:font="@string/font_roboto_light"
+            android:textSize="35dp" />
+        <act.angelman.presentation.custom.FontTextClock
+            android:id="@+id/clock_ampm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:format12Hour="a"
+            android:format24Hour="a"
+            android:gravity="center_horizontal"
+            android:layout_marginStart="5dp"
+            app:font="@string/font_demilight"
+            android:textColor="@color/white"
+            android:textSize="15dp" />
+
+    </LinearLayout>
+
+    <GridView
+        android:id="@+id/category_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/clock_layout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="35dp"
+        android:padding="0dp"
+        android:verticalSpacing="15dp"
+        android:horizontalSpacing="0dp"
+        android:numColumns="auto_fit"
+        android:stretchMode="columnWidth"
+        android:listSelector="@drawable/gridview_selector"
+        android:gravity="center_horizontal"
+        android:layout_alignBottom="@id/clock_layout"
+        android:layout_alignParentBottom="true"
+        />
+    <ImageView
+        android:id="@+id/lock_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:src="@drawable/ic_lock_disabled"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        app:layout_marginBottomPercent="3.7%"
+        />
+
+    <RelativeLayout
+        android:id="@+id/lock_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        >
+        <ImageView
+            android:id="@+id/blurredView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+        <ImageView
+            android:id="@+id/lock_area"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:scaleType="fitXY"
+            android:src="@drawable/lock_area"/>
+    </RelativeLayout>
+
+    <act.angelman.presentation.custom.FontTextView
+        android:id="@+id/lock_guide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/lock_image"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="25.3dp"
+        android:textSize="15.5dp"
+        android:textColor="@color/white"
+        android:text="@string/lock_guide"
+        app:font="@string/font_regular"
+        android:visibility="gone"
+        />
+</android.support.percent.PercentRelativeLayout>
