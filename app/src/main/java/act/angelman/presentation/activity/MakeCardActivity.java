@@ -254,7 +254,7 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
             cardView.cardImage.setScaleType(ImageView.ScaleType.FIT_XY);
             glide.load(ContentsUtil.getContentFile(contentPath))
                     .override(280, 280)
-                    .bitmapTransform(new AngelManGlideTransform(this, ResolutionUtil.getDpToPix(this, 10), 0, AngelManGlideTransform.CornerType.TOP))
+                    .bitmapTransform(new AngelManGlideTransform(this, 10, 0, AngelManGlideTransform.CornerType.TOP))
                     .into(cardView.cardImage);
 
         } else if (cardType.equals(CardModel.CardType.VIDEO_CARD)) {
