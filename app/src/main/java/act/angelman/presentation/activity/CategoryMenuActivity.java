@@ -71,7 +71,7 @@ public class CategoryMenuActivity extends AbstractActivity  implements Navigatio
     @BindString(R.string.voc_web_url)
     public String vocWebUrl;
 
-    @BindString(R.string.new_category)
+    @BindString(R.string.new_category_button_text)
     public String newCategoryString;
 
     @BindString(R.string.one_left_delete_category)
