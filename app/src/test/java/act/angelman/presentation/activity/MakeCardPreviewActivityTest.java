@@ -64,7 +64,7 @@ public class MakeCardPreviewActivityTest extends UITest {
         assertThat(subject.cardPreviewLayout.cameraRecodeVideo.getVisibility()).isEqualTo(View.VISIBLE);
         assertThat(subject.cardPreviewLayout.previewPlayButton.getVisibility()).isEqualTo(View.VISIBLE);
         assertThat(subject.cardPreviewLayout.cameraRecodeImage.getVisibility()).isEqualTo(View.VISIBLE);
-        assertThat(subject.findViewById(R.id.retake_button).getVisibility()).isEqualTo(View.VISIBLE);
+        assertThat(subject.findViewById(R.id.rerecord_button).getVisibility()).isEqualTo(View.VISIBLE);
         assertThat(subject.findViewById(R.id.confirm_button).getVisibility()).isEqualTo(View.VISIBLE);
         assertThat(subject.cardPreviewLayout.cameraRecodeGuide.getText()).contains("영상");
     }
@@ -83,7 +83,7 @@ public class MakeCardPreviewActivityTest extends UITest {
     public void givenVideoCardIntent_whenRetakeButtonClick_thenBackToVideoActivity() throws Exception {
         MakeCardPreviewActivity subject = setUpWithVideoContent();
 
-        subject.findViewById(R.id.retake_button).performClick();
+        subject.findViewById(R.id.rerecord_button).performClick();
 
         ShadowActivity shadowActivity = shadowOf(subject);
         Intent startedIntent = shadowActivity.getNextStartedActivity();
@@ -140,7 +140,7 @@ public class MakeCardPreviewActivityTest extends UITest {
     public void givenPhotoCardIntent_whenRetakeButtonClick_thenBackToCamera2Activity() throws Exception {
         MakeCardPreviewActivity subject = setUpWithPhotoContent();
 
-        subject.findViewById(R.id.retake_button).performClick();
+        subject.findViewById(R.id.rerecord_button).performClick();
 
         ShadowActivity shadowActivity = shadowOf(subject);
         Intent startedIntent = shadowActivity.getNextStartedActivity();

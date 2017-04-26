@@ -95,7 +95,7 @@ public class MakeCardPreviewActivity extends AppCompatActivity {
         finish();
     }
 
-    @OnClick(R.id.retake_button)
+    @OnClick(R.id.rerecord_button)
     public void onClickRetakeButton (View v) {
         onBackPressed();
     }
