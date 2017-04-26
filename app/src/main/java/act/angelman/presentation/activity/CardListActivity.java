@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import java.util.Collections;
@@ -52,6 +53,8 @@ public class CardListActivity extends AppCompatActivity {
     @BindView(R.id.change_order_recycler_view)
     RecyclerView changeOrderRecyclerView;
 
+    @BindView(R.id.add_card_button)
+    ImageView addCardButton;
 
     @BindView(R.id.show_hide_tab_button)
     CardListTabButton showHideTabButton;
@@ -138,6 +141,16 @@ public class CardListActivity extends AppCompatActivity {
         }
     };
 
+    public RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            if (recyclerView.getChildCount() > 6 && !recyclerView.canScrollVertically(1)) {
+                addCardButton.setVisibility(View.GONE);
+            } else {
+                addCardButton.setVisibility(View.VISIBLE);
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -207,9 +220,12 @@ public class CardListActivity extends AppCompatActivity {
         showHideRecyclerViewAdapter = new ShowHideRecyclerViewAdapter(cardList, applicationManager.getCategoryModelColor(), getApplicationContext(), dataChangeListener);
         showHideRecyclerView.setAdapter(showHideRecyclerViewAdapter);
         showHideRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        showHideRecyclerView.setOnScrollListener(onScrollListener);
+
         changeOrderRecyclerViewAdapter = new ChangeOrderRecyclerViewAdapter(cardList, applicationManager.getCategoryModelColor(), getApplicationContext());
         changeOrderRecyclerView.setAdapter(changeOrderRecyclerViewAdapter);
         changeOrderRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        changeOrderRecyclerView.setOnScrollListener(onScrollListener);
         cardListItemTouchHelper.attachToRecyclerView(changeOrderRecyclerView);
     }
 
