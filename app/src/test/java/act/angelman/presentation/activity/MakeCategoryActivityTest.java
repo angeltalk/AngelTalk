@@ -331,6 +331,23 @@ public class MakeCategoryActivityTest extends UITest {
         assertThat(editCategoryTitle.getText().toString()).isEqualTo("test");
     }
 
+    @Test
+    public void whenCategoryNameIsOver12ChractersInEnglish_thenDeleteAfter12thCharacters() throws Exception {
+        String LENGTH_13_ENGLISH_STRING = "abcdefghijklm";
+        subject.editCategoryTitle.setText(LENGTH_13_ENGLISH_STRING);
+
+        assertThat(subject.editCategoryTitle.getText().toString()).isEqualTo("abcdefghijkl");
+        assertThat(subject.editCategoryTitle.getText().length()).isEqualTo(12);
+    }
+
+    @Test
+    public void whenCategoryNameIsOver6ChractersInKorean_thenDeleteAfter6thCharacters() throws Exception {
+        String LENGTH_10_KOREAN_STRING = "일이삼사오육칠팔구십";
+        subject.editCategoryTitle.setText(LENGTH_10_KOREAN_STRING);
+
+        assertThat(subject.editCategoryTitle.getText().toString()).isEqualTo("일이삼사오육");
+        assertThat(subject.editCategoryTitle.getText().length()).isEqualTo(6);
+    }
 
     private void initIconList() {
         List<CategoryItemModel> mockItemList = Lists.newArrayList();

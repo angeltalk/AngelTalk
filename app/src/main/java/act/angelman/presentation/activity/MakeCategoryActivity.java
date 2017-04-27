@@ -36,6 +36,8 @@ import act.angelman.presentation.custom.CustomConfirmDialog;
 import act.angelman.presentation.manager.ApplicationConstants;
 import act.angelman.presentation.manager.ApplicationManager;
 import act.angelman.presentation.util.FontUtil;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 import static act.angelman.presentation.util.ResourceMapper.ColorState;
 import static act.angelman.presentation.util.ResourceMapper.IconState;
@@ -54,7 +56,10 @@ public class MakeCategoryActivity extends AbstractActivity{
     ApplicationManager applicationManager;
 
     private TextView categoryTitleTextView;
-    private EditText editCategoryTitle;
+
+    @BindView(R.id.edit_category_title)
+    EditText editCategoryTitle;
+
     private ImageView newCategorySaveButton;
     private ImageView cancelButton;
     NewCategoryItemAdapter iconAdapter;
@@ -68,6 +73,7 @@ public class MakeCategoryActivity extends AbstractActivity{
         setContentView(R.layout.activity_new_category);
 
         ((AngelmanApplication) getApplication()).getAngelmanComponent().inject(this);
+        ButterKnife.bind(this);
 
         cancelButton = (ImageView) findViewById(R.id.category_title_cancel);
         iconListView = (RecyclerView) findViewById(R.id.icon_list);
@@ -103,7 +109,7 @@ public class MakeCategoryActivity extends AbstractActivity{
 
         setFont();
 
-        editCategoryTitle = (EditText) findViewById(R.id.edit_category_title);
+
         editCategoryTitle.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
