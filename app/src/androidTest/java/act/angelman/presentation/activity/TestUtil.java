@@ -14,6 +14,8 @@ import org.hamcrest.TypeSafeMatcher;
 
 import java.util.List;
 
+import act.angelman.data.sqlite.DatabaseHelper;
+import act.angelman.data.sqlite.DefaultDataGenerator;
 import act.angelman.domain.model.CategoryModel;
 import act.angelman.domain.repository.CardRepository;
 import act.angelman.domain.repository.CategoryRepository;
@@ -26,7 +28,7 @@ public class TestUtil {
             categoryRepository.deleteCategory(model.index);
             cardRepository.deleteSingleCardsWithCategory(model.index);
         }
-//        new DefaultDataGenerator().insertDefaultData(DatabaseHelper.getInstance(context).getWritableDatabase());
+        new DefaultDataGenerator().insertDefaultData(context, DatabaseHelper.getInstance(context).getWritableDatabase());
     }
 
     public static Matcher<View> childAtPosition(
