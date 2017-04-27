@@ -10,8 +10,10 @@ import android.support.annotation.StringRes;
 
 import org.robolectric.Robolectric;
 import org.robolectric.RuntimeEnvironment;
+import org.robolectric.annotation.Config;
 import org.robolectric.util.ActivityController;
 
+@Config(qualifiers = "ko")
 public class UITest {
     protected ActivityController controller;
 
