@@ -354,18 +354,6 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
         cardView.setLayoutParams(layoutParams);
     }
 
-    private void removeCardViewMargin() {
-        PercentRelativeLayout.LayoutParams layoutParams = ((PercentRelativeLayout.LayoutParams) cardView.getLayoutParams());
-        layoutParams.setMargins(0, 0, 0, 0);
-        cardView.setLayoutParams(layoutParams);
-    }
-
-    private boolean isSoftKeyboardShowing() {
-        Rect visibleAreaRect = new Rect();
-        rootLayout.getWindowVisibleDisplayFrame(visibleAreaRect);
-        return  rootLayout.getHeight() - visibleAreaRect.height() > 0;
-    }
-
     private ViewTreeObserver.OnGlobalLayoutListener onGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
         @Override
         public void onGlobalLayout() {
@@ -374,6 +362,18 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
             } else {
                 removeCardViewMargin();
             }
+        }
+
+        private boolean isSoftKeyboardShowing() {
+            Rect visibleAreaRect = new Rect();
+            rootLayout.getWindowVisibleDisplayFrame(visibleAreaRect);
+            return rootLayout.getHeight() - visibleAreaRect.height() > 0;
+        }
+
+        private void removeCardViewMargin() {
+            PercentRelativeLayout.LayoutParams layoutParams = ((PercentRelativeLayout.LayoutParams) cardView.getLayoutParams());
+            layoutParams.setMargins(0, 0, 0, 0);
+            cardView.setLayoutParams(layoutParams);
         }
     };
 
