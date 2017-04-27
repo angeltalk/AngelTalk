@@ -1,6 +1,9 @@
 package act.angelman.presentation.manager;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,6 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ApplicationManagerTest {
 
     private ApplicationManager subject;
+    private static final String CHILD_MODE = "childMode";
 
     @Before
     public void setUp() throws Exception {
@@ -65,6 +69,44 @@ public class ApplicationManagerTest {
         assertThat(subject.getCurrentCardIndex()).isEqualTo(0);
         subject.setCurrentCardIndex(2);
         assertThat(subject.getCurrentCardIndex()).isEqualTo(2);
+    }
+
+    @Test
+    public void setChildModeTest() throws Exception {
+        SharedPreferences sharedPreferences = RuntimeEnvironment.application.getSharedPreferences(ApplicationConstants.PRIVATE_PREFERENCE_NAME, Context.MODE_PRIVATE);
+        assertThat(sharedPreferences.getBoolean(CHILD_MODE, false)).isFalse();
+        subject.setChildMode();
+        assertThat(sharedPreferences.getBoolean(CHILD_MODE, false)).isTrue();
+    }
+
+    @Test
+    public void setNotChildModeTest() throws Exception {
+        SharedPreferences sharedPreferences = RuntimeEnvironment.application.getSharedPreferences(ApplicationConstants.PRIVATE_PREFERENCE_NAME, Context.MODE_PRIVATE);
+        assertThat(sharedPreferences.getBoolean(CHILD_MODE, false)).isFalse();
+        subject.setChildMode();
+        assertThat(sharedPreferences.getBoolean(CHILD_MODE, false)).isTrue();
+        subject.setNotChildMode();
+        assertThat(sharedPreferences.getBoolean(CHILD_MODE, true)).isFalse();
+    }
+
+    @Test
+    public void isChildModeTest() throws Exception {
+        SharedPreferences sharedPreferences = RuntimeEnvironment.application.getSharedPreferences(ApplicationConstants.PRIVATE_PREFERENCE_NAME, Context.MODE_PRIVATE);
+        assertThat(subject.isChildMode()).isEqualTo(sharedPreferences.getBoolean(CHILD_MODE, true));
+        assertThat(subject.isChildMode()).isTrue();
+        subject.setNotChildMode();
+        assertThat(subject.isChildMode()).isEqualTo(sharedPreferences.getBoolean(CHILD_MODE, true));
+        assertThat(subject.isChildMode()).isFalse();
+    }
+
+    @Test
+    public void changeChildModeTest() throws Exception {
+        SharedPreferences sharedPreferences = RuntimeEnvironment.application.getSharedPreferences(ApplicationConstants.PRIVATE_PREFERENCE_NAME, Context.MODE_PRIVATE);
+        assertThat(sharedPreferences.getBoolean(CHILD_MODE, false)).isFalse();
+        subject.changeChildMode(true);
+        assertThat(sharedPreferences.getBoolean(CHILD_MODE, false)).isTrue();
+        subject.changeChildMode(false);
+        assertThat(sharedPreferences.getBoolean(CHILD_MODE, true)).isFalse();
     }
 
     private CategoryModel getCategoryModel() {

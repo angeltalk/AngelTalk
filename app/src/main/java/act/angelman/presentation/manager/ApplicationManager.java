@@ -117,7 +117,7 @@ public class ApplicationManager {
         return preferences.getBoolean(CHILD_MODE, true);
     }
 
-    private boolean isServiceRunningCheck() {
+    public boolean isServiceRunningCheck() {
         ActivityManager manager = (ActivityManager) context.getSystemService(Activity.ACTIVITY_SERVICE);
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
             if (service.service.getClassName().contains(ScreenService.class.getCanonicalName())) {
