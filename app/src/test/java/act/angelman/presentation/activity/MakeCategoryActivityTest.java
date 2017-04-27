@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -48,7 +47,7 @@ public class MakeCategoryActivityTest extends UITest {
 
     private MakeCategoryActivity subject;
     private EditText editCategoryTitle;
-    private Button saveButton;
+    private ImageView saveButton;
     private ImageView cancelButton;
     private TextView categoryTitle;
 
@@ -64,7 +63,7 @@ public class MakeCategoryActivityTest extends UITest {
 
         subject = setupActivity(MakeCategoryActivity.class);
         editCategoryTitle = (EditText) subject.findViewById(R.id.edit_category_title);
-        saveButton = (Button) subject.findViewById(R.id.new_category_save_button);
+        saveButton = (ImageView) subject.findViewById(R.id.new_category_save_button);
         cancelButton = (ImageView) subject.findViewById(R.id.category_title_cancel);
         categoryTitle = (TextView) subject.findViewById(R.id.category_title);
     }
