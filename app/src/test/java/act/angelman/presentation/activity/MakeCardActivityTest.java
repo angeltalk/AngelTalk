@@ -223,6 +223,25 @@ public class MakeCardActivityTest extends UITest{
     }
 
     @Test
+    public void givenCompleteEditing_whenDeleteText_thenShowDisabledConfirmButton() throws Exception {
+        // given
+        setupEditCardForRenaming();
+        EditText cardTitleEdit = (EditText) subject.findViewById(R.id.card_image_title_edit);
+        assertThat(subject.confirmButton).isDisabled();
+        cardTitleEdit.setText("TEST");
+        enterKey(cardTitleEdit);
+
+        // when
+        cardTitleEdit.setText("");
+
+        // then
+        assertThat(subject.confirmButton).isShown();
+        assertThat(subject.confirmButton).isDisabled();
+        ShadowDrawable shadowDrawable = shadowOf(subject.confirmButton.getBackground());
+        assertThat(R.drawable.btn_check_disable).isEqualTo(shadowDrawable.getCreatedFromResId());
+    }
+
+    @Test
     public void givenCompleteEditingCardNameAndShownConfirmButton_whenClickConfirmButton_thenUpdateCardModelAndMoveToViewPagerActivity() throws Exception {
         // given
         setupEditCardForRenaming();
