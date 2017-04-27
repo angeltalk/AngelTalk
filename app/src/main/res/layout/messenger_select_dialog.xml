@@ -71,7 +71,7 @@
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@id/img_kakaotalk"
                     android:layout_marginLeft="9dp"
-                    android:text="카카오톡"
+                    android:text="@string/kakaotalk"
                     android:textColor="@color/black_cc"
                     android:textSize="15sp"
                     app:font="@string/font_regular" />
@@ -112,7 +112,7 @@
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@id/img_message"
                     android:layout_marginLeft="9dp"
-                    android:text="메시지"
+                    android:text="@string/messages"
                     android:textColor="@color/black_cc"
                     android:textSize="15sp"
                     app:font="@string/font_regular" />

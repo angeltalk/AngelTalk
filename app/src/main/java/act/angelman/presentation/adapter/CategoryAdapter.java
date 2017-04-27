@@ -151,7 +151,7 @@ public class CategoryAdapter extends BaseAdapter {
         newCategoryModel.index = -1;
         newCategoryModel.color = Color.TRANSPARENT;
         newCategoryModel.icon = R.drawable.ic_add_category;
-        newCategoryModel.title = context.getResources().getString(R.string.new_category);
+        newCategoryModel.title = context.getResources().getString(R.string.new_category_button_text);
 
         ImageView categoryIcon = (ImageView) cardViewItem.findViewById(R.id.category_icon);
         RelativeLayout categoryItemLayout = (RelativeLayout) cardViewItem.findViewById(R.id.category_item_layout);

@@ -53,6 +53,6 @@ public class VideoFragmentTest extends UITest {
     public void whenShowVideoScreen_thenShowGuideMessage() throws Exception{
         TextView guideMessage = (TextView)subject.getView().findViewById(R.id.video_guide);
         assertThat(guideMessage.getVisibility()).isEqualTo(View.VISIBLE);
-        assertThat(guideMessage.getText()).isEqualTo("3초간 영상을 찍어보세요");
+        assertThat(guideMessage.getText()).isEqualTo("3초간 영상을 찍어 보세요");
     }
 }
