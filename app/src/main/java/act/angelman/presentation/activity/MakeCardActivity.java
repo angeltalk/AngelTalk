@@ -360,16 +360,14 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
         cardView.setLayoutParams(layoutParams);
     }
 
-    private boolean isSoftKeyboardShowing() {
-        Rect visibleAreaRect = new Rect();
-        rootLayout.getWindowVisibleDisplayFrame(visibleAreaRect);
-        return  rootLayout.getHeight() - visibleAreaRect.height() > 0;
-    }
 
     private ViewTreeObserver.OnGlobalLayoutListener onGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
         @Override
         public void onGlobalLayout() {
-            if(isSoftKeyboardShowing()) {
+            Rect visibleAreaRect = new Rect();
+            rootLayout.getWindowVisibleDisplayFrame(visibleAreaRect);
+
+            if(rootLayout.getHeight() - visibleAreaRect.height() > 0) {
                 setCardViewMarginBeforeShowingKeyboard();
             } else {
                 removeCardViewMargin();
