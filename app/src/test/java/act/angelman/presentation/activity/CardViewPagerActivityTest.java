@@ -172,7 +172,7 @@ public class CardViewPagerActivityTest extends UITest {
         subject.cardEditButton.performClick();
         AlertDialog alert = ShadowAlertDialog.getLatestAlertDialog();
         ShadowAlertDialog shadowDialog = shadowOf(alert);
-        assertThat(((TextView) shadowDialog.getView().findViewById(R.id.card_edit_select_guide)).getText()).contains( "카드를 수정해보세요" );
+        assertThat(((TextView) shadowDialog.getView().findViewById(R.id.card_edit_select_guide)).getText()).contains( "카드를 수정해 보세요" );
     }
 
     @Test
@@ -678,7 +678,7 @@ public class CardViewPagerActivityTest extends UITest {
 
         // then
         assertThat(ShadowToast.getLatestToast()).isNotNull();
-        assertThat(ShadowToast.getTextOfLatestToast()).isEqualTo("카드 공유가 실패하였습니다.");
+        assertThat(ShadowToast.getTextOfLatestToast()).isEqualTo("카드 공유가 실패하였습니다");
     }
 
     @Test
