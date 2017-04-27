@@ -68,7 +68,6 @@
             android:hint="@string/require_card_name"
             android:imeOptions="actionDone"
             android:inputType="text"
-            android:maxLength="8"
             android:maxLines="1"
             android:textColor="@color/black_99"
             android:textColorHint="@color/black_33"
