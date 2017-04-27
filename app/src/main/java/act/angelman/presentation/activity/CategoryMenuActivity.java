@@ -66,7 +66,7 @@ public class CategoryMenuActivity extends AbstractActivity  implements Navigatio
     public ImageView logoButton;
 
     @BindView(R.id.category_delete_button)
-    public TextView categoryDeleteButton;
+    public ImageView categoryDeleteButton;
 
     @BindString(R.string.voc_web_url)
     public String vocWebUrl;
@@ -219,10 +219,10 @@ public class CategoryMenuActivity extends AbstractActivity  implements Navigatio
     private void changeCategoryMenuStatus(CategoryMenuStatus categoryMenuStatus) {
         switch (categoryMenuStatus) {
             case CATEGORY_DEFAULT:
-                categoryDeleteButton.setText(R.string.delete);
+                categoryDeleteButton.setImageDrawable(getDrawable(R.drawable.btn_delete));
                 break;
             case CATEGORY_DELETABLE:
-                categoryDeleteButton.setText(R.string.complete);
+                categoryDeleteButton.setImageDrawable(getDrawable(R.drawable.btn_confirm));
                 break;
             default:
                 Log.e("error", "category is not set");

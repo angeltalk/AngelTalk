@@ -37,16 +37,13 @@
             app:font="@string/font_regular"
             android:textSize="27dp" />
 
-        <Button
+        <ImageView
             android:id="@+id/new_category_save_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:background="@null"
-            android:text="@string/register"
-            android:textAlignment="textEnd"
-            android:textColor="@color/white_32"
-            android:textSize="17dp" />
+            android:layout_centerVertical="true"
+            android:src="@drawable/btn_add_category_disabled" />
 
     </RelativeLayout>
 
