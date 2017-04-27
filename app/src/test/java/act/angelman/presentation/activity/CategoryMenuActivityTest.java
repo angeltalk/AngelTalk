@@ -62,7 +62,7 @@ public class CategoryMenuActivityTest extends UITest {
 
     private CategoryMenuActivity subject;
     private GridView categoryList;
-    private TextView categoryDeleteButton;
+    private ImageView categoryDeleteButton;
 
     @Before
     public void setUp() throws Exception {
@@ -156,24 +156,24 @@ public class CategoryMenuActivityTest extends UITest {
     @Test
     public void givenDefaultMode_whenClickDeleteButton_thenCategoryMenuChangeToDeletable() throws Exception {
         subject.categoryDeleteButton.performClick();
-
-        assertThat(subject.categoryDeleteButton.getText()).isEqualTo("완료");
+        ShadowDrawable sd = shadowOf(subject.categoryDeleteButton.getDrawable());
+        assertThat(sd.getCreatedFromResId()).isEqualTo(R.drawable.btn_confirm);
     }
 
     @Test
     public void givenDeleteMode_whenClickDeleteButton_thenCategoryMenuChangeToDefault() throws Exception {
         subject.categoryDeleteButton.performClick();
         subject.categoryDeleteButton.performClick();
-
-        assertThat(subject.categoryDeleteButton.getText()).isEqualTo("삭제");
+        ShadowDrawable sd = shadowOf(subject.categoryDeleteButton.getDrawable());
+        assertThat(sd.getCreatedFromResId()).isEqualTo(R.drawable.btn_delete);
     }
 
     @Test
     public void givenDeleteMode_whenBackPressed_thenCategoryMenuChangeToDefault() throws Exception {
         subject.categoryDeleteButton.performClick();
         subject.onBackPressed();
-
-        assertThat(subject.categoryDeleteButton.getText()).isEqualTo("삭제");
+        ShadowDrawable sd = shadowOf(subject.categoryDeleteButton.getDrawable());
+        assertThat(sd.getCreatedFromResId()).isEqualTo(R.drawable.btn_delete);
     }
 
     @Test

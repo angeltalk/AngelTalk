@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -56,7 +55,7 @@ public class MakeCategoryActivity extends AbstractActivity{
 
     private TextView categoryTitleTextView;
     private EditText editCategoryTitle;
-    private Button saveButton;
+    private ImageView newCategorySaveButton;
     private ImageView cancelButton;
     NewCategoryItemAdapter iconAdapter;
     NewCategoryItemAdapter backgroundAdapter;
@@ -99,7 +98,7 @@ public class MakeCategoryActivity extends AbstractActivity{
         backgroundListView.setAdapter(backgroundAdapter);
 
         categoryTitleTextView = (TextView) findViewById(R.id.category_title);
-        saveButton = (Button)findViewById(R.id.new_category_save_button);
+        newCategorySaveButton = (ImageView) findViewById(R.id.new_category_save_button);
         categoryTitleTextView.setText(R.string.new_category_name);
 
         setFont();
@@ -127,7 +126,7 @@ public class MakeCategoryActivity extends AbstractActivity{
             }
         });
 
-        saveButton.setOnClickListener(new OnClickListener() {
+        newCategorySaveButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 CategoryModel model = new CategoryModel();
@@ -140,8 +139,7 @@ public class MakeCategoryActivity extends AbstractActivity{
             }
         });
 
-        saveButton.setEnabled(false);
-        saveButton.setTypeface(FontUtil.setFont(this, FontUtil.FONT_REGULAR));
+        newCategorySaveButton.setEnabled(false);
 
         cancelButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -195,8 +193,8 @@ public class MakeCategoryActivity extends AbstractActivity{
             if (editCategoryTitle.getText().length() > 0) {
                 categoryTitleTextView.setText(editCategoryTitle.getText().toString());
 
-                saveButton.setEnabled(true);
-                saveButton.setTextColor(getResources().getColor(R.color.white));
+                newCategorySaveButton.setEnabled(true);
+                newCategorySaveButton.setImageDrawable(getDrawable(R.drawable.btn_add_category));
                 cancelButton.setVisibility(View.VISIBLE);
 
                 try {
@@ -209,8 +207,8 @@ public class MakeCategoryActivity extends AbstractActivity{
             } else {
                 categoryTitleTextView.setText(R.string.new_category_name);
 
-                saveButton.setEnabled(false);
-                saveButton.setTextColor(getResources().getColor(R.color.white_32));
+                newCategorySaveButton.setEnabled(false);
+                newCategorySaveButton.setImageDrawable(getDrawable(R.drawable.btn_add_category_disabled));
                 cancelButton.setVisibility(View.INVISIBLE);
 
                 ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(categoryHeader.getWindowToken(), 0);
