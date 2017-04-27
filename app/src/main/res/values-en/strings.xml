@@ -67,12 +67,35 @@
     <string name="messages">Messages</string>
     <string name="card_share_preparing_message">Your card is being prepared to be shared!</string>
     <string name="card_loading_message">Please wait until the card is ready to show</string>
-
     <string name="inform_not_saved">The category you are creating will be aborted. Proceed?</string>
     <string name="one_left_delete_category">It should have at least a item. Make a new one after this?</string>
     <string name="share_fail_message">Cannot send a card. Please try again!</string>
     <string name="cannot_share_card_save_message">Cannot save the card. Please try again!</string>
     <string name="card_edit_title">Edit Card</string>
+    <string name="category_eat_drink">EAT &amp; DRINK</string>
+    <string name="category_play">PLAY</string>
+    <string name="category_ride">RIDE</string>
+    <string name="category_go">GO</string>
+    <string name="category_people">PEOPLE</string>
+    <string name="sample_card_milk">Milk</string>
+    <string name="sample_card_juice">Juice</string>
+    <string name="sample_card_drinkwater">Drink water</string>
+    <string name="sample_card_painting">Painting</string>
+    <string name="sample_card_block">Toy blocks</string>
+    <string name="sample_card_crayon">Crayon</string>
+    <string name="sample_card_coloredpaper">Colored paper</string>
+    <string name="sample_card_swing">Swing</string>
+    <string name="sample_card_airplane">Airplane</string>
+    <string name="sample_card_bus">Bus</string>
+    <string name="sample_card_car">Car</string>
+    <string name="sample_card_handwashing">Handwashing</string>
+    <string name="sample_card_amusement_park">Amusement park</string>
+    <string name="sample_card_fast_food">Fast food</string>
+    <string name="sample_card_pool">Pool</string>
+    <string name="sample_card_mall">Mall</string>
+    <string name="sample_card_teacher">Teacher</string>
+    <string name="sample_card_daddy">Daddy</string>
+    <string name="sample_card_mommy">Mommy</string>
 
     <!-- to icon -->
     <string name="delete">삭제</string>
