@@ -536,6 +536,28 @@ public class MakeCardActivityTest extends UITest{
         assertThat(subject.micButton.getVisibility()).isEqualTo(View.VISIBLE);
     }
 
+    @Test
+    public void whenCategoryNameIsOver16ChractersInEnglish_thenDeleteAfter16thCharacters() throws Exception {
+        setupEditCardForRenaming();
+
+        String LENGTH_26_ENGLISH_STRING = "abcdefghijklmnopqrstuvwxyz";
+        subject.cardView.cardTitleEdit.setText(LENGTH_26_ENGLISH_STRING);
+
+        assertThat(subject.cardView.cardTitleEdit.getText().toString()).isEqualTo("abcdefghijklmnop");
+        assertThat(subject.cardView.cardTitleEdit.getText().length()).isEqualTo(16);
+    }
+
+    @Test
+    public void whenCategoryNameIsOver8ChractersInKorean_thenDeleteAfter8thCharacters() throws Exception {
+        setupEditCardForRenaming();
+
+        String LENGTH_10_KOREAN_STRING = "일이삼사오육칠팔구십";
+        subject.cardView.cardTitleEdit.setText(LENGTH_10_KOREAN_STRING);
+
+        assertThat(subject.cardView.cardTitleEdit.getText().toString()).isEqualTo("일이삼사오육칠팔");
+        assertThat(subject.cardView.cardTitleEdit.getText().length()).isEqualTo(8);
+    }
+
     private void recordComplete() {
         PlayUtil mockPlayUtil = mock(PlayUtil.class);
         doAnswer(new Answer<Void>() {
