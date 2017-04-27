@@ -11,6 +11,7 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
+import java.util.Collections;
 import java.util.List;
 
 import act.angelman.BuildConfig;
@@ -190,6 +191,82 @@ public class SingleCardSqliteDataStoreTest {
             }
         }
 
+    }
+
+    @Test
+    public void givenExistDataBase_whenRemoveSingleCardModel_thenVerifyChange() throws Exception {
+        DatabaseHelper mockDbHelper = mock(DatabaseHelper.class);
+
+        SingleCardSqliteDataStore dataStore = new SingleCardSqliteDataStore(RuntimeEnvironment.application);
+        dataStore.dbHelper = mockDbHelper;
+
+        when(mockDbHelper.getWritableDatabase()).thenReturn(mockDb);
+        when(mockDbHelper.getReadableDatabase()).thenReturn(mockDb);
+
+        mockDb.execSQL(SQL_CREATE_SINGLECARD_LIST);
+        insertData(mockDb);
+
+        // when
+        List<CardModel> listBefore = dataStore.getCardListWithCategoryId(0);
+        assertThat(listBefore.size()).isEqualTo(3);
+
+        dataStore.removeSingleCardModel(0, 0);
+
+        // then
+        List<CardModel> listAfter = dataStore.getCardListWithCategoryId(0);
+        assertThat(listAfter.size()).isEqualTo(2);
+    }
+
+    @Test
+    public void givenExistDataBase_whenRemoveSingleCardsInCategory_thenVerifyChange() throws Exception {
+        DatabaseHelper mockDbHelper = mock(DatabaseHelper.class);
+
+        SingleCardSqliteDataStore dataStore = new SingleCardSqliteDataStore(RuntimeEnvironment.application);
+        dataStore.dbHelper = mockDbHelper;
+
+        when(mockDbHelper.getWritableDatabase()).thenReturn(mockDb);
+        when(mockDbHelper.getReadableDatabase()).thenReturn(mockDb);
+
+        mockDb.execSQL(SQL_CREATE_SINGLECARD_LIST);
+        insertData(mockDb);
+
+        // when
+        List<CardModel> listBefore = dataStore.getCardListWithCategoryId(0);
+        assertThat(listBefore.size()).isEqualTo(3);
+
+        dataStore.removeSingleCardsInCategory(0);
+
+        // then
+        List<CardModel> listAfter = dataStore.getCardListWithCategoryId(0);
+        assertThat(listAfter).isNull();
+    }
+
+    @Test
+    public void givenExistDataBase_whenUpdateCategoryCardIndex_thenVerifyChange() throws Exception {
+        DatabaseHelper mockDbHelper = mock(DatabaseHelper.class);
+
+        SingleCardSqliteDataStore dataStore = new SingleCardSqliteDataStore(RuntimeEnvironment.application);
+        dataStore.dbHelper = mockDbHelper;
+
+        when(mockDbHelper.getWritableDatabase()).thenReturn(mockDb);
+        when(mockDbHelper.getReadableDatabase()).thenReturn(mockDb);
+
+        mockDb.execSQL(SQL_CREATE_SINGLECARD_LIST);
+        insertData(mockDb);
+
+        // when
+        List<CardModel> listBefore = dataStore.getCardListWithCategoryId(0);
+        assertThat(listBefore.get(0).name).isEqualTo("우유");
+        assertThat(listBefore.get(1).name).isEqualTo("쥬스");
+        assertThat(listBefore.get(2).name).isEqualTo("물 먹고 싶어요");
+        Collections.reverse(listBefore);
+        dataStore.updateCategoryCardIndex(listBefore);
+
+        // then
+        List<CardModel> listAfter = dataStore.getCardListWithCategoryId(0);
+        assertThat(listAfter.get(0).name).isEqualTo("물 먹고 싶어요");
+        assertThat(listAfter.get(1).name).isEqualTo("쥬스");
+        assertThat(listAfter.get(2).name).isEqualTo("우유");
     }
 
     private void insertData(SQLiteDatabase db){
