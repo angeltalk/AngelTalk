@@ -25,6 +25,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.google.common.base.Strings;
 
+import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -114,6 +115,9 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
 
     @BindView(R.id.confirm_button)
     Button confirmButton;
+
+    @BindView(R.id.card_image_title_edit)
+    EditText cardTitleEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -415,6 +419,13 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
 
         @Override
         public void afterTextChanged(Editable s) {
+            try {
+                if(cardTitleEditText.getText().toString().getBytes("euc-kr").length > 16){
+                    s.delete(s.length()-1, s.length());
+                }
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
         }
     };
 
