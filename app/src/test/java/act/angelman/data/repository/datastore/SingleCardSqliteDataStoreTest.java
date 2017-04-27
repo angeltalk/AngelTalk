@@ -43,20 +43,22 @@ public class SingleCardSqliteDataStoreTest {
                     CardColumns.HIDE + " INTEGER," +
                     CardColumns.CARD_INDEX + " INTEGER)";
     private String[] columns = {CardColumns._ID, CardColumns.NAME, CardColumns.CONTENT_PATH,CardColumns.THUMBNAIL_PATH, CardColumns.VOICE_PATH, CardColumns.FIRST_TIME, CardColumns.CARD_TYPE, CardColumns.HIDE};
+    private DatabaseHelper mockDbHelper;
+    private SingleCardSqliteDataStore dataStore;
 
     @Before
     public void setUp() throws Exception {
         mockDb = SQLiteDatabase.create(null);
+        mockDbHelper = mock(DatabaseHelper.class);
+        dataStore = new SingleCardSqliteDataStore(RuntimeEnvironment.application);
+        dataStore.dbHelper = mockDbHelper;
+
+        when(mockDbHelper.getWritableDatabase()).thenReturn(mockDb);
+        when(mockDbHelper.getReadableDatabase()).thenReturn(mockDb);
     }
 
     @Test
     public void givenExistDataBase_whenGetAllSingleCardList_thenVerifySizeOfList() throws Exception {
-        DatabaseHelper mockDbHelper = mock(DatabaseHelper.class);
-
-        SingleCardSqliteDataStore dataStore = new SingleCardSqliteDataStore(RuntimeEnvironment.application);
-        dataStore.dbHelper = mockDbHelper;
-
-        when(mockDbHelper.getReadableDatabase()).thenReturn(mockDb);
 
         mockDb.execSQL(SQL_CREATE_SINGLECARD_LIST);
         insertData(mockDb);
@@ -73,12 +75,6 @@ public class SingleCardSqliteDataStoreTest {
 
     @Test
     public void givenExistDataBase_whenGetSingleCard_thenReturnSingleCardModel() throws Exception {
-        DatabaseHelper mockDbHelper = mock(DatabaseHelper.class);
-
-        SingleCardSqliteDataStore dataStore = new SingleCardSqliteDataStore(RuntimeEnvironment.application);
-        dataStore.dbHelper = mockDbHelper;
-
-        when(mockDbHelper.getReadableDatabase()).thenReturn(mockDb);
 
         mockDb.execSQL(SQL_CREATE_SINGLECARD_LIST);
         insertData(mockDb);
@@ -95,13 +91,6 @@ public class SingleCardSqliteDataStoreTest {
 
     @Test
     public void givenExistDataBase_whenCreateSingleCard_thenVerifyIncrementation() throws Exception {
-        DatabaseHelper mockDbHelper = mock(DatabaseHelper.class);
-
-        SingleCardSqliteDataStore dataStore = new SingleCardSqliteDataStore(RuntimeEnvironment.application);
-        dataStore.dbHelper = mockDbHelper;
-
-        when(mockDbHelper.getWritableDatabase()).thenReturn(mockDb);
-        when(mockDbHelper.getReadableDatabase()).thenReturn(mockDb);
 
         mockDb.execSQL(SQL_CREATE_SINGLECARD_LIST);
         insertData(mockDb);
@@ -124,13 +113,6 @@ public class SingleCardSqliteDataStoreTest {
 
     @Test
     public void givenExistDataBase_whenUpdateSingleCardModelHide_thenVerifyChangeHide() throws Exception {
-        DatabaseHelper mockDbHelper = mock(DatabaseHelper.class);
-
-        SingleCardSqliteDataStore dataStore = new SingleCardSqliteDataStore(RuntimeEnvironment.application);
-        dataStore.dbHelper = mockDbHelper;
-
-        when(mockDbHelper.getWritableDatabase()).thenReturn(mockDb);
-        when(mockDbHelper.getReadableDatabase()).thenReturn(mockDb);
 
         mockDb.execSQL(SQL_CREATE_SINGLECARD_LIST);
         insertData(mockDb);
@@ -155,13 +137,6 @@ public class SingleCardSqliteDataStoreTest {
 
     @Test
     public void givenExistDataBase_whenUpdateSingleCardModelContent_thenVerifyChange() throws Exception {
-        DatabaseHelper mockDbHelper = mock(DatabaseHelper.class);
-
-        SingleCardSqliteDataStore dataStore = new SingleCardSqliteDataStore(RuntimeEnvironment.application);
-        dataStore.dbHelper = mockDbHelper;
-
-        when(mockDbHelper.getWritableDatabase()).thenReturn(mockDb);
-        when(mockDbHelper.getReadableDatabase()).thenReturn(mockDb);
 
         mockDb.execSQL(SQL_CREATE_SINGLECARD_LIST);
         insertData(mockDb);
@@ -195,13 +170,6 @@ public class SingleCardSqliteDataStoreTest {
 
     @Test
     public void givenExistDataBase_whenRemoveSingleCardModel_thenVerifyChange() throws Exception {
-        DatabaseHelper mockDbHelper = mock(DatabaseHelper.class);
-
-        SingleCardSqliteDataStore dataStore = new SingleCardSqliteDataStore(RuntimeEnvironment.application);
-        dataStore.dbHelper = mockDbHelper;
-
-        when(mockDbHelper.getWritableDatabase()).thenReturn(mockDb);
-        when(mockDbHelper.getReadableDatabase()).thenReturn(mockDb);
 
         mockDb.execSQL(SQL_CREATE_SINGLECARD_LIST);
         insertData(mockDb);
@@ -219,13 +187,6 @@ public class SingleCardSqliteDataStoreTest {
 
     @Test
     public void givenExistDataBase_whenRemoveSingleCardsInCategory_thenVerifyChange() throws Exception {
-        DatabaseHelper mockDbHelper = mock(DatabaseHelper.class);
-
-        SingleCardSqliteDataStore dataStore = new SingleCardSqliteDataStore(RuntimeEnvironment.application);
-        dataStore.dbHelper = mockDbHelper;
-
-        when(mockDbHelper.getWritableDatabase()).thenReturn(mockDb);
-        when(mockDbHelper.getReadableDatabase()).thenReturn(mockDb);
 
         mockDb.execSQL(SQL_CREATE_SINGLECARD_LIST);
         insertData(mockDb);
@@ -243,13 +204,6 @@ public class SingleCardSqliteDataStoreTest {
 
     @Test
     public void givenExistDataBase_whenUpdateCategoryCardIndex_thenVerifyChange() throws Exception {
-        DatabaseHelper mockDbHelper = mock(DatabaseHelper.class);
-
-        SingleCardSqliteDataStore dataStore = new SingleCardSqliteDataStore(RuntimeEnvironment.application);
-        dataStore.dbHelper = mockDbHelper;
-
-        when(mockDbHelper.getWritableDatabase()).thenReturn(mockDb);
-        when(mockDbHelper.getReadableDatabase()).thenReturn(mockDb);
 
         mockDb.execSQL(SQL_CREATE_SINGLECARD_LIST);
         insertData(mockDb);

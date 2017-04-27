@@ -23,7 +23,7 @@ import lombok.Cleanup;
 
 public class CategoryDataSqliteDataStore implements CategoryDataStore{
 
-    private DatabaseHelper dbHelper;
+    DatabaseHelper dbHelper;
 
     public CategoryDataSqliteDataStore(Context context) {
         dbHelper = DatabaseHelper.getInstance(context);
