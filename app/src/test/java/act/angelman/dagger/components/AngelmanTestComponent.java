@@ -20,6 +20,7 @@ import act.angelman.presentation.custom.AddCardViewTest;
 import act.angelman.presentation.custom.CardViewPagerLayoutTest;
 import act.angelman.presentation.custom.CategoryMenuLayoutTest;
 import act.angelman.presentation.service.ScreenReceiverTest;
+import act.angelman.presentation.util.ResolutionUtilTest;
 import dagger.Component;
 
 @Singleton
@@ -42,5 +43,6 @@ public interface AngelmanTestComponent extends AngelmanComponent {
     void inject(CardListActivityTest cardListActivityTest);
     void inject(MakeCardPreviewActivityTest makeCardPreviewActivityTest);
     void inject(PhotoEditorActivityTest photoEditorActivityTest);
+    void inject(ResolutionUtilTest resolutionUtilTest);
 
 }
