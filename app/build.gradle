@@ -92,8 +92,9 @@ task coverageReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
                        '**/*$ViewBinder*.*',
                        '**/*Shadow*.class',
                        '**/*$MembersInjector*.class',
-                       '**/Camera2Activity.class',
-                       '**/VideoFragment.class',
+                       '**/Camera2Activity*.class',
+                       '**/VideoFragment*.class',
+                       '**/VideoCardTextureView*.class',
                        '**/DatabaseHelper.class'
             ]
     )
