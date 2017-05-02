@@ -23,14 +23,13 @@
             android:paddingTop="20dp"
             android:src="@drawable/ic_back_arrow" />
 
-        <act.angelman.presentation.custom.FontTextView
+        <TextView
             android:id="@+id/category_item_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:textColor="@color/white"
             android:textSize="30dp"
-            app:font="@string/font_regular"
             tools:text="먹을 것" />
 
     </RelativeLayout>

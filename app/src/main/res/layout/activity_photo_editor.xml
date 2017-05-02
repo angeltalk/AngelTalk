@@ -17,14 +17,14 @@
         android:layout_height="match_parent"
         android:background="@drawable/blurred_view" />
 
-    <act.angelman.presentation.custom.FontTextView
+    <TextView
         android:id="@+id/picture_guide"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:text="@string/inform_editing_picture"
         android:textColor="@color/white"
-        app:font="@string/font_medium"
+        app:font="light"
         app:layout_marginTopPercent="70%" />
 
     <ImageView

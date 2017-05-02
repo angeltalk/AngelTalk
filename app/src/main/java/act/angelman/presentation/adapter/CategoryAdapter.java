@@ -130,7 +130,6 @@ public class CategoryAdapter extends BaseAdapter {
     private CardView makeCard(int position, ViewGroup parent) {
         CardView cardViewItem = (CardView) LayoutInflater.from(context).inflate(R.layout.category_card, parent, false);
         TextView categoryTitle = (TextView) cardViewItem.findViewById(R.id.category_title);
-        categoryTitle.setTypeface(FontUtil.setFont(context, FontUtil.FONT_MEDIUM));
         ImageView categoryIcon = (ImageView) cardViewItem.findViewById(R.id.category_icon);
         RelativeLayout categoryItemLayout = (RelativeLayout) cardViewItem.findViewById(R.id.category_item_layout);
 
@@ -161,7 +160,6 @@ public class CategoryAdapter extends BaseAdapter {
         categoryItemLayout.setAlpha(0.7f);
         categoryIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_add_category));
         cardTitle.setText(newCategoryModel.title);
-        cardTitle.setTypeface(FontUtil.setFont(context, FontUtil.FONT_DEMILIGHT));
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             cardViewItem.setElevation(0f);

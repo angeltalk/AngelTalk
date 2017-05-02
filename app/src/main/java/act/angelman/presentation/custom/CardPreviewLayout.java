@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import act.angelman.R;
 import act.angelman.domain.model.CardModel;
@@ -26,7 +27,7 @@ public class CardPreviewLayout extends RelativeLayout{
     public ImageView cameraRecodeImage;
 
     @BindView(R.id.camera_recode_guide)
-    public FontTextView cameraRecodeGuide;
+    public TextView cameraRecodeGuide;
 
     private Context context;
 

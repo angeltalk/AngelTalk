@@ -101,7 +101,6 @@ public class CardImageAdapter extends PagerAdapter {
             CardModel singleSectionItems = dataList.get(position);
 
             cardView.cardTitle.setText(singleSectionItems.name);
-            cardView.cardTitle.setTypeface(FontUtil.setFont(context, FontUtil.FONT_MEDIUM));
             View cardContainer = cardView.findViewById(R.id.card_container);
 
             if (singleSectionItems.cardType == CardModel.CardType.PHOTO_CARD) {

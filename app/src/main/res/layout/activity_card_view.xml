@@ -2,6 +2,8 @@
 <android.support.percent.PercentRelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingPrefix"
     android:id="@+id/category_item_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -67,13 +69,13 @@
             android:layout_height="72dp"
             android:src="@drawable/angelee" />
 
-        <act.angelman.presentation.custom.FontTextView
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/white"
             android:layout_marginTop="15dp"
             android:textSize="17sp"
-            app:font="@string/font_demilight"
+            app:font="light"
             android:text="@string/card_share_preparing_message"/>
 
     </LinearLayout>

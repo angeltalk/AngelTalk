@@ -10,6 +10,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import java.util.Collections;
 import java.util.List;
@@ -24,7 +25,6 @@ import act.angelman.presentation.adapter.ChangeOrderRecyclerViewAdapter;
 import act.angelman.presentation.adapter.ShowHideRecyclerViewAdapter;
 import act.angelman.presentation.custom.CardListTabButton;
 import act.angelman.presentation.custom.CustomSnackBar;
-import act.angelman.presentation.custom.FontTextView;
 import act.angelman.presentation.listener.OnDataChangeListener;
 import act.angelman.presentation.manager.ApplicationConstants;
 import act.angelman.presentation.manager.ApplicationManager;
@@ -42,7 +42,7 @@ public class CardListActivity extends AppCompatActivity {
     CardRepository cardRepository;
 
     @BindView(R.id.category_item_title)
-    FontTextView categoryItemTitle;
+    TextView categoryItemTitle;
 
     @BindView(R.id.title_layout)
     RelativeLayout titleLayout;

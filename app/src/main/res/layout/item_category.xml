@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -15,15 +14,16 @@
         android:layout_gravity="center"
         tools:src="@drawable/icon_bus_menu" />
 
-    <act.angelman.presentation.custom.FontTextView
+    <TextView
         android:id="@+id/category_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="20dp"
+        android:text="@string/new_category_name"
         android:textColor="@color/white"
         android:textSize="18dp"
-        app:font="@string/font_medium"
+        android:textStyle="bold"
         tools:text="TEST" />
 
 </LinearLayout>

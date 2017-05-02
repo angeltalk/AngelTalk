@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import act.angelman.R;
 import butterknife.BindView;
@@ -15,7 +16,7 @@ public class CardListTabButton extends RelativeLayout {
     private Context context;
 
     @BindView(R.id.button_text_view)
-    public FontTextView buttonTextView;
+    public TextView buttonTextView;
 
     @BindView(R.id.tab_indicator)
     public View tabIndicator;
