@@ -37,7 +37,6 @@ import act.angelman.R;
 import act.angelman.domain.model.CardModel;
 import act.angelman.domain.repository.CardRepository;
 import act.angelman.presentation.custom.CardView;
-import act.angelman.presentation.custom.FontTextView;
 import act.angelman.presentation.custom.VideoCardTextureView;
 import act.angelman.presentation.manager.ApplicationConstants;
 import act.angelman.presentation.manager.ApplicationConstants.CardEditType;
@@ -99,7 +98,7 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
     Button micButton;
 
     @BindView(R.id.waiting_count)
-    FontTextView waitCount;
+    TextView waitCount;
 
     @BindView(R.id.counting_scene)
     PercentRelativeLayout countScene;
@@ -455,7 +454,6 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
 
     private void playRecordVoiceFile() {
         waitCount.setText(R.string.check_recorded_voice);
-        waitCount.setFontType(FontUtil.FONT_REGULAR);
 
         recordStopButton.setBackground(ResourcesUtil.getDrawable(getApplicationContext(), R.drawable.ic_check_button));
         replayButton.setVisibility(View.VISIBLE);
@@ -506,11 +504,9 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
     }
 
     private void startVoiceRecording() {
-
         voiceFile = RecordUtil.getMediaFilePath(this);
 
         waitCount.setText(R.string.talk_now);
-        waitCount.setFontType(FontUtil.FONT_REGULAR);
         waitCount.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 30);
 
         recordStopButton.setVisibility(View.VISIBLE);

@@ -20,19 +20,16 @@
         android:layout_below="@id/img_logo_popup"
         android:orientation="vertical"
         android:background="@color/white">
-        <act.angelman.presentation.custom.FontTextView
+        <TextView
             android:id="@+id/text_select_category_guide"
             android:layout_width="wrap_content"
             android:layout_height="52dp"
-            app:font="@string/font_regular"
             android:textColor="@color/black_99"
             android:textSize="16sp"
             android:background="@color/white"
             android:gravity="center"
             android:layout_gravity="center"
             android:text="@string/msg_select_messenger" />
-
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -64,7 +61,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="17dp"/>
 
-                <act.angelman.presentation.custom.FontTextView
+                <TextView
                     android:id="@+id/text_kakaotalk"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -73,8 +70,7 @@
                     android:layout_marginLeft="9dp"
                     android:text="@string/kakaotalk"
                     android:textColor="@color/black_cc"
-                    android:textSize="15sp"
-                    app:font="@string/font_regular" />
+                    android:textSize="15sp" />
 
             </RelativeLayout>
 
@@ -105,7 +101,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="17dp"/>
 
-                <act.angelman.presentation.custom.FontTextView
+                <TextView
                     android:id="@+id/text_message"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -114,8 +110,7 @@
                     android:layout_marginLeft="9dp"
                     android:text="@string/messages"
                     android:textColor="@color/black_cc"
-                    android:textSize="15sp"
-                    app:font="@string/font_regular" />
+                    android:textSize="15sp" />
 
             </RelativeLayout>
         </LinearLayout>
@@ -128,7 +123,7 @@
         android:layout_alignParentBottom="true"
         android:background="@color/white">
 
-        <act.angelman.presentation.custom.FontTextView
+        <TextView
             android:id="@+id/confirm_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -137,7 +132,7 @@
             android:layout_marginRight="30dp"
             android:layout_alignParentRight="true"
             android:text="@string/confirm"
-            app:font="@string/font_medium"
+            android:textStyle="bold"
             android:textColor="@color/category_select_list_radiobutton_default"
             android:textSize="16sp"
             android:enabled="false" />
@@ -147,14 +142,13 @@
             android:layout_height="0.3dp"
             android:background="@color/card_list_horizontal_border" />
 
-        <act.angelman.presentation.custom.FontTextView
+        <TextView
             android:id="@+id/cancel_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:text="@string/cancel"
             android:layout_toLeftOf="@id/confirm_button"
-            app:font="@string/font_medium"
             android:textColor="#d41468"
             android:textSize="16sp" />
 

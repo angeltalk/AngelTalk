@@ -5,6 +5,9 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.support.v7.widget.AppCompatRadioButton;
 import android.view.View;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import act.angelman.R;
 import act.angelman.presentation.manager.ApplicationConstants;
@@ -14,7 +17,7 @@ public class ShareMessengerSelectDialog {
 
     private final AlertDialog dialog;
     private final Context context;
-    private FontTextView confirmButton;
+    private TextView confirmButton;
     private ApplicationConstants.SHARE_MESSENGER_TYPE messengerType;
 
     public ShareMessengerSelectDialog(Context context, boolean isKakaotalkInstalled, final View.OnClickListener positiveOnClickListener) {
@@ -25,7 +28,7 @@ public class ShareMessengerSelectDialog {
         }
         innerView.findViewById(R.id.item_kakaotalk).setOnClickListener(itemClickListener);
         innerView.findViewById(R.id.item_message).setOnClickListener(itemClickListener);
-        confirmButton = ((FontTextView) innerView.findViewById(R.id.confirm_button));
+        confirmButton = ((TextView) innerView.findViewById(R.id.confirm_button));
 
         dialog = DialogUtil.buildCustomDialog(context, innerView, new View.OnClickListener() {
             @Override

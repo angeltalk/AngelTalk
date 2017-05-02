@@ -35,13 +35,12 @@
                 android:layout_marginStart="17dp"
                 android:background="@drawable/rectangle_list_item_shape" />
 
-            <act.angelman.presentation.custom.FontTextView
+            <TextView
                 android:id="@+id/card_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="18sp"
-                app:font="@string/font_regular" />
+                android:textSize="18sp" />
 
             <ImageView
                 android:id="@+id/show_hide_icon"
