@@ -1,5 +1,2 @@
 <resources>
-    <declare-styleable name="FontTextView">
-        <attr name="font" format="string" />
-    </declare-styleable>
 </resources>

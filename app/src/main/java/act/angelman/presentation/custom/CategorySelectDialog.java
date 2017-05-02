@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -74,7 +75,7 @@ public class CategorySelectDialog {
                 itemRadioButton = recyclerView.getChildAt(i).findViewById(R.id.category_item_radio);
                 ((AppCompatRadioButton) itemRadioButton).setChecked(itemRadioButton.equals(selectedRadioButton));
             }
-            FontTextView confirmButton = (FontTextView) dialog.findViewById(R.id.confirm_button);
+            TextView confirmButton = (TextView) dialog.findViewById(R.id.confirm_button);
             confirmButton.setTextColor(context.getResources().getColor(R.color.simple_background_red));
             confirmButton.setEnabled(true);
         }
@@ -113,13 +114,13 @@ public class CategorySelectDialog {
         class CategorySelectRecyclerViewHolder extends RecyclerView.ViewHolder {
 
             private RelativeLayout categoryLayout;
-            private FontTextView categoryName;
+            private TextView categoryName;
             private AppCompatRadioButton selectRadioButton;
 
             public CategorySelectRecyclerViewHolder(View view) {
                 super(view);
                 this.categoryLayout = ((RelativeLayout) view.findViewById(R.id.category_item_holder_layout));
-                this.categoryName = ((FontTextView) view.findViewById(R.id.category_item_name));
+                this.categoryName = ((TextView) view.findViewById(R.id.category_item_name));
                 this.selectRadioButton = ((AppCompatRadioButton) view.findViewById(R.id.category_item_radio));
             }
         }

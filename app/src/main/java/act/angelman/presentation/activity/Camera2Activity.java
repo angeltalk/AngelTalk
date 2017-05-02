@@ -37,7 +37,6 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -54,7 +53,6 @@ import act.angelman.R;
 import act.angelman.domain.model.CardModel;
 import act.angelman.presentation.custom.AutoFitTextureView;
 import act.angelman.presentation.manager.ApplicationConstants;
-import act.angelman.presentation.util.FontUtil;
 import act.angelman.presentation.util.ContentsUtil;
 import act.angelman.presentation.util.PlayUtil;
 
@@ -397,8 +395,6 @@ public class Camera2Activity extends AbstractActivity implements View.OnClickLis
         shutterFrame = (FrameLayout) findViewById(R.id.camera_shutter);
         shutterFrame.setOnClickListener(this);
         mTextureView = (TextureView) findViewById(R.id.camera_preview);
-
-        ((TextView) findViewById(R.id.picture_guide)).setTypeface(FontUtil.setFont(this, FontUtil.FONT_DEMILIGHT));
 
         fileName = ContentsUtil.getImagePath(this);
         playUtil = PlayUtil.getInstance();

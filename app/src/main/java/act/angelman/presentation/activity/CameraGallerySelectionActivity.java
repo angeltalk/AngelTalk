@@ -6,13 +6,13 @@ import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import javax.inject.Inject;
 
 import act.angelman.AngelmanApplication;
 import act.angelman.R;
 import act.angelman.presentation.custom.CardTitleLayout;
-import act.angelman.presentation.custom.FontTextView;
 import act.angelman.presentation.manager.ApplicationConstants;
 import act.angelman.presentation.manager.ApplicationManager;
 import act.angelman.presentation.util.ResourcesUtil;
@@ -59,7 +59,7 @@ public class CameraGallerySelectionActivity extends AbstractActivity {
             titleLayout.setCategoryModelTitle(applicationManager.getCategoryModel().title);
         } else {
             titleLayout.setCategoryModelTitle(getString(R.string.card_edit_title));
-            ((FontTextView) findViewById(R.id.camera_start_text)).setText(R.string.edit_content_guide_text);
+            ((TextView) findViewById(R.id.camera_start_text)).setText(R.string.edit_content_guide_text);
         }
 
         setCameraGalleryIconColor();

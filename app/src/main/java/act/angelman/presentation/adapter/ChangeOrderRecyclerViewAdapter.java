@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
@@ -14,7 +15,6 @@ import java.util.List;
 
 import act.angelman.R;
 import act.angelman.domain.model.CardModel;
-import act.angelman.presentation.custom.FontTextView;
 import act.angelman.presentation.util.AngelManGlideTransform;
 import act.angelman.presentation.util.ContentsUtil;
 import act.angelman.presentation.util.ResourcesUtil;
@@ -93,7 +93,7 @@ public class ChangeOrderRecyclerViewAdapter extends RecyclerView.Adapter<ChangeO
 
     public static class ChangeOrderRecyclerViewHolder extends RecyclerView.ViewHolder {
         ImageView cardThumbnail;
-        FontTextView cardName;
+        TextView cardName;
         ImageView showHideIcon;
         ImageView showHideItemBar;
         ImageView itemMoveIcon;
@@ -102,7 +102,7 @@ public class ChangeOrderRecyclerViewAdapter extends RecyclerView.Adapter<ChangeO
             super(view);
             this.showHideItemBar = ((ImageView) view.findViewById(R.id.show_hide_item_bar));
             this.cardThumbnail = ((ImageView) view.findViewById(R.id.card_thumbnail));
-            this.cardName = ((FontTextView) view.findViewById(R.id.card_name));
+            this.cardName = ((TextView) view.findViewById(R.id.card_name));
             this.showHideIcon = ((ImageView) view.findViewById(R.id.show_hide_icon));
             this.itemMoveIcon = ((ImageView) view.findViewById(R.id.item_move_icon));
         }

@@ -28,13 +28,12 @@
             android:paddingEnd="20dp"
             android:src="@drawable/ic_back_arrow" />
 
-        <act.angelman.presentation.custom.FontTextView
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="@string/new_category"
             android:textColor="@color/white"
-            app:font="@string/font_regular"
             android:textSize="27dp" />
 
         <ImageView
@@ -43,7 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:src="@drawable/btn_add_category_disabled" />
+            android:src="@drawable/btn_add_category_disabled"/>
 
     </RelativeLayout>
 
@@ -77,14 +76,13 @@
             android:layout_marginTop="32.5dp"
             android:orientation="vertical">
 
-            <act.angelman.presentation.custom.FontTextView
+            <TextView
                 android:id="@+id/category_title_label"
                 android:layout_width="wrap_content"
                 android:layout_height="23.5dp"
                 android:layout_gravity="start"
                 android:text="@string/category_label"
                 android:textColor="@color/white"
-                app:font="@string/font_regular"
                 android:textSize="16dp" />
 
             <LinearLayout
@@ -96,7 +94,7 @@
                 android:orientation="horizontal"
                 android:weightSum="100">
 
-                <act.angelman.presentation.custom.FontEditText
+                <EditText
                     android:id="@+id/edit_category_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -109,7 +107,6 @@
                     android:textColor="@color/white"
                     android:textColorHint="@color/white_3A"
                     android:textCursorDrawable="@drawable/make_category_cursor_color"
-                    app:font="@string/font_regular"
                     android:textSize="20dp" />
 
                 <ImageView
@@ -136,13 +133,12 @@
             android:layout_marginTop="32.5dp"
             android:orientation="vertical">
 
-            <act.angelman.presentation.custom.FontTextView
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="23.5dp"
                 android:layout_gravity="start"
                 android:text="@string/icon_label"
                 android:textColor="@color/white"
-                app:font="@string/font_regular"
                 android:textSize="16dp" />
 
             <android.support.v7.widget.RecyclerView
@@ -152,14 +148,13 @@
                 android:layout_marginTop="15dp"
                 android:splitMotionEvents="false"/>
 
-            <act.angelman.presentation.custom.FontTextView
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="23.5dp"
                 android:layout_gravity="start"
                 android:layout_marginTop="27dp"
                 android:text="@string/background_label"
                 android:textColor="@color/white"
-                app:font="@string/font_regular"
                 android:textSize="16dp" />
 
             <android.support.v7.widget.RecyclerView
