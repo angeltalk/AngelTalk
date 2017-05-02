@@ -48,18 +48,18 @@
         </RelativeLayout>
 
 
-        <act.angelman.presentation.custom.FontTextView
+        <TextView
             android:id="@+id/card_image_title"
             android:layout_width="match_parent"
             android:layout_alignParentBottom="true"
             android:gravity="center"
             android:textColor="@color/black_99"
             android:textSize="24dp"
+            android:textStyle="bold"
             android:visibility="visible"
-            app:font="@string/font_medium"
             app:layout_heightPercent="19%" />
 
-        <act.angelman.presentation.custom.FontEditText
+        <EditText
             android:id="@+id/card_image_title_edit"
             android:layout_width="match_parent"
             android:layout_alignParentBottom="true"
@@ -74,7 +74,6 @@
             android:textCursorDrawable="@drawable/make_card_cursor_color"
             android:textSize="22dp"
             android:visibility="gone"
-            app:font="@string/font_regular"
             app:layout_heightPercent="19%" />
 
     </android.support.percent.PercentRelativeLayout>

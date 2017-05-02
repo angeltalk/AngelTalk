@@ -17,17 +17,16 @@
         android:paddingTop="20dp"
         android:src="@drawable/ic_back_arrow" />
 
-    <act.angelman.presentation.custom.FontTextView
+    <TextView
         android:id="@+id/category_item_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:text="잠금화면"
         android:textColor="@color/white"
-        android:textSize="30dp"
-        app:font="@string/font_regular" />
+        android:textSize="30dp" />
 
-    <act.angelman.presentation.custom.FontTextView
+    <TextView
         android:id="@+id/category_item_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -40,7 +39,7 @@
         android:text="0개 카드"
         android:textColor="@color/white"
         android:textSize="16dp"
-        app:font="@string/font_medium" />
+        android:textStyle="bold" />
 
     <ImageView
         android:id="@+id/list_card_button"

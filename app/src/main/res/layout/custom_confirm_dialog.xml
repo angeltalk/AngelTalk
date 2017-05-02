@@ -13,7 +13,7 @@
         android:layout_height="57dp"
         android:src="@drawable/img_logo_popup" />
 
-    <act.angelman.presentation.custom.FontTextView
+    <TextView
         android:id="@+id/alert_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -23,15 +23,14 @@
         android:layout_below="@id/img_logo_popup"
         tools:text="공유 받은 카드를 \n저장하시겠어요? \n test"
         android:textSize="16dp"
-        android:textColor="@color/black_cc"
-        app:font="@string/font_regular" />
+        android:textColor="@color/black_cc" />
 
     <RelativeLayout
         android:layout_width="280dp"
         android:layout_height="52dp"
         android:layout_alignParentBottom="true">
 
-        <act.angelman.presentation.custom.FontTextView
+        <TextView
             android:id="@+id/confirm_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -40,18 +39,18 @@
             android:layout_marginRight="30dp"
             android:layout_alignParentRight="true"
             android:text="@string/confirm"
-            app:font="@string/font_medium"
+            android:textStyle="bold"
             android:textColor="#d41468"
             android:textSize="16sp" />
 
-        <act.angelman.presentation.custom.FontTextView
+        <TextView
             android:id="@+id/cancel_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:text="@string/cancel"
             android:layout_toLeftOf="@id/confirm_button"
-            app:font="@string/font_medium"
+            android:textStyle="bold"
             android:textColor="#d41468"
             android:textSize="16sp" />
 

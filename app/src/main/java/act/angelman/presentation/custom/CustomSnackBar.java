@@ -6,10 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import act.angelman.R;
-import act.angelman.presentation.util.FontUtil;
 import act.angelman.presentation.util.ResolutionUtil;
 
 public class CustomSnackBar {
@@ -37,7 +34,6 @@ public class CustomSnackBar {
         ViewGroup.LayoutParams layoutParams = snackbarView.getLayoutParams();
         layoutParams.height = ResolutionUtil.getDpToPix(context, CUSTOM_SNACKBAR_HEIGHT);
         snackbarView.setLayoutParams(layoutParams);
-        ((TextView) snackbarView.findViewById(R.id.snackbar_text)).setTypeface(FontUtil.setFont(content.getContext(), FontUtil.FONT_REGULAR));
         return snackbar;
     }
 }

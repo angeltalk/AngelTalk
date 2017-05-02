@@ -34,7 +34,6 @@ import act.angelman.presentation.adapter.NewCategoryItemIconAdapter;
 import act.angelman.presentation.custom.CustomConfirmDialog;
 import act.angelman.presentation.manager.ApplicationConstants;
 import act.angelman.presentation.manager.ApplicationManager;
-import act.angelman.presentation.util.FontUtil;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -92,8 +91,6 @@ public class MakeCategoryActivity extends AbstractActivity{
         setContentView(R.layout.activity_new_category);
         ButterKnife.bind(this);
         initListView();
-        categoryTitleTextView.setText(R.string.new_category_name);
-        setFont();
         newCategorySaveButton.setEnabled(false);
     }
 
@@ -208,11 +205,6 @@ public class MakeCategoryActivity extends AbstractActivity{
                     dataChanged = true;
                 }});
         backgroundListView.setAdapter(backgroundAdapter);
-    }
-
-    private void setFont() {
-        FontUtil.setGlobalFont(getWindow().getDecorView(), FontUtil.FONT_REGULAR);
-        categoryTitleTextView.setTypeface(FontUtil.setFont(this, FontUtil.FONT_MEDIUM));
     }
 
     private void moveToNextActivity(CategoryModel categoryModel) {

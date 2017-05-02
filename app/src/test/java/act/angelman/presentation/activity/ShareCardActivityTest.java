@@ -38,7 +38,6 @@ import act.angelman.domain.model.CategoryModel;
 import act.angelman.domain.repository.CardRepository;
 import act.angelman.domain.repository.CategoryRepository;
 import act.angelman.presentation.custom.CategorySelectDialog;
-import act.angelman.presentation.custom.FontTextView;
 import act.angelman.presentation.listener.OnDownloadCompleteListener;
 import act.angelman.presentation.util.ResourcesUtil;
 
@@ -121,7 +120,7 @@ public class ShareCardActivityTest extends UITest {
         // then
         assertThat(dialog.isShowing()).isTrue();
 
-        FontTextView infoText = ((FontTextView) dialog.findViewById(R.id.text_select_category_guide));
+        TextView infoText = ((TextView) dialog.findViewById(R.id.text_select_category_guide));
         assertThat(infoText.getText().toString()).isEqualTo("저장하실 카테고리를 선택해 주세요");
 
         RecyclerView listView = ((RecyclerView) dialog.findViewById(R.id.category_list_recycler_view));
@@ -139,7 +138,7 @@ public class ShareCardActivityTest extends UITest {
         // then
         assertThat(dialog.isShowing()).isTrue();
 
-        FontTextView infoText = ((FontTextView) dialog.findViewById(R.id.text_select_category_guide));
+        TextView infoText = ((TextView) dialog.findViewById(R.id.text_select_category_guide));
         assertThat(infoText.getText().toString()).isEqualTo("Choose a category for this card");
 
         RecyclerView listView = ((RecyclerView) dialog.findViewById(R.id.category_list_recycler_view));
@@ -152,7 +151,7 @@ public class ShareCardActivityTest extends UITest {
 
         // given
         AlertDialog dialog = clickSaveButtonAndShowSelectCategoryDialog();
-        FontTextView cancelView = (FontTextView) dialog.findViewById(R.id.cancel_button);
+        TextView cancelView = (TextView) dialog.findViewById(R.id.cancel_button);
         assertThat(dialog.isShowing()).isTrue();
         // when
         cancelView.performClick();
@@ -178,7 +177,7 @@ public class ShareCardActivityTest extends UITest {
 
         // given
         AlertDialog dialog = clickSaveButtonAndShowSelectCategoryDialog();
-        FontTextView confirmButton = (FontTextView) dialog.findViewById(R.id.confirm_button);
+        TextView confirmButton = (TextView) dialog.findViewById(R.id.confirm_button);
         assertThat(confirmButton.isEnabled()).isFalse();
         // when
         selectCategoryRadioButtonAt(dialog, 0);

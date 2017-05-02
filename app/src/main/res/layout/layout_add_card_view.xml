@@ -14,7 +14,7 @@
         app:layout_heightPercent="100%"
         app:layout_widthPercent="78%">
 
-        <act.angelman.presentation.custom.FontTextView
+        <TextView
             android:id="@+id/add_card_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -22,8 +22,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="120dp"
             android:text="@string/add_new_card"
-            android:textSize="23dp"
-            app:font="@string/font_regular" />
+            android:textSize="23dp" />
 
         <ImageView
             android:id="@+id/plus_icon"

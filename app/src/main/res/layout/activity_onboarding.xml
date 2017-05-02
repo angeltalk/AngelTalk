@@ -44,7 +44,7 @@
         android:background="@drawable/background_gradient_red"
         android:visibility="visible">
 
-        <act.angelman.presentation.custom.FontTextView
+        <TextView
             android:id="@+id/onboarding_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -53,8 +53,7 @@
             android:text="@string/onboarding_title"
             android:textAlignment="center"
             android:textColor="@color/white"
-            android:textSize="16dp"
-            attrs:font="@string/font_regular" />
+            android:textSize="16dp"/>
 
         <ImageView
             android:id="@+id/onboaring_angelee"

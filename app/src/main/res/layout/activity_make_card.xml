@@ -24,7 +24,7 @@
             android:layout_below="@id/test"
             app:layout_heightPercent="60%"/>
 
-        <act.angelman.presentation.custom.FontTextView
+        <TextView
             android:layout_marginTop="24dp"
             android:id="@+id/recoding_guide"
             android:layout_width="wrap_content"
@@ -33,7 +33,6 @@
             app:layout_marginTopPercent="77%"
             android:text="@string/record_card_name"
             android:textColor="@color/white"
-            app:font="@string/font_regular"
             android:textSize="18dp"
             android:visibility="gone"/>
 
@@ -73,7 +72,7 @@
             android:layout_centerHorizontal="true"
             android:src="@drawable/mic_icon" />
 
-        <act.angelman.presentation.custom.FontTextView
+        <TextView
             android:id="@+id/waiting_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -82,7 +81,7 @@
             android:layout_centerHorizontal="true"
             android:text="3"
             android:textColor="@color/white"
-            app:font="@string/font_medium"
+            android:textStyle="bold"
             android:textSize="62dp" />
 
         <RelativeLayout

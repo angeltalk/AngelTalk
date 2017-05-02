@@ -103,7 +103,6 @@ public class PhotoEditorActivity extends AbstractActivity {
         rotateButton = (ImageView) findViewById(R.id.rotate_image);
         frameImage = findViewById(R.id.camera_frame);
         pictureGuide = ((TextView) findViewById(R.id.picture_guide));
-        pictureGuide.setTypeface(FontUtil.setFont(this, FontUtil.FONT_DEMILIGHT));
 
         setImageIntoImageCaptureView();
 

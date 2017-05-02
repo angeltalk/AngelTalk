@@ -29,7 +29,7 @@
             android:layout_width="match_parent"
             app:layout_heightPercent="28.57%" >
 
-            <act.angelman.presentation.custom.FontTextView
+            <TextView
                 android:id="@+id/camera_start_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -37,7 +37,6 @@
                 android:layout_centerVertical="true"
                 android:textColor="@color/black_99"
                 android:textAlignment="center"
-                app:font="@string/font_regular"
                 android:textSize="18sp"
                 android:text="@string/add_picture"/>
         </android.support.percent.PercentRelativeLayout>
@@ -64,14 +63,13 @@
                 android:layout_marginStart="33dp"
                 android:layout_centerVertical="true" />
 
-            <act.angelman.presentation.custom.FontTextView
+            <TextView
                 android:id="@+id/text_take_picture"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:textColor="@color/black_cc"
-                app:font="@string/font_regular"
                 android:textSize="18sp"
                 android:text="@string/take_picture"
                 android:layout_marginStart="25.5dp"
@@ -99,14 +97,13 @@
                 android:layout_marginStart="33dp"
                 android:layout_centerVertical="true" />
 
-            <act.angelman.presentation.custom.FontTextView
+            <TextView
                 android:id="@+id/text_select_gallery"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:textColor="@color/black_cc"
-                app:font="@string/font_regular"
                 android:textSize="18sp"
                 android:text="@string/select_gallery"
                 android:layout_marginStart="25.5dp"
@@ -135,14 +132,13 @@
                 android:layout_marginStart="33dp"
                 android:layout_centerVertical="true" />
 
-            <act.angelman.presentation.custom.FontTextView
+            <TextView
                 android:id="@+id/text_take_video"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:textColor="@color/black_cc"
-                app:font="@string/font_regular"
                 android:textSize="18sp"
                 android:text="@string/take_video"
                 android:layout_marginStart="25.5dp"
