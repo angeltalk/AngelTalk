@@ -2,9 +2,7 @@ package act.angelman.presentation.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -44,6 +42,7 @@ public class CameraGallerySelectionActivity extends AbstractActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((AngelmanApplication) getApplication()).getAngelmanComponent().inject(this);
+        ResourcesUtil.setColorTheme(this, applicationManager.getCategoryModelColor());
         setContentView(R.layout.activity_camera_gallery_selection);
         ButterKnife.bind(this);
 
@@ -61,22 +60,6 @@ public class CameraGallerySelectionActivity extends AbstractActivity {
             titleLayout.setCategoryModelTitle(getString(R.string.card_edit_title));
             ((TextView) findViewById(R.id.camera_start_text)).setText(R.string.edit_content_guide_text);
         }
-
-        setCameraGalleryIconColor();
-    }
-
-    private void setCameraGalleryIconColor() {
-        @ResourcesUtil.BackgroundColors
-        int color = applicationManager.getCategoryModel().color;
-
-        ImageView cameraIcon = (ImageView) findViewById(R.id.image_camera);
-        cameraIcon.setImageDrawable(ContextCompat.getDrawable(this, ResourcesUtil.getCameraIconBy(color)));
-
-        ImageView galleryIcon = (ImageView) findViewById(R.id.image_gallery);
-        galleryIcon.setImageDrawable(ContextCompat.getDrawable(this, ResourcesUtil.getGalleryIconBy(color)));
-
-        ImageView videoIcon = (ImageView) findViewById(R.id.image_video);
-        videoIcon.setImageDrawable(ContextCompat.getDrawable(this, ResourcesUtil.getVideoIconBy(color)));
     }
 
     @OnClick({R.id.layout_camera})

@@ -1,2 +1,11 @@
 <resources>
+    <attr name="themedBackgroundDrawable" format="reference" />
+    <attr name="themedPlusIconDrawable" format="reference" />
+    <attr name="themedCameraIconDrawable" format="reference" />
+    <attr name="themedGalleryIconDrawable" format="reference" />
+    <attr name="themedVideoIconDrawable" format="reference" />
+    <attr name="themedTitleBackgroundColor" format="reference" />
+    <attr name="themedShowHideItemBarDrawable" format="reference" />
+    <attr name="themedShowHideIconDrawable" format="reference" />
+    <attr name="themedItemMoveIconDrawable" format="reference" />
 </resources>

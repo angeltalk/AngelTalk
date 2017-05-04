@@ -13,7 +13,6 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowActivity;
-import org.robolectric.shadows.ShadowDrawable;
 import org.robolectric.util.ReflectionHelpers;
 
 import javax.inject.Inject;
@@ -82,21 +81,6 @@ public class CameraGallerySelectionActivityTest extends UITest {
     }
 
     @Test
-    public void whenCameraGallerySelectionViewLaunched_thenShowCameraAndGalleryIconRelatedCategoryColor() throws Exception {
-        ImageView cameraIcon = (ImageView) subject.findViewById(R.id.image_camera);
-        ImageView galleryIcon = (ImageView) subject.findViewById(R.id.image_gallery);
-        ImageView videoIcon = (ImageView) subject.findViewById(R.id.image_video);
-
-        ShadowDrawable shadowCameraDrawable = shadowOf(cameraIcon.getDrawable());
-        ShadowDrawable shadowGalleryDrawable = shadowOf(galleryIcon.getDrawable());
-        ShadowDrawable shadowVideoDrawable = shadowOf(videoIcon.getDrawable());
-
-        assertThat(shadowCameraDrawable.getCreatedFromResId()).isEqualTo(R.drawable.ic_camera_blue);
-        assertThat(shadowGalleryDrawable.getCreatedFromResId()).isEqualTo(R.drawable.ic_gallery_blue);
-        assertThat(shadowVideoDrawable.getCreatedFromResId()).isEqualTo(R.drawable.ic_video_blue);
-    }
-
-    @Test
     public void whenClickedCameraCard_thenStartCameraActivity() throws Exception {
         ReflectionHelpers.setStaticField(Build.VERSION.class, "SDK_INT", 23);
         setupActivity(CameraGallerySelectionActivity.class);
@@ -135,6 +119,7 @@ public class CameraGallerySelectionActivityTest extends UITest {
 
     private CategoryModel getCategoryModel() {
         CategoryModel categoryModel = new CategoryModel();
+        categoryModel.index = 0;
         categoryModel.color = ResourcesUtil.BLUE;
         categoryModel.title = "먹을 것";
         return categoryModel;

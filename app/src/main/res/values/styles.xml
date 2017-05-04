@@ -9,6 +9,78 @@
         <item name="android:statusBarColor">@color/status_bar_color</item>
     </style>
 
+    <style name="AppTheme.Red" parent="AppTheme">
+        <item name="themedBackgroundDrawable">@drawable/background_gradient_red</item>
+        <item name="themedPlusIconDrawable">@drawable/plus_red</item>
+        <item name="themedCameraIconDrawable">@drawable/ic_camera_red</item>
+        <item name="themedGalleryIconDrawable">@drawable/ic_gallery_red</item>
+        <item name="themedVideoIconDrawable">@drawable/ic_video_red</item>
+        <item name="themedTitleBackgroundColor">@color/simple_background_red</item>
+        <item name="themedShowHideItemBarDrawable">@drawable/show_red</item>
+        <item name="themedShowHideIconDrawable">@drawable/ic_show_red</item>
+        <item name="themedItemMoveIconDrawable">@drawable/ic_list_red</item>
+    </style>
+
+    <style name="AppTheme.Orange" parent="AppTheme">
+        <item name="themedBackgroundDrawable">@drawable/background_gradient_orange</item>
+        <item name="themedPlusIconDrawable">@drawable/plus_orange</item>
+        <item name="themedCameraIconDrawable">@drawable/ic_camera_orange</item>
+        <item name="themedGalleryIconDrawable">@drawable/ic_gallery_orange</item>
+        <item name="themedVideoIconDrawable">@drawable/ic_video_orange</item>
+        <item name="themedTitleBackgroundColor">@color/simple_background_orange</item>
+        <item name="themedShowHideItemBarDrawable">@drawable/show_orange</item>
+        <item name="themedShowHideIconDrawable">@drawable/ic_show_orange</item>
+        <item name="themedItemMoveIconDrawable">@drawable/ic_list_orange</item>
+    </style>
+
+    <style name="AppTheme.Yellow" parent="AppTheme">
+        <item name="themedBackgroundDrawable">@drawable/background_gradient_yellow</item>
+        <item name="themedPlusIconDrawable">@drawable/plus_yellow</item>
+        <item name="themedCameraIconDrawable">@drawable/ic_camera_yellow</item>
+        <item name="themedGalleryIconDrawable">@drawable/ic_gallery_yellow</item>
+        <item name="themedVideoIconDrawable">@drawable/ic_video_yellow</item>
+        <item name="themedTitleBackgroundColor">@color/simple_background_yellow</item>
+        <item name="themedShowHideItemBarDrawable">@drawable/show_yellow</item>
+        <item name="themedShowHideIconDrawable">@drawable/ic_show_yellow</item>
+        <item name="themedItemMoveIconDrawable">@drawable/ic_list_yellow</item>
+    </style>
+
+    <style name="AppTheme.Green" parent="AppTheme">
+        <item name="themedBackgroundDrawable">@drawable/background_gradient_green</item>
+        <item name="themedPlusIconDrawable">@drawable/plus_green</item>
+        <item name="themedCameraIconDrawable">@drawable/ic_camera_green</item>
+        <item name="themedGalleryIconDrawable">@drawable/ic_gallery_green</item>
+        <item name="themedVideoIconDrawable">@drawable/ic_video_green</item>
+        <item name="themedTitleBackgroundColor">@color/simple_background_green</item>
+        <item name="themedShowHideItemBarDrawable">@drawable/show_green</item>
+        <item name="themedShowHideIconDrawable">@drawable/ic_show_green</item>
+        <item name="themedItemMoveIconDrawable">@drawable/ic_list_green</item>
+    </style>
+
+    <style name="AppTheme.Blue" parent="AppTheme">
+        <item name="themedBackgroundDrawable">@drawable/background_gradient_blue</item>
+        <item name="themedPlusIconDrawable">@drawable/plus_blue</item>
+        <item name="themedCameraIconDrawable">@drawable/ic_camera_blue</item>
+        <item name="themedGalleryIconDrawable">@drawable/ic_gallery_blue</item>
+        <item name="themedVideoIconDrawable">@drawable/ic_video_blue</item>
+        <item name="themedTitleBackgroundColor">@color/simple_background_blue</item>
+        <item name="themedShowHideItemBarDrawable">@drawable/show_blue</item>
+        <item name="themedShowHideIconDrawable">@drawable/ic_show_blue</item>
+        <item name="themedItemMoveIconDrawable">@drawable/ic_list_blue</item>
+    </style>
+
+    <style name="AppTheme.Purple" parent="AppTheme">
+        <item name="themedBackgroundDrawable">@drawable/background_gradient_purple</item>
+        <item name="themedPlusIconDrawable">@drawable/plus_purple</item>
+        <item name="themedCameraIconDrawable">@drawable/ic_camera_purple</item>
+        <item name="themedGalleryIconDrawable">@drawable/ic_gallery_purple</item>
+        <item name="themedVideoIconDrawable">@drawable/ic_video_purple</item>
+        <item name="themedTitleBackgroundColor">@color/simple_background_purple</item>
+        <item name="themedShowHideItemBarDrawable">@drawable/show_purple</item>
+        <item name="themedShowHideIconDrawable">@drawable/ic_show_purple</item>
+        <item name="themedItemMoveIconDrawable">@drawable/ic_list_purple</item>
+    </style>
+
     <style name="CategorySelectRadioButton" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorAccent">@color/category_select_list_radiobutton_select</item>
         <item name="colorPrimary">@color/category_select_list_radiobutton_default</item>

@@ -18,24 +18,20 @@ import act.angelman.domain.model.CardModel;
 import act.angelman.presentation.listener.OnDataChangeListener;
 import act.angelman.presentation.util.AngelManGlideTransform;
 import act.angelman.presentation.util.ContentsUtil;
-import act.angelman.presentation.util.ResourcesUtil;
 
 public class ShowHideRecyclerViewAdapter extends RecyclerView.Adapter<ShowHideRecyclerViewAdapter.CardListRecyclerViewHolder> {
 
     private final RequestManager glide;
     private final Context context;
-    private final int categoryModelColor;
     private List<CardModel> cardModelList;
     private OnDataChangeListener dataChangeListener;
 
-    public ShowHideRecyclerViewAdapter(List<CardModel> cardModelList, int categoryModelColor, Context context, OnDataChangeListener dataChangeListener) {
+    public ShowHideRecyclerViewAdapter(List<CardModel> cardModelList, Context context, OnDataChangeListener dataChangeListener) {
         this.dataChangeListener = dataChangeListener;
         this.cardModelList = cardModelList;
         this.context = context;
-        this.categoryModelColor = categoryModelColor;
         this.glide = Glide.with(context);
     }
-
 
     @Override
     public CardListRecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -53,7 +49,6 @@ public class ShowHideRecyclerViewAdapter extends RecyclerView.Adapter<ShowHideRe
                 .into(holder.cardThumbnail);
         holder.cardName.setText(cardModel.name);
         setViewByHide(holder, cardModel.hide);
-        holder.showHideIcon.setVisibility(View.VISIBLE);
         holder.itemMoveIcon.setVisibility(View.GONE);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -73,15 +68,19 @@ public class ShowHideRecyclerViewAdapter extends RecyclerView.Adapter<ShowHideRe
 
     private void setViewByHide(final CardListRecyclerViewHolder holder, boolean hide) {
         if(hide) {
-            holder.showHideItemBar.setImageResource(ResourcesUtil.getShowHideItemBarBy(ResourcesUtil.HIDING));
-            holder.showHideIcon.setImageResource(ResourcesUtil.getShowHideIconBy(ResourcesUtil.HIDING));
-            holder.itemMoveIcon.setImageResource(ResourcesUtil.getItemMoveIconBy(ResourcesUtil.HIDING));
+            holder.hideItemBar.setVisibility(View.VISIBLE);
+            holder.hideIcon.setVisibility(View.VISIBLE);
+            holder.showHideItemBar.setVisibility(View.GONE);
+            holder.showHideIcon.setVisibility(View.GONE);
+
             holder.cardName.setTextColor(context.getResources().getColor(R.color.black_4C));
             holder.cardThumbnail.setImageAlpha(60);
         } else {
-            holder.showHideItemBar.setImageResource(ResourcesUtil.getShowHideItemBarBy(categoryModelColor));
-            holder.showHideIcon.setImageResource(ResourcesUtil.getShowHideIconBy(categoryModelColor));
-            holder.itemMoveIcon.setImageResource(ResourcesUtil.getItemMoveIconBy(categoryModelColor));
+            holder.hideItemBar.setVisibility(View.GONE);
+            holder.hideIcon.setVisibility(View.GONE);
+            holder.showHideItemBar.setVisibility(View.VISIBLE);
+            holder.showHideIcon.setVisibility(View.VISIBLE);
+
             holder.cardName.setTextColor(context.getResources().getColor(R.color.black_00));
             holder.cardThumbnail.setImageAlpha(255);
         }
@@ -101,7 +100,9 @@ public class ShowHideRecyclerViewAdapter extends RecyclerView.Adapter<ShowHideRe
         ImageView cardThumbnail;
         TextView cardName;
         ImageView showHideIcon;
+        ImageView hideIcon;
         ImageView showHideItemBar;
+        ImageView hideItemBar;
         ImageView itemMoveIcon;
 
         public CardListRecyclerViewHolder(View view) {
@@ -110,7 +111,9 @@ public class ShowHideRecyclerViewAdapter extends RecyclerView.Adapter<ShowHideRe
             this.cardThumbnail = ((ImageView) view.findViewById(R.id.card_thumbnail));
             this.cardName = ((TextView) view.findViewById(R.id.card_name));
             this.showHideIcon = ((ImageView) view.findViewById(R.id.show_hide_icon));
+            this.hideIcon = ((ImageView) view.findViewById(R.id.hide_icon));
             this.itemMoveIcon = ((ImageView) view.findViewById(R.id.item_move_icon));
+            this.hideItemBar = ((ImageView) view.findViewById(R.id.hide_item_bar));
         }
     }
 }

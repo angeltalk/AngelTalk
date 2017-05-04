@@ -148,7 +148,7 @@ public class ShareCardActivity extends AbstractActivity {
 
                     cardModelList.add(cardModel);
 
-                    mViewPager.setAdapter(new CardImageAdapter(context, cardModelList, glide, applicationManager));
+                    mViewPager.setAdapter(new CardImageAdapter(context, cardModelList, glide));
 
                     loadingViewLayout.setVisibility(View.GONE);
                 } catch (IOException e) {

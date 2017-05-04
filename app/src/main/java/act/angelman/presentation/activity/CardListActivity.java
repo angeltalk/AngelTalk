@@ -155,6 +155,8 @@ public class CardListActivity extends AbstractActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((AngelmanApplication) getApplication()).getAngelmanComponent().inject(this);
+
+        ResourcesUtil.setColorTheme(this, applicationManager.getCategoryModelColor());
         setContentView(R.layout.activity_card_list);
         ButterKnife.bind(this);
         cardList = cardRepository.getSingleCardListWithCategoryId(applicationManager.getCategoryModel().index);
@@ -190,7 +192,7 @@ public class CardListActivity extends AbstractActivity {
         if (!showHideTabButton.isSelected()) {
             showHideTabButton.setSelected(true);
             changeOrderTabButton.setSelected(false);
-            showHideRecyclerViewAdapter = new ShowHideRecyclerViewAdapter(cardList, applicationManager.getCategoryModelColor(), getApplicationContext(), dataChangeListener);
+            showHideRecyclerViewAdapter = new ShowHideRecyclerViewAdapter(cardList, getApplicationContext(), dataChangeListener);
             showHideRecyclerView.setAdapter(showHideRecyclerViewAdapter);
             changeOrderRecyclerView.setVisibility(View.GONE);
             showHideRecyclerView.setVisibility(View.VISIBLE);
@@ -202,7 +204,7 @@ public class CardListActivity extends AbstractActivity {
         if (!changeOrderTabButton.isSelected()) {
             showHideTabButton.setSelected(false);
             changeOrderTabButton.setSelected(true);
-            changeOrderRecyclerViewAdapter = new ChangeOrderRecyclerViewAdapter(cardList, applicationManager.getCategoryModelColor(), getApplicationContext());
+            changeOrderRecyclerViewAdapter = new ChangeOrderRecyclerViewAdapter(cardList, getApplicationContext());
             changeOrderRecyclerView.setAdapter(changeOrderRecyclerViewAdapter);
             showHideRecyclerView.setVisibility(View.GONE);
             changeOrderRecyclerView.setVisibility(View.VISIBLE);
@@ -210,18 +212,13 @@ public class CardListActivity extends AbstractActivity {
     }
 
     private void initView() {
-        titleLayout.setBackgroundResource(
-                ResourcesUtil.getTitleBackgroundColor(
-                        applicationManager.getCategoryModelColor()
-                )
-        );
         categoryItemTitle.setText(applicationManager.getCategoryModel().title);
-        showHideRecyclerViewAdapter = new ShowHideRecyclerViewAdapter(cardList, applicationManager.getCategoryModelColor(), getApplicationContext(), dataChangeListener);
+        showHideRecyclerViewAdapter = new ShowHideRecyclerViewAdapter(cardList, getApplicationContext(), dataChangeListener);
         showHideRecyclerView.setAdapter(showHideRecyclerViewAdapter);
         showHideRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         showHideRecyclerView.setOnScrollListener(onScrollListener);
 
-        changeOrderRecyclerViewAdapter = new ChangeOrderRecyclerViewAdapter(cardList, applicationManager.getCategoryModelColor(), getApplicationContext());
+        changeOrderRecyclerViewAdapter = new ChangeOrderRecyclerViewAdapter(cardList, getApplicationContext());
         changeOrderRecyclerView.setAdapter(changeOrderRecyclerViewAdapter);
         changeOrderRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         changeOrderRecyclerView.setOnScrollListener(onScrollListener);

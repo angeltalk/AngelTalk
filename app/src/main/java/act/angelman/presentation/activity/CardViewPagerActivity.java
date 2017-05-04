@@ -43,6 +43,7 @@ import act.angelman.presentation.custom.CustomSnackBar;
 import act.angelman.presentation.custom.ShareMessengerSelectDialog;
 import act.angelman.presentation.manager.ApplicationConstants;
 import act.angelman.presentation.manager.ApplicationManager;
+import act.angelman.presentation.util.ResourcesUtil;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -203,6 +204,7 @@ public class CardViewPagerActivity extends AbstractActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((AngelmanApplication) getApplication()).getAngelmanComponent().inject(this);
+        ResourcesUtil.setColorTheme(this, applicationManager.getCategoryModelColor());
         setContentView(R.layout.activity_card_view);
         ButterKnife.bind(this);
         glide = Glide.with(this);
@@ -254,7 +256,7 @@ public class CardViewPagerActivity extends AbstractActivity {
         cardTitleLayout.refreshCardCountText(0, allCardListInSelectedCategory.size() + 1);
         cardTitleLayout.categoryTitle.setText(selectedCategoryModel.title);
 
-        cardImageAdapter = new CardImageAdapter(this, allCardListInSelectedCategory, glide, applicationManager);
+        cardImageAdapter = new CardImageAdapter(this, allCardListInSelectedCategory, glide);
         cardImageAdapter.addNewCardViewAtFirst();
         mViewPager.setAdapter(cardImageAdapter);
         OverScrollDecoratorHelper.setUpOverScroll(mViewPager);
@@ -320,7 +322,7 @@ public class CardViewPagerActivity extends AbstractActivity {
                 if (deleteSelectedCard(cardIndex)) {
                     List<CardModel> cardList = cardRepository.getSingleCardListWithCategoryId((applicationManager.getCategoryModel().index),false);
                     mViewPager.removeAllViews();
-                    cardImageAdapter = new CardImageAdapter(CardViewPagerActivity.this, cardList, glide, applicationManager);
+                    cardImageAdapter = new CardImageAdapter(CardViewPagerActivity.this, cardList, glide);
                     cardImageAdapter.addNewCardViewAtFirst();
                     mViewPager.setAdapter(cardImageAdapter);
                     mViewPager.setCurrentItem(currentItem);

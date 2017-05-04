@@ -34,7 +34,7 @@ public class CardImageAdapterTest extends UITest {
         ((TestAngelmanApplication) RuntimeEnvironment.application).getAngelmanTestComponent().inject(this);
 
         List<CardModel> testDataList = getTestDataList();
-        subject = new CardImageAdapter(RuntimeEnvironment.application, testDataList, null, applicationManager);
+        subject = new CardImageAdapter(RuntimeEnvironment.application, testDataList, null);
     }
 
     @Test

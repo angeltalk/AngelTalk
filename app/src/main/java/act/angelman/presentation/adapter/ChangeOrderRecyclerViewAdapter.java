@@ -17,19 +17,16 @@ import act.angelman.R;
 import act.angelman.domain.model.CardModel;
 import act.angelman.presentation.util.AngelManGlideTransform;
 import act.angelman.presentation.util.ContentsUtil;
-import act.angelman.presentation.util.ResourcesUtil;
 
 public class ChangeOrderRecyclerViewAdapter extends RecyclerView.Adapter<ChangeOrderRecyclerViewAdapter.ChangeOrderRecyclerViewHolder> {
 
     private final RequestManager glide;
     private final Context context;
-    private final int categoryModelColor;
     private List<CardModel> cardModelList;
 
-    public ChangeOrderRecyclerViewAdapter(List<CardModel> cardModelList, int categoryModelColor, Context context) {
+    public ChangeOrderRecyclerViewAdapter(List<CardModel> cardModelList, Context context) {
         this.cardModelList = cardModelList;
         this.context = context;
-        this.categoryModelColor = categoryModelColor;
         this.glide = Glide.with(context);
     }
 
@@ -49,8 +46,8 @@ public class ChangeOrderRecyclerViewAdapter extends RecyclerView.Adapter<ChangeO
                 .into(holder.cardThumbnail);
         holder.cardName.setText(cardModel.name);
         setViewByHide(holder, cardModel.hide);
-
         holder.showHideIcon.setVisibility(View.GONE);
+        holder.hideIcon.setVisibility(View.GONE);
         holder.itemMoveIcon.setVisibility(View.VISIBLE);
     }
 
@@ -61,13 +58,15 @@ public class ChangeOrderRecyclerViewAdapter extends RecyclerView.Adapter<ChangeO
 
     private void setViewByHide(final ChangeOrderRecyclerViewHolder holder, boolean hide) {
         if(hide) {
-            holder.showHideItemBar.setImageResource(ResourcesUtil.getShowHideItemBarBy(ResourcesUtil.HIDING));
-            holder.itemMoveIcon.setImageResource(ResourcesUtil.getItemMoveIconBy(categoryModelColor));
+            holder.hideItemBar.setVisibility(View.VISIBLE);
+            holder.showHideItemBar.setVisibility(View.GONE);
+
             holder.cardName.setTextColor(context.getResources().getColor(R.color.black_4C));
             holder.cardThumbnail.setImageAlpha(60);
         } else {
-            holder.showHideItemBar.setImageResource(ResourcesUtil.getShowHideItemBarBy(categoryModelColor));
-            holder.itemMoveIcon.setImageResource(ResourcesUtil.getItemMoveIconBy(categoryModelColor));
+            holder.hideItemBar.setVisibility(View.GONE);
+            holder.showHideItemBar.setVisibility(View.VISIBLE);
+
             holder.cardName.setTextColor(context.getResources().getColor(R.color.black_00));
             holder.cardThumbnail.setImageAlpha(255);
         }
@@ -95,8 +94,11 @@ public class ChangeOrderRecyclerViewAdapter extends RecyclerView.Adapter<ChangeO
         ImageView cardThumbnail;
         TextView cardName;
         ImageView showHideIcon;
+        ImageView hideIcon;
         ImageView showHideItemBar;
+        ImageView hideItemBar;
         ImageView itemMoveIcon;
+
 
         public ChangeOrderRecyclerViewHolder(View view) {
             super(view);
@@ -104,7 +106,9 @@ public class ChangeOrderRecyclerViewAdapter extends RecyclerView.Adapter<ChangeO
             this.cardThumbnail = ((ImageView) view.findViewById(R.id.card_thumbnail));
             this.cardName = ((TextView) view.findViewById(R.id.card_name));
             this.showHideIcon = ((ImageView) view.findViewById(R.id.show_hide_icon));
+            this.hideIcon = ((ImageView) view.findViewById(R.id.hide_icon));
             this.itemMoveIcon = ((ImageView) view.findViewById(R.id.item_move_icon));
+            this.hideItemBar = ((ImageView) view.findViewById(R.id.hide_item_bar));
         }
     }
 }

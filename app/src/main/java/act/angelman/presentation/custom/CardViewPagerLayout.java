@@ -22,7 +22,6 @@ import act.angelman.domain.model.CardModel;
 import act.angelman.domain.model.CategoryModel;
 import act.angelman.domain.repository.CardRepository;
 import act.angelman.presentation.adapter.CardImageAdapter;
-import act.angelman.presentation.manager.ApplicationManager;
 import act.angelman.presentation.util.ResourcesUtil;
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 
@@ -30,10 +29,6 @@ public class CardViewPagerLayout extends RelativeLayout {
 
     @Inject
     CardRepository cardRepository;
-
-
-    @Inject
-    ApplicationManager applicationManager;
 
     List<CardModel> allCardListInSelectedCategory;
     private View subject;
@@ -86,7 +81,7 @@ public class CardViewPagerLayout extends RelativeLayout {
 
         allCardListInSelectedCategory = cardRepository.getSingleCardListWithCategoryId(categoryModel.index, false);
 
-        cardImageAdapter = new CardImageAdapter(context, allCardListInSelectedCategory, glide, applicationManager);
+        cardImageAdapter = new CardImageAdapter(context, allCardListInSelectedCategory, glide);
         mViewPager.setAdapter(cardImageAdapter);
         OverScrollDecoratorHelper.setUpOverScroll(mViewPager);
 
