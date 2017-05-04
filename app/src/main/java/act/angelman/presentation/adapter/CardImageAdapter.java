@@ -25,11 +25,8 @@ import act.angelman.presentation.custom.AddCardView;
 import act.angelman.presentation.custom.CardView;
 import act.angelman.presentation.custom.VideoCardTextureView;
 import act.angelman.presentation.util.AngelManGlideTransform;
-import act.angelman.presentation.manager.ApplicationManager;
 import act.angelman.presentation.util.ContentsUtil;
-import act.angelman.presentation.util.FontUtil;
 import act.angelman.presentation.util.PlayUtil;
-import act.angelman.presentation.util.ResourcesUtil;
 
 public class CardImageAdapter extends PagerAdapter {
 
@@ -40,11 +37,10 @@ public class CardImageAdapter extends PagerAdapter {
     public SparseArray<View> viewCollection = new SparseArray<>();
     private PlayUtil playUtil;
     private boolean isNotLongClicked;
-    private ApplicationManager applicationManager;
     private CardView lastSelectedCardView = null;
     private Handler speakHandler = new Handler();
 
-    public CardImageAdapter(Context context, List<CardModel> dataList, RequestManager glide, ApplicationManager applicationManager) {
+    public CardImageAdapter(Context context, List<CardModel> dataList, RequestManager glide) {
         this.context = context;
         this.dataList = dataList;
         this.glide = glide;
@@ -53,8 +49,6 @@ public class CardImageAdapter extends PagerAdapter {
 
         playUtil = PlayUtil.getInstance();
         playUtil.initTts(context.getApplicationContext());
-
-        this.applicationManager = applicationManager;
     }
 
     public View getItemAt(int index) {
@@ -86,12 +80,6 @@ public class CardImageAdapter extends PagerAdapter {
             AddCardView cardView = new AddCardView(context);
             container.addView(cardView, LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
             viewCollection.put(position, cardView);
-            ImageView plusIcon = (ImageView) cardView.findViewById(R.id.plus_icon);
-
-            @ResourcesUtil.BackgroundColors
-            int categoryColor = applicationManager.getCategoryModel().color;
-
-            plusIcon.setImageResource(ResourcesUtil.getPlusIconBy(categoryColor));
             return cardView;
         } else {
             final CardView cardView = new CardView(context);

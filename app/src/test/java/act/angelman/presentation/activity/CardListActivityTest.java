@@ -35,6 +35,8 @@ import act.angelman.presentation.shadow.ShadowSnackbar;
 import act.angelman.presentation.util.ContentsUtil;
 import act.angelman.presentation.util.ResourcesUtil;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
@@ -89,13 +91,17 @@ public class CardListActivityTest extends UITest{
 
     @Test
     public void givenHidingCardInList_whenLaunched_thenHideIcon() throws Exception {
-        ImageView showHideBarView = ((ImageView) subject.showHideRecyclerView.getChildAt(2).findViewById(R.id.show_hide_item_bar));
-        ImageView showHideIconView = ((ImageView) subject.showHideRecyclerView.getChildAt(2).findViewById(R.id.show_hide_icon));
-        TextView cardName = ((TextView) subject.showHideRecyclerView.getChildAt(2).findViewById(R.id.card_name));
-        ImageView cardThumbnail = ((ImageView) subject.showHideRecyclerView.getChildAt(2).findViewById(R.id.card_thumbnail));
+        View secondItemView = subject.showHideRecyclerView.getChildAt(2);
 
-        assertThat(shadowOf(showHideBarView.getDrawable()).getCreatedFromResId()).isEqualTo(R.drawable.hide);
-        assertThat(shadowOf(showHideIconView.getDrawable()).getCreatedFromResId()).isEqualTo(R.drawable.ic_hide);
+        ImageView showHideBarView = ((ImageView) secondItemView.findViewById(R.id.show_hide_item_bar));
+        ImageView hideBarView = ((ImageView) secondItemView.findViewById(R.id.hide_item_bar));
+        ImageView showHideIconView = ((ImageView) secondItemView.findViewById(R.id.show_hide_icon));
+        TextView cardName = ((TextView) secondItemView.findViewById(R.id.card_name));
+        ImageView cardThumbnail = ((ImageView) secondItemView.findViewById(R.id.card_thumbnail));
+
+        assertThat(showHideBarView.getVisibility()).isEqualTo(GONE);
+        assertThat(hideBarView.getVisibility()).isEqualTo(View.VISIBLE);
+        assertThat(shadowOf(showHideIconView.getDrawable()).getCreatedFromResId()).isEqualTo(R.drawable.ic_show_red);
         assertThat(cardName.getCurrentTextColor()).isEqualTo(subject.getResources().getColor(R.color.black_4C));
         assertThat(cardThumbnail.getImageAlpha()).isEqualTo(60);
     }
@@ -104,6 +110,7 @@ public class CardListActivityTest extends UITest{
     public void whenClickShowHideRecyclerViewItem_thenShowHideChangeAndDatabaseUpdate() throws Exception {
 
         ImageView showHideBarView = ((ImageView) subject.showHideRecyclerView.getChildAt(0).findViewById(R.id.show_hide_item_bar));
+        ImageView hideBarView = ((ImageView) subject.showHideRecyclerView.getChildAt(0).findViewById(R.id.hide_item_bar));
         assertThat(shadowOf(showHideBarView.getDrawable()).getCreatedFromResId()).isEqualTo(R.drawable.show_red);
 
         // when
@@ -115,8 +122,9 @@ public class CardListActivityTest extends UITest{
         TextView cardName = ((TextView) subject.showHideRecyclerView.getChildAt(0).findViewById(R.id.card_name));
         ImageView cardThumbnail = ((ImageView) subject.showHideRecyclerView.getChildAt(0).findViewById(R.id.card_thumbnail));
 
-        assertThat(shadowOf(showHideBarView.getDrawable()).getCreatedFromResId()).isEqualTo(R.drawable.hide);
-        assertThat(shadowOf(showHideIconView.getDrawable()).getCreatedFromResId()).isEqualTo(R.drawable.ic_hide);
+        assertThat(showHideBarView.getVisibility()).isEqualTo(GONE);
+        assertThat(hideBarView.getVisibility()).isEqualTo(View.VISIBLE);
+        assertThat(shadowOf(showHideIconView.getDrawable()).getCreatedFromResId()).isEqualTo(R.drawable.ic_show_red);
         assertThat(cardName.getCurrentTextColor()).isEqualTo(subject.getResources().getColor(R.color.black_4C));
         assertThat(cardThumbnail.getImageAlpha()).isEqualTo(60);
 
@@ -191,12 +199,15 @@ public class CardListActivityTest extends UITest{
         subject.changeOrderTabButton.performClick();
 
         // then
-        ImageView showHideBarView = ((ImageView) subject.changeOrderRecyclerView.getChildAt(0).findViewById(R.id.show_hide_item_bar));
-        ImageView itemMoveIcon = ((ImageView) subject.changeOrderRecyclerView.getChildAt(0).findViewById(R.id.item_move_icon));
-        TextView cardName = ((TextView) subject.changeOrderRecyclerView.getChildAt(0).findViewById(R.id.card_name));
-        ImageView cardThumbnail = ((ImageView) subject.changeOrderRecyclerView.getChildAt(0).findViewById(R.id.card_thumbnail));
+        View firstItem = subject.changeOrderRecyclerView.getChildAt(0);
+        ImageView showHideBarView = ((ImageView) firstItem.findViewById(R.id.show_hide_item_bar));
+        ImageView hideBarView = ((ImageView) firstItem.findViewById(R.id.hide_item_bar));
+        ImageView itemMoveIcon = ((ImageView) firstItem.findViewById(R.id.item_move_icon));
+        TextView cardName = ((TextView) firstItem.findViewById(R.id.card_name));
+        ImageView cardThumbnail = ((ImageView) firstItem.findViewById(R.id.card_thumbnail));
 
-        assertThat(shadowOf(showHideBarView.getDrawable()).getCreatedFromResId()).isEqualTo(R.drawable.hide);
+        assertThat(showHideBarView.getVisibility()).isEqualTo(GONE);
+        assertThat(hideBarView.getVisibility()).isEqualTo(View.VISIBLE);
         assertThat(shadowOf(itemMoveIcon.getDrawable()).getCreatedFromResId()).isEqualTo(R.drawable.ic_list_red);
         assertThat(cardName.getCurrentTextColor()).isEqualTo(subject.getResources().getColor(R.color.black_4C));
         assertThat(cardThumbnail.getImageAlpha()).isEqualTo(60);
@@ -242,7 +253,7 @@ public class CardListActivityTest extends UITest{
         subject.changeOrderTabButton.performClick();
 
         // then
-        assertThat(subject.showHideRecyclerView.getVisibility()).isEqualTo(View.GONE);
+        assertThat(subject.showHideRecyclerView.getVisibility()).isEqualTo(GONE);
         assertThat(subject.changeOrderRecyclerView.getVisibility()).isEqualTo(View.VISIBLE);
         ImageView itemMoveIcon = ((ImageView) subject.changeOrderRecyclerView.getChildAt(0).findViewById(R.id.item_move_icon));
         assertThat(itemMoveIcon.getVisibility()).isEqualTo(View.VISIBLE);
@@ -267,11 +278,12 @@ public class CardListActivityTest extends UITest{
         subject.showHideTabButton.performClick();
         // then
         ImageView showHideIconView = ((ImageView) subject.showHideRecyclerView.getChildAt(2).findViewById(R.id.show_hide_icon));
+        ImageView hideIconView = ((ImageView) subject.showHideRecyclerView.getChildAt(2).findViewById(R.id.hide_icon));
         ImageView itemMoveIcon = ((ImageView) subject.showHideRecyclerView.getChildAt(0).findViewById(R.id.item_move_icon));
-        assertThat(showHideIconView.getVisibility()).isEqualTo(View.VISIBLE);
-        assertThat(itemMoveIcon.getVisibility()).isEqualTo(View.GONE);
+        assertThat(showHideIconView.getVisibility()).isEqualTo(GONE);
+        assertThat(hideIconView.getVisibility()).isEqualTo(VISIBLE);
+        assertThat(itemMoveIcon.getVisibility()).isEqualTo(GONE);
     }
-
 
     @Test
     public void givenIntentFromShareCardActivity_whenLaunched_thenShowSnackBar() throws Exception {
@@ -288,7 +300,7 @@ public class CardListActivityTest extends UITest{
     @Test
     public void whenScrolledBottom_thenGoneAddCardButton() throws Exception {
         subject.showHideRecyclerView.scrollToPosition(subject.showHideRecyclerView.getChildCount()-1);
-        assertThat(subject.addCardButton.getVisibility()).isEqualTo(View.GONE);
+        assertThat(subject.addCardButton.getVisibility()).isEqualTo(GONE);
     }
 
     @Test

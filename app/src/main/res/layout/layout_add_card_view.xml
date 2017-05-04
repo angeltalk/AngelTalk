@@ -31,6 +31,7 @@
             android:layout_above="@id/add_card_text"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="60dp"
+            android:src="?attr/themedPlusIconDrawable"
             tools:src="@drawable/plus_red" />
 
     </android.support.percent.PercentRelativeLayout>

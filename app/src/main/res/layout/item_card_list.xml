@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="75dp"
     android:orientation="horizontal" >
@@ -9,7 +8,14 @@
         android:id="@+id/show_hide_item_bar"
         android:layout_width="3dp"
         android:layout_height="match_parent"
-        android:src="@drawable/show_red" />
+        android:src="?attr/themedShowHideItemBarDrawable" />
+
+    <ImageView
+        android:id="@+id/hide_item_bar"
+        android:layout_width="3dp"
+        android:layout_height="match_parent"
+        android:src="@drawable/hide"
+        android:visibility="gone"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -48,14 +54,22 @@
                 android:layout_height="29dp"
                 android:layout_marginEnd="15dp"
                 android:layout_marginStart="11dp"
-                android:src="@drawable/ic_show_red" />
+                android:src="?attr/themedShowHideIconDrawable" />
+            <ImageView
+                android:id="@+id/hide_icon"
+                android:layout_width="30dp"
+                android:layout_height="29dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginStart="11dp"
+                android:src="@drawable/ic_hide"
+                android:visibility="gone"/>
             <ImageView
                 android:id="@+id/item_move_icon"
                 android:layout_width="30dp"
                 android:layout_height="29dp"
                 android:layout_marginEnd="15dp"
                 android:layout_marginStart="11dp"
-                android:src="@drawable/ic_list_red"
+                android:src="?attr/themedItemMoveIconDrawable"
                 android:visibility="gone" />
         </LinearLayout>
 
