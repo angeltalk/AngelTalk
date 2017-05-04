@@ -3,7 +3,6 @@ package act.angelman.presentation.activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -33,7 +32,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class CardListActivity extends AppCompatActivity {
+public class CardListActivity extends AbstractActivity {
 
     @Inject
     ApplicationManager applicationManager;

@@ -1,13 +1,12 @@
 package act.angelman.presentation.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
 
 import act.angelman.R;
-import act.angelman.presentation.manager.ApplicationConstants;
 import act.angelman.presentation.fragment.VideoFragment;
+import act.angelman.presentation.manager.ApplicationConstants;
 
-public class VideoActivity extends Activity {
+public class VideoActivity extends AbstractActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

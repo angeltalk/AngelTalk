@@ -44,7 +44,6 @@ import act.angelman.presentation.manager.ApplicationManager;
 import act.angelman.presentation.util.AngelManGlideTransform;
 import act.angelman.presentation.util.ContentsUtil;
 import act.angelman.presentation.util.FileUtil;
-import act.angelman.presentation.util.FontUtil;
 import act.angelman.presentation.util.PlayUtil;
 import act.angelman.presentation.util.RecordUtil;
 import act.angelman.presentation.util.ResolutionUtil;
