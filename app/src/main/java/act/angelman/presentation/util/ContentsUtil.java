@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.media.MediaMetadataRetriever;
 import android.media.ThumbnailUtils;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
@@ -21,6 +22,7 @@ import act.angelman.domain.model.CardModel;
 import act.angelman.domain.model.CardTransferModel;
 
 import static act.angelman.presentation.util.FileUtil.copyFile;
+import static android.media.ThumbnailUtils.OPTIONS_RECYCLE_INPUT;
 
 public class ContentsUtil {
 
@@ -34,6 +36,8 @@ public class ContentsUtil {
 
     public static String CONTENT_PATH = "content path";
     public static String CARD_TYPE = "card type";
+
+    private static final int TARGET_SIZE_MICRO_THUMBNAIL = 96;
 
     public static String getContentFolder(Context context) {
         return context.getApplicationContext().getFilesDir() + File.separator + CONTENT_FULL_PATH;
@@ -127,12 +131,13 @@ public class ContentsUtil {
         return Bitmap.createBitmap(
                 drawingCache, 0, 0, width, height, matrix, false);
     }
+
     public static void saveVideoThumbnail(String videoPath) {
         String thumbNailPath = ContentsUtil.getThumbnailPath(videoPath);
         File fileCacheItem = new File(thumbNailPath);
         OutputStream out = null;
 
-        Bitmap bitmap = ThumbnailUtils.createVideoThumbnail(videoPath, MediaStore.Images.Thumbnails.MINI_KIND);
+        Bitmap bitmap = createVideoThumbnail(10,videoPath, MediaStore.Images.Thumbnails.MINI_KIND);
 
         try {
             fileCacheItem.createNewFile();
@@ -150,6 +155,44 @@ public class ContentsUtil {
             }
         }
     }
+
+    private static Bitmap createVideoThumbnail(int time, String filePath, int kind) {
+        Bitmap bitmap = null;
+        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+        try {
+            retriever.setDataSource(filePath);
+            bitmap = retriever.getFrameAtTime(time);
+        } catch (IllegalArgumentException ex) {
+        } catch (RuntimeException ex) {
+        } finally {
+            try {
+                retriever.release();
+            } catch (RuntimeException ex) {
+            }
+        }
+
+        if (bitmap == null) return null;
+
+        if (kind == MediaStore.Images.Thumbnails.MINI_KIND) {
+            // Scale down the bitmap if it's too large.
+            int width = bitmap.getWidth();
+            int height = bitmap.getHeight();
+            int max = Math.max(width, height);
+            if (max > 512) {
+                float scale = 512f / max;
+                int w = Math.round(scale * width);
+                int h = Math.round(scale * height);
+                bitmap = Bitmap.createScaledBitmap(bitmap, w, h, true);
+            }
+        } else if (kind == MediaStore.Images.Thumbnails.MICRO_KIND) {
+            bitmap = ThumbnailUtils.extractThumbnail(bitmap,
+                    TARGET_SIZE_MICRO_THUMBNAIL,
+                    TARGET_SIZE_MICRO_THUMBNAIL,
+                    OPTIONS_RECYCLE_INPUT);
+        }
+        return bitmap;
+    }
+
 
     public static float convertDpToPixel(float dp, Context context){
         Resources resources = context.getResources();
