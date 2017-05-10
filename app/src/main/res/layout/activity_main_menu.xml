@@ -59,7 +59,7 @@
             android:padding="0dp"
             android:stretchMode="columnWidth"
             android:verticalSpacing="15dp"
-            app:layout_widthPercent="92%" />
+            app:layout_widthPercent="89%" />
 
     </android.support.percent.PercentRelativeLayout>
 
