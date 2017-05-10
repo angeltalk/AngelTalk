@@ -14,9 +14,10 @@
 
     <ImageView
         android:id="@+id/slide_menu_angel"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_gravity="center" />
+        android:layout_width="150dp"
+        android:layout_gravity="center"
+        android:layout_height="150dp"
+        android:layout_marginBottom="30dp"/>
 
     <TextView
         android:layout_width="match_parent"

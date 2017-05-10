@@ -1,6 +1,7 @@
 package act.angelman.presentation.activity;
 
 import android.content.Intent;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -18,6 +19,9 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
 
 import java.util.List;
 
@@ -93,6 +97,7 @@ public class CategoryMenuActivity extends AbstractActivity  implements Navigatio
     private PopupWindow easterEggPopup;
     private GestureDetector logoGestureDetector;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,9 +105,7 @@ public class CategoryMenuActivity extends AbstractActivity  implements Navigatio
         ButterKnife.bind(this);
         ((AngelmanApplication) getApplication()).getAngelmanComponent().inject(this);
 
-        drawer.closeDrawer(GravityCompat.START);
-        navigationView.setNavigationItemSelectedListener(this);
-
+        initNavigationView();
         initEasterEggPopup();
         setCategoryGridView();
         launchNotification();
@@ -135,6 +138,7 @@ public class CategoryMenuActivity extends AbstractActivity  implements Navigatio
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
+
         int id = item.getItemId();
         Uri webpage;
 
@@ -178,6 +182,27 @@ public class CategoryMenuActivity extends AbstractActivity  implements Navigatio
     @OnTouch(R.id.logo_angeltalk)
     public boolean onTouch(View v, MotionEvent event) {
         return logoGestureDetector.onTouchEvent(event);
+    }
+
+    private void initNavigationView() {
+        drawer.closeDrawer(GravityCompat.START);
+        navigationView.setNavigationItemSelectedListener(this);
+        drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerOpened(View drawerView) {}
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                Glide.with(CategoryMenuActivity.this)
+                        .load(R.drawable.angelee)
+                        .asGif()
+                        .crossFade()
+                        .into(((ImageView) navigationView.getHeaderView(0).findViewById(R.id.slide_menu_angel)));
+            }
+            @Override
+            public void onDrawerClosed(View drawerView) {}
+            @Override
+            public void onDrawerStateChanged(int newState) {}
+        });
     }
 
     private void initEasterEggPopup() {
