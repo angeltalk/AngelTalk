@@ -2,7 +2,6 @@
     <string name="app_name">Angelman</string>
     <string name="share_functions_url">https://us-central1-angeltalk-app-a26d8.cloudfunctions.net/redirectApp/</string>
     <string name="shortener_api_key">AIzaSyAZQwhfKiXxAGMZx4aoKHv9A54YoFMLeBQ</string>
-    <string name="voc_web_url">https://docs.google.com/forms/d/1N8sSXRWc0HHVIQSXgtcO60bj_U_3cXh7Hfl5Nlxp1OE/edit</string>
     <string name="web_url">https://angeltalk-team.bitbucket.io/</string>
     <string name="font_demilight">Roboto-Light.otf</string>
     <string name="font_regular">Roboto-Regular.otf</string>
@@ -95,13 +94,13 @@
     <string name="sample_card_teacher">Teacher</string>
     <string name="sample_card_daddy">Daddy</string>
     <string name="sample_card_mommy">Mommy</string>
-
-    <!-- to icon -->
-    <string name="delete">삭제</string>
-    <string name="register">등록</string>
+    <string name="privacy_web_url">https://docs.google.com/document/d/1ntRaoVOOvFlEIRH3bLiqe--jcJ2CJEwKbP0-pPQZAZs/edit?usp=sharing</string>
+    <string name="terms_web_url">https://docs.google.com/document/d/1Q4ttTX_1GQSQD1AGxMO6N-T7j6UntlCSxbkk837vzzM/edit?usp=sharing</string>
+    <string name="oss_web_url">https://docs.google.com/document/d/1fRievNVqIlK3QovqmoETGSBhISivNeGiAa7rGQfE3nU/edit?usp=sharing</string>
+    <string name="voc_web_url">https://docs.google.com/forms/d/1jaWhUQse_1RmqOCG2vQ_oW3QNCGv4AYowrhS6BOqNnU/edit</string>
 
     <!-- onboarding -->
     <string name="onboarding_title">엔젤만 아이와 엄마의 의사소통 도우미</string>
     <string name="bug_report_title">버그 리포트를 보내시겠습니까?</string>
     <string name="bug_report">사용성 개선에 많은 도움이 됩니다</string>
-</resources>
+ </resources>

@@ -66,7 +66,7 @@ public class OnboardingAndCategoryMenuViewTest {
                 .check(matches(isDisplayed()))
                 .perform(click());
 
-        onView(withId(R.id.send_voc))
+        onView(withId(R.id.drawer_meun))
                 .check(matches(isDisplayed()));
         onView(withId(R.id.logo_angeltalk))
                 .check(matches(isDisplayed()));

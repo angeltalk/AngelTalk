@@ -68,6 +68,9 @@ public class CategoryMenuActivity extends AbstractActivity  implements Navigatio
     @BindView(R.id.category_delete_button)
     public ImageView categoryDeleteButton;
 
+    @BindView(R.id.nav_view)
+    NavigationView navigationView;
+
     @BindString(R.string.voc_web_url)
     public String vocWebUrl;
 
@@ -77,32 +80,8 @@ public class CategoryMenuActivity extends AbstractActivity  implements Navigatio
     @BindString(R.string.one_left_delete_category)
     public String oneLeftDeleteCategory;
 
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-        Uri webpage = Uri.parse(VOC_WEB_URL);
-
-        if (id == R.id.privacy) {
-            webpage = Uri.parse(PRIVACY_POLICY);
-        } else if (id == R.id.usages) {
-            webpage = Uri.parse(TERMS_OF_SERVICE);
-        } else if (id == R.id.oss) {
-            webpage = Uri.parse(OSS_LICENSE);
-        } else if (id == R.id.voc) {
-            webpage = Uri.parse(VOC_WEB_URL);
-        }
-
-        Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivity(intent);
-        }
-
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
+    @BindView(R.id.drawer_layout)
+    public DrawerLayout drawer;
 
     public enum CategoryMenuStatus {
         NONE, CATEGORY_DEFAULT, CATEGORY_DELETABLE
@@ -114,13 +93,6 @@ public class CategoryMenuActivity extends AbstractActivity  implements Navigatio
     private PopupWindow easterEggPopup;
     private GestureDetector logoGestureDetector;
 
-    private DrawerLayout drawer;
-
-    private static final String VOC_WEB_URL = "https://docs.google.com/forms/d/1N8sSXRWc0HHVIQSXgtcO60bj_U_3cXh7Hfl5Nlxp1OE/edit";
-    private static final String PRIVACY_POLICY="https://docs.google.com/document/d/14AnlKoswSa_5b1ThWbEKU-HlDWE4Z34TgnzccVqjEB8/edit#heading=h.1nrbepsiaovj";
-    private static final String TERMS_OF_SERVICE="https://docs.google.com/document/d/18Z1y7jHtTVuDSMK7X82eblYUEEePihhqMDCJQ6KI988/edit#heading=h.q1s8qq8d9h44";
-    private static final String OSS_LICENSE="https://docs.google.com/document/d/1fRievNVqIlK3QovqmoETGSBhISivNeGiAa7rGQfE3nU/edit?usp=sharing";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -128,17 +100,8 @@ public class CategoryMenuActivity extends AbstractActivity  implements Navigatio
         ButterKnife.bind(this);
         ((AngelmanApplication) getApplication()).getAngelmanComponent().inject(this);
 
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
-
-        ImageView sendVoc = ((ImageView) findViewById(R.id
-                .send_voc));
-        sendVoc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                drawer.openDrawer(GravityCompat.START);
-            }
-        });
+        navigationView.setNavigationItemSelectedListener(this);
 
         initEasterEggPopup();
         setCategoryGridView();
@@ -169,13 +132,38 @@ public class CategoryMenuActivity extends AbstractActivity  implements Navigatio
         }
     }
 
-    @OnClick(R.id.send_voc)
-    public void onClickSendVoc(View v) {
-        Uri webpage = Uri.parse(vocWebUrl);
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+        Uri webpage;
+
+        if (id == R.id.privacy) {
+            webpage = Uri.parse(getString(R.string.privacy_web_url));
+        } else if (id == R.id.usages) {
+            webpage = Uri.parse(getString(R.string.terms_web_url));
+        } else if (id == R.id.oss) {
+            webpage = Uri.parse(getString(R.string.oss_web_url));
+        } else if (id == R.id.voc) {
+            webpage = Uri.parse(getString(R.string.voc_web_url));
+        }else{
+            return false;
+        }
+
         Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivity(intent);
         }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+
+        return false;
+    }
+
+    @OnClick(R.id.drawer_meun)
+    public void onClickDrawerMenu(View v) {
+        drawer.openDrawer(GravityCompat.START);
     }
 
     @OnClick(R.id.category_delete_button)
