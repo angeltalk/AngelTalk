@@ -26,7 +26,7 @@ public class SendVOCTest {
 
     @Test
     public void sendVOCTest() {
-        onView(withId(R.id.send_voc))
+        onView(withId(R.id.drawer_meun))
                 .check(matches(isDisplayed()))
                 .perform(click());
 
