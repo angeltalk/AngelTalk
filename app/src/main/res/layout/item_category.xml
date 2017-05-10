@@ -7,19 +7,24 @@
     android:orientation="vertical"
     tools:showIn="@layout/activity_new_category">
 
-    <ImageView
-        android:id="@+id/category_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        tools:src="@drawable/icon_bus_menu" />
+    <RelativeLayout
+        android:layout_width="66dp"
+        android:layout_height="66dp"
+        android:layout_gravity="center">
+        <ImageView
+            android:id="@+id/category_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            tools:src="@drawable/icon_bus_menu" />
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/category_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="14dp"
         android:text="@string/new_category_name"
         android:textColor="@color/white"
         android:textSize="18dp"
