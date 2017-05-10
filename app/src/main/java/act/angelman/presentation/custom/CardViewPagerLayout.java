@@ -2,6 +2,7 @@ package act.angelman.presentation.custom;
 
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
@@ -75,7 +76,9 @@ public class CardViewPagerLayout extends RelativeLayout {
                 )
         );
 
-        ((TextView) subject.findViewById(R.id.category_item_title)).setText(categoryModel.title);
+        TextView categoryTitle = (TextView) subject.findViewById(R.id.category_item_title);
+        categoryTitle.setText(categoryModel.title);
+        categoryTitle.setTypeface(Typeface.createFromAsset(context.getAssets(), context.getString(R.string.font_regular)));
 
         mViewPager = (CardViewPager) findViewById(R.id.view_pager);
 
