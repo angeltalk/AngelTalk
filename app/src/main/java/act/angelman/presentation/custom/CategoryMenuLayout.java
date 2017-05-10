@@ -1,6 +1,7 @@
 package act.angelman.presentation.custom;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.percent.PercentLayoutHelper;
 import android.support.percent.PercentRelativeLayout;
 import android.util.AttributeSet;
@@ -16,6 +17,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextClock;
 import android.widget.TextView;
 
 import java.util.List;
@@ -67,6 +69,7 @@ public class CategoryMenuLayout extends LinearLayout {
         if(hasNavigationBar(context)) {
             setSmallerMarginLayout();
         }
+        setClockTypeface(context);
     }
 
     public void setLockAreaVisibleWithGone() {
@@ -191,5 +194,11 @@ public class CategoryMenuLayout extends LinearLayout {
         boolean hasMenuKey = ViewConfiguration.get(context).hasPermanentMenuKey();
         boolean hasBackKey = KeyCharacterMap.deviceHasKey(KeyEvent.KEYCODE_BACK);
         return !hasMenuKey && !hasBackKey;
+    }
+
+    private void setClockTypeface(Context context) {
+        ((TextClock) subject.findViewById(R.id.clock_ampm)).setTypeface(Typeface.createFromAsset(context.getAssets(), context.getString(R.string.font_regular)));
+        ((TextClock) subject.findViewById(R.id.clock_date)).setTypeface(Typeface.createFromAsset(context.getAssets(), context.getString(R.string.font_regular)));
+        ((TextClock) subject.findViewById(R.id.clock_time)).setTypeface(Typeface.createFromAsset(context.getAssets(), context.getString(R.string.font_demilight)));
     }
 }
