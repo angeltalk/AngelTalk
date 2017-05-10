@@ -96,7 +96,6 @@ public class CardViewPagerActivity extends AbstractActivity {
     @BindView(R.id.list_card_button)
     ImageView listCardButton;
 
-
     @OnClick(R.id.list_card_button)
     public void onClickListCardButtonText(View v) {
         stopPlayingCard();
@@ -111,6 +110,20 @@ public class CardViewPagerActivity extends AbstractActivity {
         deleteCard();
     }
 
+    @Override
+    protected void onPause() {
+        isForegroundRunning = false;
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        isForegroundRunning = false;
+        super.onDestroy();
+    }
+
+    boolean isForegroundRunning = true;
+
     @OnClick(R.id.card_share_button)
     public void shareButtonOnClick() {
         stopPlayingCard();
@@ -120,11 +133,17 @@ public class CardViewPagerActivity extends AbstractActivity {
                 final ApplicationConstants.SHARE_MESSENGER_TYPE selectType = ((ApplicationConstants.SHARE_MESSENGER_TYPE) v.getTag());
                 final CardModel cardModel = getCardModel(mViewPager.getCurrentItem());
                 showLoadingAnimation();
+
                 cardTransfer.uploadCard(cardModel, new OnSuccessListener<Map<String,String>>() {
                     @Override
                     public void onSuccess(Map<String, String> resultMap) {
                         String thumbnailUrl = resultMap.get("url");
                         final String key = resultMap.get("key");
+                        if(!isForegroundRunning){
+                            loadingViewLayout.setVisibility(View.GONE);
+                            return;
+                        }
+
                         if(selectType == ApplicationConstants.SHARE_MESSENGER_TYPE.KAKAOTALK){
                             loadingViewLayout.setVisibility(View.GONE);
                             kaKaoTransfer.sendKakaoLinkMessage(context, key, thumbnailUrl, cardModel);
@@ -146,6 +165,12 @@ public class CardViewPagerActivity extends AbstractActivity {
                 });
             }
         }).show();
+    }
+
+    @Override
+    protected void onResume() {
+        isForegroundRunning= true;
+        super.onResume();
     }
 
     @OnClick(R.id.card_edit_button)
