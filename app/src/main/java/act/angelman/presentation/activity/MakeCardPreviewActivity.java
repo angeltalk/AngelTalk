@@ -61,7 +61,6 @@ public class MakeCardPreviewActivity extends AbstractActivity {
             if (FileUtil.isFileExist(previewContentPath)) {
                 Glide.with(this)
                         .load(ContentsUtil.getContentFile(previewContentPath))
-                        .override(280, 280)
                         .into(cardPreviewLayout.cameraRecodeImage);
             }
         } else if(previewCardType == CardModel.CardType.VIDEO_CARD) {

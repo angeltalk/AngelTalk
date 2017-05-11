@@ -101,7 +101,6 @@ public class CardViewPagerLayoutTest extends UITest{
                     Glide.with(RuntimeEnvironment.application)
                             .load("file:///android_asset/bus.png")
                             .bitmapTransform(new AngelManGlideTransform(RuntimeEnvironment.application, 10, 0, AngelManGlideTransform.CornerType.TOP))
-                            .override(280, 280)
                             .into(expectedImageView);
 
                     Bitmap expectedImage = ((GlideBitmapDrawable) expectedImageView.getDrawable()).getBitmap();
