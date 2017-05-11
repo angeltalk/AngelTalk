@@ -97,7 +97,7 @@ public class VideoCardTextureView extends TextureView implements TextureView.Sur
                 break;
             case CENTER_CROP:
                 pivotPointX = (int) (viewWidth / 2);
-                pivotPointY = (int) (viewHeight / 2);
+                pivotPointY = (int) (viewHeight * 2 / 3 );
                 break;
             default:
                 pivotPointX = (int) (viewWidth / 2);
