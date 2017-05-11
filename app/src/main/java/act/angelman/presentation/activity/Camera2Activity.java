@@ -663,21 +663,25 @@ public class Camera2Activity extends AbstractActivity implements View.OnClickLis
         RectF bufferRect = new RectF(0, 0, mPreviewSize.getHeight(), mPreviewSize.getWidth());
         float centerX = viewRect.centerX();
         float centerY = viewRect.centerY();
-        if (Surface.ROTATION_90 == rotation || Surface.ROTATION_270 == rotation) {
-            bufferRect.offset(centerX - bufferRect.centerX(), centerY - bufferRect.centerY());
-            matrix.setRectToRect(viewRect, bufferRect, Matrix.ScaleToFit.FILL);
-            float scale = Math.max(
-                    (float) viewHeight / mPreviewSize.getHeight(),
-                    (float) viewWidth / mPreviewSize.getWidth());
-            matrix.postScale(scale, scale, centerX, centerY);
-            matrix.postRotate(90 * (rotation - 2), centerX, centerY);
-        } else if (Surface.ROTATION_180 == rotation) {
-            matrix.postRotate(180, centerX, centerY);
-        } else if(getDeviceName().equals("LGE LG-F470K")) {
+
+        if(getDeviceName().equals("LGE LG-F470K")) {
             bufferRect.offset(centerX - bufferRect.centerX(), centerY - bufferRect.centerY());
             matrix.setRectToRect(bufferRect, viewRect, Matrix.ScaleToFit.FILL);
             matrix.postScale(1.0f, 0.63f, centerX, centerY);
+        } else {
+            if (Surface.ROTATION_90 == rotation || Surface.ROTATION_270 == rotation) {
+                bufferRect.offset(centerX - bufferRect.centerX(), centerY - bufferRect.centerY());
+                matrix.setRectToRect(viewRect, bufferRect, Matrix.ScaleToFit.FILL);
+                float scale = Math.max(
+                        (float) viewHeight / mPreviewSize.getHeight(),
+                        (float) viewWidth / mPreviewSize.getWidth());
+                matrix.postScale(scale, scale, centerX, centerY);
+                matrix.postRotate(90 * (rotation - 2), centerX, centerY);
+            } else if (Surface.ROTATION_180 == rotation) {
+                matrix.postRotate(180, centerX, centerY);
+            }
         }
+
         mTextureView.setTransform(matrix);
     }
 
