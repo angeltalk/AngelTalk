@@ -30,6 +30,7 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
@@ -622,6 +623,7 @@ public class Camera2Activity extends AbstractActivity implements View.OnClickLis
                     try {
                         // Auto focus should be continuous for camera preview.
                         mPreviewRequestBuilder.set(CaptureRequest.CONTROL_AF_MODE, CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE);
+                        mPreviewRequestBuilder.set(CaptureRequest.JPEG_QUALITY, (byte) 100);
                         // Flash is automatically enabled when necessary.
                         setAutoFlash(mPreviewRequestBuilder);
 
@@ -671,8 +673,43 @@ public class Camera2Activity extends AbstractActivity implements View.OnClickLis
             matrix.postRotate(90 * (rotation - 2), centerX, centerY);
         } else if (Surface.ROTATION_180 == rotation) {
             matrix.postRotate(180, centerX, centerY);
+        } else if(getDeviceName().equals("LGE LG-F470K")) {
+            bufferRect.offset(centerX - bufferRect.centerX(), centerY - bufferRect.centerY());
+            matrix.setRectToRect(bufferRect, viewRect, Matrix.ScaleToFit.FILL);
+            matrix.postScale(1.0f, 0.63f, centerX, centerY);
         }
         mTextureView.setTransform(matrix);
+    }
+
+    private static String getDeviceName() {
+        String manufacturer = Build.MANUFACTURER;
+        String model = Build.MODEL;
+        if (model.startsWith(manufacturer)) {
+            return capitalize(model);
+        }
+        return capitalize(manufacturer) + " " + model;
+    }
+
+    private static String capitalize(String str) {
+        if (TextUtils.isEmpty(str)) {
+            return str;
+        }
+        char[] arr = str.toCharArray();
+        boolean capitalizeNext = true;
+
+        StringBuilder phrase = new StringBuilder();
+        for (char c : arr) {
+            if (capitalizeNext && Character.isLetter(c)) {
+                phrase.append(Character.toUpperCase(c));
+                capitalizeNext = false;
+                continue;
+            } else if (Character.isWhitespace(c)) {
+                capitalizeNext = true;
+            }
+            phrase.append(c);
+        }
+
+        return phrase.toString();
     }
 
     /**
@@ -689,6 +726,7 @@ public class Camera2Activity extends AbstractActivity implements View.OnClickLis
         try {
             // This is how to tell the camera to lock focus.
             mPreviewRequestBuilder.set(CaptureRequest.CONTROL_AF_TRIGGER, CameraMetadata.CONTROL_AF_TRIGGER_START);
+            mPreviewRequestBuilder.set(CaptureRequest.JPEG_QUALITY, (byte) 100);
             // Tell #mCaptureCallback to wait for the lock.
 
             mState = STATE_WAITING_LOCK;
@@ -707,6 +745,7 @@ public class Camera2Activity extends AbstractActivity implements View.OnClickLis
         try {
             // This is how to tell the camera to trigger.
             mPreviewRequestBuilder.set(CaptureRequest.CONTROL_AE_PRECAPTURE_TRIGGER, CaptureRequest.CONTROL_AE_PRECAPTURE_TRIGGER_START);
+            mPreviewRequestBuilder.set(CaptureRequest.JPEG_QUALITY, (byte) 100);
             // Tell #mCaptureCallback to wait for the precapture sequence to be set.
             mState = STATE_WAITING_PRECAPTURE;
             mCaptureSession.capture(mPreviewRequestBuilder.build(), mCaptureCallback, mBackgroundHandler);
@@ -730,6 +769,7 @@ public class Camera2Activity extends AbstractActivity implements View.OnClickLis
 
             // Use the same AE and AF modes as the preview.
             captureBuilder.set(CaptureRequest.CONTROL_AF_MODE, CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE);
+            captureBuilder.set(CaptureRequest.JPEG_QUALITY, (byte) 100);
             setAutoFlash(captureBuilder);
 
             // Orientation
@@ -785,6 +825,7 @@ public class Camera2Activity extends AbstractActivity implements View.OnClickLis
         try {
             // Reset the auto-focus trigger
             mPreviewRequestBuilder.set(CaptureRequest.CONTROL_AF_TRIGGER, CameraMetadata.CONTROL_AF_TRIGGER_CANCEL);
+            mPreviewRequestBuilder.set(CaptureRequest.JPEG_QUALITY, (byte) 100);
             setAutoFlash(mPreviewRequestBuilder);
             mCaptureSession.capture(mPreviewRequestBuilder.build(), mCaptureCallback, mBackgroundHandler);
             // After this, the camera will go back to the normal state of preview.

@@ -240,7 +240,6 @@ public class CardViewPagerActivityTest extends UITest {
                 Glide.with(RuntimeEnvironment.application)
                         .load("file:///android_asset/bus.png")
                         .bitmapTransform(new AngelManGlideTransform(RuntimeEnvironment.application, 10, 0, AngelManGlideTransform.CornerType.TOP))
-                        .override(280, 280)
                         .into(expectedImageView);
 
                 Bitmap expectedImage = ((GlideBitmapDrawable) expectedImageView.getDrawable()).getBitmap();
@@ -489,7 +488,6 @@ public class CardViewPagerActivityTest extends UITest {
 
             rm.load("file:///android_asset/bus.png")
                     .bitmapTransform(new AngelManGlideTransform(subject.getApplicationContext(), 10, 0, AngelManGlideTransform.CornerType.TOP))
-                    .override(280, 280)
                     .into(expectedImageView);
             Bitmap expectedImage = ((GlideBitmapDrawable)expectedImageView.getDrawable()).getBitmap();
             assertThat(equals(actualImage, expectedImage)).isTrue();
