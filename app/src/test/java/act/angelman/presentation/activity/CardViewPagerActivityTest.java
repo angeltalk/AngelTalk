@@ -137,6 +137,7 @@ public class CardViewPagerActivityTest extends UITest {
         View view = ((CardImageAdapter) subject.mViewPager.getAdapter()).getItemAt(4);
         assertThat(view.findViewById(R.id.card_video)).isVisible();
         assertThat(view.findViewById(R.id.card_image)).isVisible();
+        assertThat(view.findViewById(R.id.play_button)).isNotVisible();
         assertThat(subject.buttonContainer).isVisible();
     }
 
