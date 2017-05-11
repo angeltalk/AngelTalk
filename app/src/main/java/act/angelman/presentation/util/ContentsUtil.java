@@ -173,17 +173,24 @@ public class ContentsUtil {
 
         if (bitmap == null) return null;
 
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+        int w = 0;
+        int h = 0;
+
         if (kind == MediaStore.Images.Thumbnails.MINI_KIND) {
             // Scale down the bitmap if it's too large.
-            int width = bitmap.getWidth();
-            int height = bitmap.getHeight();
+
             int max = Math.max(width, height);
             if (max > 512) {
                 float scale = 512f / max;
-                int w = Math.round(scale * width);
-                int h = Math.round(scale * height);
+                w = Math.round(scale * width);
+                h = Math.round(scale * height);
                 bitmap = Bitmap.createScaledBitmap(bitmap, w, h, true);
+
             }
+            bitmap = Bitmap.createBitmap(bitmap, (int)(w*0.11), (int)(h*0.29), (int)(w*0.789), (int)(w*0.789));
+
         } else if (kind == MediaStore.Images.Thumbnails.MICRO_KIND) {
             bitmap = ThumbnailUtils.extractThumbnail(bitmap,
                     TARGET_SIZE_MICRO_THUMBNAIL,
