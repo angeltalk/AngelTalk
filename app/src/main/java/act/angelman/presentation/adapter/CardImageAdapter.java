@@ -99,7 +99,6 @@ public class CardImageAdapter extends PagerAdapter {
                 String imagePath = singleSectionItems.contentPath;
                 glide.load(ContentsUtil.getContentFile(imagePath))
                         .bitmapTransform(new AngelManGlideTransform(context, 10, 0, AngelManGlideTransform.CornerType.TOP))
-                        .override(280, 280)
                         .into(cardView.cardImage);
             } else if (singleSectionItems.cardType == CardModel.CardType.VIDEO_CARD) {
                 glide.load(ContentsUtil.getContentFile(ContentsUtil.getThumbnailPath(singleSectionItems.contentPath)))
