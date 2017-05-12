@@ -50,8 +50,8 @@ public class CameraGallerySelectionActivity extends AbstractActivity {
                 findViewById(R.id.camera_gallery_selection_container),
                 applicationManager.getCategoryModelColor()
         );
-        titleLayout.hideCardCountText(true);
-        titleLayout.hideListCardButton(true);
+        titleLayout.hideCardCountText();
+        titleLayout.hideListCardButton();
 
         editCardId = getIntent().getStringExtra(ApplicationConstants.EDIT_CARD_ID);
         if(editCardId == null) {
