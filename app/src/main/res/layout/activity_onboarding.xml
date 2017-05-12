@@ -9,33 +9,8 @@
     <android.support.v4.view.ViewPager
         android:id="@+id/onboarding_view_pager"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginBottom="80dp" />
-
-    <com.rd.PageIndicatorView
-        android:id="@+id/onboarding_indicator"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="40dp"
-        attrs:piv_animationType="scale"
-        attrs:piv_interactiveAnimation="true"
-        attrs:piv_radius="5dp"
-        attrs:piv_selectedColor="#78cfc7"
-        attrs:piv_unselectedColor="#989898"
-        attrs:piv_viewPager="@id/onboarding_view_pager" />
-
-    <ImageView
-        android:id="@+id/onboarding_finish"
-        android:layout_width="100dp"
-        android:layout_height="43dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="23dp"
-        android:src="@drawable/ic_onboarding_finish"
-        android:visibility="gone" />
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true" />
 
     <RelativeLayout
         android:id="@+id/onboarding_first_page"
