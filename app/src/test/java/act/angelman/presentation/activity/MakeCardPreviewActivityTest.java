@@ -219,6 +219,14 @@ public class MakeCardPreviewActivityTest extends UITest {
         verify(cardRepository).updateSingleCardContent(eq("1"), eq(CardModel.CardType.VIDEO_CARD.getValue()),eq(VIDEO_CONTENT_PATH),eq(VIDEO_THUMBNAIL_PATH));
     }
 
+    @Test
+    public void givenVideoCardEditIntent_whenClickPlayButton_thenHidePlayButton() throws Exception {
+        MakeCardPreviewActivity subject = setUpWithVideoContentEdit();
+        assertThat(subject.cardPreviewLayout.previewPlayButton.getVisibility()).isEqualTo(View.VISIBLE);
+        subject.cardPreviewLayout.previewPlayButton.performClick();
+        assertThat(subject.cardPreviewLayout.previewPlayButton.getVisibility()).isEqualTo(View.GONE);
+    }
+
     private MakeCardPreviewActivity setUpWithVideoContent() {
         Intent intent = new Intent();
         intent.putExtra(ContentsUtil.CONTENT_PATH, VIDEO_CONTENT_PATH);
