@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<appwidget-provider
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:initialLayout="@drawable/widget_on"
-    android:minHeight="72dp"
-    android:minWidth="72dp"
-    android:previewImage="@drawable/widget_on">
-</appwidget-provider>

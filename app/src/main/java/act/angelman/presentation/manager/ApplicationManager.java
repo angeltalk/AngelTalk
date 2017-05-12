@@ -2,15 +2,11 @@ package act.angelman.presentation.manager;
 
 import android.app.Activity;
 import android.app.ActivityManager;
-import android.appwidget.AppWidgetManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.annotation.DrawableRes;
 import android.support.annotation.VisibleForTesting;
 import android.view.View;
-import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import com.kakao.kakaolink.KakaoLink;
@@ -18,7 +14,6 @@ import com.kakao.util.KakaoParameterException;
 
 import act.angelman.R;
 import act.angelman.domain.model.CategoryModel;
-import act.angelman.presentation.custom.AngelmanWidgetProvider;
 import act.angelman.presentation.custom.ChildModeManager;
 import act.angelman.presentation.service.ScreenService;
 import act.angelman.presentation.util.ResourcesUtil;
@@ -90,7 +85,6 @@ public class ApplicationManager {
         edit.putBoolean(CHILD_MODE, true);
         if(!isServiceRunningCheck()) {
             Intent screenService = new Intent(context, ScreenService.class);
-            updateWidgetView(R.drawable.widget_on);
             context.startService(screenService);
         }
         edit.commit();
@@ -108,7 +102,6 @@ public class ApplicationManager {
                 context.stopService(stop);
             }
         }
-        updateWidgetView(R.drawable.widget_off);
         edit.commit();
         Toast.makeText(context, R.string.inform_hide_child_mode, Toast.LENGTH_LONG).show();
     }
@@ -125,14 +118,6 @@ public class ApplicationManager {
             }
         }
         return false;
-    }
-
-    private void updateWidgetView(@DrawableRes int drawable) {
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_angelman);
-        views.setImageViewResource(R.id.angelman_button, drawable);
-        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-        ComponentName thisWidget = new ComponentName(context, AngelmanWidgetProvider.class);
-        appWidgetManager.updateAppWidget(thisWidget, views);
     }
 
     public void changeChildMode(boolean mode) {
