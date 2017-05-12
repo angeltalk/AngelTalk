@@ -66,7 +66,7 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/show_hide_recycler_view"
         android:layout_width="match_parent"
-        app:layout_heightPercent="80%"
+        android:layout_height="match_parent"
         android:layout_below="@id/title_layout"
         android:background="@color/white" >
     </android.support.v7.widget.RecyclerView>
@@ -74,7 +74,7 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/change_order_recycler_view"
         android:layout_width="match_parent"
-        app:layout_heightPercent="80%"
+        android:layout_height="match_parent"
         android:layout_below="@id/title_layout"
         android:background="@color/white"
         android:visibility="gone">

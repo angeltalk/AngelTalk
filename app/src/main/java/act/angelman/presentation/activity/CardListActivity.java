@@ -135,8 +135,6 @@ public class CardListActivity extends AbstractActivity {
             cardList.get(position).hide = hide;
             cardRepository.updateSingleCardModelHide(cardList.get(position));
 
-            changeOrderRecyclerViewAdapter.setCardModelList(cardList);
-            changeOrderRecyclerViewAdapter.notifyDataSetChanged();
         }
     };
 
