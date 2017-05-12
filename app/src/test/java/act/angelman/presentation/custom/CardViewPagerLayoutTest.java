@@ -1,6 +1,7 @@
 package act.angelman.presentation.custom;
 
 import android.graphics.Bitmap;
+import android.support.annotation.NonNull;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -72,18 +73,7 @@ public class CardViewPagerLayoutTest extends UITest{
         when(repository.getSingleCardListWithCategoryId(anyInt(), anyBoolean())).thenReturn(getCardListWithCategoryId());
         subject.setCategoryData(setDefaultCategoryModel());
 
-        CardViewPager viewPager = subject.mViewPager;
-
-        assertThat(viewPager.getAdapter()).isNotNull();
-        assertThat(viewPager.getAdapter().getCount()).isNotEqualTo(0);
-
-        for (int i = 0; i < viewPager.getAdapter().getCount(); i++) {
-            viewPager.getAdapter().instantiateItem(viewPager, i);
-        }
-
-        viewPager.getAdapter().notifyDataSetChanged();
-        viewPager.invalidate();
-        viewPager.requestLayout();
+        CardViewPager viewPager = initViewPager();
 
         assertThat(((CardView) ((CardImageAdapter) viewPager.getAdapter()).getItemAt(0)).cardTitle.getText()).isEqualTo("버스");
 
@@ -131,6 +121,33 @@ public class CardViewPagerLayoutTest extends UITest{
 
         assertThat(subject.getBackground()).isEqualTo(getDrawable(R.drawable.background_gradient_yellow));
 
+    }
+
+    @Test
+    public void whenPageChanged_thenViewChange() throws Exception {
+        when(repository.getSingleCardListWithCategoryId(anyInt(), anyBoolean())).thenReturn(getCardListWithCategoryId());
+        subject.setCategoryData(setDefaultCategoryModel());
+
+        CardViewPager viewPager = initViewPager();
+
+        viewPager.setCurrentItem(1);
+        assertThat(subject.currentCardIndex).isEqualTo(1);
+    }
+
+    @NonNull
+    private CardViewPager initViewPager() {
+        CardViewPager viewPager = subject.mViewPager;
+        assertThat(viewPager.getAdapter()).isNotNull();
+        assertThat(viewPager.getAdapter().getCount()).isNotEqualTo(0);
+
+        for (int i = 0; i < viewPager.getAdapter().getCount(); i++) {
+            viewPager.getAdapter().instantiateItem(viewPager, i);
+        }
+
+        viewPager.getAdapter().notifyDataSetChanged();
+        viewPager.invalidate();
+        viewPager.requestLayout();
+        return viewPager;
     }
 
     private CategoryModel setDefaultCategoryModel() {
