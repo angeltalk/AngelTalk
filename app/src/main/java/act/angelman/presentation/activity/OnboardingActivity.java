@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
-import com.rd.PageIndicatorView;
 
 import javax.inject.Inject;
 
@@ -21,17 +20,8 @@ import act.angelman.presentation.adapter.OnboardingImageAdapter;
 import act.angelman.presentation.manager.ApplicationManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.OnPageChange;
 
 public class OnboardingActivity extends AbstractActivity {
-    public static int[] ONBOARDING_IMAGES = {
-            R.drawable.onboarding_1,
-            R.drawable.onboarding_2,
-            R.drawable.onboarding_3,
-            R.drawable.onboarding_4,
-            R.drawable.onboarding_5,
-    };
 
     @Inject
     ApplicationManager applicationManager;
@@ -39,17 +29,13 @@ public class OnboardingActivity extends AbstractActivity {
     @BindView(R.id.onboarding_view_pager)
     public ViewPager onboardingViewPager;
 
-    @BindView(R.id.onboarding_finish)
-    public ImageView onboardingFinishButton;
-
-    @BindView(R.id.onboarding_indicator)
-    public PageIndicatorView onboardingIndicatorView;
 
     @BindView(R.id.onboarding_first_page)
     public RelativeLayout onboardingFirstPageLayout;
 
+
     @BindView(R.id.onboaring_angelee)
-    public ImageView onboardingAngeleeImageView;
+    ImageView onboardingAngeleeImageView;
 
     private AngelmanApplication angelmanApplication;
 
@@ -67,24 +53,6 @@ public class OnboardingActivity extends AbstractActivity {
         }
     }
 
-    @OnClick(R.id.onboarding_finish)
-    public void onClickOnboardingFinish(View v) {
-        applicationManager.setChildMode();
-        moveToCategoryMenuActivity();
-    }
-
-    @OnPageChange(R.id.onboarding_view_pager)
-    public void onPageSelectedOnboardingViewPager(int position) {
-        if (isLastPage(position)) {
-            onboardingFinishButton.setVisibility(View.VISIBLE);
-            onboardingIndicatorView.setVisibility(View.GONE);
-
-        } else {
-            onboardingFinishButton.setVisibility(View.GONE);
-            onboardingIndicatorView.setVisibility(View.VISIBLE);
-        }
-    }
-
     private void showOnboardingView() {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -95,6 +63,7 @@ public class OnboardingActivity extends AbstractActivity {
         onboardingViewPager.setAdapter(new OnboardingImageAdapter(this));
     }
     private void initContentView() {
+
         Glide.with(OnboardingActivity.this)
                 .load(R.drawable.angelee)
                 .asGif()
@@ -108,10 +77,7 @@ public class OnboardingActivity extends AbstractActivity {
                 onboardingFirstPageLayout.setVisibility(View.GONE);
             }
         }, 4000);
-    }
 
-    private boolean isLastPage(int position) {
-        return position == ONBOARDING_IMAGES.length - 1;
     }
 
     private void moveToCategoryMenuActivity() {
@@ -119,4 +85,5 @@ public class OnboardingActivity extends AbstractActivity {
         startActivity(intent);
         finish();
     }
+
 }
