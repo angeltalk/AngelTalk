@@ -6,11 +6,6 @@ import android.util.AttributeSet;
 
 public class CardViewPager extends ViewPager {
 
-    public CardViewPager(Context context) {
-        super(context);
-        setViewPagerMargin();
-    }
-
     public CardViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
         setViewPagerMargin();
