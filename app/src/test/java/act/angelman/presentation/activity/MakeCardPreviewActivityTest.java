@@ -2,6 +2,7 @@ package act.angelman.presentation.activity;
 
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Environment;
 import android.view.View;
 
@@ -9,6 +10,8 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
@@ -29,13 +32,17 @@ import act.angelman.TestAngelmanApplication;
 import act.angelman.UITest;
 import act.angelman.domain.model.CardModel;
 import act.angelman.domain.repository.CardRepository;
+import act.angelman.presentation.custom.VideoCardTextureView;
 import act.angelman.presentation.manager.ApplicationConstants;
 import act.angelman.presentation.shadow.ShadowFileUtil;
 import act.angelman.presentation.util.ContentsUtil;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.robolectric.Shadows.shadowOf;
@@ -221,10 +228,24 @@ public class MakeCardPreviewActivityTest extends UITest {
 
     @Test
     public void givenVideoCardEditIntent_whenClickPlayButton_thenHidePlayButton() throws Exception {
-        MakeCardPreviewActivity subject = setUpWithVideoContentEdit();
+        final MakeCardPreviewActivity subject = setUpWithVideoContentEdit();
         assertThat(subject.cardPreviewLayout.previewPlayButton.getVisibility()).isEqualTo(View.VISIBLE);
+
+        VideoCardTextureView mockVideoCardTextureView = mock(VideoCardTextureView.class);
+        subject.cardPreviewLayout.cameraRecodeVideo = mockVideoCardTextureView;
+        doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                MediaPlayer.OnCompletionListener onCompletionListener = ((MediaPlayer.OnCompletionListener) invocation.getArguments()[0]);
+                assertThat(subject.cardPreviewLayout.previewPlayButton.getVisibility()).isEqualTo(View.GONE);
+                onCompletionListener.onCompletion(null);
+                return null;
+            }
+        }).when(mockVideoCardTextureView).play(any(MediaPlayer.OnCompletionListener.class));
+
         subject.cardPreviewLayout.previewPlayButton.performClick();
-        assertThat(subject.cardPreviewLayout.previewPlayButton.getVisibility()).isEqualTo(View.GONE);
+        assertThat(subject.cardPreviewLayout.previewPlayButton.getVisibility()).isEqualTo(View.VISIBLE);
+        verify(mockVideoCardTextureView).resetPlayer();
     }
 
     private MakeCardPreviewActivity setUpWithVideoContent() {
