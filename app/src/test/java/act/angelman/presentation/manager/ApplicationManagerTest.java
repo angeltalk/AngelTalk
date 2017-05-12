@@ -11,16 +11,20 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
+import java.lang.reflect.Field;
+
 import act.angelman.BuildConfig;
 import act.angelman.domain.model.CategoryModel;
+import act.angelman.presentation.custom.ChildModeManager;
 import act.angelman.presentation.shadow.ShadowKakaoLink;
+import act.angelman.presentation.shadow.ShadowKeyCharacterMap;
 import act.angelman.presentation.util.ResourcesUtil;
 
 import static act.angelman.presentation.util.ResourceMapper.IconType.SCHOOL;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, shadows = ShadowKakaoLink.class)
+@Config(constants = BuildConfig.class, shadows = {ShadowKakaoLink.class, ShadowKeyCharacterMap.class})
 public class ApplicationManagerTest {
 
     private ApplicationManager subject;
@@ -107,6 +111,16 @@ public class ApplicationManagerTest {
         assertThat(sharedPreferences.getBoolean(CHILD_MODE, false)).isTrue();
         subject.changeChildMode(false);
         assertThat(sharedPreferences.getBoolean(CHILD_MODE, true)).isFalse();
+    }
+
+    @Test
+    public void childModeManagerCreateCategoryMenuTest() throws  Exception{
+        ChildModeManager childModeManager = new ChildModeManager(RuntimeEnvironment.application.getApplicationContext());
+        Field field = ChildModeManager.class.getDeclaredField("categoryMenuLayout");
+        field.setAccessible(true);
+        assertThat(childModeManager.getCategoryMenuLayout()).isNull();
+        childModeManager.createAndAddCategoryMenu();
+        assertThat(childModeManager.getCategoryMenuLayout()).isNotNull();
     }
 
     private CategoryModel getCategoryModel() {
