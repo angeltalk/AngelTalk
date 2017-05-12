@@ -45,4 +45,21 @@ public class AutoFitTextureViewTest {
         expectedException.expectMessage("Size cannot be negative.");
         subject.setAspectRatio(-1, 1);
     }
+
+    @Test
+    public void onMeasureTest() throws Exception {
+        subject.measure(100, 200);
+        assertThat(subject.getMeasuredWidth()).isEqualTo(100);
+        assertThat(subject.getMeasuredHeight()).isEqualTo(200);
+
+        subject.setAspectRatio(16, 9);
+
+        subject.measure(1920 + 40, 1080);
+        assertThat(subject.getMeasuredWidth()).isEqualTo(1920);
+        assertThat(subject.getMeasuredHeight()).isEqualTo(1080);
+
+        subject.measure(1920, 1080 + 40);
+        assertThat(subject.getMeasuredWidth()).isEqualTo(1920);
+        assertThat(subject.getMeasuredHeight()).isEqualTo(1080);
+    }
 }
