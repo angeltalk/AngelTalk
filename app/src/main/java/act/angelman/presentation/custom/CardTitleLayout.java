@@ -36,6 +36,11 @@ public class CardTitleLayout extends RelativeLayout {
         initUI();
     }
 
+    public CardTitleLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        initUI();
+    }
+
     public void setCategoryModelTitle(String categoryModelTitle) {
         this.categoryModelTitle = categoryModelTitle;
         ((TextView) findViewById(R.id.category_item_title)).setText(categoryModelTitle);
@@ -66,11 +71,6 @@ public class CardTitleLayout extends RelativeLayout {
         findViewById(R.id.back_button).setOnClickListener(onClickListener);
     }
 
-    public CardTitleLayout(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        initUI();
-    }
-
     public void refreshCardCountText(int count, int total) {
         if (count == 0) {
             String message = String.format(getResources().getString(R.string.total_card), total - 1);
@@ -80,19 +80,11 @@ public class CardTitleLayout extends RelativeLayout {
         }
     }
 
-    public void hideCardCountText(boolean hide) {
-        if(hide){
-            cardCount.setVisibility(View.GONE);
-        } else {
-            cardCount.setVisibility(View.VISIBLE);
-        }
+    public void hideCardCountText() {
+        cardCount.setVisibility(View.GONE);
     }
-    public void hideListCardButton(boolean hide) {
-        if(hide){
-            listCardButton.setVisibility(View.GONE);
-        } else {
-            listCardButton.setVisibility(View.VISIBLE);
-        }
+    public void hideListCardButton() {
+        listCardButton.setVisibility(View.GONE);
     }
 
 }
