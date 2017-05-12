@@ -216,6 +216,26 @@ public class CardViewPagerActivityTest extends UITest {
     }
 
     @Test
+    public void givenClickedDeleteButton_whenClickedCancelButton_thenDismissDialog() throws Exception {
+        CardViewPager viewPager = subject.mViewPager;
+        assertThat(viewPager.getAdapter().getCount()).isEqualTo(5);
+
+        subject.mViewPager.setCurrentItem(2);
+        assertThat(((CardView) ((CardImageAdapter) viewPager.getAdapter()).getItemAt(2)).cardTitle.getText()).isEqualTo("우유");
+        assertThat(subject.cardDeleteButton.getVisibility()).isEqualTo(View.VISIBLE);
+
+        when(repository.deleteSingleCardWithCardIndex(anyInt(), anyInt())).thenReturn(true);
+        final List<CardModel> cardListWithCategoryId = getCardListWithCategoryId();
+        cardListWithCategoryId.remove(2);
+        when(repository.getSingleCardListWithCategoryId(anyInt(), anyBoolean())).thenReturn(cardListWithCategoryId);
+
+        ShadowAlertDialog shadowDialog = getShadowAlertDialog();
+        shadowDialog.getView().findViewById(R.id.cancel_button).performClick();
+
+        assertThat(shadowDialog.hasBeenDismissed()).isTrue();
+    }
+
+    @Test
     public void whenCardViewPagerActivityLaunched_thenShowCardsRelatedInCategory() throws Exception {
         CardViewPager viewPager = subject.mViewPager;
 
