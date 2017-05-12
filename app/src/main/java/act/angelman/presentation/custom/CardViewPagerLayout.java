@@ -33,7 +33,7 @@ public class CardViewPagerLayout extends RelativeLayout {
 
     List<CardModel> allCardListInSelectedCategory;
     private View subject;
-    public CardViewPager mViewPager;
+    CardViewPager mViewPager;
     private Context context;
     private OnClickBackButtonListener onClickBackButtonListener;
     private CardImageAdapter cardImageAdapter;
