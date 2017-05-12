@@ -26,18 +26,8 @@ public class CardTitleLayout extends RelativeLayout {
 
     private String categoryModelTitle;
 
-    public CardTitleLayout(Context context) {
-        super(context);
-        initUI();
-    }
-
     public CardTitleLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
-        initUI();
-    }
-
-    public CardTitleLayout(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
         initUI();
     }
 
