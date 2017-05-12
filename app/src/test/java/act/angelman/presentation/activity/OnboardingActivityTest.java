@@ -16,6 +16,7 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 
 import act.angelman.BuildConfig;
+import act.angelman.R;
 import act.angelman.TestAngelmanApplication;
 import act.angelman.UITest;
 import act.angelman.presentation.manager.ApplicationManager;
@@ -57,8 +58,7 @@ public class OnboardingActivityTest extends UITest{
     @Test
     public void givenFirstLaunched_whenFinishButtonClicked_thenMoveToCategoryMenuActivity() throws Exception {
         advance4Seconds();
-
-        subject.onboardingFinishButton.performClick();
+        subject.onboardingViewPager.findViewById(R.id.onboarding_finish).performClick();
 
         ShadowActivity shadowActivity = shadowOf(subject);
         Intent nextStartedActivity = shadowActivity.getNextStartedActivity();
@@ -70,7 +70,7 @@ public class OnboardingActivityTest extends UITest{
     public void givenWhenNotFirstLaunched_thenDirectlyMoveToCategoryMenuActivity() throws Exception {
         advance4Seconds();
 
-        subject.onboardingFinishButton.performClick();
+        subject.onboardingViewPager.findViewById(R.id.onboarding_finish).performClick();
 
         OnboardingActivity newSubject = setupActivity(OnboardingActivity.class);
 
