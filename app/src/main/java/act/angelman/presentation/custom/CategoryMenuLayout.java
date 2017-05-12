@@ -2,7 +2,6 @@ package act.angelman.presentation.custom;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import android.support.percent.PercentLayoutHelper;
 import android.support.percent.PercentRelativeLayout;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -182,12 +181,6 @@ public class CategoryMenuLayout extends LinearLayout {
 
         int p = Math.round(4*dm.density);
         subject.findViewById(R.id.lock_image).setPadding(p,p,p,p);
-
-        View view = findViewById(R.id.category_list);
-        PercentRelativeLayout.LayoutParams params = (PercentRelativeLayout.LayoutParams) view.getLayoutParams();
-        PercentLayoutHelper.PercentLayoutInfo info = params.getPercentLayoutInfo();
-        info.widthPercent = 0.89f;
-        view.requestLayout();
     }
 
     private boolean hasNavigationBar(Context context) {
