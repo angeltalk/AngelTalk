@@ -16,12 +16,11 @@ import java.util.List;
 
 import act.angelman.BuildConfig;
 import act.angelman.data.repository.datastore.SingleCardDataStore;
+import act.angelman.data.sqlite.CardColumns;
 import act.angelman.domain.model.CardModel;
 import act.angelman.presentation.util.ContentsUtil;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -108,19 +107,27 @@ public class CardDataRepositoryTest {
     @Test
     public void updateSingleCardNameTest() throws Exception {
         subject.updateSingleCardName("1","change");
-        verify(subject.dataStore).updateSingleCardModel(eq("1"), (ContentValues) anyObject());
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(CardColumns.NAME, "change");
+        verify(subject.dataStore).updateSingleCardModel("1", contentValues);
     }
 
     @Test
     public void updateSingleCardContentTest() throws Exception{
         subject.updateSingleCardContent("1", CardModel.CardType.PHOTO_CARD.getValue(),"/a","/b");
-        verify(subject.dataStore).updateSingleCardModel(eq("1"), (ContentValues) anyObject());
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(CardColumns.CARD_TYPE, CardModel.CardType.PHOTO_CARD.getValue());
+        contentValues.put(CardColumns.CONTENT_PATH, "/a");
+        contentValues.put(CardColumns.THUMBNAIL_PATH, "/b");
+        verify(subject.dataStore).updateSingleCardModel("1", contentValues);
     }
 
     @Test
     public void updateSingleCardVoiceTest() throws Exception{
         subject.updateSingleCardVoice("1","/b");
-        verify(subject.dataStore).updateSingleCardModel(eq("1"), (ContentValues) anyObject());
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(CardColumns.VOICE_PATH, "/b");
+        verify(subject.dataStore).updateSingleCardModel("1", contentValues);
     }
 
 
