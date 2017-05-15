@@ -17,26 +17,25 @@ import act.angelman.domain.repository.CardRepository;
 public class CardDataRepository implements CardRepository {
 
     private Context context;
+    SingleCardDataStore dataStore;
+
     public CardDataRepository(Context context) {
         this.context = context;
+        this.dataStore = new SingleCardSqliteDataStore(context);
     }
-
 
     @Override
     public long createSingleCardModel(CardModel cardModel) {
-        SingleCardDataStore dataStore = new SingleCardSqliteDataStore(context);
         return dataStore.createSingleCardModel(cardModel);
     }
 
     @Override
     public List<CardModel> getSingleCardListWithCategoryId(int selectedCategoryId) {
-        SingleCardDataStore dataStore = new SingleCardSqliteDataStore(context);
         return getDataModels(dataStore.getCardListWithCategoryId(selectedCategoryId));
     }
 
     @Override
     public List<CardModel> getSingleCardListWithCategoryId(int selectedCategoryId, boolean isHide) {
-        SingleCardDataStore dataStore = new SingleCardSqliteDataStore(context);
         List<CardModel> lists = getDataModels(dataStore.getCardListWithCategoryId(selectedCategoryId));
         return extractCardListByHide(isHide, lists);
     }
@@ -54,37 +53,31 @@ public class CardDataRepository implements CardRepository {
 
     @Override
     public boolean deleteSingleCardsWithCategory(int category) {
-        SingleCardDataStore dataStore = new SingleCardSqliteDataStore(context);
         return dataStore.removeSingleCardsInCategory(category);
     }
 
     @Override
     public boolean deleteSingleCardWithCardIndex(int categoryId, int cardIndex) {
-        SingleCardDataStore dataStore = new SingleCardSqliteDataStore(context);
         return dataStore.removeSingleCardModel(categoryId, cardIndex);
     }
 
     @Override
     public boolean updateSingleCardModelHide(CardModel cardModel) {
-        SingleCardDataStore dataStore = new SingleCardSqliteDataStore(context);
         return dataStore.updateSingleCardModelHide(cardModel.categoryId, cardModel.cardIndex, cardModel.hide);
     }
 
     @Override
     public boolean updateCategoryCardIndex(List<CardModel> cardModelList) {
-        SingleCardDataStore dataStore = new SingleCardSqliteDataStore(context);
         return dataStore.updateCategoryCardIndex(cardModelList);
     }
 
     @Override
     public CardModel getSingleCard(String cardId) {
-        SingleCardDataStore dataStore = new SingleCardSqliteDataStore(context);
         return dataStore.getSingleCard(cardId);
     }
 
     @Override
     public boolean updateSingleCardName(String cardId, String cardName) {
-        SingleCardDataStore dataStore = new SingleCardSqliteDataStore(context);
         ContentValues contentValues = new ContentValues();
         contentValues.put(CardColumns.NAME, cardName);
         return dataStore.updateSingleCardModel(cardId, contentValues);
@@ -92,7 +85,6 @@ public class CardDataRepository implements CardRepository {
 
     @Override
     public boolean updateSingleCardContent(String cardId, String cardType, String contentPath, String thumbnailPath) {
-        SingleCardDataStore dataStore = new SingleCardSqliteDataStore(context);
         ContentValues contentValues = new ContentValues();
         contentValues.put(CardColumns.CARD_TYPE, cardType);
         contentValues.put(CardColumns.CONTENT_PATH, contentPath);
@@ -102,7 +94,6 @@ public class CardDataRepository implements CardRepository {
 
     @Override
     public boolean updateSingleCardVoice(String cardId, String voicePath) {
-        SingleCardDataStore dataStore = new SingleCardSqliteDataStore(context);
         ContentValues contentValues = new ContentValues();
         contentValues.put(CardColumns.VOICE_PATH, voicePath);
         return dataStore.updateSingleCardModel(cardId, contentValues);
