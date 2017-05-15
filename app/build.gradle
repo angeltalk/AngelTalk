@@ -95,7 +95,9 @@ task coverageReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
                        '**/VideoFragment*.class',
                        '**/VideoCardTextureView*.class',
                        '**/*Transfer*.class',
-                       '**/DatabaseHelper.class'
+                       '**/DatabaseHelper.class',
+                       '**/AbstractActivity.class'
+
             ]
     )
 

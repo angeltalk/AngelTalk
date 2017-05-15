@@ -1,6 +1,8 @@
 package act.angelman.presentation.custom;
 
 import android.app.Activity;
+import android.support.percent.PercentRelativeLayout;
+import android.util.DisplayMetrics;
 import android.view.DragEvent;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -127,6 +129,17 @@ public class CategoryMenuLayoutTest extends UITest {
         CategoryMenuLayout.OnCategoryViewChangeListener mock = setMockChangeListener();
         fakeDragEventOnArea(false);
         verify(mock).onUnLock();
+    }
+
+    @Test
+    public void whenLunchedWithNavigationBar_thenSetSmallerMargin() throws Exception {
+        subject.setSmallerMarginLayout();
+
+        DisplayMetrics dm = subject.getResources().getDisplayMetrics();
+        PercentRelativeLayout.LayoutParams lp = ((PercentRelativeLayout.LayoutParams) subject.findViewById(R.id.clock_layout).getLayoutParams());
+        assertThat(lp.topMargin).isEqualTo(Math.round(10 * dm.density));
+        assertThat(lp.bottomMargin).isEqualTo(Math.round(2 * dm.density));
+        assertThat(subject.findViewById(R.id.lock_image).getPaddingStart()).isEqualTo(Math.round(4*dm.density));
     }
 
     private CategoryMenuLayout.OnCategoryViewChangeListener setMockChangeListener() {
