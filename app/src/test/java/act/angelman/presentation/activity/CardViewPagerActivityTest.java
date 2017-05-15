@@ -147,25 +147,16 @@ public class CardViewPagerActivityTest extends UITest {
     }
 
     @Test
-    public void whenClickedDeleteButton_thenShowsAlertDialog() throws Exception {
-        ShadowAlertDialog shadowDialog = getShadowAlertDialog();
-        assertThat(shadowDialog).isNotNull();
-    }
-
-    @Test
-    public void whenClickedDeleteButton_thenShowsAlertDialogMessage() throws Exception {
-        ShadowAlertDialog shadowDialog = getShadowAlertDialog();
-        shadowDialog.getView().findViewById(R.id.confirm_button).performClick();
-
-        assertThat(((TextView) shadowDialog.getView().findViewById(R.id.alert_message)).getText()).contains("카드를 삭제하시겠습니까?");
-    }
-
-    @Test
-    public void whenClickedDeleteButton_thenShowsCardTitleCorrectly() throws Exception {
+    public void whenClickedDeleteButton_thenShowConfirmDialogCorrectly() throws Exception {
+        // when
         subject.mViewPager.setCurrentItem(1);
         assertThat(((CardView) ((CardImageAdapter) subject.mViewPager.getAdapter()).getItemAt(1)).cardTitle.getText()).isEqualTo("물");
-        ShadowAlertDialog shadowDialog = getShadowAlertDialog();
+        subject.cardDeleteButton.performClick();
+        // then
+        ShadowAlertDialog shadowDialog = shadowOf(ShadowAlertDialog.getLatestAlertDialog());
+        assertThat(shadowDialog).isNotNull();
         assertThat(((TextView) shadowDialog.getView().findViewById(R.id.alert_message)).getText()).contains( "물" );
+        assertThat(((TextView) shadowDialog.getView().findViewById(R.id.alert_message)).getText()).contains("카드를 삭제하시겠습니까?");
     }
 
     @Test
@@ -208,7 +199,8 @@ public class CardViewPagerActivityTest extends UITest {
         cardListWithCategoryId.remove(2);
         when(repository.getSingleCardListWithCategoryId(anyInt(), anyBoolean())).thenReturn(cardListWithCategoryId);
 
-        ShadowAlertDialog shadowDialog = getShadowAlertDialog();
+        subject.cardDeleteButton.performClick();
+        ShadowAlertDialog shadowDialog = shadowOf(ShadowAlertDialog.getLatestAlertDialog());
         shadowDialog.getView().findViewById(R.id.confirm_button).performClick();
 
         assertThat(viewPager.getAdapter().getCount()).isEqualTo(4);
@@ -217,19 +209,10 @@ public class CardViewPagerActivityTest extends UITest {
 
     @Test
     public void givenClickedDeleteButton_whenClickedCancelButton_thenDismissDialog() throws Exception {
-        CardViewPager viewPager = subject.mViewPager;
-        assertThat(viewPager.getAdapter().getCount()).isEqualTo(5);
-
         subject.mViewPager.setCurrentItem(2);
-        assertThat(((CardView) ((CardImageAdapter) viewPager.getAdapter()).getItemAt(2)).cardTitle.getText()).isEqualTo("우유");
-        assertThat(subject.cardDeleteButton.getVisibility()).isEqualTo(View.VISIBLE);
+        subject.cardDeleteButton.performClick();
 
-        when(repository.deleteSingleCardWithCardIndex(anyInt(), anyInt())).thenReturn(true);
-        final List<CardModel> cardListWithCategoryId = getCardListWithCategoryId();
-        cardListWithCategoryId.remove(2);
-        when(repository.getSingleCardListWithCategoryId(anyInt(), anyBoolean())).thenReturn(cardListWithCategoryId);
-
-        ShadowAlertDialog shadowDialog = getShadowAlertDialog();
+        ShadowAlertDialog shadowDialog = shadowOf(ShadowAlertDialog.getLatestAlertDialog());
         shadowDialog.getView().findViewById(R.id.cancel_button).performClick();
 
         assertThat(shadowDialog.hasBeenDismissed()).isTrue();
@@ -737,6 +720,17 @@ public class CardViewPagerActivityTest extends UITest {
         assertThat(startedIntent.getComponent().getClassName()).isEqualTo(MakeCardActivity.class.getCanonicalName());
     }
 
+    @Test
+    public void givenShowingCardEditSelectPopup_whenClickCancelButton_thenDismissDialog() throws Exception {
+        // given
+        subject.findViewById(R.id.card_edit_button).performClick();
+        // when
+        AlertDialog dialog = (AlertDialog) ShadowAlertDialog.getLatestDialog();
+        dialog.findViewById(R.id.cancel_button).performClick();
+        // then
+        assertThat(shadowOf(dialog).hasBeenDismissed()).isTrue();
+    }
+
     public boolean equals(Bitmap bitmap1, Bitmap bitmap2) {
         ByteBuffer buffer1 = ByteBuffer.allocate(bitmap1.getHeight() * bitmap1.getRowBytes());
         bitmap1.copyPixelsToBuffer(buffer1);
@@ -765,12 +759,6 @@ public class CardViewPagerActivityTest extends UITest {
         return CardModel.builder()._id(id).name(name).contentPath(path).firstTime(time).categoryId(categoryId).cardIndex(cardIndex).cardType(cardType).thumbnailPath(thumbnailPath).hide(hide).build();
     }
 
-    private ShadowAlertDialog getShadowAlertDialog() {
-        subject.cardDeleteButton.performClick();
-
-        AlertDialog alert = ShadowAlertDialog.getLatestAlertDialog();
-        return shadowOf(alert);
-    }
 
     private CategoryModel getCategoryModel() {
         CategoryModel categoryModel = new CategoryModel();
