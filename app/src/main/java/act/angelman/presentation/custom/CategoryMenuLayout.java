@@ -2,6 +2,7 @@ package act.angelman.presentation.custom;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.support.annotation.VisibleForTesting;
 import android.support.percent.PercentRelativeLayout;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -171,7 +172,7 @@ public class CategoryMenuLayout extends LinearLayout {
         });
     }
 
-    private void setSmallerMarginLayout() {
+    @VisibleForTesting void setSmallerMarginLayout() {
         DisplayMetrics dm = getResources().getDisplayMetrics();
 
         PercentRelativeLayout.LayoutParams lp = ((PercentRelativeLayout.LayoutParams) subject.findViewById(R.id.clock_layout).getLayoutParams());
