@@ -22,6 +22,7 @@ import act.angelman.domain.model.CardModel;
 import act.angelman.domain.model.CardTransferModel;
 
 import static act.angelman.presentation.util.FileUtil.copyFile;
+import static android.graphics.Bitmap.createBitmap;
 import static android.media.ThumbnailUtils.OPTIONS_RECYCLE_INPUT;
 
 public class ContentsUtil {
@@ -94,8 +95,7 @@ public class ContentsUtil {
     public static void saveImage(Bitmap original, String fileName, int x, int y) {
         Matrix mtx = new Matrix();
         mtx.postRotate(90);
-        Bitmap croppedBitmap = Bitmap.createBitmap(original, x, y, 852, 852, mtx, true);
-
+        Bitmap croppedBitmap = createBitmap(original, x, y, 852, 852, mtx, true);
         FileOutputStream output = null;
         try {
             File file = new File(fileName);
@@ -128,7 +128,7 @@ public class ContentsUtil {
         matrix.postScale(scaleX, scaleY);
         matrix.postRotate(-90);
 
-        return Bitmap.createBitmap(
+        return createBitmap(
                 drawingCache, 0, 0, width, height, matrix, false);
     }
 
@@ -189,7 +189,7 @@ public class ContentsUtil {
                 bitmap = Bitmap.createScaledBitmap(bitmap, w, h, true);
 
             }
-            bitmap = Bitmap.createBitmap(bitmap, (int)(w*0.11), (int)(h*0.29), (int)(w*0.789), (int)(w*0.789));
+            bitmap = createBitmap(bitmap, (int)(w*0.11), (int)(h*0.29), (int)(w*0.789), (int)(w*0.789));
 
         } else if (kind == MediaStore.Images.Thumbnails.MICRO_KIND) {
             bitmap = ThumbnailUtils.extractThumbnail(bitmap,
