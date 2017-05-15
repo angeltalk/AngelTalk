@@ -77,16 +77,16 @@ public class MakeCardPreviewActivity extends AbstractActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        //super.onBackPressed();
 
         if(previewCardType == CardModel.CardType.PHOTO_CARD) {
-            Intent intent = new Intent(this, Camera2Activity.class);
-            intent.putExtra(ApplicationConstants.EDIT_CARD_ID, editCardId);
-            startActivity(intent);
-        } else if(previewCardType == CardModel.CardType.VIDEO_CARD) {
-            Intent intent = new Intent(this, VideoActivity.class);
-            intent.putExtra(ApplicationConstants.EDIT_CARD_ID, editCardId);
-            startActivity(intent);
+                Intent intent = new Intent(this, Camera2Activity.class);
+                intent.putExtra(ApplicationConstants.EDIT_CARD_ID, editCardId);
+                startActivity(intent);
+            } else if(previewCardType == CardModel.CardType.VIDEO_CARD) {
+                Intent intent = new Intent(this, VideoActivity.class);
+                intent.putExtra(ApplicationConstants.EDIT_CARD_ID, editCardId);
+                startActivity(intent);
         }
 
         ContentsUtil.deleteContentAndThumbnail(previewContentPath);

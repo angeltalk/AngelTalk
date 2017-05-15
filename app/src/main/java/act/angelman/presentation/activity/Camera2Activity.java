@@ -226,7 +226,6 @@ public class Camera2Activity extends AbstractActivity implements View.OnClickLis
         public void onImageAvailable(ImageReader reader) {
 //            mBackgroundHandler.post(new ImageSaver(reader.acquireNextImage(), mFile))
             mBackgroundHandler.post(new ImageSaver(reader.acquireNextImage()));
-
         }
     };
 
@@ -664,7 +663,7 @@ public class Camera2Activity extends AbstractActivity implements View.OnClickLis
         float centerX = viewRect.centerX();
         float centerY = viewRect.centerY();
 
-        if(getDeviceName().equals("LGE LG-F470K")) {
+        if (getDeviceName().equals("LGE LG-F470K")) {
             bufferRect.offset(centerX - bufferRect.centerX(), centerY - bufferRect.centerY());
             matrix.setRectToRect(bufferRect, viewRect, Matrix.ScaleToFit.FILL);
             matrix.postScale(1.0f, 0.63f, centerX, centerY);
@@ -680,6 +679,7 @@ public class Camera2Activity extends AbstractActivity implements View.OnClickLis
             } else if (Surface.ROTATION_180 == rotation) {
                 matrix.postRotate(180, centerX, centerY);
             }
+
         }
 
         mTextureView.setTransform(matrix);
@@ -790,6 +790,7 @@ public class Camera2Activity extends AbstractActivity implements View.OnClickLis
                     if (mState != STATE_PICTURE_FINISHED) {
                         unlockFocus();
                         mState = STATE_PICTURE_FINISHED;
+
                         Intent intent = new Intent(Camera2Activity.this, MakeCardPreviewActivity.class);
                         intent.putExtra(ContentsUtil.CONTENT_PATH, fileName);
                         intent.putExtra(ApplicationConstants.EDIT_CARD_ID, editCardId);
@@ -806,6 +807,7 @@ public class Camera2Activity extends AbstractActivity implements View.OnClickLis
             e.printStackTrace();
         }
     }
+
 
     /**
      * Retrieves the JPEG orientation from the specified screen rotation.
@@ -884,8 +886,16 @@ public class Camera2Activity extends AbstractActivity implements View.OnClickLis
             buffer.get(bytes);
             Bitmap original = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
 
+            if (original.getWidth() < original.getHeight()) {
+                Matrix mtx = new Matrix();
+                mtx.postRotate(270);
+                original = Bitmap.createBitmap(original, 0, 0, original.getWidth(), original.getHeight(), mtx, true);
+            }
+
             ContentsUtil.saveImage(original, fileName, 444, 112);
-            mImage.close();
+            if (mState == STATE_PICTURE_FINISHED) {
+                closeCamera();
+            }
         }
     }
 
