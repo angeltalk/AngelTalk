@@ -323,10 +323,13 @@ public class VideoCardTextureView extends TextureView implements TextureView.Sur
     @Override
     public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int width, int height) {
         Surface surface = new Surface(surfaceTexture);
-        mMediaPlayer.setSurface(surface);
-        mIsViewAvailable = true;
+        if(mMediaPlayer != null) {
+            mMediaPlayer.setSurface(surface);
+            mIsViewAvailable = true;
+        }
+
         if (mIsDataSourceSet && mIsPlayCalled && mIsVideoPrepared) {
-            Log.d(TAG,"View is available and play() was called.");
+            Log.d(TAG, "View is available and play() was called.");
             play(null);
         }
     }
