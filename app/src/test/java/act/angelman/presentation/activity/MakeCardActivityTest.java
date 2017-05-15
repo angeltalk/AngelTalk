@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -605,5 +606,10 @@ public class MakeCardActivityTest extends UITest{
 
     private Integer getCategoryModelColor() {
         return ResourcesUtil.getCardViewLayoutBackgroundBy(getCategoryModel().color);
+    }
+
+    @After
+    public void tearDown() throws Exception{
+        subject.onDestroy();
     }
 }
