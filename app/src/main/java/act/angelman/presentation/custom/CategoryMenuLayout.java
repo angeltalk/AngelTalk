@@ -3,7 +3,6 @@ package act.angelman.presentation.custom;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.support.annotation.VisibleForTesting;
-import android.support.percent.PercentRelativeLayout;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.DragEvent;
@@ -175,7 +174,7 @@ public class CategoryMenuLayout extends LinearLayout {
     @VisibleForTesting void setSmallerMarginLayout() {
         DisplayMetrics dm = getResources().getDisplayMetrics();
 
-        PercentRelativeLayout.LayoutParams lp = ((PercentRelativeLayout.LayoutParams) subject.findViewById(R.id.clock_layout).getLayoutParams());
+        RelativeLayout.LayoutParams lp = ((RelativeLayout.LayoutParams) subject.findViewById(R.id.clock_layout).getLayoutParams());
         lp.topMargin = Math.round(10 * dm.density);
         lp.bottomMargin = Math.round(2 * dm.density);
         subject.findViewById(R.id.clock_layout).setLayoutParams(lp);
