@@ -204,14 +204,8 @@ public class CategoryAdapter extends BaseAdapter {
     }
 
     private int getCardViewHeightSize() {
-        int dmH = context.getResources().getDisplayMetrics().heightPixels;
-        if (dmH > 2000)
-            return 580;
-        else if (dmH > 1300) {
-            return 426;
-        } else {
-            return 290;
-        }
+        int dmW = context.getResources().getDisplayMetrics().widthPixels;
+        return (int) (dmW * 0.4f);
     }
 
     private Drawable getResourceDrawable(int id) {
