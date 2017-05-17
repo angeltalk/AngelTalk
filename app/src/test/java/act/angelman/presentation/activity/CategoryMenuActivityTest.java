@@ -4,9 +4,13 @@ import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Build;
+import android.os.SystemClock;
 import android.support.v7.widget.CardView;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -23,6 +27,7 @@ import org.robolectric.shadows.ShadowActivity;
 import org.robolectric.shadows.ShadowAlertDialog;
 import org.robolectric.shadows.ShadowDrawable;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -35,6 +40,7 @@ import act.angelman.domain.model.CategoryModel;
 import act.angelman.domain.repository.CardRepository;
 import act.angelman.domain.repository.CategoryRepository;
 import act.angelman.network.transfer.CardTransfer;
+import act.angelman.presentation.adapter.CategoryAdapter;
 import act.angelman.presentation.util.ResourcesUtil;
 
 import static act.angelman.presentation.util.ResourceMapper.IconType.BUS;
@@ -43,6 +49,7 @@ import static act.angelman.presentation.util.ResourceMapper.IconType.FRIEND;
 import static act.angelman.presentation.util.ResourceMapper.IconType.PUZZLE;
 import static act.angelman.presentation.util.ResourceMapper.IconType.SCHOOL;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.robolectric.Shadows.shadowOf;
@@ -260,6 +267,32 @@ public class CategoryMenuActivityTest extends UITest {
         subject.onResume();
         // then
         assertThat(categoryList.getChildCount()).isEqualTo(6);
+    }
+
+    @Test
+    public void givenEasterEggPopup_whenOnBackPressed_thenPopupDismiss() throws Exception {
+
+        long downTime = SystemClock.uptimeMillis();
+        long eventTime = downTime + 100;
+        MotionEvent down_event = MotionEvent.obtain(downTime, eventTime, MotionEvent.ACTION_DOWN,0,0,0);
+        MotionEvent up_event = MotionEvent.obtain(downTime, eventTime, MotionEvent.ACTION_UP,0,0,0);
+
+        CategoryAdapter categoryAdapter = mock(CategoryAdapter.class);
+        when(categoryAdapter.getCategoryMenuStatus()).thenReturn(CategoryMenuActivity.CategoryMenuStatus.NONE);
+
+        PopupWindow easterEggPopup = mock(PopupWindow.class);
+        Field declaredField = CategoryMenuActivity.class.getDeclaredField("easterEggPopup");
+        declaredField.setAccessible(true);
+        declaredField.set(subject, easterEggPopup);
+
+        View viewById = subject.findViewById(R.id.logo_angeltalk);
+        viewById.dispatchTouchEvent(down_event);
+        viewById.dispatchTouchEvent(up_event);
+        viewById.dispatchTouchEvent(down_event);
+        viewById.dispatchTouchEvent(up_event);
+
+        subject.onBackPressed();
+        verify(easterEggPopup).dismiss();
     }
 
     private void setUpActivityWithCategoryList(int listSize) {
