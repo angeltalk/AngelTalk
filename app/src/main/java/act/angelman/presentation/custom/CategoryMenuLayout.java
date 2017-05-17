@@ -186,7 +186,11 @@ public class CategoryMenuLayout extends LinearLayout {
     private boolean hasNavigationBar(Context context) {
         boolean hasMenuKey = ViewConfiguration.get(context).hasPermanentMenuKey();
         boolean hasBackKey = KeyCharacterMap.deviceHasKey(KeyEvent.KEYCODE_BACK);
-        return !hasMenuKey && !hasBackKey;
+
+        DisplayMetrics dm = context.getResources().getDisplayMetrics();
+        double dmRatio = (double)dm.heightPixels/dm.widthPixels;
+
+        return !hasMenuKey && !hasBackKey && (dmRatio < 1.72);
     }
 
     private void setClockTypeface(Context context) {
