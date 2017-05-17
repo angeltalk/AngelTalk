@@ -3,6 +3,7 @@ package act.angelman.presentation.custom;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.support.annotation.VisibleForTesting;
+import android.support.percent.PercentRelativeLayout;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.DragEvent;
@@ -174,7 +175,7 @@ public class CategoryMenuLayout extends LinearLayout {
     @VisibleForTesting void setSmallerMarginLayout() {
         DisplayMetrics dm = getResources().getDisplayMetrics();
 
-        RelativeLayout.LayoutParams lp = ((RelativeLayout.LayoutParams) subject.findViewById(R.id.clock_layout).getLayoutParams());
+        PercentRelativeLayout.LayoutParams lp = ((PercentRelativeLayout.LayoutParams) subject.findViewById(R.id.clock_layout).getLayoutParams());
         lp.topMargin = Math.round(10 * dm.density);
         lp.bottomMargin = Math.round(2 * dm.density);
         subject.findViewById(R.id.clock_layout).setLayoutParams(lp);
@@ -186,11 +187,7 @@ public class CategoryMenuLayout extends LinearLayout {
     private boolean hasNavigationBar(Context context) {
         boolean hasMenuKey = ViewConfiguration.get(context).hasPermanentMenuKey();
         boolean hasBackKey = KeyCharacterMap.deviceHasKey(KeyEvent.KEYCODE_BACK);
-
-        DisplayMetrics dm = context.getResources().getDisplayMetrics();
-        double dmRatio = (double)dm.heightPixels/dm.widthPixels;
-
-        return !hasMenuKey && !hasBackKey && (dmRatio < 1.72);
+        return !hasMenuKey && !hasBackKey;
     }
 
     private void setClockTypeface(Context context) {
