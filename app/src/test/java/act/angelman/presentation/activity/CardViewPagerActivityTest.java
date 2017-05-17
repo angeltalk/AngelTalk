@@ -731,6 +731,12 @@ public class CardViewPagerActivityTest extends UITest {
         assertThat(shadowOf(dialog).hasBeenDismissed()).isTrue();
     }
 
+    @Test
+    public void whenActivityOnPause_thenIsNotForegroundRunning() throws Exception {
+        subject.onPause();
+        assertThat(subject.isForegroundRunning).isFalse();
+    }
+
     public boolean equals(Bitmap bitmap1, Bitmap bitmap2) {
         ByteBuffer buffer1 = ByteBuffer.allocate(bitmap1.getHeight() * bitmap1.getRowBytes());
         bitmap1.copyPixelsToBuffer(buffer1);
