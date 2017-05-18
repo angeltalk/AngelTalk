@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.VisibleForTesting;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -97,11 +98,10 @@ public class ShareCardActivity extends AbstractActivity {
         if (getString(R.string.kakao_scheme).equals(getIntent().getScheme())) {
             Uri uri = getIntent().getData();
             receiveKey = uri.getQueryParameter("key");
-        }else if ("app".equals(getIntent().getScheme())) {
+        }else if ("http".equals(getIntent().getScheme())) {
             Uri uri = getIntent().getData();
             receiveKey = uri.getQueryParameter("key");
         }
-
         downloadCard();
     }
 
@@ -227,6 +227,10 @@ public class ShareCardActivity extends AbstractActivity {
         cardRepository.createSingleCardModel(cardModel);
 
         return cardModel;
+    }
+
+    @VisibleForTesting String getReceiveKey(){
+        return receiveKey;
     }
 
 }
