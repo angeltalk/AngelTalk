@@ -105,21 +105,26 @@ public class CardTransfer {
                         }
 
                         final File localFile = new File(ContentsUtil.getTempFolder(context) + File.separator + "temp.zip");
-                        storage.getReferenceFromUrl(cardTransferModel.contentPath)
-                                .getFile(localFile)
-                                .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                                    @Override
-                                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                                        downloadCompleteListener.onSuccess(cardTransferModel, localFile.getAbsolutePath());
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Log.d("DOWNLOAD FAIL ", "download fail.");
-                                        downloadCompleteListener.onFail();
-                                    }
-                                });
+                        try {
+                            storage.getReferenceFromUrl(cardTransferModel.contentPath)
+                                    .getFile(localFile)
+                                    .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                                        @Override
+                                        public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                                            downloadCompleteListener.onSuccess(cardTransferModel, localFile.getAbsolutePath());
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.d("DOWNLOAD FAIL ", "download fail.");
+                                            downloadCompleteListener.onFail();
+                                        }
+                                    });
+                        } catch (IllegalArgumentException e) {
+                            Log.d("DOWNLOAD FAIL", "IllegalArgumentException : " + e.getMessage());
+                            downloadCompleteListener.onFail();
+                        }
                     }
 
                     @Override
