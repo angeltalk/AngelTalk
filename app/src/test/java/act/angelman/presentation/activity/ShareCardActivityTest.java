@@ -90,9 +90,10 @@ public class ShareCardActivityTest extends UITest {
     @Test
     public void givenWhenLaunchedAndSMSIntentReceived_thenShowLoadingAnimation() throws Exception {
         // then
-        message_subject = setupActivityWithIntent(new Intent(Intent.ACTION_VIEW, Uri.parse("app://angeltalk?key=a1234")));
+        message_subject = setupActivityWithIntent(new Intent(Intent.ACTION_VIEW, Uri.parse("http://share.angeltalk.info?key=a1234")));
         LinearLayout loadingViewLayout = (LinearLayout) message_subject.findViewById(R.id.on_loading_view);
         assertThat(loadingViewLayout.getVisibility()).isEqualTo(View.VISIBLE);
+        assertThat(message_subject.getReceiveKey()).isEqualTo("a1234");
     }
 
     @Test

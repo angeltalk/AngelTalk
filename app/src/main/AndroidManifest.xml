@@ -70,8 +70,9 @@
                 <data
                     android:host="@string/kakaolink_host"
                     android:scheme="@string/kakao_scheme" />
-                <data android:host="angeltalk"
-                      android:scheme="app" />
+                <data
+                    android:host="share.angeltalk.info"
+                    android:scheme="http" />
             </intent-filter>
         </activity>
         <activity
