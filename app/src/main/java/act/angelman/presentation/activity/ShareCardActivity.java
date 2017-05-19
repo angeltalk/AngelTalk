@@ -2,6 +2,8 @@ package act.angelman.presentation.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.VisibleForTesting;
@@ -232,5 +234,6 @@ public class ShareCardActivity extends AbstractActivity {
     @VisibleForTesting String getReceiveKey(){
         return receiveKey;
     }
+
 
 }
