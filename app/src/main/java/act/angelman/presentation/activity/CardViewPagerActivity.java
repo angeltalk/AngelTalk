@@ -3,6 +3,8 @@ package act.angelman.presentation.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -127,6 +129,12 @@ public class CardViewPagerActivity extends AbstractActivity {
     @OnClick(R.id.card_share_button)
     public void shareButtonOnClick() {
         stopPlayingCard();
+
+        if(!isConnectedToNetwork()){
+            Toast.makeText(context,"Please check your network status.",Toast.LENGTH_LONG).show();
+            return;
+        }
+
         new ShareMessengerSelectDialog(context, isKakaotalkInstalled(), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -415,4 +423,9 @@ public class CardViewPagerActivity extends AbstractActivity {
         return false;
     }
 
+    private boolean isConnectedToNetwork() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isConnected();
+    }
 }
