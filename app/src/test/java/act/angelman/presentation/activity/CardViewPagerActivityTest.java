@@ -6,15 +6,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.widget.AppCompatRadioButton;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
-import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.common.collect.Lists;
@@ -31,13 +29,12 @@ import org.robolectric.annotation.Config;
 import org.robolectric.fakes.RoboVibrator;
 import org.robolectric.shadows.ShadowActivity;
 import org.robolectric.shadows.ShadowAlertDialog;
+import org.robolectric.shadows.ShadowBitmap;
 import org.robolectric.shadows.ShadowLooper;
 import org.robolectric.shadows.ShadowToast;
 
 import java.io.File;
 import java.lang.reflect.Field;
-import java.nio.ByteBuffer;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,7 +58,6 @@ import act.angelman.presentation.custom.VideoCardTextureView;
 import act.angelman.presentation.manager.ApplicationConstants;
 import act.angelman.presentation.manager.ApplicationManager;
 import act.angelman.presentation.shadow.ShadowSnackbar;
-import act.angelman.presentation.util.AngelManGlideTransform;
 import act.angelman.presentation.util.ContentsUtil;
 import act.angelman.presentation.util.PlayUtil;
 import act.angelman.presentation.util.ResourcesUtil;
@@ -233,30 +229,10 @@ public class CardViewPagerActivityTest extends UITest {
         viewPager.invalidate();
         viewPager.requestLayout();
 
-        assertThat(((CardView) ((CardImageAdapter) viewPager.getAdapter()).getItemAt(1)).cardTitle.getText()).isEqualTo("물");
-
-        ImageView cardImageView = ((CardView) ((CardImageAdapter) viewPager.getAdapter()).getItemAt(1)).cardImage;
-
-        if (cardImageView.getDrawable() != null) {
-
-            Bitmap actualImage = ((GlideBitmapDrawable) cardImageView.getDrawable()).getBitmap();
-
-            try {
-                ImageView expectedImageView = new ImageView(RuntimeEnvironment.application);
-                expectedImageView.setLayoutParams(cardImageView.getLayoutParams());
-
-                Glide.with(RuntimeEnvironment.application)
-                        .load("file:///android_asset/bus.png")
-                        .bitmapTransform(new AngelManGlideTransform(RuntimeEnvironment.application, 10, 0, AngelManGlideTransform.CornerType.TOP))
-                        .into(expectedImageView);
-
-                Bitmap expectedImage = ((GlideBitmapDrawable) expectedImageView.getDrawable()).getBitmap();
-                assertThat(equals(actualImage, expectedImage)).isTrue();
-
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
+        CardView cardView = (CardView) ((CardImageAdapter) viewPager.getAdapter()).getItemAt(1);
+        ShadowBitmap loadedImage = shadowOf(((BitmapDrawable) cardView.cardImage.getDrawable()).getBitmap());
+        assertThat(cardView.cardTitle.getText()).isEqualTo("물");
+        assertThat(loadedImage.getDescription()).contains("contents"+File.separator+"water.jpg");
     }
 
 
@@ -483,26 +459,14 @@ public class CardViewPagerActivityTest extends UITest {
 
         assertThat(viewPager.getAdapter()).isNotNull();
         assertThat(viewPager.getAdapter().getCount()).isNotEqualTo(0);
+
+
+        CardView cardView = (CardView) ((CardImageAdapter) viewPager.getAdapter()).getItemAt(2);
+        ShadowBitmap loadedImage = shadowOf(((BitmapDrawable) cardView.cardImage.getDrawable()).getBitmap());
+        assertThat(cardView.cardTitle.getText()).isEqualTo("우유");
+        assertThat(loadedImage.getDescription()).contains("contents"+File.separator+"milk.png");
+
         assertThat(((CardView) ((CardImageAdapter) viewPager.getAdapter()).getItemAt(1)).cardTitle.getText()).isEqualTo("물");
-
-        ImageView cardImageView = ((CardView) ((CardImageAdapter) viewPager.getAdapter()).getItemAt(1)).cardImage;
-        Bitmap actualImage = null;
-        if (cardImageView != null && cardImageView.getDrawable() != null) {
-            actualImage = ((GlideBitmapDrawable) cardImageView.getDrawable()).getBitmap();
-        }
-        try {
-            ImageView expectedImageView = new ImageView(subject.getApplicationContext());
-            expectedImageView.setLayoutParams(cardImageView.getLayoutParams());
-
-            rm.load("file:///android_asset/bus.png")
-                    .bitmapTransform(new AngelManGlideTransform(subject.getApplicationContext(), 10, 0, AngelManGlideTransform.CornerType.TOP))
-                    .into(expectedImageView);
-            Bitmap expectedImage = ((GlideBitmapDrawable)expectedImageView.getDrawable()).getBitmap();
-            assertThat(equals(actualImage, expectedImage)).isTrue();
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
     }
 
     @Test
@@ -753,22 +717,12 @@ public class CardViewPagerActivityTest extends UITest {
         assertThat(subject.isForegroundRunning).isFalse();
     }
 
-    public boolean equals(Bitmap bitmap1, Bitmap bitmap2) {
-        ByteBuffer buffer1 = ByteBuffer.allocate(bitmap1.getHeight() * bitmap1.getRowBytes());
-        bitmap1.copyPixelsToBuffer(buffer1);
-
-        ByteBuffer buffer2 = ByteBuffer.allocate(bitmap2.getHeight() * bitmap2.getRowBytes());
-        bitmap2.copyPixelsToBuffer(buffer2);
-
-        return Arrays.equals(buffer1.array(), buffer2.array());
-    }
-
     private List<CardModel> getCardListWithCategoryId() {
 
         String contentFolder = ContentsUtil.getContentFolder(RuntimeEnvironment.application.getApplicationContext()) + File.separator;
 
         List<CardModel> ret = Lists.newArrayList(
-                makeSingleCardModel("1", "물", contentFolder+"water.png", "20010928_120020", 0, 0, CardModel.CardType.PHOTO_CARD, null, false),
+                makeSingleCardModel("1", "물", contentFolder+"water.jpg", "20010928_120020", 0, 0, CardModel.CardType.PHOTO_CARD, null, false),
                 makeSingleCardModel("2",  "우유", contentFolder+"milk.png", "20010928_120019", 0, 1, CardModel.CardType.PHOTO_CARD, null, false),
                 makeSingleCardModel("3",  "쥬스", contentFolder+"juice.png", "20010928_120015", 0, 2, CardModel.CardType.PHOTO_CARD, null, false),
                 makeSingleCardModel("4",  "젤리", contentFolder+"haribo.mp4", "20010928_120015", 0, 3, CardModel.CardType.VIDEO_CARD, contentFolder+"haribo.jpg", false)
