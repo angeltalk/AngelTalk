@@ -1,6 +1,8 @@
 package act.angelman.presentation.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.os.Handler;
@@ -25,7 +27,6 @@ import act.angelman.domain.model.CardModel;
 import act.angelman.presentation.custom.AddCardView;
 import act.angelman.presentation.custom.CardView;
 import act.angelman.presentation.custom.VideoCardTextureView;
-import act.angelman.presentation.util.AngelManGlideTransform;
 import act.angelman.presentation.util.ContentsUtil;
 import act.angelman.presentation.util.PlayUtil;
 
@@ -84,27 +85,19 @@ public class CardImageAdapter extends PagerAdapter {
             return cardView;
         } else {
             final CardView cardView = new CardView(context);
-            cardView.setDataModel(dataList.get(position));
-            cardView.cardImage.setScaleType(ImageView.ScaleType.FIT_XY);
-
-            CardModel singleSectionItems = dataList.get(position);
-
-            cardView.cardTitle.setText(singleSectionItems.name);
-            cardView.cardTitle.setTypeface(Typeface.createFromAsset(context.getAssets(), context.getString(R.string.font_medium)));
-            View cardContainer = cardView.findViewById(R.id.card_container);
+            final CardModel singleSectionItems = dataList.get(position);
 
             if (singleSectionItems.cardType == CardModel.CardType.PHOTO_CARD) {
                 cardView.findViewById(R.id.card_image).setVisibility(View.VISIBLE);
                 cardView.findViewById(R.id.card_video).setVisibility(View.GONE);
-                String imagePath = singleSectionItems.contentPath;
-                glide.load(ContentsUtil.getContentFile(imagePath))
-                        .bitmapTransform(new AngelManGlideTransform(context, 10, 0, AngelManGlideTransform.CornerType.TOP))
-                        .into(cardView.cardImage);
+                BitmapFactory.Options option = new BitmapFactory.Options();
+                option.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                cardView.cardImage.setImageBitmap(BitmapFactory.decodeFile( singleSectionItems.contentPath));
             } else if (singleSectionItems.cardType == CardModel.CardType.VIDEO_CARD) {
-                glide.load(ContentsUtil.getContentFile(ContentsUtil.getThumbnailPath(singleSectionItems.contentPath)))
-                        .bitmapTransform(new AngelManGlideTransform(context, 10, 0, AngelManGlideTransform.CornerType.TOP))
-                        .override(280, 280)
-                        .into(cardView.cardImage);
+                BitmapFactory.Options option = new BitmapFactory.Options();
+                option.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                cardView.cardImage.setImageBitmap(BitmapFactory.decodeFile( singleSectionItems.thumbnailPath));
+
                 VideoCardTextureView cardVideoView = ((VideoCardTextureView) cardView.findViewById(R.id.card_video));
                 cardVideoView.setVisibility(View.VISIBLE);
                 cardVideoView.setScaleType(VideoCardTextureView.ScaleType.CENTER_CROP);
@@ -114,6 +107,13 @@ public class CardImageAdapter extends PagerAdapter {
                 }
             }
 
+            cardView.setDataModel(dataList.get(position));
+            cardView.cardImage.setScaleType(ImageView.ScaleType.FIT_XY);
+
+            cardView.cardTitle.setText(singleSectionItems.name);
+            cardView.cardTitle.setTypeface(Typeface.createFromAsset(context.getAssets(), context.getString(R.string.font_medium)));
+
+            View cardContainer = cardView.findViewById(R.id.card_container);
             cardContainer.setOnClickListener(cardContainerOnClickListener);
             cardContainer.setOnLongClickListener(cardContainerOnLongClickListener);
 
