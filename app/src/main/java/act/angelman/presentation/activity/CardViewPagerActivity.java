@@ -3,8 +3,6 @@ package act.angelman.presentation.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -130,8 +128,8 @@ public class CardViewPagerActivity extends AbstractActivity {
     public void shareButtonOnClick() {
         stopPlayingCard();
 
-        if(!isConnectedToNetwork()){
-            Toast.makeText(context,"Please check your network status.",Toast.LENGTH_LONG).show();
+        if(!cardTransfer.isConnectedToNetwork()){
+            Toast.makeText(context, R.string.network_disconnected,Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -421,11 +419,5 @@ public class CardViewPagerActivity extends AbstractActivity {
             }
         }
         return false;
-    }
-
-    private boolean isConnectedToNetwork() {
-        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        return networkInfo != null && networkInfo.isConnected();
     }
 }
