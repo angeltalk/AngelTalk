@@ -36,6 +36,7 @@ import act.angelman.presentation.adapter.CardImageAdapter;
 import act.angelman.presentation.custom.CardTitleLayout;
 import act.angelman.presentation.custom.CardViewPager;
 import act.angelman.presentation.custom.CategorySelectDialog;
+import act.angelman.presentation.custom.CustomConfirmDialog;
 import act.angelman.presentation.listener.OnDownloadCompleteListener;
 import act.angelman.presentation.manager.ApplicationConstants;
 import act.angelman.presentation.manager.ApplicationManager;
@@ -75,7 +76,7 @@ public class ShareCardActivity extends AbstractActivity {
     LinearLayout loadingViewLayout;
 
     private CategorySelectDialog categorySelectDialog;
-
+    private CustomConfirmDialog cardDownloadFailDialog;
     private RequestManager glide;
     private String receiveKey;
     private Context context;
@@ -133,6 +134,11 @@ public class ShareCardActivity extends AbstractActivity {
 
 
     public void downloadCard() {
+        if(!cardTransfer.isConnectedToNetwork()){
+            showCardDownloadFailDialog();
+            return;
+        }
+
         cardTransfer.downloadCard(receiveKey, new OnDownloadCompleteListener() {
             @Override
             public void onSuccess(CardTransferModel cardTransferModel, String filePath) {
@@ -159,6 +165,7 @@ public class ShareCardActivity extends AbstractActivity {
             @Override
             public void onFail() {
                 FileUtil.removeFilesIn(ContentsUtil.getTempFolder(context));
+                showCardDownloadFailDialog();
             }
         });
     }
@@ -229,8 +236,23 @@ public class ShareCardActivity extends AbstractActivity {
         return cardModel;
     }
 
+    private void showCardDownloadFailDialog() {
+        cardDownloadFailDialog = new CustomConfirmDialog(this, getString(R.string.card_download_fail), new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finishAffinity();
+            }
+        }, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cardDownloadFailDialog.dismiss();
+                moveToCategoryMenuActivity();
+            }
+        });
+        cardDownloadFailDialog.show();
+    }
+
     @VisibleForTesting String getReceiveKey(){
         return receiveKey;
     }
-
 }
