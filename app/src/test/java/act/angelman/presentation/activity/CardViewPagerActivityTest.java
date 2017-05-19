@@ -52,6 +52,7 @@ import act.angelman.UITest;
 import act.angelman.domain.model.CardModel;
 import act.angelman.domain.model.CategoryModel;
 import act.angelman.domain.repository.CardRepository;
+import act.angelman.network.transfer.CardTransfer;
 import act.angelman.presentation.adapter.CardImageAdapter;
 import act.angelman.presentation.custom.AddCardView;
 import act.angelman.presentation.custom.CardView;
@@ -85,6 +86,9 @@ public class CardViewPagerActivityTest extends UITest {
     CardRepository repository;
 
     @Inject
+    CardTransfer cardTransfer;
+
+    @Inject
     ApplicationManager applicationManager;
 
     private CardViewPagerActivity subject;
@@ -92,6 +96,7 @@ public class CardViewPagerActivityTest extends UITest {
     @Before
     public void setUp() throws Exception {
         ((TestAngelmanApplication) RuntimeEnvironment.application).getAngelmanTestComponent().inject(this);
+        when(cardTransfer.isConnectedToNetwork()).thenReturn(true);
         when(repository.getSingleCardListWithCategoryId(anyInt(), anyBoolean())).thenReturn(getCardListWithCategoryId());
         when(applicationManager.getCategoryModel()).thenReturn(getCategoryModel());
         when(applicationManager.getCategoryModelColor()).thenReturn(getCategoryModelColor());
@@ -660,6 +665,17 @@ public class CardViewPagerActivityTest extends UITest {
     }
 
     @Test
+    public void whenClickShareButtonAndNetworkDisconnected_thenShowFailMessage() throws Exception {
+        // when
+        when(cardTransfer.isConnectedToNetwork()).thenReturn(false);
+        subject.cardShareButton.performClick();
+
+        // then
+        assertThat(ShadowToast.getLatestToast()).isNotNull();
+        assertThat(ShadowToast.getTextOfLatestToast()).isEqualTo("‘설정’ 앱에서 모바일 데이터나\nWi-Fi를 켜주세요");
+    }
+
+    @Test
     public void whenClickShareButtonAndSelectKakaotalkAndUploadFail_thenShowFailMessage() throws Exception {
         doAnswer(new Answer() {
             @Override
@@ -680,7 +696,7 @@ public class CardViewPagerActivityTest extends UITest {
 
         // then
         assertThat(ShadowToast.getLatestToast()).isNotNull();
-        assertThat(ShadowToast.getTextOfLatestToast()).isEqualTo("카드 공유가 실패하였습니다");
+        assertThat(ShadowToast.getTextOfLatestToast()).isEqualTo("카드 보내기에 실패했습니다.\n다시 시도해 보세요.");
     }
 
     @Test
