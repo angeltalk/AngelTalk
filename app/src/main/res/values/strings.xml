@@ -67,7 +67,7 @@
     <string name="card_loading_message">Please wait until the card is ready to show</string>
     <string name="inform_not_saved">The category you are creating will be aborted. Proceed?</string>
     <string name="one_left_delete_category">It should have at least a item. Make a new one after this?</string>
-    <string name="share_fail_message">Cannot send a card. Please try again!</string>
+    <string name="share_fail_message">Oops! We encountered an unexpected problem. \nPlease try again!</string>
     <string name="cannot_share_card_save_message">Cannot save the card. Please try again!</string>
     <string name="card_edit_title">Edit Card</string>
     <string name="category_eat_drink">EAT &amp; DRINK</string>
@@ -103,4 +103,6 @@
     <string name="onboarding_title">Application for children \nwith complex communication needs</string>
     <string name="bug_report_title">버그 리포트를 보내시겠습니까?</string>
     <string name="bug_report">사용성 개선에 많은 도움이 됩니다</string>
- </resources>
+    <string name="network_disconnected">Please turn on mobile data or wifi\nat the ‘setting’</string>
+    <string name="card_download_fail">Oops! We encountered an unexpected problem.\nGo back to the ‘Message’ app?</string>
+</resources>

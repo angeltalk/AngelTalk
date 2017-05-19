@@ -26,6 +26,13 @@ public class CustomConfirmDialog {
         });
     }
 
+    public CustomConfirmDialog(Context context, String message, View.OnClickListener positiveOnClickListener, View.OnClickListener negativeOnClickListener) {
+        this.context = context;
+        View innerView = ((Activity)context).getLayoutInflater().inflate(R.layout.custom_confirm_dialog, null);
+        ((TextView) innerView.findViewById(R.id.alert_message)).setText(message);
+        dialog = DialogUtil.buildCustomDialog(context, innerView, positiveOnClickListener, negativeOnClickListener);
+    }
+
     public void show() {
         DialogUtil.show(context, dialog);
     }

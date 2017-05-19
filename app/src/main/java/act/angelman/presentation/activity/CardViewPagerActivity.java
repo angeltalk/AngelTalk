@@ -127,6 +127,12 @@ public class CardViewPagerActivity extends AbstractActivity {
     @OnClick(R.id.card_share_button)
     public void shareButtonOnClick() {
         stopPlayingCard();
+
+        if(!cardTransfer.isConnectedToNetwork()){
+            Toast.makeText(context, R.string.network_disconnected,Toast.LENGTH_LONG).show();
+            return;
+        }
+
         new ShareMessengerSelectDialog(context, isKakaotalkInstalled(), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -414,5 +420,4 @@ public class CardViewPagerActivity extends AbstractActivity {
         }
         return false;
     }
-
 }
