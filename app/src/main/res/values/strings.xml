@@ -100,7 +100,7 @@
     <string name="voc_web_url">https://docs.google.com/forms/d/1jaWhUQse_1RmqOCG2vQ_oW3QNCGv4AYowrhS6BOqNnU/edit</string>
 
     <!-- onboarding -->
-    <string name="onboarding_title">엔젤만 아이와 엄마의 의사소통 도우미</string>
+    <string name="onboarding_title">Application for children \nwith complex communication needs</string>
     <string name="bug_report_title">버그 리포트를 보내시겠습니까?</string>
     <string name="bug_report">사용성 개선에 많은 도움이 됩니다</string>
  </resources>
