@@ -37,6 +37,7 @@ import act.angelman.domain.model.CardTransferModel;
 import act.angelman.domain.model.CategoryModel;
 import act.angelman.domain.repository.CardRepository;
 import act.angelman.domain.repository.CategoryRepository;
+import act.angelman.network.transfer.CardTransfer;
 import act.angelman.presentation.custom.CategorySelectDialog;
 import act.angelman.presentation.listener.OnDownloadCompleteListener;
 import act.angelman.presentation.util.ResourcesUtil;
@@ -64,12 +65,16 @@ public class ShareCardActivityTest extends UITest {
     @Inject
     CardRepository cardRepository;
 
+    @Inject
+    CardTransfer cardTransfer;
+
     private ShareCardActivity kakaotalk_subject;
     private ShareCardActivity message_subject;
 
     @Before
     public void setUp() throws Exception {
         ((TestAngelmanApplication) RuntimeEnvironment.application).getAngelmanTestComponent().inject(this);
+        when(cardTransfer.isConnectedToNetwork()).thenReturn(true);
     }
 
     @Test
@@ -94,6 +99,31 @@ public class ShareCardActivityTest extends UITest {
         LinearLayout loadingViewLayout = (LinearLayout) message_subject.findViewById(R.id.on_loading_view);
         assertThat(loadingViewLayout.getVisibility()).isEqualTo(View.VISIBLE);
         assertThat(message_subject.getReceiveKey()).isEqualTo("a1234");
+    }
+
+    @Test
+    public void givenLaunchedAndKaKaoIntentReceived_whenNetworkDisconnected_thenShowCardDownloadFailDialog() throws Exception {
+        // when
+        when(cardTransfer.isConnectedToNetwork()).thenReturn(false);
+        kakaotalk_subject = setupActivityWithIntent(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.kakao_scheme) + "://" + getString(R.string.kakaolink_host))));
+
+        //then
+        AlertDialog latestAlertDialog = ShadowAlertDialog.getLatestAlertDialog();
+        assertThat(((TextView) latestAlertDialog.findViewById(R.id.alert_message)).getText()).isEqualTo("카드 불러오기에 실패했습니다.\n대화창으로 다시 돌아갈까요?");
+     }
+
+    @Test
+    public void givenLaunchedAndKaKaoIntentReceived_whenNetworkDisconnectedAndClickCancelbutton_thenMoveToCategoryMenu() throws Exception {
+        // when
+        when(cardTransfer.isConnectedToNetwork()).thenReturn(false);
+        kakaotalk_subject = setupActivityWithIntent(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.kakao_scheme) + "://" + getString(R.string.kakaolink_host))));
+
+        //then
+        AlertDialog latestAlertDialog = ShadowAlertDialog.getLatestAlertDialog();
+        latestAlertDialog.findViewById(R.id.cancel_button).performClick();
+        ShadowActivity shadowActivity = shadowOf(kakaotalk_subject);
+        Intent startedIntent = shadowActivity.getNextStartedActivity();
+        assertThat(startedIntent.getComponent().getClassName()).isEqualTo(CategoryMenuActivity.class.getCanonicalName());
     }
 
     @Test

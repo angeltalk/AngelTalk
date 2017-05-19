@@ -2,6 +2,8 @@ package act.angelman.network.transfer;
 
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -58,39 +60,43 @@ public class CardTransfer {
         final String key = generateShareKey();
         final String zipFilePath = makeShareZipFile(cardModel, key);
 
-        storageReference.child(key).child(key + ".zip").putFile(Uri.fromFile(new File(zipFilePath))) // Zip File upload
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+        try {
+            storageReference.child(key).child(key + ".zip").putFile(Uri.fromFile(new File(zipFilePath))) // Zip File upload
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                        Uri uploadFileUri = getUploadFileUri(cardModel);
+                            Uri uploadFileUri = getUploadFileUri(cardModel);
 
-                        storageReference.child(key).child(key + IMAGE_FILE_EXTENSION).putFile(uploadFileUri)
-                                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                    @Override
-                                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                        Map<String, String> resultMap = Maps.newHashMap();
-                                        resultMap.put("key", key);
-                                        resultMap.put("url", taskSnapshot.getDownloadUrl() == null ? "" : taskSnapshot.getDownloadUrl().toString());
-                                        onSuccessListener.onSuccess(resultMap);
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                onFailureListener.onFailure(e);
-                            }
-                        });
-                        shareDataReference.child(key).child("cardType").setValue(cardModel.cardType.getValue());
-                        shareDataReference.child(key).child("name").setValue(cardModel.name);
-                        shareDataReference.child(key).child("contentPath").setValue(taskSnapshot.getDownloadUrl() == null ? "" : taskSnapshot.getDownloadUrl().toString());
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
+                            storageReference.child(key).child(key + IMAGE_FILE_EXTENSION).putFile(uploadFileUri)
+                                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                        @Override
+                                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                            Map<String, String> resultMap = Maps.newHashMap();
+                                            resultMap.put("key", key);
+                                            resultMap.put("url", taskSnapshot.getDownloadUrl() == null ? "" : taskSnapshot.getDownloadUrl().toString());
+                                            onSuccessListener.onSuccess(resultMap);
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    onFailureListener.onFailure(e);
+                                }
+                            });
+                            shareDataReference.child(key).child("cardType").setValue(cardModel.cardType.getValue());
+                            shareDataReference.child(key).child("name").setValue(cardModel.name);
+                            shareDataReference.child(key).child("contentPath").setValue(taskSnapshot.getDownloadUrl() == null ? "" : taskSnapshot.getDownloadUrl().toString());
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
 
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                onFailureListener.onFailure(e);
-            }
-        });
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    onFailureListener.onFailure(e);
+                }
+            });
+        } catch(IllegalArgumentException e) {
+            onFailureListener.onFailure(e);
+        }
 
     }
 
@@ -190,4 +196,9 @@ public class CardTransfer {
         return deviceId + (System.currentTimeMillis()%(1000*60*60*24*365));
     }
 
+    public boolean isConnectedToNetwork() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isConnected();
+    }
 }
