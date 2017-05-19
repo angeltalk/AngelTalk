@@ -66,26 +66,6 @@ public class DefaultDataGenerator {
         insertCategoryItemData(db,   3       , context.getString(R.string.sample_card_pool)       , contentFolder+"swimmingpool.jpg", null, "20161019_120012", CardModel.CardType.PHOTO_CARD, index++);
         insertCategoryItemData(db,   3       , context.getString(R.string.sample_card_mall)        , contentFolder+"mart.jpg",  null,"20161019_120012", CardModel.CardType.PHOTO_CARD, index++);
 
-        insertCategoryItemData(db,   3       , context.getString(R.string.sample_card_fast_food)    , contentFolder+"fastfood.jpg", null, "20161019_120012", CardModel.CardType.PHOTO_CARD, index++);
-        insertCategoryItemData(db,   3       , context.getString(R.string.sample_card_pool)       , contentFolder+"swimmingpool.jpg", null, "20161019_120012", CardModel.CardType.PHOTO_CARD, index++);
-        insertCategoryItemData(db,   3       , context.getString(R.string.sample_card_mall)        , contentFolder+"mart.jpg",  null,"20161019_120012", CardModel.CardType.PHOTO_CARD, index++);
-        insertCategoryItemData(db,   3       , context.getString(R.string.sample_card_fast_food)    , contentFolder+"fastfood.jpg", null, "20161019_120012", CardModel.CardType.PHOTO_CARD, index++);
-        insertCategoryItemData(db,   3       , context.getString(R.string.sample_card_pool)       , contentFolder+"swimmingpool.jpg", null, "20161019_120012", CardModel.CardType.PHOTO_CARD, index++);
-        insertCategoryItemData(db,   3       , context.getString(R.string.sample_card_mall)        , contentFolder+"mart.jpg",  null,"20161019_120012", CardModel.CardType.PHOTO_CARD, index++);
-        insertCategoryItemData(db,   3       , context.getString(R.string.sample_card_fast_food)    , contentFolder+"fastfood.jpg", null, "20161019_120012", CardModel.CardType.PHOTO_CARD, index++);
-        insertCategoryItemData(db,   3       , context.getString(R.string.sample_card_pool)       , contentFolder+"swimmingpool.jpg", null, "20161019_120012", CardModel.CardType.PHOTO_CARD, index++);
-        insertCategoryItemData(db,   3       , context.getString(R.string.sample_card_mall)        , contentFolder+"mart.jpg",  null,"20161019_120012", CardModel.CardType.PHOTO_CARD, index++);
-
-        insertCategoryItemData(db,   3       , context.getString(R.string.sample_card_fast_food)    , contentFolder+"fastfood.jpg", null, "20161019_120012", CardModel.CardType.PHOTO_CARD, index++);
-        insertCategoryItemData(db,   3       , context.getString(R.string.sample_card_pool)       , contentFolder+"swimmingpool.jpg", null, "20161019_120012", CardModel.CardType.PHOTO_CARD, index++);
-        insertCategoryItemData(db,   3       , context.getString(R.string.sample_card_mall)        , contentFolder+"mart.jpg",  null,"20161019_120012", CardModel.CardType.PHOTO_CARD, index++);
-        insertCategoryItemData(db,   3       , context.getString(R.string.sample_card_fast_food)    , contentFolder+"fastfood.jpg", null, "20161019_120012", CardModel.CardType.PHOTO_CARD, index++);
-        insertCategoryItemData(db,   3       , context.getString(R.string.sample_card_pool)       , contentFolder+"swimmingpool.jpg", null, "20161019_120012", CardModel.CardType.PHOTO_CARD, index++);
-        insertCategoryItemData(db,   3       , context.getString(R.string.sample_card_mall)        , contentFolder+"mart.jpg",  null,"20161019_120012", CardModel.CardType.PHOTO_CARD, index++);
-        insertCategoryItemData(db,   3       , context.getString(R.string.sample_card_fast_food)    , contentFolder+"fastfood.jpg", null, "20161019_120012", CardModel.CardType.PHOTO_CARD, index++);
-        insertCategoryItemData(db,   3       , context.getString(R.string.sample_card_pool)       , contentFolder+"swimmingpool.jpg", null, "20161019_120012", CardModel.CardType.PHOTO_CARD, index++);
-        insertCategoryItemData(db,   3       , context.getString(R.string.sample_card_mall)        , contentFolder+"mart.jpg",  null,"20161019_120012", CardModel.CardType.PHOTO_CARD, index++);
-
         index = 0;
         insertCategoryItemData(db,   4       , context.getString(R.string.sample_card_teacher)      ,contentFolder+"blank.jpg",  null,"20161019_120013", CardModel.CardType.PHOTO_CARD, index++);
         insertCategoryItemData(db,   4       , context.getString(R.string.sample_card_daddy)       ,contentFolder+"blank.jpg",  null,"20161019_120013", CardModel.CardType.PHOTO_CARD, index++);
