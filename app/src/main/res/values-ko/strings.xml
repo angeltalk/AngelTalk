@@ -97,9 +97,9 @@
     <string name="sample_card_teacher">선생님</string>
     <string name="sample_card_daddy">아빠</string>
     <string name="sample_card_mommy">엄마</string>
-    <string name="privacy_web_url">https://docs.google.com/document/d/11kuLEYTAYfpOV6_6Zb5-XJ3SGg5gRIkK40onnJBy0tQ/edit?usp=sharing</string>
-    <string name="terms_web_url">https://docs.google.com/document/d/1CGlQP7WT-N_T7cBJeiSYLEX5xVRBE05sBy35vVdVObs/edit?usp=sharing</string>
-    <string name="oss_web_url">https://docs.google.com/document/d/1fRievNVqIlK3QovqmoETGSBhISivNeGiAa7rGQfE3nU/edit?usp=sharing</string>
+    <string name="privacy_web_url">http://angeltalk.info/kr/popup/privacy_policy.html</string>
+    <string name="terms_web_url">http://angeltalk.info/kr/popup/terms_of_service.html</string>
+    <string name="oss_web_url">http://angeltalk.info/kr/popup/open_source.html</string>
     <string name="voc_web_url">https://docs.google.com/forms/d/1VSmDrx5wVaAOkoFwaalDy3Vf81APmAo5vBYlXifKFSQ/edit</string>
     <string name="network_disconnected">‘설정’ 앱에서 모바일 데이터나\nWi-Fi를 켜주세요</string>
     <string name="card_download_fail">카드 불러오기에 실패했습니다.\n대화창으로 다시 돌아갈까요?</string>
