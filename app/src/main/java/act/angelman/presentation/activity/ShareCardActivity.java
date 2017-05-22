@@ -99,7 +99,7 @@ public class ShareCardActivity extends AbstractActivity {
         if (getString(R.string.kakao_scheme).equals(getIntent().getScheme())) {
             Uri uri = getIntent().getData();
             receiveKey = uri.getQueryParameter("key");
-        }else if ("http".equals(getIntent().getScheme())) {
+        }else if ("app".equals(getIntent().getScheme())) {
             Uri uri = getIntent().getData();
             receiveKey = uri.getQueryParameter("key");
         }
