@@ -18,16 +18,15 @@
     <act.angelman.presentation.custom.CardViewPager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
-        app:layout_heightPercent="57.4%"
-        android:paddingTop="17.5dp"
+        app:layout_heightPercent="64.8%"
         android:layout_below="@id/title_container"/>
 
     <LinearLayout
         android:id="@+id/button_container"
-        app:layout_heightPercent="22.6%"
+        app:layout_heightPercent="15.2%"
         android:layout_width="match_parent"
         android:layout_gravity="bottom"
-        android:gravity="center"
+        android:gravity="center_horizontal"
         android:visibility="gone"
         android:layout_below="@id/view_pager">
 
