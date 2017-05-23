@@ -7,16 +7,11 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
-import android.view.GestureDetector;
-import android.view.Gravity;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -43,7 +38,6 @@ import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnTouch;
 
 import static act.angelman.R.string.delete_category;
 
@@ -92,9 +86,6 @@ public class CategoryMenuActivity extends AbstractActivity  implements Navigatio
     protected CategoryAdapter categoryAdapter;
     private CustomConfirmDialog dialog;
     private int selectedCategoryId = -1;
-    private PopupWindow easterEggPopup;
-    private GestureDetector logoGestureDetector;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +95,6 @@ public class CategoryMenuActivity extends AbstractActivity  implements Navigatio
         ((AngelmanApplication) getApplication()).getAngelmanComponent().inject(this);
 
         initNavigationView();
-        initEasterEggPopup();
         setCategoryGridView();
         launchNotification();
     }
@@ -125,9 +115,6 @@ public class CategoryMenuActivity extends AbstractActivity  implements Navigatio
     public void onBackPressed() {
         if (categoryAdapter.getCategoryMenuStatus() == CategoryMenuStatus.CATEGORY_DELETABLE) {
             changeCategoryMenuStatus(CategoryMenuStatus.CATEGORY_DEFAULT);
-        } else if (easterEggPopup != null) {
-            easterEggPopup.dismiss();
-            easterEggPopup = null;
         } else {
             super.onBackPressed();
         }
@@ -177,11 +164,6 @@ public class CategoryMenuActivity extends AbstractActivity  implements Navigatio
         }
     }
 
-    @OnTouch(R.id.logo_angeltalk)
-    public boolean onTouch(View v, MotionEvent event) {
-        return logoGestureDetector.onTouchEvent(event);
-    }
-
     private void initNavigationView() {
         drawer.closeDrawer(GravityCompat.START);
         navigationView.setNavigationItemSelectedListener(this);
@@ -200,21 +182,6 @@ public class CategoryMenuActivity extends AbstractActivity  implements Navigatio
             public void onDrawerClosed(View drawerView) {}
             @Override
             public void onDrawerStateChanged(int newState) {}
-        });
-    }
-
-    private void initEasterEggPopup() {
-        logoGestureDetector = new GestureDetector(getApplicationContext(), new GestureDetector.SimpleOnGestureListener() {
-            @Override
-            public boolean onDoubleTap(MotionEvent e) {
-                showEasterEggPopup();
-                return super.onDoubleTap(e);
-            }
-
-            @Override
-            public boolean onDown(MotionEvent e) {
-                return true;
-            }
         });
     }
 
@@ -240,20 +207,6 @@ public class CategoryMenuActivity extends AbstractActivity  implements Navigatio
                 break;
         }
         categoryAdapter.changeCategoryItemsStatus(categoryMenuStatus);
-    }
-
-    private void showEasterEggPopup() {
-        View view = getLayoutInflater().inflate(R.layout.easter_egg, null);
-        ImageView easterEggClose = (ImageView) view.findViewById(R.id.easter_egg_close);
-
-        easterEggClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                easterEggPopup.dismiss();
-            }
-        });
-        easterEggPopup = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        easterEggPopup.showAtLocation(view, Gravity.CENTER, 0, 0);
     }
 
     private void setCategoryItemClickListener(final GridView gridView, final List<CategoryModel> categoryList) {
