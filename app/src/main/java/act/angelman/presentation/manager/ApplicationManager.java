@@ -5,7 +5,9 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.support.annotation.VisibleForTesting;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
 
@@ -69,7 +71,6 @@ public class ApplicationManager {
     public int getCurrentCardIndex(){
         return preferences.getInt(CURRENT_CARD_INDEX,0);
     }
-
 
     @ResourcesUtil.BackgroundColors
     public int getCategoryModelColor(){
@@ -171,4 +172,34 @@ public class ApplicationManager {
         return preferences.getBoolean(ApplicationConstants.FIRST_LAUNCH, true);
     }
 
+    public static String getDeviceName() {
+        String manufacturer = Build.MANUFACTURER;
+        String model = Build.MODEL;
+        if (model.startsWith(manufacturer)) {
+            return capitalize(model);
+        }
+        return capitalize(manufacturer) + " " + model;
+    }
+
+    private static String capitalize(String str) {
+        if (TextUtils.isEmpty(str)) {
+            return str;
+        }
+        char[] arr = str.toCharArray();
+        boolean capitalizeNext = true;
+
+        StringBuilder phrase = new StringBuilder();
+        for (char c : arr) {
+            if (capitalizeNext && Character.isLetter(c)) {
+                phrase.append(Character.toUpperCase(c));
+                capitalizeNext = false;
+                continue;
+            } else if (Character.isWhitespace(c)) {
+                capitalizeNext = true;
+            }
+            phrase.append(c);
+        }
+
+        return phrase.toString();
+    }
 }
