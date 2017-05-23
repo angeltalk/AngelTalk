@@ -68,6 +68,7 @@ import act.angelman.domain.model.CardModel;
 import act.angelman.presentation.activity.MakeCardPreviewActivity;
 import act.angelman.presentation.custom.AutoFitTextureView;
 import act.angelman.presentation.manager.ApplicationConstants;
+import act.angelman.presentation.manager.ApplicationManager;
 import act.angelman.presentation.util.ContentsUtil;
 
 public class VideoFragment extends Fragment
@@ -266,18 +267,23 @@ public class VideoFragment extends Fragment
     private static Size chooseOptimalSize(Size[] choices, int width, int height, Size aspectRatio) {
         // Collect the supported resolutions that are at least as big as the preview Surface
         List<Size> bigEnough = Lists.newArrayList();
+        List<Size> bigEnough2 = Lists.newArrayList();
         int w = aspectRatio.getWidth();
         int h = aspectRatio.getHeight();
         for (Size option : choices) {
-            if (option.getHeight() == option.getWidth() * h / w &&
-                    option.getWidth() >= width && option.getHeight() >= height) {
-                bigEnough.add(option);
+            if ( option.getHeight() == option.getWidth() * h / w ) {
+                bigEnough2.add(option);
+                if( option.getWidth() >= width && option.getHeight() >= height) {
+                   bigEnough.add(option);
+                }
             }
         }
 
         // Pick the smallest of those, assuming we found any
         if (bigEnough.size() > 0) {
             return Collections.min(bigEnough, new CompareSizesByArea());
+        } if(bigEnough2.size() >0) {
+            return Collections.max(bigEnough2, new CompareSizesByArea());
         } else {
             Log.e(TAG, "Couldn't find any suitable preview size");
             return choices[0];
@@ -532,6 +538,11 @@ public class VideoFragment extends Fragment
         } else if (Surface.ROTATION_180 == rotation) {
             matrix.postRotate(180, centerX, centerY);
         }
+
+        if ( ApplicationManager.getDeviceName().contains("SM-G850")) {
+            matrix.postScale(1.0f, 1.66f, 0, 0);
+        }
+
         mTextureView.setTransform(matrix);
     }
 

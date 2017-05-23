@@ -1,15 +1,21 @@
 package act.angelman.presentation.custom;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Matrix;
 import android.graphics.SurfaceTexture;
 import android.media.MediaPlayer;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.KeyCharacterMap;
+import android.view.KeyEvent;
 import android.view.Surface;
 import android.view.TextureView;
+import android.view.ViewConfiguration;
 
 import java.io.IOException;
+
+import act.angelman.presentation.manager.ApplicationManager;
 
 public class VideoCardTextureView extends TextureView implements TextureView.SurfaceTextureListener {
 
@@ -25,6 +31,7 @@ public class VideoCardTextureView extends TextureView implements TextureView.Sur
     private boolean mIsViewAvailable;
     private boolean mIsVideoPrepared;
     private boolean mIsPlayCalled;
+    private Context context;
 
     private ScaleType mScaleType;
     private State mState;
@@ -41,16 +48,19 @@ public class VideoCardTextureView extends TextureView implements TextureView.Sur
 
     public VideoCardTextureView(Context context) {
         super(context);
+        this.context = context;
         initView();
     }
 
     public VideoCardTextureView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        this.context = context;
         initView();
     }
 
     public VideoCardTextureView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        this.context = context;
         initView();
     }
 
@@ -69,22 +79,21 @@ public class VideoCardTextureView extends TextureView implements TextureView.Sur
         float viewWidth = getWidth();
         float viewHeight = getHeight();
 
-        float scaleX = 1.0f;
-        float scaleY = 1.0f;
-
-        if (mVideoWidth > viewWidth && mVideoHeight > viewHeight) {
-            scaleX = mVideoWidth / viewWidth;
-            scaleY = mVideoHeight / viewHeight;
-        } else if (mVideoWidth < viewWidth && mVideoHeight < viewHeight) {
-            scaleY = viewWidth / mVideoWidth;
-            scaleX = viewHeight / mVideoHeight;
-        } else if (viewWidth > mVideoWidth) {
-            scaleX = viewWidth / mVideoWidth;
-        } else if (viewHeight > mVideoHeight) {
-            scaleY = viewHeight / mVideoHeight;
+        if(viewWidth == 0 || viewHeight == 0) {
+            return;
         }
 
-        // Calculate pivot points, in our case crop from center
+        float scaleX = getRootView().getWidth() / viewWidth;
+        float scaleY = (getRootView().getHeight() * 3 / 4) / viewHeight;
+
+        int navigationBarHeight = 0;
+        if(hasNavigationBar()) {
+            Resources resources = context.getResources();
+            int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
+            if (resourceId > 0) {
+                navigationBarHeight = resources.getDimensionPixelSize(resourceId);
+            }
+        }
 
         switch (mScaleType) {
             case TOP:
@@ -97,7 +106,7 @@ public class VideoCardTextureView extends TextureView implements TextureView.Sur
                 break;
             case CENTER_CROP:
                 pivotPointX = (int) (viewWidth / 2);
-                pivotPointY = (int) (viewHeight * 2 / 3 );
+                pivotPointY = (int) ((viewHeight - navigationBarHeight) * 0.66f);
                 break;
             default:
                 pivotPointX = (int) (viewWidth / 2);
@@ -105,10 +114,21 @@ public class VideoCardTextureView extends TextureView implements TextureView.Sur
                 break;
         }
 
+        if (ApplicationManager.getDeviceName().contains("SM-G850")) {
+            scaleY *= 1.66f;
+            pivotPointY /= 2.4f;
+        }
+
         Matrix matrix = new Matrix();
         matrix.setScale(scaleX, scaleY, pivotPointX, pivotPointY);
 
         setTransform(matrix);
+    }
+
+    private boolean hasNavigationBar() {
+        boolean hasMenuKey = ViewConfiguration.get(context).hasPermanentMenuKey();
+        boolean hasBackKey = KeyCharacterMap.deviceHasKey(KeyEvent.KEYCODE_BACK);
+        return !hasMenuKey && !hasBackKey;
     }
 
     private void initPlayer() {
@@ -192,6 +212,9 @@ public class VideoCardTextureView extends TextureView implements TextureView.Sur
      * If video is stopped or ended and play() method was called, video will start over.
      */
     public void play(MediaPlayer.OnCompletionListener completionListener) {
+        if (mMediaPlayer == null ) {
+            initPlayer();
+        }
         if (!mIsDataSourceSet) {
             Log.d(TAG,"play() was called but data source was not set.");
             return;

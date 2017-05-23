@@ -30,7 +30,6 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
@@ -54,6 +53,7 @@ import act.angelman.R;
 import act.angelman.domain.model.CardModel;
 import act.angelman.presentation.custom.AutoFitTextureView;
 import act.angelman.presentation.manager.ApplicationConstants;
+import act.angelman.presentation.manager.ApplicationManager;
 import act.angelman.presentation.util.ContentsUtil;
 import act.angelman.presentation.util.PlayUtil;
 
@@ -661,7 +661,7 @@ public class Camera2Activity extends AbstractActivity implements View.OnClickLis
         float centerX = viewRect.centerX();
         float centerY = viewRect.centerY();
 
-        if (getDeviceName().equals("LGE LG-F470K")) {
+        if (ApplicationManager.getDeviceName().equals("LGE LG-F470K")) {
             bufferRect.offset(centerX - bufferRect.centerX(), centerY - bufferRect.centerY());
             matrix.setRectToRect(bufferRect, viewRect, Matrix.ScaleToFit.FILL);
             matrix.postScale(1.0f, 0.63f, centerX, centerY);
@@ -683,36 +683,6 @@ public class Camera2Activity extends AbstractActivity implements View.OnClickLis
         mTextureView.setTransform(matrix);
     }
 
-    private static String getDeviceName() {
-        String manufacturer = Build.MANUFACTURER;
-        String model = Build.MODEL;
-        if (model.startsWith(manufacturer)) {
-            return capitalize(model);
-        }
-        return capitalize(manufacturer) + " " + model;
-    }
-
-    private static String capitalize(String str) {
-        if (TextUtils.isEmpty(str)) {
-            return str;
-        }
-        char[] arr = str.toCharArray();
-        boolean capitalizeNext = true;
-
-        StringBuilder phrase = new StringBuilder();
-        for (char c : arr) {
-            if (capitalizeNext && Character.isLetter(c)) {
-                phrase.append(Character.toUpperCase(c));
-                capitalizeNext = false;
-                continue;
-            } else if (Character.isWhitespace(c)) {
-                capitalizeNext = true;
-            }
-            phrase.append(c);
-        }
-
-        return phrase.toString();
-    }
 
     /**
      * Initiate a still image capture.
