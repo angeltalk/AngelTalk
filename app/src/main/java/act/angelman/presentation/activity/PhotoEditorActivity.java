@@ -20,7 +20,6 @@ import act.angelman.domain.model.CardModel;
 import act.angelman.domain.repository.CardRepository;
 import act.angelman.presentation.manager.ApplicationConstants;
 import act.angelman.presentation.util.ContentsUtil;
-import act.angelman.presentation.util.FontUtil;
 import act.angelman.presentation.util.ResolutionUtil;
 
 public class PhotoEditorActivity extends AbstractActivity {

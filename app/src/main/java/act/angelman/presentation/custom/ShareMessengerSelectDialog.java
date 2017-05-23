@@ -7,8 +7,6 @@ import android.support.v7.widget.AppCompatRadioButton;
 import android.view.View;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import act.angelman.R;
 import act.angelman.presentation.manager.ApplicationConstants;
 import act.angelman.presentation.util.DialogUtil;

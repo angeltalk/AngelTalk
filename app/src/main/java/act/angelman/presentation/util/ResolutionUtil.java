@@ -7,7 +7,7 @@ public class ResolutionUtil {
     static String TAG = ResolutionUtil.class.getSimpleName();
 
     public static float getDensity(Context con) {
-        float density = 0.0f;
+        float density;
         density  = con.getResources().getDisplayMetrics().density;
         Log.d(TAG, "density = " + density);
         return density;
@@ -15,7 +15,7 @@ public class ResolutionUtil {
 
 
     public static int getDpToPix(Context con, double dp) {
-        float density = 0.0f;
+        float density;
         density  = con.getResources().getDisplayMetrics().density;
         Log.d(TAG, "density = " + density);
         return (int)(dp * density + 0.5);

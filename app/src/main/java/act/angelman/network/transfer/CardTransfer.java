@@ -145,8 +145,14 @@ public class CardTransfer {
     private Uri getUploadFileUri(CardModel cardModel) {
         Uri uploadFileUri;
         if (cardModel.cardType == CardModel.CardType.PHOTO_CARD) {
+            if(getAbsoluteContentsPath(cardModel.contentPath) == null){
+                return null;
+            }
             uploadFileUri = Uri.fromFile(new File(getAbsoluteContentsPath(cardModel.contentPath)));
         } else {
+            if(getAbsoluteContentsPath(cardModel.thumbnailPath) == null){
+                return null;
+            }
             uploadFileUri = Uri.fromFile(new File(getAbsoluteContentsPath(cardModel.thumbnailPath)));
         }
         return uploadFileUri;
@@ -175,7 +181,7 @@ public class CardTransfer {
     private String getAbsoluteContentsPath(String filePath) {
         File contentFile = ContentsUtil.getContentFile(filePath);
         if(contentFile != null){
-            return ContentsUtil.getContentFile(filePath).getAbsolutePath();
+            return contentFile.getAbsolutePath();
         }else{
             return null;
         }

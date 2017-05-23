@@ -163,8 +163,7 @@ public class ContentsUtil {
             retriever.setDataSource(filePath);
             bitmap = retriever.getFrameAtTime(time);
         } catch (IllegalArgumentException ex) {
-        } catch (RuntimeException ex) {
-        } finally {
+        }  finally {
             try {
                 retriever.release();
             } catch (RuntimeException ex) {
@@ -261,7 +260,7 @@ public class ContentsUtil {
                     copyFile(file, new File(cardModel.voicePath));
                 }
             } catch (IOException e) {
-                Log.e("error", "copyShardFile error : " + e.getStackTrace());
+                Log.e("error", "copyShardFile error : " + e.getStackTrace().toString());
             }
         }
     }
