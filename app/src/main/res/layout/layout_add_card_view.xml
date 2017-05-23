@@ -11,7 +11,7 @@
         android:layout_centerInParent="true"
         android:background="@drawable/rectangle_shape"
         android:elevation="10dp"
-        app:layout_heightPercent="100%"
+        app:layout_heightPercent="84%"
         app:layout_widthPercent="78%">
 
         <TextView
@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="120dp"
+            android:layout_marginBottom="110dp"
             android:text="@string/add_new_card"
             android:textSize="23dp" />
 

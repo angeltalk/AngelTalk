@@ -11,7 +11,7 @@
         android:layout_centerInParent="true"
         android:background="@drawable/rectangle_shape"
         android:elevation="10dp"
-        app:layout_heightPercent="100%"
+        app:layout_heightPercent="84%"
         app:layout_widthPercent="78%">
 
         <RelativeLayout
