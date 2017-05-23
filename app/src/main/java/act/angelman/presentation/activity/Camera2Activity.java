@@ -520,8 +520,6 @@ public class Camera2Activity extends AbstractActivity implements View.OnClickLis
             }
         } catch (CameraAccessException e) {
             e.printStackTrace();
-        } catch (NullPointerException e) {
-            e.printStackTrace();
         }
     }
 
