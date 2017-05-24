@@ -15,6 +15,7 @@ import java.util.List;
 
 import act.angelman.R;
 import act.angelman.domain.model.CardModel;
+import act.angelman.presentation.custom.CustomSnackBar;
 import act.angelman.presentation.util.AngelManGlideTransform;
 import act.angelman.presentation.util.ContentsUtil;
 
@@ -49,6 +50,13 @@ public class ChangeOrderRecyclerViewAdapter extends RecyclerView.Adapter<ChangeO
         holder.showHideIcon.setVisibility(View.GONE);
         holder.hideIcon.setVisibility(View.GONE);
         holder.itemMoveIcon.setVisibility(View.VISIBLE);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CustomSnackBar.styledSnackBarWithDuration(context, v.getRootView(), context.getResources().getString(R.string.change_order_toast_message), 2000);
+            }
+        });
     }
 
     @Override
@@ -84,10 +92,6 @@ public class ChangeOrderRecyclerViewAdapter extends RecyclerView.Adapter<ChangeO
 
     public void onItemSelected() {
 
-    }
-
-    public void setCardModelList(List<CardModel> cardModelList) {
-        this.cardModelList = cardModelList;
     }
 
     public static class ChangeOrderRecyclerViewHolder extends RecyclerView.ViewHolder {
