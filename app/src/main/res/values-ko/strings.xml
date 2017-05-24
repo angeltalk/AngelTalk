@@ -2,7 +2,7 @@
     <string name="app_name">AngelTalk</string>
     <string name="share_functions_url">https://us-central1-angeltalk-app-a26d8.cloudfunctions.net/redirectApp/</string>
     <string name="shortener_api_key">AIzaSyAZQwhfKiXxAGMZx4aoKHv9A54YoFMLeBQ</string>
-    <string name="web_url">http://angeltalk.info</string>
+    <string name="web_url">https://www.angeltalk.info</string>
     <string name="font_demilight">NotoSansKR-DemiLight-Hestia.otf</string>
     <string name="font_regular">NotoSansKR-Regular-Hestia.otf</string>
     <string name="font_medium">NotoSansKR-Medium-Hestia.otf</string>
@@ -94,9 +94,9 @@
     <string name="sample_card_teacher">선생님</string>
     <string name="sample_card_daddy">아빠</string>
     <string name="sample_card_mommy">엄마</string>
-    <string name="privacy_web_url">http://angeltalk.info/kr/popup/privacy_policy.html</string>
-    <string name="terms_web_url">http://angeltalk.info/kr/popup/terms_of_service.html</string>
-    <string name="oss_web_url">http://angeltalk.info/kr/popup/open_source.html</string>
+    <string name="privacy_web_url">https://www.angeltalk.info/kr/popup/privacy_policy.html</string>
+    <string name="terms_web_url">https://www.angeltalk.info/kr/popup/terms_of_service.html</string>
+    <string name="oss_web_url">https://www.angeltalk.info/kr/popup/open_source.html</string>
     <string name="voc_web_url">https://docs.google.com/forms/d/1VSmDrx5wVaAOkoFwaalDy3Vf81APmAo5vBYlXifKFSQ/edit</string>
     <string name="change_order_toast_message">순서를 바꾸시려면 카드를 길게 눌러보세요</string>
 
