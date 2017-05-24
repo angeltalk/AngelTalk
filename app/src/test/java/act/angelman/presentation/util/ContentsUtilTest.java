@@ -62,7 +62,7 @@ public class ContentsUtilTest {
         FileUtil.copyFile(new File(ContentsUtil.getContentFolder(RuntimeEnvironment.application.getApplicationContext()) + File.separator + "airplane.mp4"), new File(ContentsUtil.getTempFolder(RuntimeEnvironment.application.getApplicationContext()) + File.separator + "airplane.mp4"));
 
         // when
-        ContentsUtil.saveVideoThumbnail(ContentsUtil.getTempFolder(RuntimeEnvironment.application.getApplicationContext()) + File.separator + "airplane.mp4");
+        ContentsUtil.saveVideoThumbnail(RuntimeEnvironment.application.getApplicationContext(), ContentsUtil.getTempFolder(RuntimeEnvironment.application.getApplicationContext()) + File.separator + "airplane.mp4");
 
         // then
         assertThat(new File(ContentsUtil.getTempFolder(RuntimeEnvironment.application.getApplicationContext()) + File.separator + "airplane.jpg").exists()).isTrue();
