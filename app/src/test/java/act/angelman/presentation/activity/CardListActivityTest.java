@@ -286,6 +286,17 @@ public class CardListActivityTest extends UITest{
     }
 
     @Test
+    public void givenChangeOrderTabButtonSelected_whenClickOneItemInTheCardList_thenShowSnackBar() throws Exception {
+        // given
+        subject.changeOrderTabButton.performClick();
+        // when
+        subject.changeOrderRecyclerView.getChildAt(1).performClick();
+        // then
+        assertThat(ShadowSnackbar.getLatestSnackbar()).isNotNull();
+        assertThat(ShadowSnackbar.getTextOfLatestSnackbar()).isEqualTo("순서를 바꾸시려면 카드를 길게 눌러보세요");
+    }
+
+    @Test
     public void givenIntentFromShareCardActivity_whenLaunched_thenShowSnackBar() throws Exception {
         // given
         Intent intent = new Intent(RuntimeEnvironment.application, CardListActivity.class);
