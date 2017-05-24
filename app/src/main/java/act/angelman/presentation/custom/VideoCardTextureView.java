@@ -6,6 +6,7 @@ import android.graphics.Matrix;
 import android.graphics.SurfaceTexture;
 import android.media.MediaPlayer;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
@@ -92,6 +93,11 @@ public class VideoCardTextureView extends TextureView implements TextureView.Sur
             int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
             if (resourceId > 0) {
                 navigationBarHeight = resources.getDimensionPixelSize(resourceId);
+            }
+            DisplayMetrics dm = context.getResources().getDisplayMetrics();
+            double dmRatio = (double)dm.heightPixels/dm.widthPixels;
+            if(dmRatio > 1.72f) {
+                navigationBarHeight *= -1;
             }
         }
 
