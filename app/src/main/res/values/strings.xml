@@ -106,4 +106,8 @@
     <string name="bug_report">사용성 개선에 많은 도움이 됩니다</string>
     <string name="network_disconnected">Please turn on mobile data or wifi\nat the ‘setting’</string>
     <string name="card_download_fail">Oops! We encountered an unexpected problem.\nGo back to the ‘Message’ app?</string>
+
+    <string name="kakao_app_key">79596264d79a5d8e3ada29bbd442abe0</string>
+    <string name="kakao_scheme">kakao79596264d79a5d8e3ada29bbd442abe0</string>
+    <string name="kakaolink_host">kakaolink</string>
 </resources>
