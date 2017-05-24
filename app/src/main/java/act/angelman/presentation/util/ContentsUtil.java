@@ -9,7 +9,10 @@ import android.media.ThumbnailUtils;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.KeyCharacterMap;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 
 import com.google.common.base.Strings;
 
@@ -20,6 +23,7 @@ import java.io.OutputStream;
 
 import act.angelman.domain.model.CardModel;
 import act.angelman.domain.model.CardTransferModel;
+import act.angelman.presentation.manager.ApplicationManager;
 
 import static act.angelman.presentation.util.FileUtil.copyFile;
 import static android.graphics.Bitmap.createBitmap;
@@ -132,12 +136,12 @@ public class ContentsUtil {
                 drawingCache, 0, 0, width, height, matrix, false);
     }
 
-    public static void saveVideoThumbnail(String videoPath) {
+    public static void saveVideoThumbnail(Context context, String videoPath ) {
         String thumbNailPath = ContentsUtil.getThumbnailPath(videoPath);
         File fileCacheItem = new File(thumbNailPath);
         OutputStream out = null;
 
-        Bitmap bitmap = createVideoThumbnail(10,videoPath, MediaStore.Images.Thumbnails.MINI_KIND);
+        Bitmap bitmap = createVideoThumbnail(context, 10,videoPath, MediaStore.Images.Thumbnails.MINI_KIND);
 
         try {
             fileCacheItem.createNewFile();
@@ -155,8 +159,13 @@ public class ContentsUtil {
             }
         }
     }
+    private static boolean hasNavigationBar(Context context) {
+        boolean hasMenuKey = ViewConfiguration.get(context).hasPermanentMenuKey();
+        boolean hasBackKey = KeyCharacterMap.deviceHasKey(KeyEvent.KEYCODE_BACK);
+        return !hasMenuKey && !hasBackKey;
+    }
 
-    private static Bitmap createVideoThumbnail(int time, String filePath, int kind) {
+    private static Bitmap createVideoThumbnail(Context context, int time, String filePath, int kind) {
         Bitmap bitmap = null;
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         try {
@@ -188,7 +197,30 @@ public class ContentsUtil {
                 bitmap = Bitmap.createScaledBitmap(bitmap, w, h, true);
 
             }
-            bitmap = createBitmap(bitmap, (int)(w*0.11), (int)(h*0.29), (int)(w*0.789), (int)(w*0.789));
+
+            float heightConst = 0.29f;
+
+            if(hasNavigationBar(context)) {
+                Resources resources = context.getResources();
+                int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
+                if (resourceId > 0) {
+                    heightConst *= (1- (resources.getDimensionPixelSize(resourceId) / (float)height)- 0.04 );
+                }
+                DisplayMetrics dm = context.getResources().getDisplayMetrics();
+                double dmRatio = (double)dm.heightPixels/dm.widthPixels;
+                if(dmRatio > 1.72f) {
+                    heightConst = 0.30f;
+                }
+
+            }
+
+            h = w;
+            if (ApplicationManager.getDeviceName().contains("SM-G850")) {
+                heightConst = 0.4f;
+                h/=1.75f;
+            }
+
+            bitmap = createBitmap(bitmap, (int)(w*0.11), (int)(h*heightConst), (int)(w*0.789), (int)(h*0.789));
 
         } else if (kind == MediaStore.Images.Thumbnails.MICRO_KIND) {
             bitmap = ThumbnailUtils.extractThumbnail(bitmap,

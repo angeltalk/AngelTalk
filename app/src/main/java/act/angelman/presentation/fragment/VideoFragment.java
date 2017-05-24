@@ -703,7 +703,7 @@ public class VideoFragment extends Fragment
         mMediaRecorder.stop();
         mMediaRecorder.reset();
 
-        ContentsUtil.saveVideoThumbnail(mNextVideoAbsolutePath);
+        ContentsUtil.saveVideoThumbnail(this.getActivity().getApplicationContext(), mNextVideoAbsolutePath);
 
         Activity activity = getActivity();
         if (null != activity) {
