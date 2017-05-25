@@ -153,13 +153,13 @@ public class SingleCardSqliteDataStore implements SingleCardDataStore {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(CardColumns.HIDE, hide ? 1 : 0);
-        return db.update(CardColumns.TABLE_NAME, contentValues, CardColumns.CATEGORY_ID + "=" + categoryId + " AND " + CardColumns.CARD_INDEX + "=" + cardIndex, null) > 0 ? true : false;
+        return db.update(CardColumns.TABLE_NAME, contentValues, CardColumns.CATEGORY_ID + "=" + categoryId + " AND " + CardColumns.CARD_INDEX + "=" + cardIndex, null) > 0;
     }
 
     @Override
     public boolean updateSingleCardModel(String cardId, ContentValues contentValues) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        return db.update(CardColumns.TABLE_NAME, contentValues, CardColumns._ID + "=" + cardId, null) > 0 ? true : false;
+        return db.update(CardColumns.TABLE_NAME, contentValues, CardColumns._ID + "=" + cardId, null) > 0;
     }
 
     private int getNewIndex(int categoryId) {

@@ -133,7 +133,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String oldFilePath = cardModel.contentPath;
         String newFilePath = ContentsUtil.getContentFolder(context) + File.separator + cardModel.contentPath.substring(cardModel.contentPath.lastIndexOf(File.separator)+1);
         String oldVoiceFilePath = cardModel.voicePath;
-        String newVoiceFilePath = ContentsUtil.getVoiceFolder(context) + File.separator + cardModel.voicePath.substring(cardModel.voicePath.lastIndexOf(File.separator)+1);;
+        String newVoiceFilePath = ContentsUtil.getVoiceFolder(context) + File.separator + cardModel.voicePath.substring(cardModel.voicePath.lastIndexOf(File.separator)+1);
 
         try {
             FileUtil.copyFile(new File(oldFilePath), new File(newFilePath));
