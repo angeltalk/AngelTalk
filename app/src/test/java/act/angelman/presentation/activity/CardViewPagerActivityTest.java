@@ -367,7 +367,7 @@ public class CardViewPagerActivityTest extends UITest {
     }
 
     @Test
-    public void whenOnBackPressed_thenMoveToCategoryMenuActivity() throws Exception {
+    public void whenOnBackPressed_thenMoveToCategoryMenuActivityAndClearOtherActivities() throws Exception {
         // when
         CardImageAdapter mockImageAdapter = mock(CardImageAdapter.class);
         subject.mViewPager.setAdapter(mockImageAdapter);
@@ -381,6 +381,7 @@ public class CardViewPagerActivityTest extends UITest {
 
         ShadowActivity shadowActivity = shadowOf(subject);
         Intent nextStartedActivity = shadowActivity.getNextStartedActivity();
+        assertThat(nextStartedActivity.getFlags()).isEqualTo(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         assertThat(nextStartedActivity.getComponent().getClassName()).isEqualTo(CategoryMenuActivity.class.getCanonicalName());
     }
 
