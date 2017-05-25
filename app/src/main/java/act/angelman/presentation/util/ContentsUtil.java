@@ -181,46 +181,46 @@ public class ContentsUtil {
 
         if (bitmap == null) return null;
 
-        int width = bitmap.getWidth();
-        int height = bitmap.getHeight();
-        int w = 0;
-        int h = 0;
-
         if (kind == MediaStore.Images.Thumbnails.MINI_KIND) {
-            // Scale down the bitmap if it's too large.
 
+            int width = bitmap.getWidth();
+            int height = bitmap.getHeight();
+
+            // Scale down the bitmap if it's too large.
             int max = Math.max(width, height);
             if (max > 512) {
                 float scale = 512f / max;
-                w = Math.round(scale * width);
-                h = Math.round(scale * height);
-                bitmap = Bitmap.createScaledBitmap(bitmap, w, h, true);
-
+                width = Math.round(scale * width);
+                height = Math.round(scale * height);
+                bitmap = Bitmap.createScaledBitmap(bitmap, width, height, true);
             }
 
-            float heightConst = 0.29f;
+            // Cropping the bitmap
+            int sx = (int)(width*0.11f);
+            int sy = (int)(height*0.29f);
+            int w = (int)(width*0.789f);
+            int h = (int)(width*0.789f);
 
             if(hasNavigationBar(context)) {
                 Resources resources = context.getResources();
                 int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
                 if (resourceId > 0) {
-                    heightConst *= (1- (resources.getDimensionPixelSize(resourceId) / (float)height)- 0.04 );
+                    sy *= (1- (resources.getDimensionPixelSize(resourceId) / (float)height)- 0.04);
                 }
+
                 DisplayMetrics dm = context.getResources().getDisplayMetrics();
                 double dmRatio = (double)dm.heightPixels/dm.widthPixels;
                 if(dmRatio > 1.72f) {
-                    heightConst = 0.30f;
+                    sy = (int)((height*dmRatio/1.72f)*0.29f);
                 }
-
             }
 
-            h = w;
             if (ApplicationManager.getDeviceName().contains("SM-G850")) {
-                heightConst = 0.4f;
-                h/=1.75f;
+                sy = (int)((height/1.75f)*0.29f);
+                h = (int)((width/1.75f)*0.789);
             }
 
-            bitmap = createBitmap(bitmap, (int)(w*0.11), (int)(h*heightConst), (int)(w*0.789), (int)(h*0.789));
+            bitmap = createBitmap(bitmap, sx, sy, w, h);
 
         } else if (kind == MediaStore.Images.Thumbnails.MICRO_KIND) {
             bitmap = ThumbnailUtils.extractThumbnail(bitmap,

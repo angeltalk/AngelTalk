@@ -679,7 +679,6 @@ public class Camera2Activity extends AbstractActivity implements View.OnClickLis
             }
 
         }
-
         mTextureView.setTransform(matrix);
     }
 
