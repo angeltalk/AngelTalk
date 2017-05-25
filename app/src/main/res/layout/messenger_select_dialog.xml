@@ -10,6 +10,7 @@
         android:id="@+id/img_logo_popup"
         android:layout_width="280dp"
         android:layout_height="57dp"
+        android:scaleType="fitXY"
         android:layout_alignParentTop="true"
         android:src="@drawable/img_logo_popup"
         />
