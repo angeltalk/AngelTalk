@@ -16,7 +16,7 @@ public class ApplicationConstants {
     public static final String EDIT_TYPE = "editType";
 
 
-    public enum SHARE_MESSENGER_TYPE{ KAKAOTALK, MESSAGE }
+    public enum SHARE_MESSENGER_TYPE{ KAKAOTALK, MESSAGE ,WHATSAPP}
     public enum CardEditType {
         CONTENT("CONTENT"),
         NAME("NAME"),
