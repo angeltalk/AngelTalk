@@ -10,7 +10,7 @@ import act.angelman.network.transfer.CardTransfer;
 import act.angelman.network.transfer.KaKaoTransfer;
 import act.angelman.domain.repository.CardRepository;
 import act.angelman.domain.repository.CategoryRepository;
-import act.angelman.network.transfer.SmsTransfer;
+import act.angelman.network.transfer.MessageTransfer;
 import act.angelman.presentation.manager.ApplicationManager;
 import dagger.Module;
 import dagger.Provides;
@@ -50,8 +50,8 @@ public class AngelmanModule {
 
     @Provides
     @Singleton
-    SmsTransfer providesSmsTransfer() {
-        return  new SmsTransfer(context.getApplicationContext());
+    MessageTransfer providesMessageTransfer() {
+        return  new MessageTransfer(context.getApplicationContext());
     }
 
     @Provides

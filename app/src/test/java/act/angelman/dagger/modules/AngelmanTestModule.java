@@ -6,6 +6,7 @@ import act.angelman.domain.repository.CardRepository;
 import act.angelman.domain.repository.CategoryRepository;
 import act.angelman.network.transfer.CardTransfer;
 import act.angelman.network.transfer.KaKaoTransfer;
+import act.angelman.network.transfer.MessageTransfer;
 import act.angelman.presentation.manager.ApplicationManager;
 
 import static org.mockito.Mockito.mock;
@@ -41,5 +42,9 @@ public class AngelmanTestModule extends act.angelman.dagger.modules.AngelmanModu
         return mock(KaKaoTransfer.class);
     }
 
+    @Override
+    MessageTransfer providesMessageTransfer()  {
+        return mock(MessageTransfer.class);
+    }
 
 }
