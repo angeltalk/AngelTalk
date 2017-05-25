@@ -6,7 +6,7 @@ import act.angelman.dagger.modules.AngelmanModule;
 import act.angelman.data.sqlite.DatabaseHelper;
 import act.angelman.network.transfer.CardTransfer;
 import act.angelman.network.transfer.KaKaoTransfer;
-import act.angelman.network.transfer.SmsTransfer;
+import act.angelman.network.transfer.MessageTransfer;
 import act.angelman.presentation.activity.CameraGallerySelectionActivity;
 import act.angelman.presentation.activity.CardListActivity;
 import act.angelman.presentation.activity.CardViewPagerActivity;
@@ -43,7 +43,7 @@ public interface AngelmanComponent {
     void inject(NotificationActionManager notificationActionManager);
     void inject(ScreenReceiver screenReceiver);
     void inject(CardTransfer cardTransfer);
-    void inject(SmsTransfer smsTransfer);
+    void inject(MessageTransfer messageTransfer);
     void inject(KaKaoTransfer kaKaoTransfer);
     void inject(ApplicationInitializer applicationInitializer);
     void inject(CardListActivity cardListActivity);

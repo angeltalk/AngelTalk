@@ -50,6 +50,7 @@ import act.angelman.domain.model.CardModel;
 import act.angelman.domain.model.CategoryModel;
 import act.angelman.domain.repository.CardRepository;
 import act.angelman.network.transfer.CardTransfer;
+import act.angelman.network.transfer.MessageTransfer;
 import act.angelman.presentation.adapter.CardImageAdapter;
 import act.angelman.presentation.custom.AddCardView;
 import act.angelman.presentation.custom.CardView;
@@ -67,6 +68,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
@@ -83,6 +85,9 @@ public class CardViewPagerActivityTest extends UITest {
 
     @Inject
     CardTransfer cardTransfer;
+
+    @Inject
+    MessageTransfer messageTransfer;
 
     @Inject
     ApplicationManager applicationManager;
@@ -565,7 +570,7 @@ public class CardViewPagerActivityTest extends UITest {
     }
 
     @Test
-    public void givenKakaotalkNotInstall_whenShareButtonClick_thenShowAvailableMessengerListWithOutKakaotalk() throws Exception{
+    public void givenKakaotalkNotInstall_whenShareButtonClick_thenShowAvailableMessengerListWithoutKakaotalk() throws Exception{
 
         subject.cardShareButton.performClick();
         subject.pm = mock(PackageManager.class);
@@ -575,6 +580,19 @@ public class CardViewPagerActivityTest extends UITest {
         ShadowAlertDialog shadowDialog = shadowOf(alert);
         assertThat(shadowDialog).isNotNull();
         assertThat(shadowDialog.getView().findViewById(R.id.item_kakaotalk).getVisibility()).isEqualTo(View.GONE);
+    }
+
+    @Test
+    public void givenWhatsappNotInstall_whenShareButtonClick_thenShowAvailableMessengerListWithoutKakaotalk() throws Exception{
+
+        subject.cardShareButton.performClick();
+        subject.pm = mock(PackageManager.class);
+        when(subject.pm.getPackageInfo("com.whatsapp",PackageManager.GET_ACTIVITIES)).thenThrow(new PackageManager.NameNotFoundException());
+
+        AlertDialog alert = ShadowAlertDialog.getLatestAlertDialog();
+        ShadowAlertDialog shadowDialog = shadowOf(alert);
+        assertThat(shadowDialog).isNotNull();
+        assertThat(shadowDialog.getView().findViewById(R.id.item_whatsapp).getVisibility()).isEqualTo(View.GONE);
     }
 
     @Test
@@ -591,10 +609,18 @@ public class CardViewPagerActivityTest extends UITest {
         assertThat(innerView.findViewById(R.id.confirm_button).isEnabled()).isTrue();
         assertThat(((AppCompatRadioButton) innerView.findViewById(R.id.radio_kakaotalk)).isChecked()).isTrue();
         assertThat(((AppCompatRadioButton) innerView.findViewById(R.id.radio_message)).isChecked()).isFalse();
+        assertThat(((AppCompatRadioButton) innerView.findViewById(R.id.radio_whatsapp)).isChecked()).isFalse();
+
 
         innerView.findViewById(R.id.item_message).performClick();
+        assertThat(((AppCompatRadioButton) innerView.findViewById(R.id.radio_whatsapp)).isChecked()).isFalse();
         assertThat(((AppCompatRadioButton) innerView.findViewById(R.id.radio_kakaotalk)).isChecked()).isFalse();
         assertThat(((AppCompatRadioButton) innerView.findViewById(R.id.radio_message)).isChecked()).isTrue();
+
+        innerView.findViewById(R.id.item_whatsapp).performClick();
+        assertThat(((AppCompatRadioButton) innerView.findViewById(R.id.radio_whatsapp)).isChecked()).isTrue();
+        assertThat(((AppCompatRadioButton) innerView.findViewById(R.id.radio_kakaotalk)).isChecked()).isFalse();
+        assertThat(((AppCompatRadioButton) innerView.findViewById(R.id.radio_message)).isChecked()).isFalse();
     }
 
     @Test
@@ -626,6 +652,66 @@ public class CardViewPagerActivityTest extends UITest {
 
         // then
         verify(subject.kaKaoTransfer).sendKakaoLinkMessage(subject.context, "key string", "url string", cardModel);
+    }
+
+    @Test
+    public void whenClickShareButtonAndSelectWhatsappAndUploadSuccess_thenSendWhatsappMessage() throws Exception {
+        subject.mViewPager.setCurrentItem(1);
+
+        final Map<String, String> resultMap = new HashMap<>();
+        resultMap.put("url", "url string");
+        resultMap.put("key", "key string");
+
+        doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+
+                OnSuccessListener<Map<String,String>> onSuccessListener = ((OnSuccessListener<Map<String, String>>) invocation.getArguments()[1]);
+                onSuccessListener.onSuccess(resultMap);
+                return null;
+            }
+        }).when(subject.cardTransfer).uploadCard(any(CardModel.class), any(OnSuccessListener.class), any(OnFailureListener.class));
+
+        // when
+        subject.cardShareButton.performClick();
+        AlertDialog alert = ShadowAlertDialog.getLatestAlertDialog();
+        ShadowAlertDialog shadowDialog = shadowOf(alert);
+        View innerView = shadowDialog.getView();
+        innerView.findViewById(R.id.item_whatsapp).performClick();
+        innerView.findViewById(R.id.confirm_button).performClick();
+
+        // then
+        verify(subject.messageTransfer).sendMessage(eq(ApplicationConstants.SHARE_MESSENGER_TYPE.WHATSAPP), eq(resultMap.get("key")), any(CardModel.class), any(MessageTransfer.OnCompleteListener.class));
+    }
+
+    @Test
+    public void whenClickShareButtonAndSelectMessengerAndUploadSuccess_thenSendMessengerMessage() throws Exception {
+        subject.mViewPager.setCurrentItem(1);
+
+        final Map<String, String> resultMap = new HashMap<>();
+        resultMap.put("url", "url string");
+        resultMap.put("key", "key string");
+
+        doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+
+                OnSuccessListener<Map<String,String>> onSuccessListener = ((OnSuccessListener<Map<String, String>>) invocation.getArguments()[1]);
+                onSuccessListener.onSuccess(resultMap);
+                return null;
+            }
+        }).when(subject.cardTransfer).uploadCard(any(CardModel.class), any(OnSuccessListener.class), any(OnFailureListener.class));
+
+        // when
+        subject.cardShareButton.performClick();
+        AlertDialog alert = ShadowAlertDialog.getLatestAlertDialog();
+        ShadowAlertDialog shadowDialog = shadowOf(alert);
+        View innerView = shadowDialog.getView();
+        innerView.findViewById(R.id.item_message).performClick();
+        innerView.findViewById(R.id.confirm_button).performClick();
+
+        // then
+        verify(subject.messageTransfer).sendMessage(eq(ApplicationConstants.SHARE_MESSENGER_TYPE.MESSAGE), eq(resultMap.get("key")), any(CardModel.class), any(MessageTransfer.OnCompleteListener.class));
     }
 
     @Test

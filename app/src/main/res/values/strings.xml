@@ -54,7 +54,7 @@
     <string name="video_content_check_guide">Check the video clip captured</string>
     <string name="msg_select_messenger">Choose an app to send this card</string>
     <string name="photo_content_check_guide">Check the photo taken</string>
-    <string name="share_sms_message">AngelTalk \'%s\' card is shared\n</string>
+    <string name="share_message">AngelTalk \'%s\' card is shared\n</string>
     <string name="card_edit_select_guide">Which one do you want change?</string>
     <string name="card_edit_content">Photo / Video</string>
     <string name="card_edit_name">Card Name</string>
@@ -110,4 +110,7 @@
     <string name="kakao_app_key">79596264d79a5d8e3ada29bbd442abe0</string>
     <string name="kakao_scheme">kakao79596264d79a5d8e3ada29bbd442abe0</string>
     <string name="kakaolink_host">kakaolink</string>
+    <string name="kakao_package_name">com.kakao.talk</string>
+    <string name="whatsapp_package_name">com.whatsapp</string>
+    <string name="whatsapp">WhatsApp</string>
 </resources>

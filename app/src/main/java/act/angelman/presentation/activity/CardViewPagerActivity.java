@@ -32,7 +32,7 @@ import act.angelman.domain.model.CategoryModel;
 import act.angelman.domain.repository.CardRepository;
 import act.angelman.network.transfer.CardTransfer;
 import act.angelman.network.transfer.KaKaoTransfer;
-import act.angelman.network.transfer.SmsTransfer;
+import act.angelman.network.transfer.MessageTransfer;
 import act.angelman.presentation.adapter.CardImageAdapter;
 import act.angelman.presentation.custom.CardEditSelectDialog;
 import act.angelman.presentation.custom.CardTitleLayout;
@@ -66,7 +66,7 @@ public class CardViewPagerActivity extends AbstractActivity {
     KaKaoTransfer kaKaoTransfer;
 
     @Inject
-    SmsTransfer smsTransfer;
+    MessageTransfer messageTransfer;
 
     @BindView(R.id.title_container)
     CardTitleLayout cardTitleLayout;
@@ -128,33 +128,33 @@ public class CardViewPagerActivity extends AbstractActivity {
     public void shareButtonOnClick() {
         stopPlayingCard();
 
-        if(!cardTransfer.isConnectedToNetwork()){
-            Toast.makeText(context, R.string.network_disconnected,Toast.LENGTH_LONG).show();
+        if (!cardTransfer.isConnectedToNetwork()) {
+            Toast.makeText(context, R.string.network_disconnected, Toast.LENGTH_LONG).show();
             return;
         }
 
-        new ShareMessengerSelectDialog(context, isKakaotalkInstalled(), new View.OnClickListener() {
+        new ShareMessengerSelectDialog(context, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final ApplicationConstants.SHARE_MESSENGER_TYPE selectType = ((ApplicationConstants.SHARE_MESSENGER_TYPE) v.getTag());
                 final CardModel cardModel = getCardModel(mViewPager.getCurrentItem());
                 showLoadingAnimation();
 
-                cardTransfer.uploadCard(cardModel, new OnSuccessListener<Map<String,String>>() {
+                cardTransfer.uploadCard(cardModel, new OnSuccessListener<Map<String, String>>() {
                     @Override
                     public void onSuccess(Map<String, String> resultMap) {
                         String thumbnailUrl = resultMap.get("url");
                         final String key = resultMap.get("key");
-                        if(!isForegroundRunning){
+                        if (!isForegroundRunning) {
                             loadingViewLayout.setVisibility(View.GONE);
                             return;
                         }
 
-                        if(selectType == ApplicationConstants.SHARE_MESSENGER_TYPE.KAKAOTALK){
+                        if (selectType == ApplicationConstants.SHARE_MESSENGER_TYPE.KAKAOTALK) {
                             loadingViewLayout.setVisibility(View.GONE);
                             kaKaoTransfer.sendKakaoLinkMessage(context, key, thumbnailUrl, cardModel);
-                        }else if(selectType == ApplicationConstants.SHARE_MESSENGER_TYPE.MESSAGE){
-                            smsTransfer.sendSmsMessage(key, cardModel, new SmsTransfer.OnCompleteListener(){
+                        } else {
+                            messageTransfer.sendMessage(selectType, key, cardModel, new MessageTransfer.OnCompleteListener() {
                                 @Override
                                 public void onComplete() {
                                     loadingViewLayout.setVisibility(View.GONE);
@@ -166,7 +166,7 @@ public class CardViewPagerActivity extends AbstractActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         loadingViewLayout.setVisibility(View.GONE);
-                        Toast.makeText(context, R.string.share_fail_message,Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, R.string.share_fail_message, Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -175,7 +175,7 @@ public class CardViewPagerActivity extends AbstractActivity {
 
     @Override
     protected void onResume() {
-        isForegroundRunning= true;
+        isForegroundRunning = true;
         super.onResume();
     }
 
@@ -186,38 +186,41 @@ public class CardViewPagerActivity extends AbstractActivity {
             @Override
             public void onClick(View view) {
                 CardModel cardModel = ((CardView) cardImageAdapter.viewCollection.get(mViewPager.getCurrentItem())).dataModel;
-                if (view.getTag() == ApplicationConstants.CardEditType.CONTENT ) {
+                if (view.getTag() == ApplicationConstants.CardEditType.CONTENT) {
                     moveToContentEditActivity(cardModel);
-                }else if(view.getTag() == ApplicationConstants.CardEditType.NAME ) {
+                } else if (view.getTag() == ApplicationConstants.CardEditType.NAME) {
                     moveToNameEditActivity(cardModel);
-                }else if(view.getTag() == ApplicationConstants.CardEditType.VOICE) {
+                } else if (view.getTag() == ApplicationConstants.CardEditType.VOICE) {
                     moveToVoiceEditActivity(cardModel);
                 }
             }
         }).show();
     }
 
-    private void moveToContentEditActivity(CardModel cardModel){
+    private void moveToContentEditActivity(CardModel cardModel) {
         Intent intent = new Intent(context, CameraGallerySelectionActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.putExtra(ApplicationConstants.EDIT_CARD_ID, cardModel._id);
         intent.putExtra(ApplicationConstants.EDIT_TYPE, ApplicationConstants.CardEditType.CONTENT.value());
         startActivity(intent);
     }
-    private void moveToNameEditActivity(CardModel cardModel){
+
+    private void moveToNameEditActivity(CardModel cardModel) {
         String cardId = cardModel._id;
         Intent intent = new Intent(context, MakeCardActivity.class);
         intent.putExtra(ApplicationConstants.EDIT_CARD_ID, cardId);
         intent.putExtra(ApplicationConstants.EDIT_TYPE, ApplicationConstants.CardEditType.NAME.value());
         startActivity(intent);
     }
-    private void moveToVoiceEditActivity(CardModel cardModel){
+
+    private void moveToVoiceEditActivity(CardModel cardModel) {
         String cardId = cardModel._id;
         Intent intent = new Intent(context, MakeCardActivity.class);
         intent.putExtra(ApplicationConstants.EDIT_CARD_ID, cardId);
         intent.putExtra(ApplicationConstants.EDIT_TYPE, ApplicationConstants.CardEditType.VOICE.value());
         startActivity(intent);
     }
+
     List<CardModel> allCardListInSelectedCategory;
 
     private CategoryModel selectedCategoryModel;
@@ -282,7 +285,7 @@ public class CardViewPagerActivity extends AbstractActivity {
 
         selectedCategoryModel = applicationManager.getCategoryModel();
 
-        allCardListInSelectedCategory = cardRepository.getSingleCardListWithCategoryId(selectedCategoryModel.index,false);
+        allCardListInSelectedCategory = cardRepository.getSingleCardListWithCategoryId(selectedCategoryModel.index, false);
         cardTitleLayout.setCategoryModelTitle(applicationManager.getCategoryModel().title);
         cardTitleLayout.refreshCardCountText(0, allCardListInSelectedCategory.size() + 1);
         cardTitleLayout.categoryTitle.setText(selectedCategoryModel.title);
@@ -351,7 +354,7 @@ public class CardViewPagerActivity extends AbstractActivity {
             public void onClick(View v) {
                 int currentItem = setCurrentItem();
                 if (deleteSelectedCard(cardIndex)) {
-                    List<CardModel> cardList = cardRepository.getSingleCardListWithCategoryId((applicationManager.getCategoryModel().index),false);
+                    List<CardModel> cardList = cardRepository.getSingleCardListWithCategoryId((applicationManager.getCategoryModel().index), false);
                     mViewPager.removeAllViews();
                     cardImageAdapter = new CardImageAdapter(CardViewPagerActivity.this, cardList, glide);
                     cardImageAdapter.addNewCardViewAtFirst();
@@ -389,7 +392,7 @@ public class CardViewPagerActivity extends AbstractActivity {
         CustomSnackBar.styledSnackBarWithDuration(this, rootLayout, message, 2000);
     }
 
-    private void showLoadingAnimation(){
+    private void showLoadingAnimation() {
         loadingViewLayout.setVisibility(View.VISIBLE);
         Glide.with(CardViewPagerActivity.this)
                 .load(R.drawable.angelee)
@@ -398,22 +401,10 @@ public class CardViewPagerActivity extends AbstractActivity {
                 .into(imageLoadingGif);
     }
 
-    private boolean isKakaotalkInstalled() {
-        try {
-            String KAKAO_PACKAGE_NAME = "com.kakao.talk";
-            if(pm == null){
-                pm = getPackageManager();
-            }
-            pm.getPackageInfo(KAKAO_PACKAGE_NAME, PackageManager.GET_ACTIVITIES);
-            return true;
-        } catch (PackageManager.NameNotFoundException e) {
-        }
-        return false;
-    }
 
     private boolean setViewPagerCurrentItem(int beforeCardIndex) {
-        for(int i=0;i<allCardListInSelectedCategory.size();i++) {
-            if(allCardListInSelectedCategory.get(i).cardIndex == beforeCardIndex) {
+        for (int i = 0; i < allCardListInSelectedCategory.size(); i++) {
+            if (allCardListInSelectedCategory.get(i).cardIndex == beforeCardIndex) {
                 mViewPager.setCurrentItem(i);
                 return true;
             }

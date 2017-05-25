@@ -58,7 +58,7 @@
     <string name="video_content_check_guide">찍은 영상을 확인해 보세요</string>
     <string name="msg_select_messenger">공유하실 메신저를 선택하세요</string>
     <string name="photo_content_check_guide">찍은 사진을 확인해 보세요</string>
-    <string name="share_sms_message">엔젤톡 \'%s\' 카드 공유\n</string>
+    <string name="share_message">엔젤톡 \'%s\' 카드 공유\n</string>
     <string name="card_edit_select_guide">카드를 수정해 보세요</string>
     <string name="card_edit_content">사진 바꾸기</string>
     <string name="card_edit_name">이름 바꾸기</string>
@@ -110,5 +110,6 @@
     <string name="kakao_app_key">79596264d79a5d8e3ada29bbd442abe0</string>
     <string name="kakao_scheme">kakao79596264d79a5d8e3ada29bbd442abe0</string>
     <string name="kakaolink_host">kakaolink</string>
+    <string name="whatsapp">WhatsApp</string>
 
 </resources>

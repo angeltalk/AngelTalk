@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.percent.PercentRelativeLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white" >
+    android:background="@color/white">
 
     <ImageView
-        app:layout_heightPercent="20.35%"
         android:id="@+id/img_logo_popup"
-        android:scaleType="fitXY"
-        android:layout_width="350dp"
+        android:layout_width="280dp"
+        android:layout_height="57dp"
+        android:layout_alignParentTop="true"
         android:src="@drawable/img_logo_popup"
         />
 
     <LinearLayout
-        android:layout_width="350dp"
-        app:layout_heightPercent="61.08%"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@id/img_logo_popup"
         android:orientation="vertical"
         android:background="@color/white">
@@ -30,16 +30,23 @@
             android:gravity="center"
             android:layout_gravity="center"
             android:text="@string/msg_select_messenger" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:orientation="vertical">
 
+
             <RelativeLayout
                 android:id="@+id/item_kakaotalk"
                 android:layout_width="match_parent"
-                android:layout_height="60dp">
+                android:layout_height="60.3dp">
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.3dp"
+                    android:background="@color/card_list_horizontal_border" />
+
                 <android.support.v7.widget.AppCompatRadioButton
                     android:id="@+id/radio_kakaotalk"
                     android:layout_width="wrap_content"
@@ -48,10 +55,7 @@
                     android:layout_marginLeft="24dp"
                     android:tag="radio"
                     android:theme="@style/CategorySelectRadioButton"
-                    android:clickable="false"
-                    />
-
-
+                    android:clickable="false" />
                 <ImageView
                     android:layout_width="35dp"
                     android:layout_height="35dp"
@@ -60,7 +64,6 @@
                     android:layout_toRightOf="@id/radio_kakaotalk"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="17dp"/>
-
                 <TextView
                     android:id="@+id/text_kakaotalk"
                     android:layout_width="wrap_content"
@@ -71,18 +74,53 @@
                     android:text="@string/kakaotalk"
                     android:textColor="@color/black_cc"
                     android:textSize="15sp" />
-
             </RelativeLayout>
 
-            <View
+            <RelativeLayout
+                android:id="@+id/item_whatsapp"
                 android:layout_width="match_parent"
-                android:layout_height="0.3dp"
-                android:background="@color/card_list_horizontal_border" />
+                android:layout_height="60.3dp">
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.3dp"
+                    android:background="@color/card_list_horizontal_border" />
+                <android.support.v7.widget.AppCompatRadioButton
+                    android:id="@+id/radio_whatsapp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="24dp"
+                    android:tag="radio"
+                    android:clickable="false"
+                    android:theme="@style/CategorySelectRadioButton" />
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:id="@+id/img_whatsapp"
+                    android:src="@drawable/ic_whats_app"
+                    android:layout_toRightOf="@id/radio_whatsapp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="17dp"/>
+                <TextView
+                    android:id="@+id/text_whatsapp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/img_whatsapp"
+                    android:layout_marginLeft="9dp"
+                    android:text="@string/whatsapp"
+                    android:textColor="@color/black_cc"
+                    android:textSize="15sp" />
+            </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/item_message"
                 android:layout_width="match_parent"
-                android:layout_height="60dp">
+                android:layout_height="60.3dp">
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.3dp"
+                    android:background="@color/card_list_horizontal_border" />
                 <android.support.v7.widget.AppCompatRadioButton
                     android:id="@+id/radio_message"
                     android:layout_width="wrap_content"
@@ -111,15 +149,14 @@
                     android:text="@string/messages"
                     android:textColor="@color/black_cc"
                     android:textSize="15sp" />
-
             </RelativeLayout>
+
         </LinearLayout>
     </LinearLayout>
 
-
     <RelativeLayout
-        android:layout_width="350dp"
-        app:layout_heightPercent="18.57%"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
         android:layout_alignParentBottom="true"
         android:background="@color/white">
 
@@ -154,4 +191,4 @@
 
     </RelativeLayout>
 
-</android.support.percent.PercentRelativeLayout>
+</RelativeLayout>
