@@ -202,7 +202,7 @@ public class ShareCardActivity extends AbstractActivity {
 
     private void moveToCategoryMenuActivity() {
         Intent intent = new Intent(context, CategoryMenuActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
 
