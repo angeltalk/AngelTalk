@@ -109,6 +109,8 @@
 
     <string name="kakao_app_key">79596264d79a5d8e3ada29bbd442abe0</string>
     <string name="kakao_scheme">kakao79596264d79a5d8e3ada29bbd442abe0</string>
+    <string name="kakao_package_name">com.kakao.talk</string>
+    <string name="whatsapp_package_name">com.whatsapp</string>
     <string name="kakaolink_host">kakaolink</string>
     <string name="whatsapp">WhatsApp</string>
 
