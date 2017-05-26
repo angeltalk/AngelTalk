@@ -48,7 +48,7 @@ android {
         }
         release {
             testCoverageEnabled = false
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             applicationVariants.all { variant -> renameAPK(variant) }
         }
