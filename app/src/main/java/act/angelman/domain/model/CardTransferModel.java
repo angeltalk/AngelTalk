@@ -13,5 +13,6 @@ public class CardTransferModel {
     public String name;
     public String contentPath;
     public String thumbnailPath;
+    public String downloadedFilePath;
 }
 

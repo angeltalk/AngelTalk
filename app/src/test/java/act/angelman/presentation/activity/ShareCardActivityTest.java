@@ -40,6 +40,7 @@ import act.angelman.domain.repository.CategoryRepository;
 import act.angelman.network.transfer.CardTransfer;
 import act.angelman.presentation.custom.CategorySelectDialog;
 import act.angelman.presentation.listener.OnDownloadCompleteListener;
+import act.angelman.presentation.manager.ApplicationConstants;
 import act.angelman.presentation.util.ResourcesUtil;
 
 import static act.angelman.presentation.util.ResourceMapper.IconType.BUS;
@@ -51,6 +52,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.robolectric.Shadows.shadowOf;
@@ -70,6 +72,7 @@ public class ShareCardActivityTest extends UITest {
 
     private ShareCardActivity kakaotalk_subject;
     private ShareCardActivity message_subject;
+    private ShareCardActivity multiDownload_subject;
 
     @Before
     public void setUp() throws Exception {
@@ -98,7 +101,7 @@ public class ShareCardActivityTest extends UITest {
         message_subject = setupActivityWithIntent(new Intent(Intent.ACTION_VIEW, Uri.parse("app://angeltalk?key=a1234")));
         LinearLayout loadingViewLayout = (LinearLayout) message_subject.findViewById(R.id.on_loading_view);
         assertThat(loadingViewLayout.getVisibility()).isEqualTo(View.VISIBLE);
-        assertThat(message_subject.getReceiveKey()).isEqualTo("a1234");
+        assertThat(message_subject.getReceiveKeys().get(0)).isEqualTo("a1234");
     }
 
     @Test
@@ -292,6 +295,49 @@ public class ShareCardActivityTest extends UITest {
         assertThat(nextStartedActivity.getComponent().getClassName()).isEqualTo(CategoryMenuActivity.class.getCanonicalName());
     }
 
+    @Test
+    public void whenLaunchedWithMultiReceiveKey_thenLoadingMessageShowCorrectly() throws Exception {
+        multiDownload_subject = setupActivityWithMultiDownload();
+        assertThat(multiDownload_subject.loadingViewText.getText()).contains("/3)");
+        verify(cardTransfer, times(3)).downloadCard(any(String.class), any(OnDownloadCompleteListener.class));
+    }
+
+    @Test
+    public void givenMultiReceiveKey_whenClickSaveButton3times_thenMoveToCardListActivity() throws Exception {
+        // given
+        multiDownload_subject = setupActivityWithMultiDownload();
+        multiDownload_subject.downloadCard();
+
+        // when
+        AlertDialog dialog;
+        ImageView saveButton;
+
+        saveButton = (ImageView) multiDownload_subject.findViewById(R.id.card_save_button);
+        saveButton.performClick();
+        dialog = (AlertDialog) ShadowAlertDialog.getLatestDialog();
+        selectCategoryRadioButtonAt(dialog, 0);
+        dialog.findViewById(R.id.confirm_button).performClick();
+        assertThat(multiDownload_subject.getShareCardModelList().size()).isEqualTo(2);
+
+        saveButton = (ImageView) multiDownload_subject.findViewById(R.id.card_save_button);
+        saveButton.performClick();
+        dialog = (AlertDialog) ShadowAlertDialog.getLatestDialog();
+        selectCategoryRadioButtonAt(dialog, 0);
+        dialog.findViewById(R.id.confirm_button).performClick();
+        assertThat(multiDownload_subject.getShareCardModelList().size()).isEqualTo(1);
+
+        saveButton = (ImageView) multiDownload_subject.findViewById(R.id.card_save_button);
+        saveButton.performClick();
+        dialog = (AlertDialog) ShadowAlertDialog.getLatestDialog();
+        selectCategoryRadioButtonAt(dialog, 0);
+        dialog.findViewById(R.id.confirm_button).performClick();
+
+        // then
+        ShadowActivity shadowActivity = shadowOf(multiDownload_subject);
+        Intent nextStartedActivity = shadowActivity.getNextStartedActivity();
+        assertThat(nextStartedActivity.getComponent().getClassName()).isEqualTo(CardListActivity.class.getCanonicalName());
+    }
+
     private AlertDialog clickSaveButtonAndShowSelectCategoryDialog() {
         kakaotalk_subject.downloadCard();
         ImageView saveButton = (ImageView) kakaotalk_subject.findViewById(R.id.card_save_button);
@@ -320,7 +366,30 @@ public class ShareCardActivityTest extends UITest {
                 String filePath = "/";
                 onSuccessListener.onSuccess(cardTransferModel, filePath);
                 return null;
+            }
+        }).when(subject.cardTransfer).downloadCard(any(String.class), any(OnDownloadCompleteListener.class));
+        when(categoryRepository.getCategoryAllList()).thenReturn(getCategoryList(6));
 
+        return subject;
+    }
+
+    private ShareCardActivity setupActivityWithMultiDownload() {
+        Intent intent = new Intent();
+        intent.putExtra(ApplicationConstants.INTENT_KEY_MULTI_DOWNLOAD, true);
+        intent.putStringArrayListExtra(ApplicationConstants.INTENT_KEY_MULTI_DOWNLOAD_DATA, Lists.newArrayList("a", "b", "c"));
+
+        ShareCardActivity subject = setupActivityWithIntent(ShareCardActivity.class, intent);
+        doAnswer(new Answer() {
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                OnDownloadCompleteListener onSuccessListener = ((OnDownloadCompleteListener) invocation.getArguments()[1]);
+                CardTransferModel cardTransferModel = new CardTransferModel();
+                cardTransferModel.name = "TESTCARD";
+                cardTransferModel.cardType = CardModel.CardType.PHOTO_CARD.getValue();
+                cardTransferModel.contentPath = "/content";
+                String filePath = "/";
+                onSuccessListener.onSuccess(cardTransferModel, filePath);
+                return null;
             }
         }).when(subject.cardTransfer).downloadCard(any(String.class), any(OnDownloadCompleteListener.class));
         when(categoryRepository.getCategoryAllList()).thenReturn(getCategoryList(6));

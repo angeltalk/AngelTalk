@@ -75,14 +75,15 @@ public class ShareCardActivity extends AbstractActivity {
     @BindView(R.id.on_loading_view)
     LinearLayout loadingViewLayout;
 
+    @BindView(R.id.on_loading_view_text)
+    TextView loadingViewText;
+
     private CategorySelectDialog categorySelectDialog;
     private CustomConfirmDialog cardDownloadFailDialog;
     private RequestManager glide;
-    private String receiveKey;
     private Context context;
-
-    private CardTransferModel shareCardModel;
-    private String shareFilePath;
+    private List<CardTransferModel> shareCardModelList;
+    private List<String> receiveKeys;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,11 +99,17 @@ public class ShareCardActivity extends AbstractActivity {
 
         if (getString(R.string.kakao_scheme).equals(getIntent().getScheme())) {
             Uri uri = getIntent().getData();
-            receiveKey = uri.getQueryParameter("key");
+            receiveKeys = Lists.newArrayList();
+            receiveKeys.add(uri.getQueryParameter("key"));
         }else if ("app".equals(getIntent().getScheme())) {
             Uri uri = getIntent().getData();
-            receiveKey = uri.getQueryParameter("key");
+            receiveKeys = Lists.newArrayList();
+            receiveKeys.add(uri.getQueryParameter("key"));
+        }else if (getIntent().getBooleanExtra(ApplicationConstants.INTENT_KEY_MULTI_DOWNLOAD, false)) {
+            receiveKeys = getIntent().getStringArrayListExtra(ApplicationConstants.INTENT_KEY_MULTI_DOWNLOAD_DATA);
         }
+
+        shareCardModelList = Lists.newArrayList();
         downloadCard();
     }
 
@@ -132,67 +139,79 @@ public class ShareCardActivity extends AbstractActivity {
                 .into(imageLoadingGif);
     }
 
-
     public void downloadCard() {
         if(!cardTransfer.isConnectedToNetwork()){
             showCardDownloadFailDialog();
             return;
         }
 
-        cardTransfer.downloadCard(receiveKey, new OnDownloadCompleteListener() {
-            @Override
-            public void onSuccess(CardTransferModel cardTransferModel, String filePath) {
-                try {
-                    shareCardModel = cardTransferModel;
-                    shareFilePath = filePath;
+        loadingViewText.setText(getString(R.string.card_loading_message) + "\n(0/" + receiveKeys.size() + ")");
 
-                    String tempLocation = context.getCacheDir() + File.separator + receiveKey;
-                    FileUtil.unzip(filePath, tempLocation);
+        for(final String receiveKey : receiveKeys) {
+            cardTransfer.downloadCard(receiveKey, new OnDownloadCompleteListener() {
+                @Override
+                public void onSuccess(CardTransferModel cardTransferModel, String filePath) {
+                    try {
+                        cardTransferModel.downloadedFilePath = filePath;
+                        shareCardModelList.add(cardTransferModel);
 
-                    List<CardModel> cardModelList = Lists.newArrayList();
-                    CardModel cardModel = ContentsUtil.getTempCardModel(tempLocation, cardTransferModel);
+                        String tempLocation = context.getCacheDir() + File.separator + receiveKey;
+                        FileUtil.unzip(filePath, tempLocation);
 
-                    cardModelList.add(cardModel);
+                        List<CardModel> cardModelList = Lists.newArrayList();
+                        CardModel cardModel = ContentsUtil.getTempCardModel(tempLocation, cardTransferModel);
 
-                    mViewPager.setAdapter(new CardImageAdapter(context, cardModelList, glide));
+                        cardModelList.add(cardModel);
+                        loadingViewText.setText(getString(R.string.card_loading_message) + "\n(" + shareCardModelList.size() + "/" + receiveKeys.size() + ")");
 
-                    loadingViewLayout.setVisibility(View.GONE);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                        if(shareCardModelList.size() == receiveKeys.size()) {
+                            mViewPager.setAdapter(new CardImageAdapter(context, cardModelList, glide));
+                            loadingViewLayout.setVisibility(View.GONE);
+                        }
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
 
-            @Override
-            public void onFail() {
-                FileUtil.removeFilesIn(ContentsUtil.getTempFolder(context));
-                showCardDownloadFailDialog();
-            }
-        });
+                @Override
+                public void onFail() {
+                    FileUtil.removeFile(ContentsUtil.getTempFolder(context));
+                    showCardDownloadFailDialog();
+                }
+            });
+        }
     }
+
 
     @OnClick(R.id.card_save_button)
     public void onClickCardSaveButton(View view) {
         categorySelectDialog = new CategorySelectDialog(ShareCardActivity.this, categoryRepository.getCategoryAllList(), new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (shareCardModel != null) {
-                    try {
-                        CategoryModel selectItem = categorySelectDialog.getSelectItem();
-                        if(selectItem == null) {
-                            return;
-                        }
-                        FileUtil.unzip(shareFilePath, ContentsUtil.getTempFolder(context));
-                        CardModel cardModel = saveNewSharedCard(shareCardModel, selectItem.index);
-                        ContentsUtil.copySharedFiles(context, cardModel);
-                        FileUtil.removeFilesIn(ContentsUtil.getTempFolder(context));
+                try {
+                    CardTransferModel selectTransferModel = shareCardModelList.get(mViewPager.getCurrentItem());
+                    CategoryModel selectItem = categorySelectDialog.getSelectItem();
+                    if(selectItem == null) {
+                        return;
+                    }
+                    FileUtil.unzip(selectTransferModel.downloadedFilePath, ContentsUtil.getTempFolder(context) + "unzip");
+                    CardModel cardModel = saveNewSharedCard(selectTransferModel, selectItem.index);
+                    ContentsUtil.copySharedFiles(context, cardModel, ContentsUtil.getTempFolder(context) + "unzip");
+                    FileUtil.removeFilesIn(ContentsUtil.getTempFolder(context) + "unzip");
 
+                    if(shareCardModelList.size() == 1) {
                         applicationManager.setCategoryModel(selectItem);
                         applicationManager.setCurrentCardIndex(cardModel.cardIndex);
                         moveToCardListActivity();
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    } else {
+                        shareCardModelList.remove(selectTransferModel);
+                        ((CardImageAdapter) mViewPager.getAdapter()).removeItemAt(mViewPager.getCurrentItem());
+                        mViewPager.getAdapter().notifyDataSetChanged();
+                        categorySelectDialog.dismiss();
                     }
-                }else{
+                } catch(Exception e) {
+                    e.printStackTrace();
                     Toast.makeText(context, R.string.cannot_share_card_save_message,Toast.LENGTH_SHORT).show();
                 }
             }
@@ -253,7 +272,6 @@ public class ShareCardActivity extends AbstractActivity {
         cardDownloadFailDialog.show();
     }
 
-    @VisibleForTesting String getReceiveKey(){
-        return receiveKey;
-    }
+    @VisibleForTesting List<String> getReceiveKeys() { return receiveKeys; }
+    @VisibleForTesting List<CardTransferModel> getShareCardModelList() { return shareCardModelList; }
 }
