@@ -276,8 +276,8 @@ public class ContentsUtil {
         return  cardModel;
     }
 
-    public static void copySharedFiles(Context context, CardModel cardModel) {
-        File[] files = new File(getTempFolder(context)).listFiles();
+    public static void copySharedFiles(Context context, CardModel cardModel, String orginPath) {
+        File[] files = new File(orginPath).listFiles();
         for (File file : files) {
             try {
                 if (isVideoFile(file)) {
