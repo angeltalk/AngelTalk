@@ -2,6 +2,7 @@ package act.angelman.presentation.custom;
 
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -67,6 +68,16 @@ public class CardViewPagerLayoutTest extends UITest{
         subject.setCategoryData(setDefaultCategoryModel());
         assertThat(subject.getChildCount() == 1).isTrue();
     }
+
+    @Test
+    public void whenLaunchedCardViewPagerView_thenShowOXButton() throws Exception {
+        subject.setCategoryData(setDefaultCategoryModel());
+        ImageView yesNoButton = (ImageView) subject.findViewById(R.id.yes_no_btn);
+        assertThat(yesNoButton.getVisibility()).isEqualTo(View.VISIBLE);
+    }
+
+
+
 
     @Test
     public void whenLaunchedCardViewPagerView_thenShowsCardListInSelectedCategory() throws Exception {
