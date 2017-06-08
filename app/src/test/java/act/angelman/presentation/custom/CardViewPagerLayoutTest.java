@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -76,6 +77,33 @@ public class CardViewPagerLayoutTest extends UITest{
         assertThat(yesNoButton.getVisibility()).isEqualTo(View.VISIBLE);
     }
 
+    @Test
+    public void whenClickYesNoButton_thenShowYesNoLayout() throws Exception {
+        subject.setCategoryData(setDefaultCategoryModel());
+        ImageView yesNoButton = (ImageView) subject.findViewById(R.id.yes_no_btn);
+        RelativeLayout backgorundLayout  = (RelativeLayout) subject.findViewById(R.id.yes_no_background);
+        assertThat(backgorundLayout.getVisibility()).isEqualTo(View.GONE);
+        yesNoButton.performClick();
+        assertThat(backgorundLayout.getVisibility()).isEqualTo(View.VISIBLE);
+    }
+
+
+    @Test
+    public void givenShowYesNoLayout_whenClickYesNoCloseButton_thenHideYesNoLayout() throws Exception {
+        //Given
+        subject.setCategoryData(setDefaultCategoryModel());
+        ImageView yesNoButton = (ImageView) subject.findViewById(R.id.yes_no_btn);
+        RelativeLayout backgorundLayout  = (RelativeLayout) subject.findViewById(R.id.yes_no_background);
+        yesNoButton.performClick();
+        assertThat(backgorundLayout.getVisibility()).isEqualTo(View.VISIBLE);
+
+        //When
+        ImageView yesNoCloseButton = (ImageView) subject.findViewById(R.id.yes_no_close_btn);
+        yesNoCloseButton.performClick();
+
+        //Then
+        assertThat(backgorundLayout.getVisibility()).isEqualTo(View.GONE);
+    }
 
 
 
