@@ -620,6 +620,34 @@ public class MakeCardActivityTest extends UITest{
     }
 
     @Test
+    public void givenPhotoCard_whenTtsButtonPressed_thenPlayTtsVoiceImmediately() throws Exception {
+        // given
+        setupPhotoCard();
+        subject.playUtil = mock(PlayUtil.class);
+
+        // when
+        subject.ttsButton.performClick();
+
+        // then
+        verify(subject.playUtil).ttsSpeak(anyString());
+    }
+
+    @Test
+    public void givenPhotoCardAndTtsButtonPressed_whenClickReplayButton_thenPlayTtsVoice() throws Exception {
+        // given
+        setupPhotoCard();
+        subject.playUtil = mock(PlayUtil.class);
+        subject.ttsButton.performClick();
+
+        // when
+        verify(subject.playUtil, times(1)).ttsSpeak(anyString());
+        subject.replayButton.performClick();
+
+        // then
+        verify(subject.playUtil, times(2)).ttsSpeak(anyString());
+    }
+
+    @Test
     public void whenCategoryNameIsOver16ChractersInEnglish_thenDeleteAfter16thCharacters() throws Exception {
         setupEditCardForRenaming();
 
