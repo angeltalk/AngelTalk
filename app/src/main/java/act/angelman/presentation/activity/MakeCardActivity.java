@@ -64,7 +64,7 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
     private String contentPath;
     private RequestManager glide;
     private int selectedCategoryId;
-    private String voiceFile;
+    private String voiceFilePath;
     private Handler countHandler = new Handler();
     private CardModel.CardType cardType;
     private CardEditType editType;
@@ -177,7 +177,7 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
 
     @Override
     public void afterRecord() {
-        playRecordVoiceFile();
+        playCardTitle();
     }
 
     @Override
@@ -193,13 +193,13 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
     public void onClickRecStopButton(View view){
         if (state == STATE_RECORD_NOT_COMPLETE) {
             recordUtil.stopRecord();
-            playRecordVoiceFile();
+            playCardTitle();
         } else {
             if(isCardEditing() && editType.equals(CardEditType.VOICE)) {
                 if(editCardModel.voicePath != null ){
                     FileUtil.removeFile(editCardModel.voicePath);
                 }
-                cardRepository.updateSingleCardVoice(editCardModel._id, voiceFile);
+                cardRepository.updateSingleCardVoice(editCardModel._id, voiceFilePath);
                 moveToCardViewPagerActivityAfterEditing();
             } else {
                 saveCardAndMoveToNextActivity();
@@ -212,6 +212,7 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
         showCountingScene();
         changeCountingSceneForRecoding();
         changeCountingSceneForPlay();
+        playCardTitle();
     }
 
     private void changeCountingSceneForRecoding() {
@@ -235,7 +236,7 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
 
     @OnClick(R.id.replay_button)
     public void onClickReplayButton(View view){
-        playRecordVoiceFile();
+        playCardTitle();
     }
 
     @OnClick(R.id.rerecord_button)
@@ -472,9 +473,13 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
         getApplicationContext().startActivity(intent);
     }
 
-    private void playRecordVoiceFile() {
+    private void playCardTitle() {
         changeCountingSceneForPlay();
-        playUtil.play(voiceFile);
+        if(!Strings.isNullOrEmpty(voiceFilePath)) {
+            playUtil.play(voiceFilePath);
+        } else {
+            playUtil.ttsSpeak(cardTitleEditText.getText().toString());
+        }
     }
 
     private void changeCountingSceneForPlay() {
@@ -511,7 +516,7 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
 
         CardModel cardModel = CardModel.builder()
                 .name(cardView.cardTitleEdit.getText().toString())
-                .contentPath(contentPath).voicePath(voiceFile)
+                .contentPath(contentPath).voicePath(voiceFilePath)
                 .firstTime(dateFormat.format(date))
                 .categoryId(selectedCategoryId)
                 .cardType(cardType)
@@ -528,10 +533,10 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
     }
 
     private void startVoiceRecording() {
-        voiceFile = RecordUtil.getMediaFilePath(this);
+        voiceFilePath = RecordUtil.getMediaFilePath(this);
         waitCount.setText(R.string.talk_now);
         changeCountingSceneForRecoding();
-        recordUtil.record(voiceFile, this);
+        recordUtil.record(voiceFilePath, this);
     }
 
     private Runnable countAction = new Runnable() {
