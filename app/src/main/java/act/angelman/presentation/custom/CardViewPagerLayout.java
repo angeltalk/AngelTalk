@@ -7,6 +7,8 @@ import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -23,13 +25,31 @@ import act.angelman.domain.model.CardModel;
 import act.angelman.domain.model.CategoryModel;
 import act.angelman.domain.repository.CardRepository;
 import act.angelman.presentation.adapter.CardImageAdapter;
+import act.angelman.presentation.util.PlayUtil;
 import act.angelman.presentation.util.ResourcesUtil;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 
 public class CardViewPagerLayout extends RelativeLayout {
 
     @Inject
     CardRepository cardRepository;
+
+    @BindView(R.id.yes_no_background)
+    RelativeLayout yesNoBackground;
+
+
+    @BindView(R.id.yes_layout)
+    RelativeLayout yesLayout;
+
+    @BindView(R.id.no_layout)
+    RelativeLayout noLayout;
+
+
+    PlayUtil playUtil;
+
 
     List<CardModel> allCardListInSelectedCategory;
     private View subject;
@@ -52,6 +72,8 @@ public class CardViewPagerLayout extends RelativeLayout {
 
         subject = inflate(context, R.layout.card_viewpager_layout, this);
 
+        ButterKnife.bind(this);
+
         findViewById(R.id.back_button).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,9 +85,40 @@ public class CardViewPagerLayout extends RelativeLayout {
             }
         });
 
+
         glide = Glide.with(context);
+        playUtil = PlayUtil.getInstance();
 
     }
+
+    @OnClick(R.id.yes_no_btn)
+    public void onClickYesNoButton(View v){
+        Animation slide_up = AnimationUtils.loadAnimation(context, R.anim.slide_up);
+        yesNoBackground.startAnimation(slide_up);
+        yesNoBackground.setVisibility(View.VISIBLE);
+        yesNoBackground.setClickable(true);
+    }
+
+
+    @OnClick(R.id.yes_no_close_btn)
+    public void onClickYesNoCloseButton(View v){
+        Animation slide_down = AnimationUtils.loadAnimation(context, R.anim.slide_down);
+        yesNoBackground.startAnimation(slide_down);
+        yesNoBackground.setVisibility(View.GONE);
+    }
+
+    @OnClick(R.id.yes_layout)
+    public void onClickYesLayout(View v){
+        playUtil.ttsSpeak(getResources().getString(R.string.response_yes));
+
+    }
+
+    @OnClick(R.id.no_layout)
+    public void onClickNoLayout(View v){
+        playUtil.ttsSpeak(getResources().getString(R.string.response_no));
+    }
+
+
 
     public void setCategoryData(CategoryModel categoryModel){
         setBackground(
