@@ -114,4 +114,8 @@
     <string name="whatsapp_package_name">com.whatsapp</string>
     <string name="whatsapp">WhatsApp</string>
     <string name="o_x">O / X</string>
+    <string name="response_yes">Yes</string>
+    <string name="response_no">No</string>
+
+
 </resources>
