@@ -113,4 +113,5 @@
     <string name="kakao_package_name">com.kakao.talk</string>
     <string name="whatsapp_package_name">com.whatsapp</string>
     <string name="whatsapp">WhatsApp</string>
+    <string name="o_x">O / X</string>
 </resources>
