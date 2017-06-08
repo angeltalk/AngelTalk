@@ -327,6 +327,23 @@ public class MakeCardActivityTest extends UITest{
         assertThat(subject.replayButton.getVisibility()).isEqualTo(View.VISIBLE);
         assertThat(subject.rerecordButton.getVisibility()).isEqualTo(View.VISIBLE);
     }
+
+    @Test
+    public void givenPhotoCard_whenClickTtsButton_thenShowsCheckRecordAndRetakeAndReplayButtonsAndText() throws Exception {
+        // given
+        setupPhotoCard();
+        // when
+        subject.ttsButton.performClick();
+        // then
+        assertThat(subject.countScene.getVisibility()).isEqualTo(View.VISIBLE);
+        assertThat(((TextView) subject.findViewById(R.id.waiting_count)).getText()).isEqualTo("음성을 확인하세요");
+        assertThat(subject.recordStopButton.getVisibility()).isEqualTo(View.VISIBLE);
+        assertThat(subject.replayButton.getVisibility()).isEqualTo(View.VISIBLE);
+        assertThat(subject.rerecordButton.getVisibility()).isEqualTo(View.VISIBLE);
+        assertThat(subject.ttsButton.isEnabled()).isFalse();
+        assertThat(subject.micButton.isEnabled()).isFalse();
+    }
+
     @Test
     public void givenVoiceRecordFinished_whenClickReplayButton_thenStartVoicePlay() throws Exception {
         setupPhotoCard();
@@ -554,6 +571,52 @@ public class MakeCardActivityTest extends UITest{
         assertThat(shadowOf((subject.findViewById(R.id.record_stop_button)).getBackground()).getCreatedFromResId()).isEqualTo(R.drawable.record_stop);
         verify(subject.playUtil).playStop();
         assertThat(subject.micButton.getVisibility()).isEqualTo(View.VISIBLE);
+    }
+
+    @Test
+    public void givenPhotoCard_whenFinishVoiceRecordingAndOnBackPressed_thenPrepareRecording() throws Exception {
+        // given
+        setupPhotoCard();
+        subject.recordUtil = mock(RecordUtil.class);
+        subject.playUtil = mock(PlayUtil.class);
+
+        // when
+        subject.micButton.performClick();
+
+        Robolectric.flushForegroundThreadScheduler();
+        Robolectric.flushForegroundThreadScheduler();
+        Robolectric.flushForegroundThreadScheduler();
+        Robolectric.flushForegroundThreadScheduler();
+
+        subject.recordStopButton.performClick();
+
+        assertThat(subject.micButton.isEnabled()).isFalse();
+        assertThat(subject.ttsButton.isEnabled()).isFalse();
+
+        subject.onBackPressed();
+        // then
+        assertThat(subject.micButton.isEnabled()).isTrue();
+        assertThat(subject.ttsButton.isEnabled()).isTrue();
+    }
+
+    @Test
+    public void givenPhotoCard_whenTtsButtonPressedAndOnBackPressed_thenPrepareRecording() throws Exception {
+        // given
+        setupPhotoCard();
+        subject.recordUtil = mock(RecordUtil.class);
+        subject.playUtil = mock(PlayUtil.class);
+
+        // when
+        subject.ttsButton.performClick();
+
+        assertThat(subject.micButton.isEnabled()).isFalse();
+        assertThat(subject.ttsButton.isEnabled()).isFalse();
+
+        subject.onBackPressed();
+        // then
+        assertThat(subject.micButton.isEnabled()).isTrue();
+        assertThat(subject.ttsButton.isEnabled()).isTrue();
+
     }
 
     @Test
