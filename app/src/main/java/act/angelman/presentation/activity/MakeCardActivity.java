@@ -462,8 +462,8 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
     }
 
     private void showRecodingGuideAndMicButton() {
-        findViewById(R.id.recoding_guide).setVisibility(View.VISIBLE);
         findViewById(R.id.mic_btn).setVisibility(View.VISIBLE);
+        findViewById(R.id.tts_btn).setVisibility(View.VISIBLE);
     }
 
     private void hideKeyboard() {

@@ -189,8 +189,8 @@ public class MakeCardActivityTest extends UITest{
 
         enterKey(cardTitleEdit);
 
-        assertThat(subject.findViewById(R.id.recoding_guide)).isVisible();
         assertThat(subject.findViewById(R.id.mic_btn)).isVisible();
+        assertThat(subject.findViewById(R.id.tts_btn)).isVisible();
     }
 
     @Test
