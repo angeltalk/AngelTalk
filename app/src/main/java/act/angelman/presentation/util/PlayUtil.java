@@ -58,6 +58,8 @@ public class PlayUtil implements TextToSpeech.OnInitListener {
         if(tts != null  && state == STATE_NONE) {
             Bundle bundle = new Bundle();
             bundle.putString(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, text);
+
+            tts.setSpeechRate(0.8f);
             tts.speak(text, TextToSpeech.QUEUE_FLUSH, bundle, text);
         }
     }
