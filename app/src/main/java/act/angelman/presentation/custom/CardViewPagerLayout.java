@@ -98,7 +98,11 @@ public class CardViewPagerLayout extends RelativeLayout {
     }
 
     @OnClick(R.id.yes_no_btn)
-    public void onClickYesNoButton(View v){
+    public void slideUpYesNoLayout(View v){
+        if(cardImageAdapter != null) {
+            cardImageAdapter.releaseSpeakHandler();
+            cardImageAdapter.stopVideoView();
+        }
         Animation slide_up = AnimationUtils.loadAnimation(context, R.anim.slide_up);
         yesNoPannel.startAnimation(slide_up);
         yesNoPannel.setVisibility(View.VISIBLE);
@@ -107,7 +111,7 @@ public class CardViewPagerLayout extends RelativeLayout {
 
 
     @OnClick(R.id.yes_no_close_btn)
-    public void onClickYesNoCloseButton(View v){
+    public void slideDownYesNoLayout(View v){
         Animation slide_down = AnimationUtils.loadAnimation(context, R.anim.slide_down);
         yesNoPannel.startAnimation(slide_down);
         yesNoPannel.setVisibility(View.GONE);
