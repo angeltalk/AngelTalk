@@ -1,11 +1,18 @@
 package act.angelman.presentation.activity;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.matcher.BoundedMatcher;
 import android.support.test.internal.util.Checks;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.hamcrest.Description;
@@ -19,6 +26,13 @@ import act.angelman.data.sqlite.DefaultDataGenerator;
 import act.angelman.domain.model.CategoryModel;
 import act.angelman.domain.repository.CardRepository;
 import act.angelman.domain.repository.CategoryRepository;
+
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 public class TestUtil {
 
@@ -62,5 +76,74 @@ public class TestUtil {
                 description.appendText("with text color: ");
             }
         };
+    }
+
+    public static Matcher<View> withDrawable(final int drawableId) {
+        return new TypeSafeMatcher<View>() {
+
+            String resourceName;
+
+            @Override
+            protected boolean matchesSafely(View target) {
+                Drawable targetDrawable;
+
+                if (target instanceof Button){
+                    targetDrawable = ((Button) target).getBackground();
+                } else if(target instanceof ImageView) {
+                    targetDrawable = ((ImageView) target).getDrawable();
+                } else {
+                    return false;
+                }
+
+                if (drawableId < 0){
+                    return targetDrawable == null;
+                }
+                Resources resources = target.getContext().getResources();
+                Drawable expectedDrawable = resources.getDrawable(drawableId);
+                resourceName = resources.getResourceEntryName(drawableId);
+
+                if (expectedDrawable == null) {
+                    return false;
+                }
+
+                Bitmap bitmap = ((BitmapDrawable) targetDrawable).getBitmap();
+                Bitmap otherBitmap = ((BitmapDrawable) expectedDrawable).getBitmap();
+                return bitmap.sameAs(otherBitmap);
+            }
+
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("with drawable from resource id: ");
+                description.appendValue(drawableId);
+                if (resourceName != null) {
+                    description.appendText("[");
+                    description.appendText(resourceName);
+                    description.appendText("]");
+                }
+            }
+        };
+    }
+    public static ViewInteraction checkIsDisplayed(int resId) {
+        return onView(withId(resId))
+                .check(matches(isDisplayed()));
+    }
+
+    public static ViewInteraction checkWithText(int resId, String text) {
+        return onView(withId(resId))
+                .check(matches(isDisplayed()))
+                .check(matches(withText(text)));
+    }
+
+    public static void performClick(Matcher<View> viewMatcher) {
+        onView(viewMatcher)
+                .check(matches(isDisplayed()))
+                .perform(click());
+    }
+
+    public static void performClick(int resId) {
+        onView(withId(resId))
+                .check(matches(isDisplayed()))
+                .perform(click());
     }
 }
