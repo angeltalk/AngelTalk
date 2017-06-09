@@ -9,6 +9,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -37,29 +38,34 @@ public class CardViewPagerLayout extends RelativeLayout {
     @Inject
     CardRepository cardRepository;
 
-    @BindView(R.id.yes_no_background)
-    RelativeLayout yesNoBackground;
+    @BindView(R.id.yes_no_pannel)
+    RelativeLayout yesNoPannel;
 
 
     @BindView(R.id.yes_layout)
-    RelativeLayout yesLayout;
+    LinearLayout yesCardLayout;
 
     @BindView(R.id.no_layout)
-    RelativeLayout noLayout;
+    LinearLayout noCardLayout;
 
 
-    PlayUtil playUtil;
-
-
-    List<CardModel> allCardListInSelectedCategory;
     private View subject;
-    CardViewPager mViewPager;
+
     private Context context;
+
     private OnClickBackButtonListener onClickBackButtonListener;
+
     private CardImageAdapter cardImageAdapter;
+
     int currentCardIndex = 0;
 
     RequestManager glide;
+
+    CardViewPager mViewPager;
+
+    List<CardModel> allCardListInSelectedCategory;
+
+    PlayUtil playUtil;
 
     public CardViewPagerLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -94,27 +100,31 @@ public class CardViewPagerLayout extends RelativeLayout {
     @OnClick(R.id.yes_no_btn)
     public void onClickYesNoButton(View v){
         Animation slide_up = AnimationUtils.loadAnimation(context, R.anim.slide_up);
-        yesNoBackground.startAnimation(slide_up);
-        yesNoBackground.setVisibility(View.VISIBLE);
-        yesNoBackground.setClickable(true);
+        yesNoPannel.startAnimation(slide_up);
+        yesNoPannel.setVisibility(View.VISIBLE);
+        yesNoPannel.setClickable(true);
     }
 
 
     @OnClick(R.id.yes_no_close_btn)
     public void onClickYesNoCloseButton(View v){
         Animation slide_down = AnimationUtils.loadAnimation(context, R.anim.slide_down);
-        yesNoBackground.startAnimation(slide_down);
-        yesNoBackground.setVisibility(View.GONE);
+        yesNoPannel.startAnimation(slide_down);
+        yesNoPannel.setVisibility(View.GONE);
     }
 
     @OnClick(R.id.yes_layout)
     public void onClickYesLayout(View v){
+        Animation scaleUp = AnimationUtils.loadAnimation(context, R.anim.scale_up);
+        v.startAnimation(scaleUp);
         playUtil.ttsSpeak(getResources().getString(R.string.response_yes));
 
     }
 
     @OnClick(R.id.no_layout)
     public void onClickNoLayout(View v){
+        Animation scaleUp = AnimationUtils.loadAnimation(context, R.anim.scale_up);
+        v.startAnimation(scaleUp);
         playUtil.ttsSpeak(getResources().getString(R.string.response_no));
     }
 
