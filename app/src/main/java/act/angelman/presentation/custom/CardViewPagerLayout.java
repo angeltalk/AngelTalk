@@ -115,7 +115,7 @@ public class CardViewPagerLayout extends RelativeLayout {
 
     @OnClick(R.id.yes_layout)
     public void onClickYesLayout(View v){
-        Animation scaleUp = AnimationUtils.loadAnimation(context, R.anim.scale_up);
+        Animation scaleUp = AnimationUtils.loadAnimation(context, R.anim.zoom_out);
         v.startAnimation(scaleUp);
         playUtil.ttsSpeak(getResources().getString(R.string.response_yes));
 
@@ -123,7 +123,7 @@ public class CardViewPagerLayout extends RelativeLayout {
 
     @OnClick(R.id.no_layout)
     public void onClickNoLayout(View v){
-        Animation scaleUp = AnimationUtils.loadAnimation(context, R.anim.scale_up);
+        Animation scaleUp = AnimationUtils.loadAnimation(context, R.anim.zoom_out);
         v.startAnimation(scaleUp);
         playUtil.ttsSpeak(getResources().getString(R.string.response_no));
     }
