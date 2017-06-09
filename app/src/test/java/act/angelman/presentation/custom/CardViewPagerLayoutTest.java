@@ -3,7 +3,9 @@ package act.angelman.presentation.custom;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.view.View;
+import android.view.animation.Animation;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -18,6 +20,7 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
+import java.lang.reflect.Field;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.List;
@@ -33,11 +36,14 @@ import act.angelman.domain.model.CategoryModel;
 import act.angelman.domain.repository.CardRepository;
 import act.angelman.presentation.adapter.CardImageAdapter;
 import act.angelman.presentation.util.AngelManGlideTransform;
+import act.angelman.presentation.util.PlayUtil;
 import act.angelman.presentation.util.ResourcesUtil;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyInt;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -81,7 +87,7 @@ public class CardViewPagerLayoutTest extends UITest{
     public void whenClickYesNoButton_thenShowYesNoLayout() throws Exception {
         subject.setCategoryData(setDefaultCategoryModel());
         ImageView yesNoButton = (ImageView) subject.findViewById(R.id.yes_no_btn);
-        RelativeLayout backgorundLayout  = (RelativeLayout) subject.findViewById(R.id.yes_no_background);
+        RelativeLayout backgorundLayout  = (RelativeLayout) subject.findViewById(R.id.yes_no_pannel);
         assertThat(backgorundLayout.getVisibility()).isEqualTo(View.GONE);
         yesNoButton.performClick();
         assertThat(backgorundLayout.getVisibility()).isEqualTo(View.VISIBLE);
@@ -90,19 +96,46 @@ public class CardViewPagerLayoutTest extends UITest{
 
     @Test
     public void givenShowYesNoLayout_whenClickYesNoCloseButton_thenHideYesNoLayout() throws Exception {
-        //Given
         subject.setCategoryData(setDefaultCategoryModel());
         ImageView yesNoButton = (ImageView) subject.findViewById(R.id.yes_no_btn);
-        RelativeLayout backgorundLayout  = (RelativeLayout) subject.findViewById(R.id.yes_no_background);
+        RelativeLayout backgorundLayout  = (RelativeLayout) subject.findViewById(R.id.yes_no_pannel);
         yesNoButton.performClick();
         assertThat(backgorundLayout.getVisibility()).isEqualTo(View.VISIBLE);
 
-        //When
         ImageView yesNoCloseButton = (ImageView) subject.findViewById(R.id.yes_no_close_btn);
         yesNoCloseButton.performClick();
 
-        //Then
         assertThat(backgorundLayout.getVisibility()).isEqualTo(View.GONE);
+    }
+
+    @Test
+    public void whenClickYesNoButton_thenSlideUpAnimation() throws Exception {
+        subject.setCategoryData(setDefaultCategoryModel());
+        ImageView yesNoButton = (ImageView) subject.findViewById(R.id.yes_no_btn);
+        RelativeLayout mockRelativeLayout = mock(RelativeLayout.class);
+        subject.yesNoPannel = mockRelativeLayout;
+
+        yesNoButton.performClick();
+
+        verify(subject.yesNoPannel).startAnimation(any(Animation.class));
+    }
+
+    @Test
+    public void givenShowYesNoLayout_whenClickYes_thenTtsSpeak() throws Exception {
+        subject.setCategoryData(setDefaultCategoryModel());
+        ImageView yesNoButton = (ImageView) subject.findViewById(R.id.yes_no_btn);
+        yesNoButton.performClick();
+
+        PlayUtil ttsMock = mock(PlayUtil.class);
+
+        Field declaredField = CardViewPagerLayout.class.getDeclaredField("playUtil");
+        declaredField.setAccessible(true);
+        declaredField.set(subject, ttsMock);
+
+        doNothing().when(ttsMock).ttsSpeak("네");
+        LinearLayout yesLayout = (LinearLayout) subject.findViewById(R.id.yes_layout);
+        yesLayout.performClick();
+        verify(ttsMock).ttsSpeak("네");
     }
 
 

@@ -52,7 +52,7 @@
         <ImageView
             android:id="@+id/yes_no_btn"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="38dp"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:src="@drawable/bg_yn_out" />
@@ -61,16 +61,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="11.5dp"
+            android:layout_centerInParent="true"
+            android:layout_marginBottom="10dp"
             android:text="@string/o_x"
             android:textColor="@color/white"
-            android:textSize="14sp"
+            android:textSize="15sp"
             android:textStyle="bold" />
     </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/yes_no_background"
+    <android.support.percent.PercentRelativeLayout
+        android:id="@+id/yes_no_pannel"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#dadada"
@@ -92,70 +92,86 @@
             android:layout_marginTop="10dp"
             android:src="@drawable/img_down_arrow" />
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/yes_layout"
-            android:layout_width="250dp"
-            android:layout_height="250dp"
-            android:layout_centerHorizontal="true"
             android:layout_below="@id/yes_no_close_btn"
-            android:layout_marginTop="20.5dp"
-            android:background="@color/white">
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="42.2dp"
-                android:layout_centerHorizontal="true"
-                android:src="@drawable/ic_yes"
-                />
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="#f9f9f9"
-                android:layout_alignParentBottom="true">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:textColor="#000000"
-                    android:text="@string/response_yes"/>
-            </RelativeLayout>
-
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/no_layout"
-            android:layout_width="250dp"
-            android:layout_height="250dp"
             android:layout_centerHorizontal="true"
-            android:layout_below="@id/yes_layout"
-            android:layout_marginTop="25dp"
-            android:background="@color/white">
+            android:layout_marginTop="20.5dp"
+            android:background="@drawable/rectangle_radius_shape"
+            android:orientation="vertical"
+            app:layout_heightPercent="40%"
+            app:layout_widthPercent="70%">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="42.2dp"
-                android:layout_centerHorizontal="true"
-                android:src="@drawable/ic_no"
-                />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/ic_yes" />
+            </RelativeLayout>
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="#f9f9f9"
-                android:layout_alignParentBottom="true">
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/rectangle_bottom_radius_shape">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:textStyle="bold"
+                    android:text="@string/response_yes"
                     android:textColor="#000000"
-                    android:text="@string/response_no"/>
+                    android:textSize="20sp" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/no_layout"
+            android:layout_below="@id/yes_layout"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="25dp"
+            android:background="@drawable/rectangle_radius_shape"
+            android:orientation="vertical"
+            app:layout_heightPercent="40%"
+            app:layout_widthPercent="70%">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="55dp"
+                    android:src="@drawable/ic_no" />
             </RelativeLayout>
 
-        </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/rectangle_bottom_radius_shape">
 
-    </RelativeLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="@string/response_no"
+                    android:textColor="#000000"
+                    android:textSize="20sp" />
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </android.support.percent.PercentRelativeLayout>
 
 
 </android.support.percent.PercentRelativeLayout>
