@@ -6,6 +6,7 @@ import android.graphics.Rect;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.VisibleForTesting;
 import android.support.percent.PercentRelativeLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -25,6 +26,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.google.common.base.Strings;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -64,7 +66,7 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
     private String contentPath;
     private RequestManager glide;
     private int selectedCategoryId;
-    private String voiceFilePath;
+
     private Handler countHandler = new Handler();
     private CardModel.CardType cardType;
     private CardEditType editType;
@@ -75,6 +77,9 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
 
     RecordUtil recordUtil = RecordUtil.getInstance();
     PlayUtil playUtil;
+
+    @VisibleForTesting
+    String voiceFilePath;
 
     private CardModel editCardModel;
 
@@ -116,6 +121,9 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
 
     @BindView(R.id.card_image_title_edit)
     EditText cardTitleEditText;
+
+    @BindView(R.id.card_image_title)
+    TextView cardTitle;
 
     @BindView(R.id.tts_btn)
     Button ttsButton;
@@ -209,10 +217,20 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
 
     @OnClick(R.id.tts_btn)
     public void onClickTtsButton(View view) {
+        initVoiceFile();
         showCountingScene();
         changeCountingSceneForRecoding();
         changeCountingSceneForPlay();
         playCardTitle();
+    }
+
+    private void initVoiceFile() {
+        if(!Strings.isNullOrEmpty(voiceFilePath)) {
+            if(new File(voiceFilePath).exists()) {
+                FileUtil.removeFile(voiceFilePath);
+            }
+            voiceFilePath = "";
+        }
     }
 
     private void changeCountingSceneForRecoding() {
@@ -478,7 +496,7 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
         if(!Strings.isNullOrEmpty(voiceFilePath)) {
             playUtil.play(voiceFilePath);
         } else {
-            playUtil.ttsSpeak(cardTitleEditText.getText().toString());
+            playUtil.ttsSpeak(cardTitle.getText().toString());
         }
     }
 
