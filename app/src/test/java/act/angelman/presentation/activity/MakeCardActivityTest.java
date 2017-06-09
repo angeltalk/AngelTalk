@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.assertj.core.util.Strings;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,6 +22,9 @@ import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowActivity;
 import org.robolectric.shadows.ShadowDrawable;
 import org.robolectric.shadows.ShadowInputMethodManager;
+
+import java.io.File;
+import java.io.IOException;
 
 import javax.inject.Inject;
 
@@ -46,6 +50,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -80,6 +85,23 @@ public class MakeCardActivityTest extends UITest{
         when(applicationManager.getCategoryModel()).thenReturn(getCategoryModel());
         when(applicationManager.getCategoryModelColor()).thenReturn(getCategoryModelColor());
         subject = setupActivityWithIntent(MakeCardActivity.class, intent);
+        subject.cardTitle.setText("photo card");
+    }
+
+    private void setupPhotoCardWithVoicePath() {
+        Intent intent = new Intent();
+        intent.putExtra(ContentsUtil.CONTENT_PATH, "/Users/ssa009/workspace/angelman/app/src/main/assets/bus.jpg");
+        intent.putExtra(ContentsUtil.CARD_TYPE, CardModel.CardType.PHOTO_CARD.getValue());
+        when(applicationManager.getCategoryModel()).thenReturn(getCategoryModel());
+        when(applicationManager.getCategoryModelColor()).thenReturn(getCategoryModelColor());
+        subject = setupActivityWithIntent(MakeCardActivity.class, intent);
+        subject.cardTitle.setText("photo card");
+        subject.voiceFilePath = "voice file path";
+        try {
+            new File(subject.voiceFilePath).createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     private void setupVideoCard() {
         Intent intent = new Intent();
@@ -629,7 +651,22 @@ public class MakeCardActivityTest extends UITest{
         subject.ttsButton.performClick();
 
         // then
-        verify(subject.playUtil).ttsSpeak(anyString());
+        verify(subject.playUtil).ttsSpeak(eq(subject.cardTitle.getText().toString()));
+    }
+
+    @Test
+    public void givenPhotoCardWithVoicePath_whenTtsButtonPressed_thenRemoveVoiceFileAndVoiceFilePath() throws Exception {
+        // given
+        setupPhotoCardWithVoicePath();
+        assertThat(new File(subject.voiceFilePath).exists()).isTrue();
+        assertThat(Strings.isNullOrEmpty(subject.voiceFilePath)).isFalse();
+
+        // when
+        subject.ttsButton.performClick();
+
+        // then
+        assertThat(new File(subject.voiceFilePath).exists()).isFalse();
+        assertThat(Strings.isNullOrEmpty(subject.voiceFilePath)).isTrue();
     }
 
     @Test
@@ -640,11 +677,11 @@ public class MakeCardActivityTest extends UITest{
         subject.ttsButton.performClick();
 
         // when
-        verify(subject.playUtil, times(1)).ttsSpeak(anyString());
+        verify(subject.playUtil, times(1)).ttsSpeak(eq(subject.cardTitle.getText().toString()));
         subject.replayButton.performClick();
 
         // then
-        verify(subject.playUtil, times(2)).ttsSpeak(anyString());
+        verify(subject.playUtil, times(2)).ttsSpeak(eq(subject.cardTitle.getText().toString()));
     }
 
     @Test
