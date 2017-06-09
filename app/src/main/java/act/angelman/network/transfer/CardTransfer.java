@@ -100,7 +100,7 @@ public class CardTransfer {
 
     }
 
-    public void downloadCard(String receiveKey, final OnDownloadCompleteListener downloadCompleteListener) {
+    public void downloadCard(final String receiveKey, final OnDownloadCompleteListener downloadCompleteListener) {
         shareDataReference.child(receiveKey).addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override
@@ -110,7 +110,7 @@ public class CardTransfer {
                             setCardModealData(cardTransferModel, snapshot);
                         }
 
-                        final File localFile = new File(ContentsUtil.getTempFolder(context) + File.separator + "temp.zip");
+                        final File localFile = new File(ContentsUtil.getTempFolder(context) + File.separator + receiveKey + ".zip");
                         try {
                             storage.getReferenceFromUrl(cardTransferModel.contentPath)
                                     .getFile(localFile)

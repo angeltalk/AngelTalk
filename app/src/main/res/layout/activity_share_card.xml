@@ -65,12 +65,14 @@
             android:src="@drawable/angelee" />
 
         <TextView
+            android:id="@+id/on_loading_view_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:text="@string/card_loading_message"
             android:textColor="@color/white"
             android:textSize="17sp"
+            android:textAlignment="center"
             app:font="light" />
 
     </LinearLayout>

@@ -57,6 +57,8 @@ public class CardImageAdapter extends PagerAdapter {
         return viewCollection.get(index);
     }
 
+    public void removeItemAt(int index) { dataList.remove(index); }
+
     @Override
     public int getCount() {
         if (dataList == null) {

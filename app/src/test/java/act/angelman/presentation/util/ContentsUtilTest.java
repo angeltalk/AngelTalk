@@ -120,9 +120,9 @@ public class ContentsUtilTest {
     @Test
     public void givenPhotoCardAndTempFiles_whenCallCopySharedFiles_thenCopy() throws Exception {
         // given
-        String folderPath = ContentsUtil.getTempFolder(RuntimeEnvironment.application.getApplicationContext()) + File.separator;
-        new File(folderPath + "test.jpg").createNewFile();
-        new File(folderPath + "test.3gdp").createNewFile();
+        String folderPath = ContentsUtil.getTempFolder(RuntimeEnvironment.application.getApplicationContext());
+        new File(folderPath + File.separator + "test.jpg").createNewFile();
+        new File(folderPath + File.separator + "test.3gdp").createNewFile();
 
         CardModel cardModel = CardModel.builder()
                 .name("copyPhotoCard")
@@ -132,7 +132,7 @@ public class ContentsUtilTest {
                 .build();
 
         // when
-        ContentsUtil.copySharedFiles(RuntimeEnvironment.application.getApplicationContext(), cardModel);
+        ContentsUtil.copySharedFiles(RuntimeEnvironment.application.getApplicationContext(), cardModel, folderPath);
 
         // then
         assertThat(cardModel.name).isEqualTo("copyPhotoCard");
@@ -144,10 +144,10 @@ public class ContentsUtilTest {
     @Test
     public void givenVideoCardAndTempFiles_whenCallCopySharedFiles_thenCopy() throws Exception {
         // given
-        String folderPath = ContentsUtil.getTempFolder(RuntimeEnvironment.application.getApplicationContext()) + File.separator;
-        new File(folderPath + "test.mp4").createNewFile();
-        new File(folderPath + "test.jpg").createNewFile();
-        new File(folderPath + "test.3gdp").createNewFile();
+        String folderPath = ContentsUtil.getTempFolder(RuntimeEnvironment.application.getApplicationContext());
+        new File(folderPath + File.separator + "test.mp4").createNewFile();
+        new File(folderPath + File.separator + "test.jpg").createNewFile();
+        new File(folderPath + File.separator + "test.3gdp").createNewFile();
 
         String videoPath = ContentsUtil.getVideoPath(RuntimeEnvironment.application.getApplicationContext());
         CardModel cardModel = CardModel.builder()
@@ -159,7 +159,7 @@ public class ContentsUtilTest {
                 .build();
 
         // when
-        ContentsUtil.copySharedFiles(RuntimeEnvironment.application.getApplicationContext(),cardModel);
+        ContentsUtil.copySharedFiles(RuntimeEnvironment.application.getApplicationContext(),cardModel, folderPath);
 
         // then
         assertThat(cardModel.name).isEqualTo("copyVideoCard");

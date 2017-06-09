@@ -14,6 +14,8 @@ public class ApplicationConstants {
     public static final String INTENT_KEY_CARD_EDITED = "cardEdited";
     public static final String EDIT_CARD_ID = "editCardId";
     public static final String EDIT_TYPE = "editType";
+    public static final String INTENT_KEY_MULTI_DOWNLOAD = "isMultiDownload";
+    public static final String INTENT_KEY_MULTI_DOWNLOAD_DATA = "multiDownloadData";
 
 
     public enum SHARE_MESSENGER_TYPE{ KAKAOTALK, MESSAGE ,WHATSAPP}
