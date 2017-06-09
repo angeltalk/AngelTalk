@@ -145,7 +145,7 @@ public class ShareCardActivity extends AbstractActivity {
             return;
         }
 
-        loadingViewText.setText(getString(R.string.card_loading_message) + "\n(0/" + receiveKeys.size() + ")");
+        updateShareLoadingText();
 
         for(final String receiveKey : receiveKeys) {
             cardTransfer.downloadCard(receiveKey, new OnDownloadCompleteListener() {
@@ -162,7 +162,7 @@ public class ShareCardActivity extends AbstractActivity {
                         CardModel cardModel = ContentsUtil.getTempCardModel(tempLocation, cardTransferModel);
 
                         cardModelList.add(cardModel);
-                        loadingViewText.setText(getString(R.string.card_loading_message) + "\n(" + shareCardModelList.size() + "/" + receiveKeys.size() + ")");
+                        updateShareLoadingText();
 
                         if(shareCardModelList.size() == receiveKeys.size()) {
                             mViewPager.setAdapter(new CardImageAdapter(context, cardModelList, glide));
@@ -180,6 +180,14 @@ public class ShareCardActivity extends AbstractActivity {
                     showCardDownloadFailDialog();
                 }
             });
+        }
+    }
+
+    private void updateShareLoadingText() {
+        if (receiveKeys.size() > 1) {
+            loadingViewText.setText(getString(R.string.card_loading_message) + "\n(" + shareCardModelList.size() + "/" + receiveKeys.size() + ")");
+        } else {
+            loadingViewText.setText(getString(R.string.card_loading_message));
         }
     }
 
