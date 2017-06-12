@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -27,6 +28,7 @@ import act.angelman.presentation.custom.CustomSnackBar;
 import act.angelman.presentation.listener.OnDataChangeListener;
 import act.angelman.presentation.manager.ApplicationConstants;
 import act.angelman.presentation.manager.ApplicationManager;
+import act.angelman.presentation.util.ResolutionUtil;
 import act.angelman.presentation.util.ResourcesUtil;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -94,6 +96,9 @@ public class CardListActivity extends AbstractActivity {
             if (actionState == ItemTouchHelper.ACTION_STATE_IDLE) {
                 changeOrderRecyclerViewAdapter.onItemSelected();
                 if (keepView != null) {
+                    ViewGroup.LayoutParams layoutParams = keepView.getLayoutParams();
+                    layoutParams.height -= ResolutionUtil.getDpToPix(getApplicationContext(), 8);
+                    keepView.setLayoutParams(layoutParams);
                     keepView.setBackground(keepBackground);
                     keepView.setPadding(0, 0, 0, 0);
                     keepView.refreshDrawableState();
@@ -102,8 +107,11 @@ public class CardListActivity extends AbstractActivity {
                 }
             } else if (actionState == ItemTouchHelper.ACTION_STATE_DRAG) {
                 keepView = viewHolder.itemView;
-                keepBackground = viewHolder.itemView.getBackground();
-                viewHolder.itemView.setBackground(getResources().getDrawable(R.drawable.card_item_shadow));
+                keepBackground = keepView.getBackground();
+                keepView.setBackground(getResources().getDrawable(R.drawable.card_item_shadow));
+                ViewGroup.LayoutParams layoutParams = keepView.getLayoutParams();
+                layoutParams.height += ResolutionUtil.getDpToPix(getApplicationContext(), 8);
+                keepView.setLayoutParams(layoutParams);
             }
             super.onSelectedChanged(viewHolder, actionState);
         }
