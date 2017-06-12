@@ -2,7 +2,9 @@ package act.angelman.presentation.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -24,11 +26,13 @@ public class ChangeOrderRecyclerViewAdapter extends RecyclerView.Adapter<ChangeO
     private final RequestManager glide;
     private final Context context;
     private List<CardModel> cardModelList;
+    private final ItemTouchHelper cardListItemTouchHelper;
 
-    public ChangeOrderRecyclerViewAdapter(List<CardModel> cardModelList, Context context) {
+    public ChangeOrderRecyclerViewAdapter(List<CardModel> cardModelList, Context context, ItemTouchHelper cardListItemTouchHelper) {
         this.cardModelList = cardModelList;
         this.context = context;
         this.glide = Glide.with(context);
+        this.cardListItemTouchHelper = cardListItemTouchHelper;
     }
 
     @Override
@@ -55,6 +59,16 @@ public class ChangeOrderRecyclerViewAdapter extends RecyclerView.Adapter<ChangeO
             @Override
             public void onClick(View v) {
                 CustomSnackBar.styledSnackBarWithDuration(context, v.getRootView(), context.getResources().getString(R.string.change_order_toast_message), 2000);
+            }
+        });
+
+        holder.itemMoveIcon.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                    cardListItemTouchHelper.startDrag(holder);
+                }
+                return false;
             }
         });
     }
