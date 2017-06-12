@@ -125,8 +125,8 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
     @BindView(R.id.card_image_title)
     TextView cardTitle;
 
-    @BindView(R.id.tts_btn)
-    Button ttsButton;
+//    @BindView(R.id.tts_btn)
+//    Button ttsButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -215,14 +215,14 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
         }
     }
 
-    @OnClick(R.id.tts_btn)
+    /*@OnClick(R.id.tts_btn)
     public void onClickTtsButton(View view) {
         initVoiceFile();
         showCountingScene();
         changeCountingSceneForRecoding();
         changeCountingSceneForPlay();
         playCardTitle();
-    }
+    }*/
 
     private void initVoiceFile() {
         if(!Strings.isNullOrEmpty(voiceFilePath)) {
@@ -247,7 +247,7 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
     private void showCountingScene() {
         countScene.setVisibility(View.VISIBLE);
         waitCount.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 62);
-        ttsButton.setEnabled(false);
+//        ttsButton.setEnabled(false);
         micButton.setEnabled(false);
     }
 
@@ -338,7 +338,7 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
         waitCount.setText(String.valueOf(INIT_COUNT));
         countScene.setVisibility(View.GONE);
         micButton.setEnabled(true);
-        ttsButton.setEnabled(true);
+//        ttsButton.setEnabled(true);
         recordStopButton.setBackground(ResourcesUtil.getDrawable(getApplicationContext(), R.drawable.record_stop));
         recordStopButton.setVisibility(View.GONE);
         replayButton.setVisibility(View.GONE);
@@ -511,8 +511,9 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
     }
 
     private void showRecodingGuideAndMicButton() {
+        findViewById(R.id.recoding_guide).setVisibility(View.VISIBLE);
         findViewById(R.id.mic_btn).setVisibility(View.VISIBLE);
-        findViewById(R.id.tts_btn).setVisibility(View.VISIBLE);
+        //findViewById(R.id.tts_btn).setVisibility(View.VISIBLE);
     }
 
     private void hideKeyboard() {
