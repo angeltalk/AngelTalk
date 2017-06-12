@@ -220,6 +220,15 @@ public class ContentsUtil {
                 h = (int)((width/1.75f)*0.789);
             }
 
+            // y + height must be <= bitmap.height()
+            if(sy + h > bitmap.getHeight()) {
+                sy = (int)((bitmap.getHeight() - h) * 0.5);
+            }
+            // x + width must be <= bitmap.width()
+            if(sx + w > bitmap.getWidth()) {
+                sx = (int)((bitmap.getWidth() - w) * 0.5);
+            }
+
             bitmap = createBitmap(bitmap, sx, sy, w, h);
 
         } else if (kind == MediaStore.Images.Thumbnails.MICRO_KIND) {
