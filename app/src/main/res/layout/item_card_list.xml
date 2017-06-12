@@ -66,10 +66,14 @@
                 android:visibility="gone"/>
             <ImageView
                 android:id="@+id/item_move_icon"
-                android:layout_width="30dp"
-                android:layout_height="29dp"
-                android:layout_marginEnd="15dp"
-                android:layout_marginStart="11dp"
+                android:layout_width="50dp"
+                android:layout_height="69dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginStart="1dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp"
                 android:src="?attr/themedItemMoveIconDrawable"
                 android:visibility="gone" />
         </LinearLayout>

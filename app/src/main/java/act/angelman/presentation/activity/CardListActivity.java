@@ -202,7 +202,7 @@ public class CardListActivity extends AbstractActivity {
         if (!changeOrderTabButton.isSelected()) {
             showHideTabButton.setSelected(false);
             changeOrderTabButton.setSelected(true);
-            changeOrderRecyclerViewAdapter = new ChangeOrderRecyclerViewAdapter(cardList, getApplicationContext());
+            changeOrderRecyclerViewAdapter = new ChangeOrderRecyclerViewAdapter(cardList, getApplicationContext(), cardListItemTouchHelper);
             changeOrderRecyclerView.setAdapter(changeOrderRecyclerViewAdapter);
             showHideRecyclerView.setVisibility(View.GONE);
             changeOrderRecyclerView.setVisibility(View.VISIBLE);
@@ -216,7 +216,7 @@ public class CardListActivity extends AbstractActivity {
         showHideRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         showHideRecyclerView.setOnScrollListener(onScrollListener);
 
-        changeOrderRecyclerViewAdapter = new ChangeOrderRecyclerViewAdapter(cardList, getApplicationContext());
+        changeOrderRecyclerViewAdapter = new ChangeOrderRecyclerViewAdapter(cardList, getApplicationContext(), cardListItemTouchHelper);
         changeOrderRecyclerView.setAdapter(changeOrderRecyclerViewAdapter);
         changeOrderRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         changeOrderRecyclerView.setOnScrollListener(onScrollListener);
