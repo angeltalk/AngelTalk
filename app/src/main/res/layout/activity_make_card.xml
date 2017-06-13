@@ -91,6 +91,17 @@
             app:layout_marginTopPercent="84%" >
 
             <Button
+                android:id="@+id/skip_button"
+                android:layout_width="256dp"
+                android:layout_height="53.5dp"
+                android:layout_centerInParent="true"
+                android:text="@string/skip_button"
+                android:textSize="22sp"
+                android:textColor="@color/white"
+                android:background="@color/transparent"
+                android:visibility="gone" />
+
+            <Button
                 android:id="@+id/record_stop_button"
                 android:layout_width="62dp"
                 android:layout_height="62dp"
