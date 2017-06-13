@@ -115,6 +115,7 @@
     <string name="whatsapp">WhatsApp</string>
     <string name="response_yes">네</string>
     <string name="response_no">아니오</string>
+    <string name="skip_button">건너뛰기</string>
 
 
 </resources>

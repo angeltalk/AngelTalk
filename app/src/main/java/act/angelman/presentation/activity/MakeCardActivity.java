@@ -71,6 +71,7 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
     private CardModel.CardType cardType;
     private CardEditType editType;
     private String editCardId;
+    private CardModel editCardModel;
 
     protected int state = STATE_RECORD_NOT_COMPLETE;
     protected InputMethodManager imm;
@@ -80,8 +81,6 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
 
     @VisibleForTesting
     String voiceFilePath;
-
-    private CardModel editCardModel;
 
     @Inject
     CardRepository cardRepository;
@@ -125,8 +124,8 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
     @BindView(R.id.card_image_title)
     TextView cardTitle;
 
-//    @BindView(R.id.tts_btn)
-//    Button ttsButton;
+    @BindView(R.id.skip_button)
+    Button skipButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -185,6 +184,7 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
 
     @Override
     public void afterRecord() {
+        changeCountingSceneForPlay();
         playCardTitle();
     }
 
@@ -201,6 +201,7 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
     public void onClickRecStopButton(View view){
         if (state == STATE_RECORD_NOT_COMPLETE) {
             recordUtil.stopRecord();
+            changeCountingSceneForPlay();
             playCardTitle();
         } else {
             if(isCardEditing() && editType.equals(CardEditType.VOICE)) {
@@ -215,27 +216,14 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
         }
     }
 
-    /*@OnClick(R.id.tts_btn)
-    public void onClickTtsButton(View view) {
+    @OnClick(R.id.skip_button)
+    public void onClickSkipButton(View view) {
+        skipButton.setVisibility(View.GONE);
+        countHandler.removeCallbacks(countAction);
         initVoiceFile();
-        showCountingScene();
         changeCountingSceneForRecoding();
         changeCountingSceneForPlay();
         playCardTitle();
-    }*/
-
-    private void initVoiceFile() {
-        if(!Strings.isNullOrEmpty(voiceFilePath)) {
-            if(new File(voiceFilePath).exists()) {
-                FileUtil.removeFile(voiceFilePath);
-            }
-            voiceFilePath = "";
-        }
-    }
-
-    private void changeCountingSceneForRecoding() {
-        recordStopButton.setVisibility(View.VISIBLE);
-        waitCount.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 30);
     }
 
     @OnClick(R.id.mic_btn)
@@ -243,14 +231,6 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
         showCountingScene();
         countHandler.postDelayed(countAction, COUNT_INTERVAL);
     }
-
-    private void showCountingScene() {
-        countScene.setVisibility(View.VISIBLE);
-        waitCount.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 62);
-//        ttsButton.setEnabled(false);
-        micButton.setEnabled(false);
-    }
-
 
     @OnClick(R.id.replay_button)
     public void onClickReplayButton(View view){
@@ -267,6 +247,27 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
         editCardModel.name = cardView.cardTitleEdit.getText().toString();
         cardRepository.updateSingleCardName(editCardModel._id, editCardModel.name);
         moveToCardViewPagerActivityAfterEditing();
+    }
+
+    private void initVoiceFile() {
+        if(!Strings.isNullOrEmpty(voiceFilePath)) {
+            if(new File(voiceFilePath).exists()) {
+                FileUtil.removeFile(voiceFilePath);
+            }
+            voiceFilePath = "";
+        }
+    }
+
+    private void changeCountingSceneForRecoding() {
+        recordStopButton.setVisibility(View.VISIBLE);
+        waitCount.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 30);
+    }
+
+    private void showCountingScene() {
+        countScene.setVisibility(View.VISIBLE);
+        waitCount.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 62);
+        micButton.setEnabled(false);
+        skipButton.setVisibility(View.VISIBLE);
     }
 
     private void initCardView() {
@@ -338,7 +339,6 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
         waitCount.setText(String.valueOf(INIT_COUNT));
         countScene.setVisibility(View.GONE);
         micButton.setEnabled(true);
-//        ttsButton.setEnabled(true);
         recordStopButton.setBackground(ResourcesUtil.getDrawable(getApplicationContext(), R.drawable.record_stop));
         recordStopButton.setVisibility(View.GONE);
         replayButton.setVisibility(View.GONE);
@@ -492,7 +492,6 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
     }
 
     private void playCardTitle() {
-        changeCountingSceneForPlay();
         if(!Strings.isNullOrEmpty(voiceFilePath)) {
             playUtil.play(voiceFilePath);
         } else {
@@ -513,7 +512,6 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
     private void showRecodingGuideAndMicButton() {
         findViewById(R.id.recoding_guide).setVisibility(View.VISIBLE);
         findViewById(R.id.mic_btn).setVisibility(View.VISIBLE);
-        //findViewById(R.id.tts_btn).setVisibility(View.VISIBLE);
     }
 
     private void hideKeyboard() {
@@ -562,6 +560,7 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
         @Override
         public void run() {
             if(--mCountDown == 0){
+                skipButton.setVisibility(View.GONE);
                 startVoiceRecording();
             }
             else {
