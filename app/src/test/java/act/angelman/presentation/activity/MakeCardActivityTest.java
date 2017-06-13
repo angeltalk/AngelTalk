@@ -11,7 +11,6 @@ import android.widget.TextView;
 import org.assertj.core.util.Strings;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.invocation.InvocationOnMock;
@@ -214,7 +213,6 @@ public class MakeCardActivityTest extends UITest{
 
         assertThat(subject.findViewById(R.id.mic_btn)).isVisible();
         assertThat(subject.findViewById(R.id.recoding_guide)).isVisible();
-        //assertThat(subject.findViewById(R.id.tts_btn)).isVisible();
     }
 
     @Test
@@ -306,13 +304,18 @@ public class MakeCardActivityTest extends UITest{
     }
 
     @Test
-    public void whenShowCountingScene_thenCountDown3To1() throws Exception {
+    public void givenPhotoCard_whenClickMicButton_thenStartCountDown3To1AndShowSkipButton() throws Exception {
+        // given
         setupPhotoCard();
 
+        // when
         Button micBtn = (Button) subject.findViewById(R.id.mic_btn);
         micBtn.setVisibility(View.VISIBLE);
+        assertThat(subject.skipButton.getVisibility()).isEqualTo(View.GONE);
         micBtn.performClick();
 
+        // then
+        assertThat(subject.skipButton.getVisibility()).isEqualTo(View.VISIBLE);
         TextView waitingCount = (TextView) subject.findViewById(R.id.waiting_count);
         assertThat(waitingCount.getText().toString()).isEqualTo("3");
         Robolectric.flushForegroundThreadScheduler();
@@ -322,7 +325,80 @@ public class MakeCardActivityTest extends UITest{
     }
 
     @Test
-    public void whenCountDown3To1_thenStartVoiceRecordAndShowsCheckRecordAndRetakeAndReplayButtonsAndText() throws Exception {
+    public void givenPhotoCard_whenClickMicButtonAndFinishVoiceRecording_thenHideSkipButton() throws Exception {
+        // given
+        setupPhotoCard();
+
+        // when
+        Button micBtn = (Button) subject.findViewById(R.id.mic_btn);
+        micBtn.setVisibility(View.VISIBLE);
+        assertThat(subject.skipButton.getVisibility()).isEqualTo(View.GONE);
+        micBtn.performClick();
+        Robolectric.flushForegroundThreadScheduler();
+        Robolectric.flushForegroundThreadScheduler();
+        Robolectric.flushForegroundThreadScheduler();
+
+        // then
+        assertThat(subject.skipButton.getVisibility()).isEqualTo(View.GONE);
+    }
+
+    @Test
+    public void givenPhotoCardAndShownSkipButtonWhileVoiceRecording_whenClickSkipButton_thenChangeLayoutToReplayAndPlayTts() throws Exception {
+        // given
+        setupPhotoCard();
+        subject.micButton.performClick();
+        subject.playUtil = mock(PlayUtil.class);
+
+        // when
+        subject.skipButton.performClick();
+
+        // then
+        assertThat(subject.countScene.getVisibility()).isEqualTo(View.VISIBLE);
+        assertThat(((TextView) subject.findViewById(R.id.waiting_count)).getText()).isEqualTo("음성을 확인하세요");
+        assertThat(subject.recordStopButton.getVisibility()).isEqualTo(View.VISIBLE);
+        assertThat(subject.replayButton.getVisibility()).isEqualTo(View.VISIBLE);
+        assertThat(subject.rerecordButton.getVisibility()).isEqualTo(View.VISIBLE);
+        assertThat(subject.micButton.isEnabled()).isFalse();
+        assertThat(subject.skipButton.getVisibility()).isEqualTo(View.GONE);
+
+        verify(subject.playUtil).ttsSpeak(eq(subject.cardTitle.getText().toString()));
+    }
+
+    @Test
+    public void givenPhotoCardAndShownSkipButtonWhileVoiceRecording_whenClickSkipButton_thenRemoveVoiceFileAndVoiceFilePath() throws Exception {
+        // given
+        setupPhotoCardWithVoicePath();
+        subject.micButton.performClick();
+        assertThat(new File(subject.voiceFilePath).exists()).isTrue();
+        assertThat(Strings.isNullOrEmpty(subject.voiceFilePath)).isFalse();
+
+        // when
+        subject.skipButton.performClick();
+
+        // then
+        assertThat(new File(subject.voiceFilePath).exists()).isFalse();
+        assertThat(Strings.isNullOrEmpty(subject.voiceFilePath)).isTrue();
+    }
+
+    @Test
+    public void givenPhotoCardAndSkipVoiceRecording_whenClickReplayButton_thenPlayTtsVoice() throws Exception {
+        // given
+        setupPhotoCard();
+        subject.playUtil = mock(PlayUtil.class);
+
+        subject.micButton.performClick();
+        subject.skipButton.performClick();
+
+        // when
+        verify(subject.playUtil, times(1)).ttsSpeak(eq(subject.cardTitle.getText().toString()));
+        subject.replayButton.performClick();
+
+        // then
+        verify(subject.playUtil, times(2)).ttsSpeak(eq(subject.cardTitle.getText().toString()));
+    }
+
+    @Test
+    public void whenFinishCountDown3To1_thenHideSkipButtonAndStartVoiceRecordAndShowsCheckRecordAndRetakeAndReplayButtonsAndText() throws Exception {
         setupPhotoCard();
         subject.recordUtil = mock(RecordUtil.class);
         subject.playUtil = mock(PlayUtil.class);
@@ -345,28 +421,10 @@ public class MakeCardActivityTest extends UITest{
 
         recordStopBtn.performClick();
         verify(subject.recordUtil).stopRecord();
-
         assertThat(((TextView) subject.findViewById(R.id.waiting_count)).getText()).isEqualTo("음성을 확인하세요");
         assertThat(subject.recordStopButton.getVisibility()).isEqualTo(View.VISIBLE);
         assertThat(subject.replayButton.getVisibility()).isEqualTo(View.VISIBLE);
         assertThat(subject.rerecordButton.getVisibility()).isEqualTo(View.VISIBLE);
-    }
-
-    @Test
-    @Ignore
-    public void givenPhotoCard_whenClickTtsButton_thenShowsCheckRecordAndRetakeAndReplayButtonsAndText() throws Exception {
-        // given
-        setupPhotoCard();
-        // when
-        //subject.ttsButton.performClick();
-        // then
-        assertThat(subject.countScene.getVisibility()).isEqualTo(View.VISIBLE);
-        assertThat(((TextView) subject.findViewById(R.id.waiting_count)).getText()).isEqualTo("음성을 확인하세요");
-        assertThat(subject.recordStopButton.getVisibility()).isEqualTo(View.VISIBLE);
-        assertThat(subject.replayButton.getVisibility()).isEqualTo(View.VISIBLE);
-        assertThat(subject.rerecordButton.getVisibility()).isEqualTo(View.VISIBLE);
-        //assertThat(subject.ttsButton.isEnabled()).isFalse();
-        assertThat(subject.micButton.isEnabled()).isFalse();
     }
 
     @Test
@@ -622,73 +680,6 @@ public class MakeCardActivityTest extends UITest{
         // then
         assertThat(subject.micButton.isEnabled()).isTrue();
         //assertThat(subject.ttsButton.isEnabled()).isTrue();
-    }
-
-    @Test
-    @Ignore
-    public void givenPhotoCard_whenTtsButtonPressedAndOnBackPressed_thenPrepareRecording() throws Exception {
-        // given
-        setupPhotoCard();
-        subject.recordUtil = mock(RecordUtil.class);
-        subject.playUtil = mock(PlayUtil.class);
-
-        // when
-        //subject.ttsButton.performClick();
-
-        assertThat(subject.micButton.isEnabled()).isFalse();
-        //assertThat(subject.ttsButton.isEnabled()).isFalse();
-
-        subject.onBackPressed();
-        // then
-        assertThat(subject.micButton.isEnabled()).isTrue();
-        //assertThat(subject.ttsButton.isEnabled()).isTrue();
-
-    }
-
-    @Test
-    @Ignore
-    public void givenPhotoCard_whenTtsButtonPressed_thenPlayTtsVoiceImmediately() throws Exception {
-        // given
-        setupPhotoCard();
-        subject.playUtil = mock(PlayUtil.class);
-
-        // when
-        //subject.ttsButton.performClick();
-
-        // then
-        verify(subject.playUtil).ttsSpeak(eq(subject.cardTitle.getText().toString()));
-    }
-
-    @Test
-    @Ignore
-    public void givenPhotoCardWithVoicePath_whenTtsButtonPressed_thenRemoveVoiceFileAndVoiceFilePath() throws Exception {
-        // given
-        setupPhotoCardWithVoicePath();
-        assertThat(new File(subject.voiceFilePath).exists()).isTrue();
-        assertThat(Strings.isNullOrEmpty(subject.voiceFilePath)).isFalse();
-
-        // when
-        //subject.ttsButton.performClick();
-
-        // then
-        assertThat(new File(subject.voiceFilePath).exists()).isFalse();
-        assertThat(Strings.isNullOrEmpty(subject.voiceFilePath)).isTrue();
-    }
-
-    @Test
-    @Ignore
-    public void givenPhotoCardAndTtsButtonPressed_whenClickReplayButton_thenPlayTtsVoice() throws Exception {
-        // given
-        setupPhotoCard();
-        subject.playUtil = mock(PlayUtil.class);
-        //subject.ttsButton.performClick();
-
-        // when
-        verify(subject.playUtil, times(1)).ttsSpeak(eq(subject.cardTitle.getText().toString()));
-        subject.replayButton.performClick();
-
-        // then
-        verify(subject.playUtil, times(2)).ttsSpeak(eq(subject.cardTitle.getText().toString()));
     }
 
     @Test
