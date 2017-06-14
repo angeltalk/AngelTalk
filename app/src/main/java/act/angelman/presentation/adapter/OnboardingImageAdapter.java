@@ -1,18 +1,23 @@
 package act.angelman.presentation.adapter;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
+import android.graphics.Typeface;
 import android.support.v4.view.PagerAdapter;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.StyleSpan;
+import android.text.style.UnderlineSpan;
+import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import act.angelman.R;
-import act.angelman.presentation.activity.CategoryMenuActivity;
 
 
 public class OnboardingImageAdapter extends PagerAdapter{
@@ -26,6 +31,7 @@ public class OnboardingImageAdapter extends PagerAdapter{
     };
 
     private Context context;
+    private View.OnClickListener permissionButtonOnClickListener;
 
     public OnboardingImageAdapter(Context context) {
         this.context = context;
@@ -48,33 +54,44 @@ public class OnboardingImageAdapter extends PagerAdapter{
         ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.item_onboarding,container,false);
 
         ImageView onBoardingImage = ((ImageView) layout.findViewById(R.id.img_onboarding));
-        ImageView onBoardingFinishAngelee = ((ImageView) layout.findViewById(R.id.onboarding_finish_angelee));
-        ImageView onBoardingFinishButton = ((ImageView) layout.findViewById(R.id.onboarding_finish));
+        ImageView permissionButton = ((ImageView) layout.findViewById(R.id.onboarding_finish));
+        TextView privacyGuide = ((TextView) layout.findViewById(R.id.onboarding_privacy_guide));
 
         onBoardingImage.setImageDrawable(context.getResources().getDrawable(ONBOARDING_IMAGES[position]));
-        onBoardingFinishButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                moveToCategoryMenuActivity();
-            }
-        });
+        permissionButton.setOnClickListener(permissionButtonOnClickListener);
+
 
         if(isLastPage(position)) {
-            onBoardingFinishAngelee.setVisibility(View.VISIBLE);
-            Glide.with(context)
-                    .load(R.drawable.angelee)
-                    .asGif()
-                    .crossFade()
-                    .into(onBoardingFinishAngelee);
-            onBoardingFinishButton.setVisibility(View.VISIBLE);
-
-        } else {
-            onBoardingFinishButton.setVisibility(View.GONE);
-            onBoardingFinishAngelee.setVisibility(View.GONE);
+            setPrivacyGuideText(privacyGuide);
+            privacyGuide.setVisibility(View.VISIBLE);
+            permissionButton.setVisibility(View.VISIBLE);
         }
 
         container.addView(layout);
         return layout;
+    }
+
+    private void setPrivacyGuideText(TextView privacyGuide) {
+        String privacyPolicy = context.getString(R.string.noti_privacy);
+        String privacyGuideString = context.getString(R.string.onboarding_privacy_guide);
+
+        SpannableStringBuilder builder = new SpannableStringBuilder(privacyGuideString);
+
+        int start = privacyGuideString.indexOf(privacyPolicy);
+        int end = start + privacyPolicy.length();
+
+        builder.setSpan(new StyleSpan(Typeface.BOLD), start, end, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+        builder.setSpan(new UnderlineSpan(), start, end, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+
+        privacyGuide.append(builder);
+
+        Linkify.TransformFilter mTransform = new Linkify.TransformFilter() {
+            @Override
+            public String transformUrl(Matcher matcher, String s) {
+                return "";
+            }
+        };
+        Linkify.addLinks(privacyGuide, Pattern.compile(privacyPolicy), context.getString(R.string.privacy_web_url), null, mTransform);
     }
 
     @Override
@@ -82,11 +99,10 @@ public class OnboardingImageAdapter extends PagerAdapter{
         collection.removeView((View) view);
     }
 
-    private void moveToCategoryMenuActivity() {
-        Intent intent = new Intent(context, CategoryMenuActivity.class);
-        context.startActivity(intent);
-        ((Activity)context).finish();
+    public void setPermissionButtonOnClickListener(View.OnClickListener onClickListener) {
+        permissionButtonOnClickListener = onClickListener;
     }
+
     private boolean isLastPage(int position) {
         return position == ONBOARDING_IMAGES.length - 1;
     }

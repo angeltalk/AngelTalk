@@ -38,7 +38,6 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -77,7 +76,7 @@ import static org.mockito.Mockito.when;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, shadows = {ShadowSnackbar.class})
+@Config(constants = BuildConfig.class, sdk=22, shadows = {ShadowSnackbar.class})
 public class CardViewPagerActivityTest extends UITest {
 
     @Inject
@@ -317,7 +316,7 @@ public class CardViewPagerActivityTest extends UITest {
         View cardView = ((CardImageAdapter) subject.mViewPager.getAdapter()).getItemAt(4);
         cardView.findViewById(R.id.card_container).performClick();
 
-        Robolectric.getForegroundThreadScheduler().advanceBy(1000, TimeUnit.MILLISECONDS);
+        Robolectric.getForegroundThreadScheduler().advanceBy(1000);
 
         assertThat(((VideoCardTextureView) cardView.findViewById(R.id.card_video))).isVisible();
     }

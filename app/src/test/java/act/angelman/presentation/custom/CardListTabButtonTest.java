@@ -17,7 +17,7 @@ import act.angelman.UITest;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class)
+@Config(constants = BuildConfig.class, sdk=22)
 public class CardListTabButtonTest extends UITest {
     private CardListTabButton subject;
 
