@@ -1,6 +1,5 @@
 package act.angelman.presentation.activity;
 
-import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 
@@ -19,6 +18,7 @@ import act.angelman.TestAngelmanApplication;
 import act.angelman.UITest;
 import act.angelman.presentation.manager.ApplicationManager;
 
+import static act.angelman.presentation.manager.ApplicationConstants.STORAGE_PERMISSION_REQUEST_CODE;
 import static org.assertj.android.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -63,7 +63,7 @@ public class OnboardingActivityTest extends UITest{
 
         //when
         int[] grantResults = {PackageManager.PERMISSION_GRANTED, PackageManager.PERMISSION_GRANTED};
-        subject.onRequestPermissionsResult(subject.PERMISSION_REQUEST_CODE, null, grantResults);
+        subject.onRequestPermissionsResult(STORAGE_PERMISSION_REQUEST_CODE, null, grantResults);
 
         //then
         ShadowActivity shadowActivity = shadowOf(subject);
@@ -78,7 +78,7 @@ public class OnboardingActivityTest extends UITest{
 
         //when
         int[] grantResults = {PackageManager.PERMISSION_DENIED, PackageManager.PERMISSION_DENIED};
-        subject.onRequestPermissionsResult(subject.PERMISSION_REQUEST_CODE, null, grantResults);
+        subject.onRequestPermissionsResult(STORAGE_PERMISSION_REQUEST_CODE, null, grantResults);
 
         //then
         ShadowActivity shadowActivity = shadowOf(subject);
@@ -96,10 +96,6 @@ public class OnboardingActivityTest extends UITest{
         ((TestAngelmanApplication) RuntimeEnvironment.application).getAngelmanTestComponent().inject(this);
         when(applicationManager.isFirstLaunched()).thenReturn(false);
         subject = setupActivity(OnboardingActivity.class);
-
-        ShadowActivity shadowActivity = shadowOf(subject);
-        shadowActivity.denyPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE});
-
     }
 
     private void advance4Seconds() {
