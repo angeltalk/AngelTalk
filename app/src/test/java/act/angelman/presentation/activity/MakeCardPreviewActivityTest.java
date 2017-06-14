@@ -22,7 +22,6 @@ import org.robolectric.shadows.ShadowMediaPlayer;
 import org.robolectric.shadows.util.DataSource;
 
 import java.io.File;
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -48,7 +47,7 @@ import static org.mockito.Mockito.when;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, shadows = ShadowFileUtil.class)
+@Config(constants = BuildConfig.class, sdk=22, shadows = ShadowFileUtil.class)
 public class MakeCardPreviewActivityTest extends UITest {
 
     @Inject
@@ -83,7 +82,7 @@ public class MakeCardPreviewActivityTest extends UITest {
 
         subject.findViewById(R.id.preview_play_button).performClick();
         assertThat(subject.findViewById(R.id.preview_play_button).getVisibility()).isEqualTo(View.GONE);
-        Robolectric.getBackgroundThreadScheduler().advanceBy(1000, TimeUnit.MILLISECONDS);
+        Robolectric.getBackgroundThreadScheduler().advanceBy(1000);
     }
 
     @Test

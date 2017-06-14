@@ -19,7 +19,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, shadows = {ShadowResourcesCompat.class})
+@Config(constants = BuildConfig.class, shadows = {ShadowResourcesCompat.class}, sdk=22)
 public class ResourcesUtilTest {
 
 

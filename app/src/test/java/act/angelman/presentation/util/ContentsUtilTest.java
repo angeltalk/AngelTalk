@@ -24,7 +24,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, shadows = ShadowThumbnailUtil.class)
+@Config(constants = BuildConfig.class, sdk=22, shadows = ShadowThumbnailUtil.class)
 public class ContentsUtilTest {
 
     @Test
