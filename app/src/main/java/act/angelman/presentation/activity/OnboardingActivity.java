@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.VisibleForTesting;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
@@ -28,6 +27,8 @@ import act.angelman.presentation.manager.ApplicationManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static act.angelman.presentation.manager.ApplicationConstants.STORAGE_PERMISSION_REQUEST_CODE;
+
 public class OnboardingActivity extends AbstractActivity {
 
     @Inject
@@ -46,10 +47,6 @@ public class OnboardingActivity extends AbstractActivity {
 
     private AngelmanApplication angelmanApplication;
     private Activity activity;
-
-    @VisibleForTesting
-    static final int PERMISSION_REQUEST_CODE = 1;
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -74,7 +71,7 @@ public class OnboardingActivity extends AbstractActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
-            case PERMISSION_REQUEST_CODE: {
+            case STORAGE_PERMISSION_REQUEST_CODE: {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED
                         && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
@@ -135,7 +132,7 @@ public class OnboardingActivity extends AbstractActivity {
     private View.OnClickListener onPermissionButtonOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_REQUEST_CODE);
+            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_PERMISSION_REQUEST_CODE);
 
         }
     };

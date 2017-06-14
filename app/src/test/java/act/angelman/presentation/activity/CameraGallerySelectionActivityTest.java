@@ -1,7 +1,7 @@
 package act.angelman.presentation.activity;
 
 import android.content.Intent;
-import android.os.Build;
+import android.content.pm.PackageManager;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -13,7 +13,6 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowActivity;
-import org.robolectric.util.ReflectionHelpers;
 
 import javax.inject.Inject;
 
@@ -25,6 +24,8 @@ import act.angelman.domain.model.CategoryModel;
 import act.angelman.presentation.manager.ApplicationManager;
 import act.angelman.presentation.util.ResourcesUtil;
 
+import static act.angelman.presentation.manager.ApplicationConstants.CAMERA_PERMISSION_FOR_PHOTO_REQUEST_CODE;
+import static act.angelman.presentation.manager.ApplicationConstants.CAMERA_PERMISSION_FOR_VIDEO_REQUEST_CODE;
 import static junit.framework.Assert.assertTrue;
 import static org.assertj.android.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -81,13 +82,27 @@ public class CameraGallerySelectionActivityTest extends UITest {
     }
 
     @Test
-    public void whenClickedCameraCard_thenStartCameraActivity() throws Exception {
-        ReflectionHelpers.setStaticField(Build.VERSION.class, "SDK_INT", 23);
+    public void whenOnRequestPermissionsWithCameraPermission_thenStartCameraActivity() throws Exception {
         setupActivity(CameraGallerySelectionActivity.class);
-        subject.cameraCard.performClick();
+
+        int[] grantResults = {PackageManager.PERMISSION_GRANTED};
+        subject.onRequestPermissionsResult(CAMERA_PERMISSION_FOR_PHOTO_REQUEST_CODE, null, grantResults);
+
         ShadowActivity shadowMainActivity = shadowOf(subject);
         Intent nextStartedActivity = shadowMainActivity.getNextStartedActivity();
         assertThat(nextStartedActivity.getComponent().getClassName()).isEqualTo(Camera2Activity.class.getCanonicalName());
+    }
+
+    @Test
+    public void whenOnRequestPermissionsWithoutCameraPermission_thenDoNotStartCameraActivity() throws Exception {
+        setupActivity(CameraGallerySelectionActivity.class);
+
+        int[] grantResults = {PackageManager.PERMISSION_DENIED};
+        subject.onRequestPermissionsResult(CAMERA_PERMISSION_FOR_PHOTO_REQUEST_CODE, null, grantResults);
+
+        ShadowActivity shadowMainActivity = shadowOf(subject);
+        Intent nextStartedActivity = shadowMainActivity.getNextStartedActivity();
+        assertThat(nextStartedActivity).isNull();
     }
 
     @Test
@@ -99,13 +114,27 @@ public class CameraGallerySelectionActivityTest extends UITest {
     }
 
     @Test
-    public void whenClickedVideoCard_thenStartVideoActivity() throws  Exception {
-        ReflectionHelpers.setStaticField(Build.VERSION.class, "SDK_INT", 23);
+    public void whenOnRequestPermissionWithCameraPermission_thenStartVideoActivity() throws  Exception {
         setupActivity(CameraGallerySelectionActivity.class);
-        subject.videoCard.performClick();
+
+        int[] grantResults = {PackageManager.PERMISSION_GRANTED};
+        subject.onRequestPermissionsResult(CAMERA_PERMISSION_FOR_VIDEO_REQUEST_CODE, null, grantResults);
+
         ShadowActivity shadowMainActivity = shadowOf(subject);
         Intent nextStartedActivity = shadowMainActivity.getNextStartedActivity();
         assertThat(nextStartedActivity.getComponent().getClassName()).isEqualTo(VideoActivity.class.getCanonicalName());
+    }
+
+    @Test
+    public void whenOnRequestPermissionWithoutCameraPermission_thenStartVideoActivity() throws  Exception {
+        setupActivity(CameraGallerySelectionActivity.class);
+
+        int[] grantResults = {PackageManager.PERMISSION_DENIED};
+        subject.onRequestPermissionsResult(CAMERA_PERMISSION_FOR_VIDEO_REQUEST_CODE, null, grantResults);
+
+        ShadowActivity shadowMainActivity = shadowOf(subject);
+        Intent nextStartedActivity = shadowMainActivity.getNextStartedActivity();
+        assertThat(nextStartedActivity).isNull();
     }
 
     @Test
