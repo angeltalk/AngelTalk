@@ -27,7 +27,7 @@ import static org.mockito.Mockito.verify;
 
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class)
+@Config(constants = BuildConfig.class, sdk=22)
 public class CardDataRepositoryTest {
 
     private CardDataRepository subject;

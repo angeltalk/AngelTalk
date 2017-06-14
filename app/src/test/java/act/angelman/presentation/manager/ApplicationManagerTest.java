@@ -24,7 +24,7 @@ import static act.angelman.presentation.util.ResourceMapper.IconType.SCHOOL;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, shadows = {ShadowKakaoLink.class, ShadowKeyCharacterMap.class})
+@Config(constants = BuildConfig.class, sdk=22, shadows = {ShadowKakaoLink.class, ShadowKeyCharacterMap.class})
 public class ApplicationManagerTest {
 
     private ApplicationManager subject;

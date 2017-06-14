@@ -25,7 +25,7 @@ import static org.mockito.Mockito.verify;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, shadows = ShadowKeyCharacterMap.class)
+@Config(constants = BuildConfig.class, sdk=22, shadows = ShadowKeyCharacterMap.class)
 public class ScreenReceiverTest extends UITest{
 
     @Inject

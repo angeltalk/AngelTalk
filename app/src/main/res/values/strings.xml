@@ -117,6 +117,8 @@
     <string name="response_yes">Yes</string>
     <string name="response_no">No</string>
     <string name="skip_button">SKIP</string>
+    <string name="onboarding_privacy_guide">By starting the app,\n you agree to the AngelTalk Privacy Policy.</string>
+
 
 
 </resources>

@@ -40,7 +40,7 @@
     <string name="inform_show_child_mode">잠금화면에 엔젤톡이 나타납니다</string>
     <string name="inform_hide_child_mode">잠금화면에서 엔젤톡이 사라집니다</string>
     <string name="format_day">MM월 dd일 E요일</string>
-    <string name="noti_privacy">개인정보처리방침</string>
+    <string name="noti_privacy">개인정보취급방침</string>
     <string name="noti_usages">이용 약관</string>
     <string name="noti_oss">오픈소스 라이선스</string>
     <string name="noti_voc">의견 보내기</string>
@@ -116,6 +116,7 @@
     <string name="response_yes">네</string>
     <string name="response_no">아니오</string>
     <string name="skip_button">건너뛰기</string>
+    <string name="onboarding_privacy_guide">이 앱을 사용하는 것은 AngelTalk 개인정보취급방침에\n 동의하는 것으로 간주됩니다.</string>
 
 
 </resources>

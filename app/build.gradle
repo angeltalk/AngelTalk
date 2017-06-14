@@ -23,7 +23,7 @@ android {
     defaultConfig {
         applicationId "act.angelman"
         minSdkVersion 21
-        targetSdkVersion 22
+        targetSdkVersion 23
         versionCode 12
         versionName "2.1"
         multiDexEnabled true
