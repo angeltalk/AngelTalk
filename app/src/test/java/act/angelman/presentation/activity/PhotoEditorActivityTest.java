@@ -41,7 +41,7 @@ import static org.mockito.Mockito.when;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, shadows = ShadowContentUtil.class)
+@Config(constants = BuildConfig.class, sdk=22, shadows = ShadowContentUtil.class)
 public class PhotoEditorActivityTest extends UITest{
 
     private PhotoEditorActivity subject;

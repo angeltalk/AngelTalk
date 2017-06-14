@@ -28,7 +28,7 @@ import static org.mockito.Mockito.when;
 import static org.robolectric.Robolectric.setupActivity;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class)
+@Config(constants = BuildConfig.class, sdk=22)
 public class DatabaseHelperTest {
 
     @Inject

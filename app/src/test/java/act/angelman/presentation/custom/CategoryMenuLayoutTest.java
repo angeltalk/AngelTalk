@@ -44,7 +44,7 @@ import static org.mockito.Mockito.when;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(AngelmanTestRunner.WithKorean.class)
-@Config(constants = BuildConfig.class, shadows = ShadowKeyCharacterMap.class)
+@Config(constants = BuildConfig.class, shadows = ShadowKeyCharacterMap.class, sdk=22)
 public class CategoryMenuLayoutTest extends UITest {
 
     @Inject

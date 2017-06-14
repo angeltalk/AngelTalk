@@ -1,8 +1,9 @@
 package act.angelman.presentation.activity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
@@ -11,12 +12,9 @@ import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowActivity;
 
-import java.util.concurrent.TimeUnit;
-
 import javax.inject.Inject;
 
 import act.angelman.BuildConfig;
-import act.angelman.R;
 import act.angelman.TestAngelmanApplication;
 import act.angelman.UITest;
 import act.angelman.presentation.manager.ApplicationManager;
@@ -27,7 +25,7 @@ import static org.mockito.Mockito.when;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class)
+@Config(constants = BuildConfig.class, sdk=22)
 public class OnboardingActivityTest extends UITest{
 
     @Inject
@@ -35,52 +33,76 @@ public class OnboardingActivityTest extends UITest{
 
     private OnboardingActivity subject;
 
-    @Before
-    public void setUp() throws Exception {
-        ((TestAngelmanApplication) RuntimeEnvironment.application).getAngelmanTestComponent().inject(this);
-        when(applicationManager.isFirstLaunched()).thenReturn(true);
-        subject = setupActivity(OnboardingActivity.class);
-    }
-
     @Test
     public void whenFirstLaunched_thenShowOnBoardingPage() throws Exception {
-
+        setUpWhenFirstLaunched();
         assertThat(subject.onboardingFirstPageLayout).isShown();
     }
 
     @Test
     public void givenFirstLaunched_whenAfter4SecondsOnOnboardingFirstPage_thenShowNextOnBoaringPage() throws Exception {
+        setUpWhenFirstLaunched();
         advance4Seconds();
 
         assertThat(subject.onboardingFirstPageLayout).isGone();
     }
 
     @Test
-    public void givenFirstLaunched_whenFinishButtonClicked_thenMoveToCategoryMenuActivity() throws Exception {
-        advance4Seconds();
-        subject.onboardingViewPager.findViewById(R.id.onboarding_finish).performClick();
+    public void givenWhenNotFirstLaunchedWithoutStoragePermission_thenShowLastPage() throws Exception {
+        // given when
+        setUpWhenNotFirstLaunched();
 
+        //then
+        assertThat(subject.onboardingViewPager.getCurrentItem()).isEqualTo(4);
+    }
+
+    @Test
+    public void givenNotFirstLaunchedWithoutPermission_whenGrantPermission_thenMoveToCategoryMenuActivity() throws Exception {
+        //given
+        setUpWhenNotFirstLaunched();
+
+        //when
+        int[] grantResults = {PackageManager.PERMISSION_GRANTED, PackageManager.PERMISSION_GRANTED};
+        subject.onRequestPermissionsResult(subject.PERMISSION_REQUEST_CODE, null, grantResults);
+
+        //then
         ShadowActivity shadowActivity = shadowOf(subject);
         Intent nextStartedActivity = shadowActivity.getNextStartedActivity();
-
         assertThat(nextStartedActivity.getComponent().getClassName()).contains(CategoryMenuActivity.class.getCanonicalName());
     }
 
     @Test
-    public void givenWhenNotFirstLaunched_thenDirectlyMoveToCategoryMenuActivity() throws Exception {
-        advance4Seconds();
+    public void givenNotFirstLaunchedWithoutPermission_whenDenyPermission_thenDoNotMoveToCategoryMenuActivity() throws Exception {
+        //given
+        setUpWhenNotFirstLaunched();
 
-        subject.onboardingViewPager.findViewById(R.id.onboarding_finish).performClick();
+        //when
+        int[] grantResults = {PackageManager.PERMISSION_DENIED, PackageManager.PERMISSION_DENIED};
+        subject.onRequestPermissionsResult(subject.PERMISSION_REQUEST_CODE, null, grantResults);
 
-        OnboardingActivity newSubject = setupActivity(OnboardingActivity.class);
-
-        ShadowActivity shadowActivity = shadowOf(newSubject);
+        //then
+        ShadowActivity shadowActivity = shadowOf(subject);
         Intent nextStartedActivity = shadowActivity.getNextStartedActivity();
+        assertThat(nextStartedActivity).isNull();
+    }
 
-        assertThat(nextStartedActivity.getComponent().getClassName()).contains(CategoryMenuActivity.class.getCanonicalName());
+    private void setUpWhenFirstLaunched() throws Exception {
+        ((TestAngelmanApplication) RuntimeEnvironment.application).getAngelmanTestComponent().inject(this);
+        when(applicationManager.isFirstLaunched()).thenReturn(true);
+        subject = setupActivity(OnboardingActivity.class);
+    }
+
+    private void setUpWhenNotFirstLaunched() throws Exception {
+        ((TestAngelmanApplication) RuntimeEnvironment.application).getAngelmanTestComponent().inject(this);
+        when(applicationManager.isFirstLaunched()).thenReturn(false);
+        subject = setupActivity(OnboardingActivity.class);
+
+        ShadowActivity shadowActivity = shadowOf(subject);
+        shadowActivity.denyPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE});
+
     }
 
     private void advance4Seconds() {
-        Robolectric.getForegroundThreadScheduler().advanceBy(4000, TimeUnit.MILLISECONDS);
+        Robolectric.getForegroundThreadScheduler().advanceBy(4000);
     }
 }

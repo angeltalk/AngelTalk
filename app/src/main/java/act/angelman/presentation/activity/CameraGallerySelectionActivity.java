@@ -64,6 +64,29 @@ public class CameraGallerySelectionActivity extends AbstractActivity {
 
     @OnClick({R.id.layout_camera})
     public void onClickCamera(View view){
+//        if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+//            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE}, 100);
+//        } else {
+            moveToCamera2Activity();
+        //}
+
+    }
+
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        switch (requestCode) {
+//            case 100: {
+//                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                    moveToCamera2Activity();
+//                } else {
+//                    return;
+//                }
+//                return;
+//            }
+//        }
+//    }
+
+    private void moveToCamera2Activity() {
         Intent intent = new Intent(this, Camera2Activity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.putExtra(ApplicationConstants.EDIT_CARD_ID, editCardId);

@@ -22,7 +22,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class)
+@Config(constants = BuildConfig.class, sdk=22)
 public class NotificationActionReceiverTest {
     private NotificationActionReceiver subject;
     private NotificationManager notificationManager;
