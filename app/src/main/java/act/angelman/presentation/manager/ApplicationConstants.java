@@ -19,6 +19,7 @@ public class ApplicationConstants {
     public static final int STORAGE_PERMISSION_REQUEST_CODE = 1;
     public static final int CAMERA_PERMISSION_FOR_PHOTO_REQUEST_CODE = 2;
     public static final int CAMERA_PERMISSION_FOR_VIDEO_REQUEST_CODE = 3;
+    public static final int RECORDING_PERMISSION_REQUEST_CODE = 5;
 
 
 
