@@ -1,11 +1,15 @@
 package act.angelman.presentation.activity;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -27,7 +31,9 @@ import act.angelman.presentation.manager.ApplicationManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static act.angelman.presentation.manager.ApplicationConstants.OVERLAY_PERMISSION_REQUEST_CODE;
 import static act.angelman.presentation.manager.ApplicationConstants.STORAGE_PERMISSION_REQUEST_CODE;
+import static android.os.Build.VERSION_CODES.M;
 
 public class OnboardingActivity extends AbstractActivity {
 
@@ -45,7 +51,6 @@ public class OnboardingActivity extends AbstractActivity {
     @BindView(R.id.onboaring_angelee)
     ImageView onboardingAngeleeImageView;
 
-    private AngelmanApplication angelmanApplication;
     private Activity activity;
 
     @Override
@@ -53,12 +58,11 @@ public class OnboardingActivity extends AbstractActivity {
         super.onCreate(savedInstanceState);
         ((AngelmanApplication) getApplication()).getAngelmanComponent().inject(this);
 
-        angelmanApplication = (AngelmanApplication) getApplicationContext();
         activity = this;
 
         if (applicationManager.isFirstLaunched()) {
-            applicationManager.setNotFirstLaunched();
             showOnboardingView();
+            applicationManager.setNotFirstLaunched();
         } else {
             if(ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 showOnboardingView();
@@ -71,15 +75,38 @@ public class OnboardingActivity extends AbstractActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
-            case STORAGE_PERMISSION_REQUEST_CODE: {
+            case STORAGE_PERMISSION_REQUEST_CODE:
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED
                         && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                    moveToCategoryMenuActivity();
-                } else {
-                    return;
+                    if (Build.VERSION.SDK_INT >= M) {
+                        checkDrawOverlayPermission();
+                    } else {
+                        moveToCategoryMenuActivity();
+                    }
                 }
-                return;
+                break;
+            default:
+                break;
+        }
+    }
+
+
+
+    @TargetApi(Build.VERSION_CODES.M)
+    public void checkDrawOverlayPermission() {
+        if (!Settings.canDrawOverlays(getApplicationContext())) {
+            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
+            startActivityForResult(intent, OVERLAY_PERMISSION_REQUEST_CODE);
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.M)
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode,  Intent data) {
+        if (requestCode == OVERLAY_PERMISSION_REQUEST_CODE) {
+            if (Settings.canDrawOverlays(this)) {
+                moveToCategoryMenuActivity();
             }
         }
     }
@@ -133,7 +160,6 @@ public class OnboardingActivity extends AbstractActivity {
         @Override
         public void onClick(View view) {
             ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_PERMISSION_REQUEST_CODE);
-
         }
     };
 }
