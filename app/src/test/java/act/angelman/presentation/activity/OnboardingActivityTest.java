@@ -18,7 +18,7 @@ import act.angelman.TestAngelmanApplication;
 import act.angelman.UITest;
 import act.angelman.presentation.manager.ApplicationManager;
 
-import static act.angelman.presentation.manager.ApplicationConstants.STORAGE_PERMISSION_REQUEST_CODE;
+import static act.angelman.presentation.manager.ApplicationConstants.ONBOARDING_PERMISSION_REQUEST_CODE;
 import static org.assertj.android.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -62,8 +62,8 @@ public class OnboardingActivityTest extends UITest{
         setUpWhenNotFirstLaunched();
 
         //when
-        int[] grantResults = {PackageManager.PERMISSION_GRANTED, PackageManager.PERMISSION_GRANTED};
-        subject.onRequestPermissionsResult(STORAGE_PERMISSION_REQUEST_CODE, null, grantResults);
+        int[] grantResults = {PackageManager.PERMISSION_GRANTED, PackageManager.PERMISSION_GRANTED, PackageManager.PERMISSION_GRANTED};
+        subject.onRequestPermissionsResult(ONBOARDING_PERMISSION_REQUEST_CODE, null, grantResults);
 
         //then
         ShadowActivity shadowActivity = shadowOf(subject);
@@ -77,8 +77,8 @@ public class OnboardingActivityTest extends UITest{
         setUpWhenNotFirstLaunched();
 
         //when
-        int[] grantResults = {PackageManager.PERMISSION_DENIED, PackageManager.PERMISSION_DENIED};
-        subject.onRequestPermissionsResult(STORAGE_PERMISSION_REQUEST_CODE, null, grantResults);
+        int[] grantResults = {PackageManager.PERMISSION_DENIED, PackageManager.PERMISSION_DENIED, PackageManager.PERMISSION_DENIED};
+        subject.onRequestPermissionsResult(ONBOARDING_PERMISSION_REQUEST_CODE, null, grantResults);
 
         //then
         ShadowActivity shadowActivity = shadowOf(subject);
