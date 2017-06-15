@@ -16,7 +16,7 @@ public class ApplicationConstants {
     public static final String EDIT_TYPE = "editType";
     public static final String INTENT_KEY_MULTI_DOWNLOAD = "isMultiDownload";
     public static final String INTENT_KEY_MULTI_DOWNLOAD_DATA = "multiDownloadData";
-    public static final int STORAGE_PERMISSION_REQUEST_CODE = 1;
+    public static final int ONBOARDING_PERMISSION_REQUEST_CODE = 1;
     public static final int CAMERA_PERMISSION_FOR_PHOTO_REQUEST_CODE = 2;
     public static final int CAMERA_PERMISSION_FOR_VIDEO_REQUEST_CODE = 3;
     public static final int OVERLAY_PERMISSION_REQUEST_CODE = 4;
