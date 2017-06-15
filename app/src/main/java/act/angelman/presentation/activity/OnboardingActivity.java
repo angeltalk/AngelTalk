@@ -75,7 +75,7 @@ public class OnboardingActivity extends AbstractActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
-            case STORAGE_PERMISSION_REQUEST_CODE: {
+            case STORAGE_PERMISSION_REQUEST_CODE:
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED
                         && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
@@ -84,11 +84,10 @@ public class OnboardingActivity extends AbstractActivity {
                     } else {
                         moveToCategoryMenuActivity();
                     }
-                } else {
-                    return;
                 }
-                return;
-            }
+                break;
+            default:
+                break;
         }
     }
 
@@ -160,7 +159,7 @@ public class OnboardingActivity extends AbstractActivity {
     private View.OnClickListener onPermissionButtonOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.SYSTEM_ALERT_WINDOW}, STORAGE_PERMISSION_REQUEST_CODE);
+            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_PERMISSION_REQUEST_CODE);
         }
     };
 }
