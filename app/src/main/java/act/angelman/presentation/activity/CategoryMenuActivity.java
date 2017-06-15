@@ -165,24 +165,14 @@ public class CategoryMenuActivity extends AbstractActivity  implements Navigatio
     }
 
     private void initNavigationView() {
+        Glide.with(CategoryMenuActivity.this)
+                .load(R.drawable.angelee)
+                .asGif()
+                .crossFade()
+                .into(((ImageView) navigationView.getHeaderView(0).findViewById(R.id.slide_menu_angel)));
+
         drawer.closeDrawer(GravityCompat.START);
         navigationView.setNavigationItemSelectedListener(this);
-        drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
-            @Override
-            public void onDrawerOpened(View drawerView) {}
-            @Override
-            public void onDrawerSlide(View drawerView, float slideOffset) {
-                Glide.with(CategoryMenuActivity.this)
-                        .load(R.drawable.angelee)
-                        .asGif()
-                        .crossFade()
-                        .into(((ImageView) navigationView.getHeaderView(0).findViewById(R.id.slide_menu_angel)));
-            }
-            @Override
-            public void onDrawerClosed(View drawerView) {}
-            @Override
-            public void onDrawerStateChanged(int newState) {}
-        });
     }
 
     private void setCategoryGridView() {
