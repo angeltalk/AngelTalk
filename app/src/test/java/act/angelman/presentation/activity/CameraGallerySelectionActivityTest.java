@@ -117,7 +117,7 @@ public class CameraGallerySelectionActivityTest extends UITest {
     public void whenOnRequestPermissionWithCameraPermission_thenStartVideoActivity() throws  Exception {
         setupActivity(CameraGallerySelectionActivity.class);
 
-        int[] grantResults = {PackageManager.PERMISSION_GRANTED};
+        int[] grantResults = {PackageManager.PERMISSION_GRANTED, PackageManager.PERMISSION_GRANTED};
         subject.onRequestPermissionsResult(CAMERA_PERMISSION_FOR_VIDEO_REQUEST_CODE, null, grantResults);
 
         ShadowActivity shadowMainActivity = shadowOf(subject);
@@ -129,7 +129,7 @@ public class CameraGallerySelectionActivityTest extends UITest {
     public void whenOnRequestPermissionWithoutCameraPermission_thenStartVideoActivity() throws  Exception {
         setupActivity(CameraGallerySelectionActivity.class);
 
-        int[] grantResults = {PackageManager.PERMISSION_DENIED};
+        int[] grantResults = {PackageManager.PERMISSION_DENIED, PackageManager.PERMISSION_DENIED};
         subject.onRequestPermissionsResult(CAMERA_PERMISSION_FOR_VIDEO_REQUEST_CODE, null, grantResults);
 
         ShadowActivity shadowMainActivity = shadowOf(subject);

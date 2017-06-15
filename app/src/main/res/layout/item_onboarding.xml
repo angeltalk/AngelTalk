@@ -13,6 +13,17 @@
         android:layout_height="match_parent" />
 
     <ImageView
+        android:id="@+id/onboarding_finish_angelee"
+        android:layout_width="191dp"
+        android:layout_height="162dp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="156dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/angelee"
+        android:visibility="gone" />
+
+    <ImageView
         android:id="@+id/onboarding_finish"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
