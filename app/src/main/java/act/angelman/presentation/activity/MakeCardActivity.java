@@ -1,13 +1,18 @@
 package act.angelman.presentation.activity;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
 import android.support.percent.PercentRelativeLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.TypedValue;
@@ -53,6 +58,8 @@ import act.angelman.presentation.util.ResourcesUtil;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static act.angelman.presentation.manager.ApplicationConstants.RECORDING_PERMISSION_REQUEST_CODE;
 
 public class MakeCardActivity extends AbstractActivity implements RecordUtil.RecordCallback {
 
@@ -197,6 +204,20 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
         playUtil.playStop();
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case RECORDING_PERMISSION_REQUEST_CODE: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    startRecording();
+                } else {
+                    return;
+                }
+                return;
+            }
+        }
+    }
+
     @OnClick(R.id.record_stop_button)
     public void onClickRecStopButton(View view){
         if (state == STATE_RECORD_NOT_COMPLETE) {
@@ -228,8 +249,11 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
 
     @OnClick(R.id.mic_btn)
     public void onClickMicButton(View view){
-        showCountingScene();
-        countHandler.postDelayed(countAction, COUNT_INTERVAL);
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, RECORDING_PERMISSION_REQUEST_CODE);
+        } else {
+            startRecording();
+        }
     }
 
     @OnClick(R.id.replay_button)
@@ -572,6 +596,11 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
 
     private boolean isCardEditing() {
         return !Strings.isNullOrEmpty(editCardId);
+    }
+
+    private void startRecording() {
+        showCountingScene();
+        countHandler.postDelayed(countAction, COUNT_INTERVAL);
     }
 }
 

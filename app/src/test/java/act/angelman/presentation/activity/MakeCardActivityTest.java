@@ -1,6 +1,7 @@
 package act.angelman.presentation.activity;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.View;
@@ -45,6 +46,7 @@ import act.angelman.presentation.util.RecordUtil;
 import act.angelman.presentation.util.ResourcesUtil;
 
 import static act.angelman.R.id.counting_scene;
+import static act.angelman.presentation.manager.ApplicationConstants.RECORDING_PERMISSION_REQUEST_CODE;
 import static org.assertj.android.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
@@ -674,12 +676,36 @@ public class MakeCardActivityTest extends UITest{
         subject.recordStopButton.performClick();
 
         assertThat(subject.micButton.isEnabled()).isFalse();
-        //assertThat(subject.ttsButton.isEnabled()).isFalse();
 
         subject.onBackPressed();
         // then
         assertThat(subject.micButton.isEnabled()).isTrue();
-        //assertThat(subject.ttsButton.isEnabled()).isTrue();
+    }
+
+    @Test
+    public void givenPhotoCardWithRecordAudioPermission_whenOnRequestPermissionsResultAfterClickingMicButton_thenStartToRecordVoice() throws Exception {
+        // given
+        setupPhotoCard();
+
+        // when
+        int[] grantResults = {PackageManager.PERMISSION_GRANTED};
+        subject.onRequestPermissionsResult(RECORDING_PERMISSION_REQUEST_CODE, null, grantResults);
+
+        // then
+        assertThat(subject.countScene.getVisibility()).isEqualTo(View.VISIBLE);
+    }
+
+    @Test
+    public void givenPhotoCardWithoutRecordAudioPermission_whenOnRequestPermissionsResultAfterClickingMicButton_thenDoNotStartToRecordVoice() throws Exception {
+        // given
+        setupPhotoCard();
+
+        // when
+        int[] grantResults = {PackageManager.PERMISSION_DENIED};
+        subject.onRequestPermissionsResult(RECORDING_PERMISSION_REQUEST_CODE, null, grantResults);
+
+        // then
+        assertThat(subject.countScene.getVisibility()).isEqualTo(View.GONE);
     }
 
     @Test
