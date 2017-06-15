@@ -2,6 +2,7 @@ package act.angelman.presentation.adapter;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.support.v4.view.PagerAdapter;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -14,10 +15,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import act.angelman.R;
+
+import static android.os.Build.VERSION_CODES.M;
 
 
 public class OnboardingImageAdapter extends PagerAdapter{
@@ -27,7 +32,7 @@ public class OnboardingImageAdapter extends PagerAdapter{
             R.drawable.img_onboarding_2,
             R.drawable.img_onboarding_3,
             R.drawable.img_onboarding_4,
-            R.drawable.img_onboarding_5,
+            R.drawable.img_onboarding_5
     };
 
     private Context context;
@@ -54,6 +59,7 @@ public class OnboardingImageAdapter extends PagerAdapter{
         ViewGroup layout = (ViewGroup) inflater.inflate(R.layout.item_onboarding,container,false);
 
         ImageView onBoardingImage = ((ImageView) layout.findViewById(R.id.img_onboarding));
+        ImageView onBoardingFinishAngelee = ((ImageView) layout.findViewById(R.id.onboarding_finish_angelee));
         ImageView permissionButton = ((ImageView) layout.findViewById(R.id.onboarding_finish));
         TextView privacyGuide = ((TextView) layout.findViewById(R.id.onboarding_privacy_guide));
 
@@ -65,6 +71,15 @@ public class OnboardingImageAdapter extends PagerAdapter{
             setPrivacyGuideText(privacyGuide);
             privacyGuide.setVisibility(View.VISIBLE);
             permissionButton.setVisibility(View.VISIBLE);
+            if (Build.VERSION.SDK_INT < M) {
+                onBoardingFinishAngelee.setVisibility(View.VISIBLE);
+                Glide.with(context)
+                        .load(R.drawable.angelee)
+                        .asGif()
+                        .crossFade()
+                        .into(onBoardingFinishAngelee);
+                onBoardingImage.setImageDrawable(context.getResources().getDrawable(R.drawable.img_onboarding_5_low_version));
+            }
         }
 
         container.addView(layout);

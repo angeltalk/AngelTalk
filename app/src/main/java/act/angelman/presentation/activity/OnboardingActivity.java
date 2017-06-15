@@ -102,6 +102,8 @@ public class OnboardingActivity extends AbstractActivity {
         if (!Settings.canDrawOverlays(getApplicationContext())) {
             Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
             startActivityForResult(intent, OVERLAY_PERMISSION_REQUEST_CODE);
+        } else {
+            moveToCategoryMenuActivity();
         }
     }
 
