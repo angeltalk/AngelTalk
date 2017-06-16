@@ -114,7 +114,7 @@ public class CameraGallerySelectionActivityTest extends UITest {
     }
 
     @Test
-    public void whenOnRequestPermissionWithCameraPermission_thenStartVideoActivity() throws  Exception {
+    public void whenOnRequestPermissionWithCameraAndAudioRecordPermission_thenStartVideoActivity() throws  Exception {
         setupActivity(CameraGallerySelectionActivity.class);
 
         int[] grantResults = {PackageManager.PERMISSION_GRANTED, PackageManager.PERMISSION_GRANTED};
@@ -126,7 +126,7 @@ public class CameraGallerySelectionActivityTest extends UITest {
     }
 
     @Test
-    public void whenOnRequestPermissionWithoutCameraPermission_thenStartVideoActivity() throws  Exception {
+    public void whenOnRequestPermissionWithoutBothCameraAndAudioRecordPermission_thenDoNotStartVideoActivity() throws  Exception {
         setupActivity(CameraGallerySelectionActivity.class);
 
         int[] grantResults = {PackageManager.PERMISSION_DENIED, PackageManager.PERMISSION_DENIED};
