@@ -65,9 +65,7 @@ public class OnboardingActivity extends AbstractActivity {
             showOnboardingView();
             applicationManager.setNotFirstLaunched();
         } else {
-            if(ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-                    || ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-                    || ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            if(hasAllPermissions()) {
                 showOnboardingView();
             } else {
                 moveToCategoryMenuActivity();
@@ -168,4 +166,11 @@ public class OnboardingActivity extends AbstractActivity {
             ActivityCompat.requestPermissions(onboardingActivityReference.get(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE}, ONBOARDING_PERMISSION_REQUEST_CODE);
         }
     };
+
+    private boolean hasAllPermissions() {
+        return ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED
+                || (Build.VERSION.SDK_INT >= M && !Settings.canDrawOverlays(this));
+    }
 }
