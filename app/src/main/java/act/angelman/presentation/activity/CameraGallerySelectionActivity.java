@@ -89,7 +89,8 @@ public class CameraGallerySelectionActivity extends AbstractActivity {
 
     @OnClick({R.id.layout_video})
     public void onClickVideo(View view){
-        if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO}, CAMERA_PERMISSION_FOR_VIDEO_REQUEST_CODE);
         } else {
             moveToVideoActivity();
