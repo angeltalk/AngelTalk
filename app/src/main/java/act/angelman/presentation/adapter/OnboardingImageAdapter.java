@@ -60,17 +60,17 @@ public class OnboardingImageAdapter extends PagerAdapter{
 
         ImageView onBoardingImage = ((ImageView) layout.findViewById(R.id.img_onboarding));
         ImageView onBoardingFinishAngelee = ((ImageView) layout.findViewById(R.id.onboarding_finish_angelee));
-        ImageView permissionButton = ((ImageView) layout.findViewById(R.id.onboarding_finish));
+        ImageView finishButton = ((ImageView) layout.findViewById(R.id.onboarding_finish));
         TextView privacyGuide = ((TextView) layout.findViewById(R.id.onboarding_privacy_guide));
 
         onBoardingImage.setImageDrawable(context.getResources().getDrawable(ONBOARDING_IMAGES[position]));
-        permissionButton.setOnClickListener(permissionButtonOnClickListener);
+        finishButton.setOnClickListener(permissionButtonOnClickListener);
 
 
         if(isLastPage(position)) {
             setPrivacyGuideText(privacyGuide);
             privacyGuide.setVisibility(View.VISIBLE);
-            permissionButton.setVisibility(View.VISIBLE);
+            finishButton.setVisibility(View.VISIBLE);
             if (Build.VERSION.SDK_INT < M) {
                 onBoardingFinishAngelee.setVisibility(View.VISIBLE);
                 Glide.with(context)
@@ -79,6 +79,7 @@ public class OnboardingImageAdapter extends PagerAdapter{
                         .crossFade()
                         .into(onBoardingFinishAngelee);
                 onBoardingImage.setImageDrawable(context.getResources().getDrawable(R.drawable.img_onboarding_5_low_version));
+                finishButton.setImageDrawable(context.getResources().getDrawable(R.drawable.btn_appstart_low_version));
             }
         }
 
