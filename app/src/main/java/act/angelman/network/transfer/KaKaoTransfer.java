@@ -2,12 +2,16 @@ package act.angelman.network.transfer;
 
 
 import android.content.Context;
+import android.widget.Toast;
 
-import com.kakao.kakaolink.AppActionBuilder;
-import com.kakao.kakaolink.AppActionInfoBuilder;
-import com.kakao.kakaolink.KakaoLink;
-import com.kakao.kakaolink.KakaoTalkLinkMessageBuilder;
-import com.kakao.util.KakaoParameterException;
+import com.kakao.kakaolink.v2.KakaoLinkResponse;
+import com.kakao.kakaolink.v2.KakaoLinkService;
+import com.kakao.kakaolink.v2.model.ButtonObject;
+import com.kakao.kakaolink.v2.model.ContentObject;
+import com.kakao.kakaolink.v2.model.FeedTemplate;
+import com.kakao.kakaolink.v2.model.LinkObject;
+import com.kakao.network.ErrorResult;
+import com.kakao.network.callback.ResponseCallback;
 
 import javax.inject.Inject;
 
@@ -29,24 +33,41 @@ public class KaKaoTransfer {
     }
 
     public void sendKakaoLinkMessage(Context activityContext, String key, String thumbnailImageUrl, CardModel card) {
-        try {
-            KakaoLink kakaoLink = applicationManager.getKakaoLink();
-            KakaoTalkLinkMessageBuilder kakaoTalkLinkMessageBuilder = kakaoLink.createKakaoTalkLinkMessageBuilder();
+        makeTemplate(activityContext, key, thumbnailImageUrl, card);
+    }
 
-            String kakaoNewCardMessage = activityContext.getString(R.string.kakao_add_new_card_text, card.name);
-            kakaoTalkLinkMessageBuilder.addText(kakaoNewCardMessage);
-            kakaoTalkLinkMessageBuilder.addImage(thumbnailImageUrl, 300, 300);
-            kakaoTalkLinkMessageBuilder.addAppButton(activityContext.getString(R.string.kakao_button_go_to_app), new AppActionBuilder().addActionInfo(
-                    AppActionInfoBuilder.createAndroidActionInfoBuilder()
-                            .setExecuteParam("key="+key)
-                            .setMarketParam("referrer=kakakotalklink")
+    private void makeTemplate(Context activityContext, String key, String thumbnailImageUrl, CardModel card) {
+        String kakaoNewCardMessage = activityContext.getString(R.string.kakao_add_new_card_text, card.name);
+
+        FeedTemplate params = getFeedTemplate(activityContext, key, thumbnailImageUrl, kakaoNewCardMessage);
+
+        sendKakaoLink(activityContext, params);
+    }
+
+    private FeedTemplate getFeedTemplate(Context activityContext, String key, String thumbnailImageUrl, String kakaoNewCardMessage) {
+        return FeedTemplate
+                    .newBuilder(ContentObject.newBuilder(kakaoNewCardMessage,
+                            thumbnailImageUrl,
+                            LinkObject.newBuilder().setWebUrl(activityContext.getString(R.string.web_url))
+                                    .setMobileWebUrl(activityContext.getString(R.string.web_url)).build())
+                            .setDescrption(kakaoNewCardMessage)
                             .build())
-                    .setUrl(activityContext.getString(R.string.web_url))
-                    .build());
+                    .addButton(new ButtonObject(activityContext.getString(R.string.kakao_button_go_to_app), LinkObject.newBuilder()
+                            .setWebUrl(activityContext.getString(R.string.web_url))
+                            .setMobileWebUrl(activityContext.getString(R.string.web_url))
+                            .setAndroidExecutionParams("key="+key).build()))
+                    .build();
+    }
 
-            kakaoLink.sendMessage(kakaoTalkLinkMessageBuilder, activityContext);
-        } catch (KakaoParameterException e) {
-            e.printStackTrace();
-        }
+    private void sendKakaoLink(Context activityContext, FeedTemplate params) {
+        KakaoLinkService.getInstance().sendDefault(activityContext, params, new ResponseCallback<KakaoLinkResponse>() {
+            @Override
+            public void onFailure(ErrorResult errorResult) {
+                Toast.makeText(context, errorResult.getErrorMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onSuccess(KakaoLinkResponse result) {}
+        });
     }
 }
