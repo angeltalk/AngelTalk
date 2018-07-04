@@ -94,9 +94,10 @@
     <string name="sample_card_teacher">Teacher</string>
     <string name="sample_card_daddy">Daddy</string>
     <string name="sample_card_mommy">Mommy</string>
-    <string name="privacy_web_url">https://www.angeltalk.info/en/popup/privacy_policy.html</string>
-    <string name="terms_web_url">https://www.angeltalk.info/en/popup/terms_of_service.html</string>
-    <string name="oss_web_url">https://www.angeltalk.info/en/popup/open_source.html</string>
+
+    <string name="privacy_web_url">https://angeltalk-app-a26d8.firebaseapp.com/en/popup/privacy_policy.html</string>
+    <string name="terms_web_url">https://angeltalk-app-a26d8.firebaseapp.com/en/popup/terms_of_service.html</string>
+    <string name="oss_web_url">https://angeltalk-app-a26d8.firebaseapp.com/en/popup/open_source.html</string>
     <string name="voc_web_url">https://docs.google.com/forms/d/1jaWhUQse_1RmqOCG2vQ_oW3QNCGv4AYowrhS6BOqNnU/edit</string>
     <string name="change_order_toast_message">Press a little longer to move a card</string>
 
