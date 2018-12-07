@@ -84,34 +84,17 @@
         app:layout_marginBottomPercent="3.7%"
         />
 
-    <RelativeLayout
-        android:id="@+id/lock_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"
-        >
-        <ImageView
-            android:id="@+id/blurredView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-        <ImageView
-            android:id="@+id/lock_area"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:scaleType="fitXY"
-            android:src="@drawable/lock_area"/>
-    </RelativeLayout>
-
     <TextView
-        android:id="@+id/lock_guide"
+        android:id="@+id/lock_long_press_guide"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@id/lock_image"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="25.3dp"
+        android:layout_marginBottom="20.3dp"
         android:textSize="15.5dp"
         android:textColor="@color/white"
-        android:text="@string/lock_guide"
+        android:background="@color/background_blue"
+        android:text="@string/lock_long_press_guide"
         android:visibility="gone" />
+
 </android.support.percent.PercentRelativeLayout>

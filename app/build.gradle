@@ -7,7 +7,7 @@ apply plugin: 'jacoco'
 
 
 android {
-    compileSdkVersion 23
+    compileSdkVersion 26
     buildToolsVersion '25.0.2'
     useLibrary 'org.apache.http.legacy'
 
@@ -22,8 +22,8 @@ android {
 
     defaultConfig {
         applicationId "act.angelman"
-        minSdkVersion 21
-        targetSdkVersion 23
+        minSdkVersion 23
+        targetSdkVersion 26
         versionCode 14
         versionName "2.3"
         multiDexEnabled true

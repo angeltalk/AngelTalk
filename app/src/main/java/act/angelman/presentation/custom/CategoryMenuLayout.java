@@ -41,10 +41,8 @@ public class CategoryMenuLayout extends LinearLayout {
 
     private OnCategoryViewChangeListener onCategoryViewChangeListener;
     private View subject;
-    protected RelativeLayout lockContainer;
-    private TextView lockGuide;
+    private TextView lockLongPressGuide;
     private ImageView lockButton;
-
     private static final int CLICKED = 0;
     private static final int NON_CLICKED = 1;
 
@@ -59,12 +57,11 @@ public class CategoryMenuLayout extends LinearLayout {
         ((AngelmanApplication) context.getApplicationContext()).getAngelmanComponent().inject(this);
 
         subject = inflate(context, R.layout.category_menu_layout, this);
-        lockContainer = (RelativeLayout) subject.findViewById(R.id.lock_container);
-        lockGuide = (TextView) subject.findViewById(R.id.lock_guide);
+        lockLongPressGuide = (TextView) subject.findViewById(R.id.lock_long_press_guide);
         lockButton = (ImageView) subject.findViewById(R.id.lock_image);
 
         getAllCategoryList(context);
-        setLockView(context);
+        setLockView();
 
         if(hasNavigationBar(context)) {
             setSmallerMarginLayout();
@@ -73,8 +70,7 @@ public class CategoryMenuLayout extends LinearLayout {
     }
 
     public void setLockAreaVisibleWithGone() {
-        lockContainer.setVisibility(GONE);
-        lockGuide.setVisibility(GONE);
+        lockLongPressGuide.setVisibility(GONE);
         lockButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_lock_disabled));
         clickState = NON_CLICKED;
     }
@@ -114,61 +110,27 @@ public class CategoryMenuLayout extends LinearLayout {
         }
     }
 
-    private void setLockView(final Context context) {
+    @VisibleForTesting void setLockView() {
+        lockButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                lockLongPressGuide.setVisibility(VISIBLE);
+                try {
+                   Thread.sleep(3000);
+                   lockLongPressGuide.setVisibility(GONE);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
         lockButton.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public boolean onLongClick(View view) {
-                lockButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_lock_enabled));
-                lockGuide.setVisibility(VISIBLE);
-
-                lockContainer.setVisibility(VISIBLE);
-
-                Blurry.with(context)
-                        .sampling(6)
-                        .capture(subject)
-                        .into(((ImageView) findViewById(R.id.blurredView)));
-
-                view.startDrag(null, new ImageDragShadowBuilder(lockButton), view, 0);
-
+            public boolean onLongClick(View v) {
+                lockLongPressGuide.setVisibility(GONE);
+                onCategoryViewChangeListener.onUnLock();
                 return true;
             }
-        });
-
-        lockButton.setOnTouchListener(new OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_UP) {
-                    setLockAreaVisibleWithGone();
-                }
-                return false;
-            }
-        });
-
-        lockContainer.setOnDragListener(new View.OnDragListener() {
-            private boolean isInLockArea(View v, float eventX, float eventY) {
-                int centerX = v.getRight()/2;
-                int centerY = v.getBottom();
-                int radius = v.getRight()/2;
-
-                return Math.pow(eventX-centerX, 2) + Math.pow(eventY-centerY, 2) < Math.pow(radius, 2);
-            }
-            @Override
-            public boolean onDrag(View v, DragEvent event) {
-                switch (event.getAction()) {
-                    case DragEvent.ACTION_DROP:
-                        if (isInLockArea(v, event.getX(), event.getY())) {
-                            setLockAreaVisibleWithGone();
-                        } else {
-                            onCategoryViewChangeListener.onUnLock();
-                        }
-                        break;
-                    case DragEvent.ACTION_DRAG_ENDED:
-                        setLockAreaVisibleWithGone();
-                        break;
-                }
-                return true;
-            }
-
         });
     }
 

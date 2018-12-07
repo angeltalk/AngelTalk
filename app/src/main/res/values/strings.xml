@@ -19,6 +19,7 @@
     <string name="add_new_card_success">New card is added</string>
     <string name="add_share_card_success">The shared card is added</string>
     <string name="lock_guide">Drag the lock out of the circle</string>
+    <string name="lock_long_press_guide">Long press lock button</string>
     <string name="delete_alert_message">Do you really want to delete this \'%s\' Card?</string>
     <string name="confirm">OK</string>
     <string name="cancel">CANCEL</string>

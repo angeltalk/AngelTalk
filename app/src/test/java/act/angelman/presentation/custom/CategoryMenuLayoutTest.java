@@ -8,6 +8,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextClock;
+import android.widget.TextView;
 
 import com.google.common.collect.Lists;
 
@@ -58,7 +59,6 @@ public class CategoryMenuLayoutTest extends UITest {
         ((TestAngelmanApplication) RuntimeEnvironment.application).getAngelmanTestComponent().inject(this);
         when(categoryRepository.getCategoryAllList()).thenReturn(getCategoryList());
         subject = new CategoryMenuLayout(RuntimeEnvironment.application, null);
-        container = spy(subject.lockContainer);
     }
 
     @Test
@@ -80,11 +80,10 @@ public class CategoryMenuLayoutTest extends UITest {
     }
 
     @Test
-    public void whenCalledSetLockAreaVisibleWithGoneMethod_thenChangeLockAreaVisibilityToGone() throws Exception {
+    public void whenCalledSetLockAreaVisibleWithGoneMethod_thenInvisibilityLongPressLockGuide() throws Exception {
         subject.setLockAreaVisibleWithGone();
 
-        assertThat(subject.findViewById(R.id.lock_container)).isGone();
-        assertThat(subject.findViewById(R.id.lock_guide)).isGone();
+        assertThat(subject.findViewById(R.id.lock_long_press_guide)).isGone();
 
         ShadowDrawable shadowDrawable = shadowOf(((ImageView) subject.findViewById(R.id.lock_image)).getDrawable());
         assertThat(shadowDrawable.getCreatedFromResId()).isEqualTo(R.drawable.ic_lock_disabled);
@@ -111,23 +110,29 @@ public class CategoryMenuLayoutTest extends UITest {
     }
 
     @Test
-    public void whenLongClickLockButton_thenBlurredAndShowLockArea() throws Exception {
-        ImageView lockButton = (ImageView) subject.findViewById(R.id.lock_image);
-        assertThat(subject.findViewById(R.id.lock_container)).isGone();
-        lockButton.performLongClick();
-        assertThat(subject.findViewById(R.id.lock_container)).isVisible();
-    }
-
-    @Test
-    public void whenLockButtonDraggedInsideLockArea_thenGoneBlurredAndLockArea() throws Exception {
-        fakeDragEventOnArea(true);
-        assertThat(container).isGone();
-    }
-
-    @Test
-    public void whenLockButtonDraggedOutsideLockArea_thenUnLock() throws Exception {
+    public void whenLockButtonClick_thenShowLockButtonLongPressGuide() throws Exception {
+        subject.setLockView();
         CategoryMenuLayout.OnCategoryViewChangeListener mock = setMockChangeListener();
-        fakeDragEventOnArea(false);
+
+        ImageView lockButton = (ImageView) subject.findViewById(R.id.lock_image);
+        TextView longPressGuide = subject.findViewById(R.id.lock_long_press_guide);
+
+        lockButton.performClick();
+
+        assertThat(longPressGuide).isGone();
+    }
+
+    @Test
+    public void whenLongClickLockButton_thenHideGuideAndCallOnCategoryViewChangeListener() throws Exception {
+        subject.setLockView();
+        CategoryMenuLayout.OnCategoryViewChangeListener mock = setMockChangeListener();
+
+        ImageView lockButton = (ImageView) subject.findViewById(R.id.lock_image);
+        TextView longPressGuide = subject.findViewById(R.id.lock_long_press_guide);
+
+        lockButton.performLongClick();
+
+        assertThat(longPressGuide).isGone();
         verify(mock).onUnLock();
     }
 
