@@ -9,6 +9,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -55,6 +56,9 @@ public class CategoryMenuActivity extends AbstractActivity  implements Navigatio
     @Inject
     ApplicationManager applicationManager;
 
+    @Inject
+    NotificationActionManager notificationActionManager;
+
     @BindView(R.id.category_list)
     public GridView categoryGridView;
 
@@ -90,6 +94,7 @@ public class CategoryMenuActivity extends AbstractActivity  implements Navigatio
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().getDecorView().setLayoutParams(new WindowManager.LayoutParams(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN));
         setContentView(R.layout.activity_main_menu);
         ButterKnife.bind(this);
         ((AngelmanApplication) getApplication()).getAngelmanComponent().inject(this);
@@ -270,7 +275,6 @@ public class CategoryMenuActivity extends AbstractActivity  implements Navigatio
     };
 
     private void launchNotification() {
-        NotificationActionManager notificationActionManager = new NotificationActionManager(this);
         notificationActionManager.generateNotification(new Intent(this, NotificationActionReceiver.class));
     }
 }

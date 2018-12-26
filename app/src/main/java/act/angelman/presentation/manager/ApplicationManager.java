@@ -2,6 +2,8 @@ package act.angelman.presentation.manager;
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -128,7 +130,11 @@ public class ApplicationManager {
         if (mode) {
             if (!isServiceRunningCheck()) {
                 Intent screenService = new Intent(context, ScreenService.class);
-                context.startService(screenService);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    context.startForegroundService(screenService);
+                } else {
+                    context.startService(screenService);
+                }
             }
             edit.putBoolean(CHILD_MODE, true).apply();
             Toast.makeText(context, R.string.inform_show_child_mode, Toast.LENGTH_LONG).show();
@@ -136,8 +142,7 @@ public class ApplicationManager {
             ActivityManager manager = (ActivityManager) context.getSystemService(Activity.ACTIVITY_SERVICE);
             for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
                 if (service.service.getClassName().contains(ScreenService.class.getCanonicalName())) {
-                    Intent stop = new Intent();
-                    stop.setComponent(service.service);
+                    Intent stop = new Intent().setComponent(service.service);
                     context.stopService(stop);
                 }
             }

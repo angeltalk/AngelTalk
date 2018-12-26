@@ -12,6 +12,7 @@ import act.angelman.domain.repository.CardRepository;
 import act.angelman.domain.repository.CategoryRepository;
 import act.angelman.network.transfer.MessageTransfer;
 import act.angelman.presentation.manager.ApplicationManager;
+import act.angelman.presentation.manager.NotificationActionManager;
 import dagger.Module;
 import dagger.Provides;
 
@@ -58,5 +59,11 @@ public class AngelmanModule {
     @Singleton
     KaKaoTransfer providesKaKaoTransfer() {
         return  new KaKaoTransfer(context.getApplicationContext());
+    }
+
+    @Provides
+    @Singleton
+    NotificationActionManager providesNotificationActionManager() {
+        return  new NotificationActionManager(context.getApplicationContext());
     }
 }

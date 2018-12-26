@@ -2,21 +2,19 @@ package act.angelman.presentation.custom;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.os.Vibrator;
 import android.support.annotation.VisibleForTesting;
 import android.support.percent.PercentRelativeLayout;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.view.DragEvent;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextClock;
 import android.widget.TextView;
 
@@ -29,9 +27,9 @@ import act.angelman.R;
 import act.angelman.domain.model.CategoryModel;
 import act.angelman.domain.repository.CategoryRepository;
 import act.angelman.presentation.adapter.CategoryAdapter;
-import jp.wasabeef.blurry.Blurry;
 
 import static act.angelman.R.id.category_list;
+import static android.content.Context.VIBRATOR_SERVICE;
 
 
 public class CategoryMenuLayout extends LinearLayout {
@@ -61,7 +59,7 @@ public class CategoryMenuLayout extends LinearLayout {
         lockButton = (ImageView) subject.findViewById(R.id.lock_image);
 
         getAllCategoryList(context);
-        setLockView();
+        setLockView(context);
 
         if(hasNavigationBar(context)) {
             setSmallerMarginLayout();
@@ -110,23 +108,26 @@ public class CategoryMenuLayout extends LinearLayout {
         }
     }
 
-    @VisibleForTesting void setLockView() {
+    @VisibleForTesting void setLockView(Context context) {
+
+        final Vibrator vibrator = (Vibrator) context.getSystemService(VIBRATOR_SERVICE);
         lockButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 lockLongPressGuide.setVisibility(VISIBLE);
-                try {
-                   Thread.sleep(3000);
-                   lockLongPressGuide.setVisibility(GONE);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                vibrator.vibrate(200);
+                lockLongPressGuide.postDelayed(new Runnable() {
+                    public void run() {
+                        lockLongPressGuide.setVisibility(GONE);
+                    }
+                }, 1100);
             }
         });
 
         lockButton.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
+                lockButton.setVisibility(GONE);
                 lockLongPressGuide.setVisibility(GONE);
                 onCategoryViewChangeListener.onUnLock();
                 return true;

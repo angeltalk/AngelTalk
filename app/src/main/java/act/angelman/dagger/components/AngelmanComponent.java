@@ -23,7 +23,9 @@ import act.angelman.presentation.custom.CardViewPagerLayout;
 import act.angelman.presentation.custom.CategoryMenuLayout;
 import act.angelman.presentation.manager.ApplicationInitializer;
 import act.angelman.presentation.manager.NotificationActionManager;
+import act.angelman.presentation.receiver.NotificationActionReceiver;
 import act.angelman.presentation.service.ScreenReceiver;
+import act.angelman.presentation.service.ScreenService;
 import dagger.Component;
 
 @Singleton
@@ -50,4 +52,6 @@ public interface AngelmanComponent {
     void inject(ShareCardActivity shareCardActivity);
     void inject(MakeCardPreviewActivity makeCardPreviewActivity);
     void inject(PhotoEditorActivity photoEditorActivity);
+    void inject(NotificationActionReceiver notificationActionReceiver);
+    void inject(ScreenService screenService);
 }

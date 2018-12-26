@@ -23,6 +23,7 @@
     <color name="black_00">#000000</color>
     <color name="transparent">#00000000</color>
     <color name="pink_guide">#d3526d</color>
+    <color name="long_press_guide">#70000000</color>
 
     <color name="background_red">#e43939</color>
     <color name="background_orange">#f69b19</color>

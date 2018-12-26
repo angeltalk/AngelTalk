@@ -39,7 +39,6 @@ import static act.angelman.R.drawable.ic_food;
 import static org.assertj.android.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.robolectric.Shadows.shadowOf;
@@ -111,7 +110,7 @@ public class CategoryMenuLayoutTest extends UITest {
 
     @Test
     public void whenLockButtonClick_thenShowLockButtonLongPressGuide() throws Exception {
-        subject.setLockView();
+        subject.setLockView(subject.getContext());
         CategoryMenuLayout.OnCategoryViewChangeListener mock = setMockChangeListener();
 
         ImageView lockButton = (ImageView) subject.findViewById(R.id.lock_image);
@@ -119,12 +118,13 @@ public class CategoryMenuLayoutTest extends UITest {
 
         lockButton.performClick();
 
-        assertThat(longPressGuide).isGone();
+        assertThat(longPressGuide).isVisible();
+        assertThat(lockButton).isVisible();
     }
 
     @Test
     public void whenLongClickLockButton_thenHideGuideAndCallOnCategoryViewChangeListener() throws Exception {
-        subject.setLockView();
+        subject.setLockView(subject.getContext());
         CategoryMenuLayout.OnCategoryViewChangeListener mock = setMockChangeListener();
 
         ImageView lockButton = (ImageView) subject.findViewById(R.id.lock_image);

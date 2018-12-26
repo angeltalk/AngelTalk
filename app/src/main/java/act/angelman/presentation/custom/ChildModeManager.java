@@ -31,7 +31,11 @@ public class ChildModeManager {
 
         if (categoryMenuLayout == null) {
             categoryMenuLayout = new CategoryMenuLayout(context, null);
-            mWindowManager.addView(categoryMenuLayout, params);
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                mWindowManager.addView(categoryMenuLayout, paramsAndroidOreoHigher);
+            } else {
+                mWindowManager.addView(categoryMenuLayout, paramsAndroidOreoLower);
+            }
             categoryMenuLayout.setOnCategoryViewChangeListener(onCategoryViewChangeListener);
         }
         categoryMenuLayout.setLockAreaVisibleWithGone();
@@ -62,7 +66,12 @@ public class ChildModeManager {
         if(cardViewPagerLayout == null) {
             cardViewPagerLayout = new CardViewPagerLayout(context, null);
             cardViewPagerLayout.setOnClickBackButtonListener(onClickBackButtonListener);
-            mWindowManager.addView(cardViewPagerLayout, params);
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                mWindowManager.addView(cardViewPagerLayout, paramsAndroidOreoHigher);
+            } else {
+                mWindowManager.addView(cardViewPagerLayout, paramsAndroidOreoLower);
+            }
+
         }
         cardViewPagerLayout.setCategoryData(categoryModel);
     }
@@ -118,9 +127,19 @@ public class ChildModeManager {
         }
     };
 
-    private final WindowManager.LayoutParams params = new WindowManager.LayoutParams(
+    private final WindowManager.LayoutParams paramsAndroidOreoHigher = new WindowManager.LayoutParams(
+            WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
+            WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
+                    | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+                    | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
+            PixelFormat.TRANSLUCENT
+    );
+
+    private final WindowManager.LayoutParams paramsAndroidOreoLower = new WindowManager.LayoutParams(
             WindowManager.LayoutParams.TYPE_SYSTEM_ERROR,
-            WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED,
+            WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
+                    | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+                    | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
             PixelFormat.TRANSLUCENT
     );
 
