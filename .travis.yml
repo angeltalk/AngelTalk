@@ -22,6 +22,9 @@ android:
     # - sys-img-x86-android-26
     # - sys-img-armeabi-v7a-android-17
 
+dist: trusty
+sudo: required
+
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
