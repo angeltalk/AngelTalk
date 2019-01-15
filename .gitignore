@@ -18,3 +18,7 @@ Thumbs.db
 .idea/
 *.iml
 app/AngelTalk.apk
+
+caches/
+daemon/
+wrapper/
