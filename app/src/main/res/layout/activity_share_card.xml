@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.percent.PercentRelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:ignore="MissingPrefix"
     android:id="@+id/category_item_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -12,33 +9,35 @@
     <act.angelman.presentation.custom.CardTitleLayout
         android:id="@+id/title_container"
         android:layout_width="match_parent"
-        app:layout_heightPercent="13%" />
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.13" />
 
     <act.angelman.presentation.custom.CardViewPager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
-        android:layout_below="@id/title_container"
+        android:layout_height="0dp"
         android:paddingTop="17dp"
-        app:layout_heightPercent="59.5%" />
+        app:layout_constraintTop_toBottomOf="@id/title_container"
+        app:layout_constraintHeight_percent="0.595" />
 
     <LinearLayout
         android:id="@+id/button_container"
         android:layout_width="match_parent"
-        android:layout_below="@id/view_pager"
-        android:layout_gravity="bottom"
+        android:layout_height="0dp"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        app:layout_heightPercent="27.5%">
+        app:layout_constraintTop_toBottomOf="@id/view_pager"
+        app:layout_constraintHeight_percent="0.275">
 
         <TextView
             android:id="@+id/category_item_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="27.2dp"
+            android:fontFamily="@font/roboto_light_font"
             android:text="@string/share_card_message"
             android:textColor="@color/white"
-            android:textSize="17sp"
-            app:font="light" />
+            android:textSize="17sp" />
 
         <ImageView
             android:id="@+id/card_save_button"
@@ -69,12 +68,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
+            android:fontFamily="@font/roboto_light_font"
             android:text="@string/card_loading_message"
-            android:textColor="@color/white"
-            android:textSize="17sp"
             android:textAlignment="center"
-            app:font="light" />
+            android:textColor="@color/white"
+            android:textSize="17sp" />
 
     </LinearLayout>
 
-</android.support.percent.PercentRelativeLayout>
+</android.support.constraint.ConstraintLayout>

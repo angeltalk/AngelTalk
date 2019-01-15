@@ -1,11 +1,13 @@
 package act.angelman.presentation.custom;
 
 import android.app.Activity;
+import android.support.constraint.ConstraintLayout;
 import android.support.percent.PercentRelativeLayout;
 import android.util.DisplayMetrics;
 import android.view.DragEvent;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextClock;
 import android.widget.TextView;
@@ -26,7 +28,6 @@ import java.util.TimeZone;
 
 import javax.inject.Inject;
 
-import act.angelman.BuildConfig;
 import act.angelman.R;
 import act.angelman.TestAngelmanApplication;
 import act.angelman.UITest;
@@ -44,7 +45,7 @@ import static org.mockito.Mockito.when;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(AngelmanTestRunner.WithKorean.class)
-@Config(constants = BuildConfig.class, shadows = ShadowKeyCharacterMap.class, sdk=22)
+@Config(shadows = ShadowKeyCharacterMap.class, sdk=22)
 public class CategoryMenuLayoutTest extends UITest {
 
     @Inject
@@ -141,7 +142,7 @@ public class CategoryMenuLayoutTest extends UITest {
         subject.setSmallerMarginLayout();
 
         DisplayMetrics dm = subject.getResources().getDisplayMetrics();
-        PercentRelativeLayout.LayoutParams lp = ((PercentRelativeLayout.LayoutParams) subject.findViewById(R.id.clock_layout).getLayoutParams());
+        ConstraintLayout.LayoutParams lp = ((ConstraintLayout.LayoutParams) subject.findViewById(R.id.clock_layout).getLayoutParams());
         assertThat(lp.topMargin).isEqualTo(Math.round(10 * dm.density));
         assertThat(lp.bottomMargin).isEqualTo(Math.round(2 * dm.density));
         assertThat(subject.findViewById(R.id.lock_image).getPaddingStart()).isEqualTo(Math.round(4*dm.density));

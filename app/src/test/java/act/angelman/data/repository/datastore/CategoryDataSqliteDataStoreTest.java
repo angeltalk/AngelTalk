@@ -38,7 +38,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk=22)
+@Config(sdk=22)
 public class CategoryDataSqliteDataStoreTest {
 
     private SQLiteDatabase mockDb;

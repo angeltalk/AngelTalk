@@ -1,12 +1,12 @@
 package act.angelman.presentation.shadow;
 
-/**
- * Created by ssa009 on 10/10/16.
- */
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.SnackbarContentLayout;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -17,9 +17,10 @@ import com.google.common.collect.Lists;
 import org.robolectric.annotation.Implementation;
 import org.robolectric.annotation.Implements;
 import org.robolectric.annotation.RealObject;
-import org.robolectric.internal.ShadowExtractor;
+import org.robolectric.shadow.api.Shadow;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.List;
 
@@ -38,38 +39,51 @@ public class ShadowSnackbar {
     private int yOffset;
     private View view;
 
+    private static ShadowSnackbar self;
+
     @Implementation
     public static Snackbar make(@NonNull View view, @NonNull CharSequence text, int duration) {
         Snackbar snackbar = null;
-
+        Constructor<Snackbar> constructor = null;
+        Method hasSnackbarButtonStyleAttrMethod = null;
         try {
-            Constructor<Snackbar> constructor = Snackbar.class.getDeclaredConstructor(ViewGroup.class);
+            constructor = Snackbar.class.getDeclaredConstructor(ViewGroup.class, View.class, android.support.design.snackbar.ContentViewCallback.class);
 
-            //just in case, maybe they'll change the method signature in the future
             if (null == constructor)
                 throw new IllegalArgumentException("Seems like the constructor was not found!");
-
 
             if (Modifier.isPrivate(constructor.getModifiers())) {
                 constructor.setAccessible(true);
             }
 
-            snackbar = constructor.newInstance(findSuitableParent(view));
+            ViewGroup parent = findSuitableParent(view);
+            LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+
+            hasSnackbarButtonStyleAttrMethod = Snackbar.class.getDeclaredMethod("hasSnackbarButtonStyleAttr", Context.class);
+            if (Modifier.isProtected(hasSnackbarButtonStyleAttrMethod.getModifiers())) {
+                hasSnackbarButtonStyleAttrMethod.setAccessible(true);
+            }
+
+            boolean isSnackbarButtonStyleAttr = (boolean) hasSnackbarButtonStyleAttrMethod.invoke(ShadowSnackbar.self, parent.getContext());
+            SnackbarContentLayout content = (SnackbarContentLayout)inflater.inflate(isSnackbarButtonStyleAttr ? android.support.design.R.layout.mtrl_layout_snackbar_include : android.support.design.R.layout.design_layout_snackbar_include, parent, false);
+            snackbar = constructor.newInstance(parent, content, content);
             snackbar.setText(text);
             snackbar.setDuration(duration);
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            constructor.setAccessible(false);
+            hasSnackbarButtonStyleAttrMethod.setAccessible(false);
         }
 
         shadowOf(snackbar).text = text.toString();
-
         shadowSnackbars.add(shadowOf(snackbar));
 
         return snackbar;
     }
 
     //this code is fetched from the decompiled Snackbar.class.
-    private static ViewGroup findSuitableParent(View view) {
+    public static ViewGroup findSuitableParent(View view) {
         ViewGroup fallback = null;
 
         do {
@@ -103,7 +117,7 @@ public class ShadowSnackbar {
 
     //just a facilitator to get the shadow
     static ShadowSnackbar shadowOf(Snackbar bar) {
-        return (ShadowSnackbar) ShadowExtractor.extract(bar);
+        return (ShadowSnackbar) Shadow.extract(bar);
     }
 
     //handy for when running tests, empty the list of snackbars

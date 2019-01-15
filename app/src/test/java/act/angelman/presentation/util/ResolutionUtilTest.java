@@ -7,14 +7,13 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
-import act.angelman.BuildConfig;
 import act.angelman.TestAngelmanApplication;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk=22)
+@Config(sdk=22)
 public class ResolutionUtilTest {
 
     @Before

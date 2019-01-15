@@ -16,14 +16,13 @@ import org.robolectric.shadows.ShadowApplication;
 import java.util.Arrays;
 import java.util.List;
 
-import act.angelman.BuildConfig;
 import act.angelman.UITest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk=22)
+@Config(sdk=22)
 public class ScreenServiceTest extends UITest {
 
     private ActivityManager activityManager;

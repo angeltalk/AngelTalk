@@ -22,7 +22,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import act.angelman.BuildConfig;
 import act.angelman.R;
 import act.angelman.TestAngelmanApplication;
 import act.angelman.UITest;
@@ -45,7 +44,7 @@ import static org.mockito.Mockito.when;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk=22, shadows = {ShadowSnackbar.class})
+@Config(shadows = {ShadowSnackbar.class})
 public class CardListActivityTest extends UITest{
 
     @Inject
@@ -73,7 +72,7 @@ public class CardListActivityTest extends UITest{
     @Test
     public void whenLaunched_thenShowCardListInCategory() throws Exception {
         assertThat(subject.showHideRecyclerView).isNotNull();
-        assertThat(subject.showHideRecyclerView.getChildCount()).isEqualTo(8);
+        assertThat(subject.showHideRecyclerView.getAdapter().getItemCount()).isEqualTo(8);
     }
 
     @Test
@@ -310,8 +309,8 @@ public class CardListActivityTest extends UITest{
 
     @Test
     public void whenScrolledBottom_thenGoneAddCardButton() throws Exception {
-        subject.showHideRecyclerView.scrollToPosition(subject.showHideRecyclerView.getChildCount()-1);
-        assertThat(subject.addCardButton.getVisibility()).isEqualTo(GONE);
+        subject.showHideRecyclerView.scrollToPosition(subject.showHideRecyclerView.getAdapter().getItemCount()-1);
+        assertThat(subject.addCardButton.getVisibility()).isEqualTo(View.GONE);
     }
 
     @Test

@@ -13,14 +13,13 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
-import act.angelman.BuildConfig;
 import act.angelman.R;
 import act.angelman.UITest;
 
 import static org.assertj.android.api.Assertions.assertThat;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk=22)
+@Config(sdk=22)
 public class CardViewTest extends UITest{
 
     private CardView subject;

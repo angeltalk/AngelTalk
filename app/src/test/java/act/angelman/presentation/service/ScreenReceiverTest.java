@@ -13,11 +13,10 @@ import org.robolectric.annotation.Config;
 
 import javax.inject.Inject;
 
-import act.angelman.BuildConfig;
 import act.angelman.TestAngelmanApplication;
 import act.angelman.UITest;
-import act.angelman.presentation.shadow.ShadowKeyCharacterMap;
 import act.angelman.presentation.manager.ApplicationManager;
+import act.angelman.presentation.shadow.ShadowKeyCharacterMap;
 
 import static android.content.Context.KEYGUARD_SERVICE;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,7 +24,7 @@ import static org.mockito.Mockito.verify;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk=22, shadows = ShadowKeyCharacterMap.class)
+@Config(sdk=22, shadows = ShadowKeyCharacterMap.class)
 public class ScreenReceiverTest extends UITest{
 
     @Inject

@@ -47,7 +47,7 @@ import static org.mockito.Mockito.when;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk=22, shadows = ShadowFileUtil.class)
+@Config(sdk=22, shadows = ShadowFileUtil.class)
 public class MakeCardPreviewActivityTest extends UITest {
 
     @Inject

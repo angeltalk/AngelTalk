@@ -14,7 +14,6 @@ import org.robolectric.annotation.Config;
 
 import java.io.File;
 
-import act.angelman.BuildConfig;
 import act.angelman.domain.model.CardModel;
 import act.angelman.domain.model.CardTransferModel;
 import act.angelman.presentation.shadow.ShadowThumbnailUtil;
@@ -24,7 +23,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk=22, shadows = ShadowThumbnailUtil.class)
+@Config(sdk=22, shadows = ShadowThumbnailUtil.class)
 public class ContentsUtilTest {
 
     @Test

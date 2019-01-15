@@ -58,7 +58,6 @@ import static org.mockito.Mockito.when;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk=22)
 public class ShareCardActivityTest extends UITest {
 
     @Inject
@@ -158,7 +157,7 @@ public class ShareCardActivityTest extends UITest {
         assertThat(infoText.getText().toString()).isEqualTo("저장하실 카테고리를 선택해 주세요");
 
         RecyclerView listView = ((RecyclerView) dialog.findViewById(R.id.category_list_recycler_view));
-        assertThat(listView.getChildCount()).isEqualTo(6);
+        assertThat(listView.getAdapter().getItemCount()).isEqualTo(6);
     }
 
     @Test
@@ -176,7 +175,7 @@ public class ShareCardActivityTest extends UITest {
         assertThat(infoText.getText().toString()).isEqualTo("Choose a category for this card");
 
         RecyclerView listView = ((RecyclerView) dialog.findViewById(R.id.category_list_recycler_view));
-        assertThat(listView.getChildCount()).isEqualTo(6);
+        assertThat(listView.getAdapter().getItemCount()).isEqualTo(6);
     }
 
     @Test
@@ -354,7 +353,7 @@ public class ShareCardActivityTest extends UITest {
     }
 
     private ShareCardActivity setupActivityWithIntent(Intent intent) {
-        ShareCardActivity subject = setupActivityWithIntent(ShareCardActivity.class, intent);
+        ShareCardActivity subject = setupActivityWithIntentAndPostCreate(ShareCardActivity.class, intent);
         doAnswer(new Answer() {
             @Override
             public Object answer(InvocationOnMock invocation) throws Throwable {

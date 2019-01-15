@@ -18,12 +18,13 @@ public class FileUtil {
 
     private static final int BUFFER_SIZE = 8192;
 
-    public static void removeFile(String path){
+    public static boolean removeFile(String path){
         try {
             File file = new File(path);
-            file.delete();
+            return file.delete();
         }catch (NullPointerException e){
             Log.e("Exception", "Not found file " + path);
+            return false;
         }
     }
 

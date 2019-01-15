@@ -1,7 +1,6 @@
 package act.angelman.data.repository;
 
 import android.content.ContentValues;
-
 import com.google.common.collect.Lists;
 
 import org.junit.Before;
@@ -27,7 +26,7 @@ import static org.mockito.Mockito.verify;
 
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk=22)
+@Config(sdk=22)
 public class CardDataRepositoryTest {
 
     private CardDataRepository subject;

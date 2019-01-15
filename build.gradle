@@ -2,7 +2,13 @@
 
 buildscript {
     repositories {
-        jcenter()
+        mavenCentral()
+        jcenter {
+            url "http://jcenter.bintray.com/"
+        }
+        maven {
+            url 'https://maven.google.com'
+        }
         maven {
             url "https://repox.sonarsource.com/sonarsource"
         }
@@ -10,16 +16,19 @@ buildscript {
     subprojects {
         repositories {
             mavenCentral()
+            maven {
+                url 'https://maven.google.com'
+            }
             maven { url 'http://devrepo.kakao.com:8088/nexus/content/groups/public/' }
         }
     }
         dependencies {
             // NOTE: Do not place your application dependencies here; they belong
             // in the individual module build.gradle files
-            classpath 'com.android.tools.build:gradle:2.2.3'
+            classpath 'com.android.tools.build:gradle:3.0.0'
             classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
-            classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.2"
-            classpath 'com.google.gms:google-services:3.0.0'
+            classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.5"
+            classpath 'com.google.gms:google-services:4.2.0'
         }
     }
 
@@ -37,7 +46,7 @@ buildscript {
     apply plugin: 'jacoco'
 
     jacoco {
-        toolVersion = "0.7.6.201602180812"
+        toolVersion = "0.8.2"
         reportsDir = file("$buildDir/jacoco/report")
     }
 }

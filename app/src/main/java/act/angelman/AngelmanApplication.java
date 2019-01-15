@@ -13,7 +13,6 @@ import act.angelman.dagger.components.AngelmanComponent;
 import act.angelman.dagger.components.DaggerAngelmanComponent;
 import act.angelman.dagger.modules.AngelmanModule;
 import act.angelman.presentation.manager.ApplicationInitializer;
-import act.angelman.presentation.util.FontUtil;
 
 @ReportsCrashes(
         mailTo = "act.angeltalk@gmail.com",
@@ -36,8 +35,6 @@ public class AngelmanApplication extends Application {
 
         applicationInitializer = new ApplicationInitializer(getApplicationContext());
         applicationInitializer.initializeApplication();
-
-        FontUtil.overrideDefaultFont(this);
     }
 
     @Override

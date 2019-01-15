@@ -3,9 +3,6 @@
     <string name="share_functions_url">https://us-central1-angeltalk-app-a26d8.cloudfunctions.net/redirectApp/</string>
     <string name="shortener_api_key">AIzaSyAZQwhfKiXxAGMZx4aoKHv9A54YoFMLeBQ</string>
     <string name="web_url">https://www.angeltalk.info</string>
-    <string name="font_demilight">Roboto-Light.otf</string>
-    <string name="font_regular">Roboto-Regular.otf</string>
-    <string name="font_medium">Roboto-Medium.otf</string>
     <string name="add_picture">Add a photo or\n a video clip</string>
     <string name="take_picture">Take a photo</string>
     <string name="select_gallery">Bring from gallery</string>

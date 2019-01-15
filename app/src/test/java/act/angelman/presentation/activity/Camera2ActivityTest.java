@@ -7,10 +7,8 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowActivity;
 
-import act.angelman.BuildConfig;
 import act.angelman.R;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -18,7 +16,6 @@ import static org.robolectric.Robolectric.setupActivity;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk=22)
 public class Camera2ActivityTest {
 
     private Camera2Activity subject;

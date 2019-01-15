@@ -3,7 +3,6 @@ package act.angelman.presentation.adapter;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.Vibrator;
@@ -113,7 +112,6 @@ public class CardImageAdapter extends PagerAdapter {
             cardView.cardImage.setScaleType(ImageView.ScaleType.FIT_XY);
 
             cardView.cardTitle.setText(singleSectionItems.name);
-            cardView.cardTitle.setTypeface(Typeface.createFromAsset(context.getAssets(), context.getString(R.string.font_medium)));
 
             View cardContainer = cardView.findViewById(R.id.card_container);
             cardContainer.setOnClickListener(cardContainerOnClickListener);

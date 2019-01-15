@@ -2,7 +2,7 @@ package act.angelman.presentation.custom;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.support.percent.PercentRelativeLayout;
+import android.support.constraint.ConstraintLayout;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +13,7 @@ import android.widget.TextView;
 import act.angelman.R;
 import act.angelman.domain.model.CardModel;
 
-public class CardView extends PercentRelativeLayout {
+public class CardView extends ConstraintLayout {
     public static final int MODE_MAKE_CARD = 0;
     public static final int MODE_VIEW_CARD = 1;
 

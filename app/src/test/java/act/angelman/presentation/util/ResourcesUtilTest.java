@@ -9,7 +9,6 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
-import act.angelman.BuildConfig;
 import act.angelman.R;
 import act.angelman.presentation.shadow.ShadowResourcesCompat;
 
@@ -19,7 +18,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, shadows = {ShadowResourcesCompat.class}, sdk=22)
+@Config(shadows = {ShadowResourcesCompat.class}, sdk=22)
 public class ResourcesUtilTest {
 
 

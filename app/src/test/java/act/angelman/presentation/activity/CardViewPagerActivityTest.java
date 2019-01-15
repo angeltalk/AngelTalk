@@ -4,9 +4,11 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
+import android.content.pm.ActivityInfo;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.ResolveInfo;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Vibrator;
 import android.support.v7.widget.AppCompatRadioButton;
 import android.view.View;
 import android.widget.TextView;
@@ -26,11 +28,11 @@ import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
-import org.robolectric.fakes.RoboVibrator;
 import org.robolectric.shadows.ShadowActivity;
 import org.robolectric.shadows.ShadowAlertDialog;
 import org.robolectric.shadows.ShadowBitmap;
 import org.robolectric.shadows.ShadowLooper;
+import org.robolectric.shadows.ShadowPackageManager;
 import org.robolectric.shadows.ShadowToast;
 
 import java.io.File;
@@ -41,7 +43,6 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import act.angelman.BuildConfig;
 import act.angelman.R;
 import act.angelman.TestAngelmanApplication;
 import act.angelman.UITest;
@@ -61,6 +62,7 @@ import act.angelman.presentation.shadow.ShadowSnackbar;
 import act.angelman.presentation.util.ContentsUtil;
 import act.angelman.presentation.util.PlayUtil;
 import act.angelman.presentation.util.ResourcesUtil;
+import androidx.test.core.app.ApplicationProvider;
 
 import static org.assertj.android.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -76,7 +78,7 @@ import static org.mockito.Mockito.when;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk=22, shadows = {ShadowSnackbar.class})
+@Config(shadows = {ShadowSnackbar.class})
 public class CardViewPagerActivityTest extends UITest {
 
     @Inject
@@ -297,16 +299,17 @@ public class CardViewPagerActivityTest extends UITest {
         viewPager.invalidate();
         viewPager.requestLayout();
         @SuppressLint("ServiceCast")
-        RoboVibrator vibrator = (RoboVibrator) RuntimeEnvironment.application.getSystemService(Context.VIBRATOR_SERVICE);
+        Vibrator vibrator = (Vibrator) ApplicationProvider.getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
+
         (((CardImageAdapter) subject.mViewPager.getAdapter()).getItemAt(1)).findViewById(R.id.card_container).performClick();
 
-        assertThat(vibrator.isVibrating()).isTrue();
-        assertThat(vibrator.getMilliseconds()).isEqualTo(500);
+        assertThat(shadowOf(vibrator).isVibrating()).isTrue();
+        assertThat(shadowOf(vibrator).getMilliseconds()).isEqualTo(500);
 
         (((CardImageAdapter) subject.mViewPager.getAdapter()).getItemAt(1)).findViewById(R.id.card_container).performLongClick();
 
-        assertThat(vibrator.isVibrating()).isTrue();
-        assertThat(vibrator.getMilliseconds()).isEqualTo(500);
+        assertThat(shadowOf(vibrator).isVibrating()).isTrue();
+        assertThat(shadowOf(vibrator).getMilliseconds()).isEqualTo(500);
     }
 
     @Test
@@ -475,18 +478,6 @@ public class CardViewPagerActivityTest extends UITest {
     }
 
     @Test
-    public void whenFinishedToMakeNewCard_thenShowsNewAddedCardAtFirstCardInViewPager() throws Exception {
-        Intent intent = new Intent();
-        intent.putExtra(ApplicationConstants.INTENT_KEY_NEW_CARD, true);
-
-        when(repository.getSingleCardListWithCategoryId(anyInt(), anyBoolean())).thenReturn(getCardListWithCategoryId());
-        subject = setupActivityWithIntent(CardViewPagerActivity.class, intent);
-
-        assertThat(subject.mViewPager.getCurrentItem()).isNotEqualTo(0);
-        assertThat(subject.mViewPager.getCurrentItem()).isEqualTo(1);
-    }
-
-    @Test
     public void whenStartWithRefreshCardIntent_thenShowsAddCardItemInCardViewPager() throws Exception {
         Intent intent = new Intent();
         intent.putExtra(ApplicationConstants.INTENT_KEY_REFRESH_CARD, true);
@@ -538,30 +529,6 @@ public class CardViewPagerActivityTest extends UITest {
     }
 
     @Test
-    public void whenCardEditSuccess_thenShowTheCard() throws Exception {
-        Intent intent = new Intent();
-        intent.putExtra(ApplicationConstants.INTENT_KEY_CARD_EDITED, true);
-
-        when(repository.getSingleCardListWithCategoryId(anyInt(), anyBoolean())).thenReturn(getCardListWithCategoryId());
-        when(applicationManager.getCurrentCardIndex()).thenReturn(1);
-        subject = setupActivityWithIntent(CardViewPagerActivity.class, intent);
-
-        assertThat(subject.mViewPager.getCurrentItem()).isEqualTo(2);
-    }
-
-    @Test
-    public void whenCardEditSuccess_thenShowSnackBarMessage() throws Exception {
-        Intent intent = new Intent();
-        intent.putExtra(ApplicationConstants.INTENT_KEY_CARD_EDITED, true);
-
-        when(repository.getSingleCardListWithCategoryId(anyInt(), anyBoolean())).thenReturn(getCardListWithCategoryId());
-        subject = setupActivityWithIntent(CardViewPagerActivity.class, intent);
-
-        assertThat(ShadowSnackbar.getLatestSnackbar()).isNotNull();
-        assertThat(ShadowSnackbar.getTextOfLatestSnackbar()).isEqualTo("카드가 수정되었습니다");
-    }
-
-    @Test
     public void whenShareButtonClick_thenShowAvailableMessengerList() throws Exception{
         subject.cardShareButton.performClick();
         AlertDialog alert = ShadowAlertDialog.getLatestAlertDialog();
@@ -572,9 +539,14 @@ public class CardViewPagerActivityTest extends UITest {
     @Test
     public void givenKakaotalkNotInstall_whenShareButtonClick_thenShowAvailableMessengerListWithoutKakaotalk() throws Exception{
 
+        ShadowPackageManager shadowPackageManager = shadowOf(ApplicationProvider.getApplicationContext().getPackageManager());
+
+        ApplicationInfo applicationInfo = new ApplicationInfo();
+        applicationInfo.packageName = "no.name.app";
+
+        shadowPackageManager.addResolveInfoForIntent(new Intent(), new ResolveInfo());
+
         subject.cardShareButton.performClick();
-        subject.pm = mock(PackageManager.class);
-        when(subject.pm.getPackageInfo("com.kakao.talk",PackageManager.GET_ACTIVITIES)).thenThrow(new PackageManager.NameNotFoundException());
 
         AlertDialog alert = ShadowAlertDialog.getLatestAlertDialog();
         ShadowAlertDialog shadowDialog = shadowOf(alert);
@@ -584,10 +556,14 @@ public class CardViewPagerActivityTest extends UITest {
 
     @Test
     public void givenWhatsappNotInstall_whenShareButtonClick_thenShowAvailableMessengerListWithoutKakaotalk() throws Exception{
+        ShadowPackageManager shadowPackageManager = shadowOf(ApplicationProvider.getApplicationContext().getPackageManager());
+
+        ApplicationInfo applicationInfo = new ApplicationInfo();
+        applicationInfo.packageName = "no.name.app";
+
+        shadowPackageManager.addResolveInfoForIntent(new Intent(), new ResolveInfo());
 
         subject.cardShareButton.performClick();
-        subject.pm = mock(PackageManager.class);
-        when(subject.pm.getPackageInfo("com.whatsapp",PackageManager.GET_ACTIVITIES)).thenThrow(new PackageManager.NameNotFoundException());
 
         AlertDialog alert = ShadowAlertDialog.getLatestAlertDialog();
         ShadowAlertDialog shadowDialog = shadowOf(alert);
@@ -597,9 +573,30 @@ public class CardViewPagerActivityTest extends UITest {
 
     @Test
     public void whenMessengerItemClicked_thenConfirmButtonEnableAndTheOtherItemUnchecked() throws Exception{
+        ShadowPackageManager shadowPackageManager = shadowOf(ApplicationProvider.getApplicationContext().getPackageManager());
+
+        ResolveInfo info = new ResolveInfo();
+        info.isDefault = true;
+
+        ApplicationInfo applicationKakaoInfo = new ApplicationInfo();
+        applicationKakaoInfo.packageName = "com.kakao.talk";
+
+        info.activityInfo = new ActivityInfo();
+        info.activityInfo.applicationInfo = applicationKakaoInfo;
+        info.activityInfo.name = "kakaotalk";
+
+        shadowPackageManager.addResolveInfoForIntent(new Intent(), info);
+
+        ApplicationInfo applicationWhatsappInfo = new ApplicationInfo();
+        applicationWhatsappInfo.packageName = "com.whatsapp";
+
+        info.activityInfo = new ActivityInfo();
+        info.activityInfo.applicationInfo = applicationWhatsappInfo;
+        info.activityInfo.name = "whatsapp";
+
+        shadowPackageManager.addResolveInfoForIntent(new Intent(), info);
+
         subject.cardShareButton.performClick();
-        subject.pm = mock(PackageManager.class);
-        when(subject.pm.getPackageInfo("com.kakao.talk",PackageManager.GET_ACTIVITIES)).thenReturn(new PackageInfo());
 
         AlertDialog alert = ShadowAlertDialog.getLatestAlertDialog();
         ShadowAlertDialog shadowDialog = shadowOf(alert);

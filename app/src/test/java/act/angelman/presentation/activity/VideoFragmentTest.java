@@ -20,7 +20,7 @@ import static act.angelman.presentation.manager.ApplicationConstants.VIDEO_FRAGM
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk=22)
+@Config(sdk=22)
 public class VideoFragmentTest extends UITest {
 
 

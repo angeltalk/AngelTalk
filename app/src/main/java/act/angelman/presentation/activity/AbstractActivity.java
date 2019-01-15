@@ -1,11 +1,8 @@
 package act.angelman.presentation.activity;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-
-import com.tsengvn.typekit.TypekitContextWrapper;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -28,11 +25,6 @@ public class AbstractActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-    }
-
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(TypekitContextWrapper.wrap(newBase));
     }
 
     @Override

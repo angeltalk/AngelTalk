@@ -139,7 +139,6 @@ public class CategoryAdapter extends BaseAdapter {
         categoryIcon.setImageDrawable(getResourceDrawable(ResourceMapper.getCategoryIconResourceId(values[categoryModel.icon].ordinal(), DEFAULT.ordinal())));
 
         categoryTitle.setText(categoryModel.title);
-        categoryTitle.setTypeface(Typeface.createFromAsset(context.getAssets(), context.getString(R.string.font_medium)));
 
         cardViewItem.getLayoutParams().height = cardViewItem.getLayoutParams().width = getCardViewHeightSize();
         return cardViewItem;
@@ -162,7 +161,6 @@ public class CategoryAdapter extends BaseAdapter {
         categoryItemLayout.setAlpha(0.7f);
         categoryIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_add_category));
         categoryTitle.setText(newCategoryModel.title);
-        categoryTitle.setTypeface(Typeface.createFromAsset(context.getAssets(), context.getString(R.string.font_medium)));
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             cardViewItem.setElevation(0f);

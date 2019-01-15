@@ -14,14 +14,14 @@ import org.robolectric.shadows.ShadowEnvironment;
 
 import java.io.File;
 
-import act.angelman.BuildConfig;
 import act.angelman.presentation.manager.ApplicationConstants;
 import act.angelman.presentation.manager.ApplicationInitializer;
+import androidx.test.core.app.ApplicationProvider;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk=22)
+@Config(sdk=22)
 public class ApplicationInitializerTest {
 
     private ApplicationInitializer subject;
@@ -36,7 +36,7 @@ public class ApplicationInitializerTest {
         ShadowEnvironment.setExternalStorageState(Environment.MEDIA_MOUNTED);
         subject.initializeApplication();
 
-        File rootFolder = new File(RuntimeEnvironment.application.getApplicationContext().getFilesDir() + File.separator + ContentsUtil.ANGELMAN_FOLDER);
+        File rootFolder = new File(ApplicationProvider.getApplicationContext().getFilesDir() + File.separator + ContentsUtil.ANGELMAN_FOLDER);
         File imageFolder = new File(ContentsUtil.getContentFolder(RuntimeEnvironment.application.getApplicationContext()));
         File voiceFolder = new File(ContentsUtil.getVoiceFolder(RuntimeEnvironment.application.getApplicationContext()));
         File tempFolder = new File(ContentsUtil.getTempFolder(RuntimeEnvironment.application.getApplicationContext()));
@@ -54,7 +54,7 @@ public class ApplicationInitializerTest {
 
         subject.initializeApplication();
 
-        File imageFolder = new File(ContentsUtil.getContentFolder(RuntimeEnvironment.application.getApplicationContext()));
+        File imageFolder = new File(ContentsUtil.getContentFolder(ApplicationProvider.getApplicationContext()));
         assertThat(imageFolder.listFiles().length).isEqualTo(context.getAssets().list("contents").length);
     }
 

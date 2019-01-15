@@ -16,7 +16,6 @@ import org.robolectric.shadows.ShadowActivity;
 
 import javax.inject.Inject;
 
-import act.angelman.BuildConfig;
 import act.angelman.R;
 import act.angelman.TestAngelmanApplication;
 import act.angelman.UITest;
@@ -33,7 +32,7 @@ import static org.mockito.Mockito.when;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk=22)
+@Config(sdk=22)
 public class CameraGallerySelectionActivityTest extends UITest {
 
     @Inject

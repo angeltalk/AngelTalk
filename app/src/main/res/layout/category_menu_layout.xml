@@ -28,7 +28,8 @@
             android:format24Hour="@string/format_day"
             android:gravity="center_horizontal"
             android:textColor="@color/white"
-            android:textSize="15dp" />
+            android:textSize="15dp"
+            android:fontFamily="@font/roboto_regular_font"/>
         <TextClock
             android:id="@+id/clock_time"
             android:layout_width="wrap_content"
@@ -39,7 +40,7 @@
             android:layout_marginStart="5dp"
             android:textColor="@color/white"
             android:textSize="35dp"
-            app:font="light" />
+            android:fontFamily="@font/roboto_light_font" />
         <TextClock
             android:id="@+id/clock_ampm"
             android:layout_width="wrap_content"
@@ -49,7 +50,8 @@
             android:gravity="center_horizontal"
             android:layout_marginStart="5dp"
             android:textColor="@color/white"
-            android:textSize="15dp" />
+            android:textSize="15dp"
+            android:fontFamily="@font/roboto_regular_font"/>
     </LinearLayout>
 
     <GridView

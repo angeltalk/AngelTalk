@@ -13,7 +13,6 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
-import act.angelman.BuildConfig;
 import act.angelman.R;
 import act.angelman.presentation.manager.ApplicationManager;
 
@@ -22,7 +21,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk=22)
+@Config(sdk=22)
 public class NotificationActionReceiverTest {
     private NotificationActionReceiver subject;
     private NotificationManager notificationManager;
@@ -45,19 +44,5 @@ public class NotificationActionReceiverTest {
     public void givenChildModeAndLaunched_whenOnReceive_thenChangeNotificationViewOn() throws Exception {
         when(applicationManager.isChildMode()).thenReturn(false);
         assertThat(applicationManager.isChildMode()).isFalse();
-
-/*
-        final ShadowNotification.LatestEventInfo latestEventInfo = getLatestEventInfo(notification);
-        final ShadowIntent pendingIntent = getPendingIntent(latestEventInfo);
-
-        RemoteViews remoteView = shadowOf(notificationManager).getNotification(0).contentView;
-        View view = remoteView.apply(RuntimeEnvironment.application, null);
-        view.findViewById(R.id.btn_on).performClick();
-
-        assertThat(shadowOf(notificationManager).getNotification(1).contentView.getLayoutId()).isEqualTo(R.layout.layout_notification_on);
-        assertThat(applicationManager.isChildMode()).isTrue();
-*/
-
-
     }
 }

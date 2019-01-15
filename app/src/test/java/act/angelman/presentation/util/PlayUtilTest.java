@@ -7,10 +7,8 @@ import android.speech.tts.TextToSpeech;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.annotation.Config;
 import org.robolectric.RobolectricTestRunner;
-
-import act.angelman.BuildConfig;
+import org.robolectric.annotation.Config;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
@@ -19,7 +17,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk=22)
+@Config(sdk=22)
 public class PlayUtilTest {
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)

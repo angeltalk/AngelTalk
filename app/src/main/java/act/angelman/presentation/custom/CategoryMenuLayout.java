@@ -1,10 +1,9 @@
 package act.angelman.presentation.custom;
 
 import android.content.Context;
-import android.graphics.Typeface;
 import android.os.Vibrator;
 import android.support.annotation.VisibleForTesting;
-import android.support.percent.PercentRelativeLayout;
+import android.support.constraint.ConstraintLayout;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.KeyCharacterMap;
@@ -15,7 +14,6 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextClock;
 import android.widget.TextView;
 
 import java.util.List;
@@ -64,7 +62,6 @@ public class CategoryMenuLayout extends LinearLayout {
         if(hasNavigationBar(context)) {
             setSmallerMarginLayout();
         }
-        setClockTypeface(context);
     }
 
     public void setLockAreaVisibleWithGone() {
@@ -138,7 +135,7 @@ public class CategoryMenuLayout extends LinearLayout {
     @VisibleForTesting void setSmallerMarginLayout() {
         DisplayMetrics dm = getResources().getDisplayMetrics();
 
-        PercentRelativeLayout.LayoutParams lp = ((PercentRelativeLayout.LayoutParams) subject.findViewById(R.id.clock_layout).getLayoutParams());
+        ConstraintLayout.LayoutParams lp = ((ConstraintLayout.LayoutParams) subject.findViewById(R.id.clock_layout).getLayoutParams());
         lp.topMargin = Math.round(10 * dm.density);
         lp.bottomMargin = Math.round(2 * dm.density);
         subject.findViewById(R.id.clock_layout).setLayoutParams(lp);
@@ -155,11 +152,5 @@ public class CategoryMenuLayout extends LinearLayout {
         double dmRatio = (double)dm.heightPixels/dm.widthPixels;
 
         return !hasMenuKey && !hasBackKey && (dmRatio < 1.72);
-    }
-
-    private void setClockTypeface(Context context) {
-        ((TextClock) subject.findViewById(R.id.clock_ampm)).setTypeface(Typeface.createFromAsset(context.getAssets(), context.getString(R.string.font_regular)));
-        ((TextClock) subject.findViewById(R.id.clock_date)).setTypeface(Typeface.createFromAsset(context.getAssets(), context.getString(R.string.font_regular)));
-        ((TextClock) subject.findViewById(R.id.clock_time)).setTypeface(Typeface.createFromAsset(context.getAssets(), context.getString(R.string.font_demilight)));
     }
 }

@@ -1,16 +1,16 @@
 package act.angelman.presentation.custom;
 
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.view.View;
 import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
 import com.google.common.collect.Lists;
 
 import org.junit.Before;
@@ -27,7 +27,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import act.angelman.BuildConfig;
 import act.angelman.R;
 import act.angelman.TestAngelmanApplication;
 import act.angelman.UITest;
@@ -47,9 +46,10 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk=22)
+@Config(sdk=22)
 public class CardViewPagerLayoutTest extends UITest{
 
     @Inject
@@ -87,7 +87,7 @@ public class CardViewPagerLayoutTest extends UITest{
     public void whenClickYesNoButton_thenShowYesNoLayout() throws Exception {
         subject.setCategoryData(setDefaultCategoryModel());
         ImageView yesNoButton = (ImageView) subject.findViewById(R.id.yes_no_btn);
-        RelativeLayout backgorundLayout  = (RelativeLayout) subject.findViewById(R.id.yes_no_pannel);
+        ConstraintLayout backgorundLayout  = (ConstraintLayout) subject.findViewById(R.id.yes_no_pannel);
         assertThat(backgorundLayout.getVisibility()).isEqualTo(View.GONE);
         yesNoButton.performClick();
         assertThat(backgorundLayout.getVisibility()).isEqualTo(View.VISIBLE);
@@ -98,7 +98,7 @@ public class CardViewPagerLayoutTest extends UITest{
     public void givenShowYesNoLayout_whenClickYesNoCloseButton_thenHideYesNoLayout() throws Exception {
         subject.setCategoryData(setDefaultCategoryModel());
         ImageView yesNoButton = (ImageView) subject.findViewById(R.id.yes_no_btn);
-        RelativeLayout backgorundLayout  = (RelativeLayout) subject.findViewById(R.id.yes_no_pannel);
+        ConstraintLayout backgorundLayout  = (ConstraintLayout) subject.findViewById(R.id.yes_no_pannel);
         yesNoButton.performClick();
         assertThat(backgorundLayout.getVisibility()).isEqualTo(View.VISIBLE);
 
@@ -112,8 +112,8 @@ public class CardViewPagerLayoutTest extends UITest{
     public void whenClickYesNoButton_thenSlideUpAnimation() throws Exception {
         subject.setCategoryData(setDefaultCategoryModel());
         ImageView yesNoButton = (ImageView) subject.findViewById(R.id.yes_no_btn);
-        RelativeLayout mockRelativeLayout = mock(RelativeLayout.class);
-        subject.yesNoPannel = mockRelativeLayout;
+        ConstraintLayout mockLayout = mock(ConstraintLayout.class);
+        subject.yesNoPannel = mockLayout;
 
         yesNoButton.performClick();
 
@@ -154,7 +154,7 @@ public class CardViewPagerLayoutTest extends UITest{
 
             if (cardImageView.getDrawable() != null) {
 
-                Bitmap actualImage = ((GlideBitmapDrawable) cardImageView.getDrawable()).getBitmap();
+                Bitmap actualImage = ((BitmapDrawable) cardImageView.getDrawable()).getBitmap();
 
                 try {
                     ImageView expectedImageView = new ImageView(RuntimeEnvironment.application);
@@ -165,7 +165,7 @@ public class CardViewPagerLayoutTest extends UITest{
                             .bitmapTransform(new AngelManGlideTransform(RuntimeEnvironment.application, 10, 0, AngelManGlideTransform.CornerType.TOP))
                             .into(expectedImageView);
 
-                    Bitmap expectedImage = ((GlideBitmapDrawable) expectedImageView.getDrawable()).getBitmap();
+                    Bitmap expectedImage = ((BitmapDrawable) expectedImageView.getDrawable()).getBitmap();
                     assertThat(equals(actualImage, expectedImage)).isTrue();
 
                 } catch (Exception ex) {
@@ -191,8 +191,7 @@ public class CardViewPagerLayoutTest extends UITest{
         when(repository.getSingleCardListWithCategoryId(anyInt(), anyBoolean())).thenReturn(getCardListWithCategoryId());
         subject.setCategoryData(setDefaultCategoryModel());
 
-        assertThat(subject.getBackground()).isEqualTo(getDrawable(R.drawable.background_gradient_yellow));
-
+        assertThat(shadowOf(subject.getBackground()).getCreatedFromResId()).isEqualTo(R.drawable.background_gradient_yellow);
     }
 
     @Test

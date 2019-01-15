@@ -14,7 +14,6 @@ import org.robolectric.annotation.Config;
 import java.util.Collections;
 import java.util.List;
 
-import act.angelman.BuildConfig;
 import act.angelman.data.sqlite.CardColumns;
 import act.angelman.data.sqlite.DatabaseHelper;
 import act.angelman.domain.model.CardModel;
@@ -26,7 +25,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk=22)
+@Config(sdk=22)
 public class SingleCardSqliteDataStoreTest {
     private SQLiteDatabase mockDb;
 

@@ -13,7 +13,6 @@ import org.robolectric.annotation.Config;
 
 import java.lang.reflect.Field;
 
-import act.angelman.BuildConfig;
 import act.angelman.domain.model.CategoryModel;
 import act.angelman.presentation.custom.ChildModeManager;
 import act.angelman.presentation.shadow.ShadowKakaoLink;
@@ -24,7 +23,7 @@ import static act.angelman.presentation.util.ResourceMapper.IconType.SCHOOL;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk=22, shadows = {ShadowKakaoLink.class, ShadowKeyCharacterMap.class})
+@Config(sdk=22, shadows = {ShadowKakaoLink.class, ShadowKeyCharacterMap.class})
 public class ApplicationManagerTest {
 
     private ApplicationManager subject;

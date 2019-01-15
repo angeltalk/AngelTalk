@@ -7,6 +7,7 @@ import act.angelman.data.sqlite.DatabaseHelperTest;
 import act.angelman.presentation.activity.CameraGallerySelectionActivityTest;
 import act.angelman.presentation.activity.CardListActivityTest;
 import act.angelman.presentation.activity.CardViewPagerActivityTest;
+import act.angelman.presentation.activity.CardViewPagerActivityWithIntentTest;
 import act.angelman.presentation.activity.CategoryMenuActivityTest;
 import act.angelman.presentation.activity.MakeCardActivityTest;
 import act.angelman.presentation.activity.MakeCardPreviewActivityTest;
@@ -29,6 +30,7 @@ public interface AngelmanTestComponent extends AngelmanComponent {
     void inject(MakeCardActivityTest activity);
     void inject(CategoryMenuActivityTest activity);
     void inject(CardViewPagerActivityTest activity);
+    void inject(CardViewPagerActivityWithIntentTest activity);
     void inject(CategoryMenuLayoutTest view);
     void inject(CardViewPagerLayoutTest view);
     void inject(MakeCategoryActivityTest activity);

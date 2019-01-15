@@ -1,22 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_view_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_centerInParent="true">
+    android:layout_height="match_parent">
 
-    <android.support.percent.PercentRelativeLayout
+    <android.support.constraint.ConstraintLayout
         android:id="@+id/card_container"
-        android:layout_centerInParent="true"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:background="@drawable/rectangle_shape"
         android:elevation="10dp"
-        app:layout_heightPercent="84%"
-        app:layout_widthPercent="78%">
+        app:layout_constraintHeight_percent="0.84"
+        app:layout_constraintWidth_percent="0.78"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            app:layout_heightPercent="81%">
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent="0.81">
 
             <FrameLayout
                 android:layout_width="match_parent"
@@ -51,18 +56,20 @@
         <TextView
             android:id="@+id/card_image_title"
             android:layout_width="match_parent"
-            android:layout_alignParentBottom="true"
+            android:layout_height="0dp"
             android:gravity="center"
             android:textColor="@color/black_99"
             android:textSize="24dp"
             android:textStyle="bold"
             android:visibility="visible"
-            app:layout_heightPercent="19%" />
+            app:layout_constraintHeight_percent="0.19"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
         <EditText
             android:id="@+id/card_image_title_edit"
             android:layout_width="match_parent"
-            android:layout_alignParentBottom="true"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             android:background="@android:color/transparent"
             android:gravity="center"
             android:hint="@string/require_card_name"
@@ -74,8 +81,8 @@
             android:textCursorDrawable="@drawable/make_card_cursor_color"
             android:textSize="22dp"
             android:visibility="gone"
-            app:layout_heightPercent="19%" />
+            app:layout_constraintHeight_percent="0.19" />
 
-    </android.support.percent.PercentRelativeLayout>
+    </android.support.constraint.ConstraintLayout>
 
-</android.support.percent.PercentRelativeLayout>
+</android.support.constraint.ConstraintLayout>

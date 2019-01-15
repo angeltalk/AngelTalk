@@ -149,7 +149,7 @@ public class CardListActivity extends AbstractActivity {
     public RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-            if (recyclerView.getChildCount() > 6 && !recyclerView.canScrollVertically(1)) {
+            if (recyclerView.getAdapter().getItemCount() > 6 && !recyclerView.canScrollVertically(1)) {
                 addCardButton.setVisibility(View.GONE);
             } else {
                 addCardButton.setVisibility(View.VISIBLE);
@@ -222,12 +222,12 @@ public class CardListActivity extends AbstractActivity {
         showHideRecyclerViewAdapter = new ShowHideRecyclerViewAdapter(cardList, getApplicationContext(), dataChangeListener);
         showHideRecyclerView.setAdapter(showHideRecyclerViewAdapter);
         showHideRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        showHideRecyclerView.setOnScrollListener(onScrollListener);
+        showHideRecyclerView.addOnScrollListener(onScrollListener);
 
         changeOrderRecyclerViewAdapter = new ChangeOrderRecyclerViewAdapter(cardList, getApplicationContext(), cardListItemTouchHelper);
         changeOrderRecyclerView.setAdapter(changeOrderRecyclerViewAdapter);
         changeOrderRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        changeOrderRecyclerView.setOnScrollListener(onScrollListener);
+        changeOrderRecyclerView.addOnScrollListener(onScrollListener);
         cardListItemTouchHelper.attachToRecyclerView(changeOrderRecyclerView);
     }
 

@@ -22,7 +22,7 @@ import act.angelman.presentation.manager.ApplicationManager;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk=22)
+@Config(sdk=22)
 public class CardImageAdapterTest extends UITest {
 
     @Inject

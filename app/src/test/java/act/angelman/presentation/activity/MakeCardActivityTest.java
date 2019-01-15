@@ -29,7 +29,6 @@ import java.io.IOException;
 
 import javax.inject.Inject;
 
-import act.angelman.BuildConfig;
 import act.angelman.R;
 import act.angelman.TestAngelmanApplication;
 import act.angelman.UITest;
@@ -62,7 +61,7 @@ import static org.robolectric.Shadows.shadowOf;
 
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk=22, shadows = {ShadowViewTreeObserver.class})
+@Config(shadows = {ShadowViewTreeObserver.class})
 public class MakeCardActivityTest extends UITest{
 
     @Inject
@@ -151,11 +150,14 @@ public class MakeCardActivityTest extends UITest{
     public void when1SecondAfterLaunched_thenShowKeyboardAndEditTextViewAndHideTextView() throws InterruptedException {
         setupPhotoCard();
 
+        int[] grantResults = {PackageManager.PERMISSION_GRANTED};
+        subject.onRequestPermissionsResult(RECORDING_PERMISSION_REQUEST_CODE, null, grantResults);
+
         TextView cardImageTitle = (TextView) subject.findViewById(R.id.card_image_title);
         EditText editText = (EditText) subject.findViewById(R.id.card_image_title_edit);
 
-        assertThat(cardImageTitle.isShown()).isFalse();
-        assertThat(editText.isShown()).isTrue();
+        assertThat(cardImageTitle.getVisibility()).isEqualTo(View.GONE);
+        assertThat(editText.getVisibility()).isEqualTo(View.VISIBLE);
 
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -223,7 +225,7 @@ public class MakeCardActivityTest extends UITest{
         setupEditCardForRenaming();
 
         // then
-        assertThat(subject.confirmButton).isShown();
+        assertThat(subject.confirmButton.getVisibility()).isEqualTo(View.VISIBLE);
         assertThat(subject.confirmButton).isDisabled();
         ShadowDrawable shadowDrawable = shadowOf(subject.confirmButton.getBackground());
         assertThat(R.drawable.btn_check_disable).isEqualTo(shadowDrawable.getCreatedFromResId());
@@ -241,7 +243,7 @@ public class MakeCardActivityTest extends UITest{
         enterKey(cardTitleEdit);
 
         // then
-        assertThat(subject.confirmButton).isShown();
+        assertThat(subject.confirmButton.getVisibility()).isEqualTo(View.VISIBLE);
         assertThat(subject.confirmButton).isEnabled();
         ShadowDrawable shadowDrawable = shadowOf(subject.confirmButton.getBackground());
         assertThat(R.drawable.btn_complete).isEqualTo(shadowDrawable.getCreatedFromResId());
@@ -260,7 +262,7 @@ public class MakeCardActivityTest extends UITest{
         cardTitleEdit.setText("");
 
         // then
-        assertThat(subject.confirmButton).isShown();
+        assertThat(subject.confirmButton.getVisibility()).isEqualTo(View.VISIBLE);
         assertThat(subject.confirmButton).isDisabled();
         ShadowDrawable shadowDrawable = shadowOf(subject.confirmButton.getBackground());
         assertThat(R.drawable.btn_check_disable).isEqualTo(shadowDrawable.getCreatedFromResId());
@@ -297,12 +299,15 @@ public class MakeCardActivityTest extends UITest{
     public void givenShowMicButton_whenClickMicButton_thenShowCountingScene() throws Exception {
         setupPhotoCard();
 
+        int[] grantResults = {PackageManager.PERMISSION_GRANTED};
+        subject.onRequestPermissionsResult(RECORDING_PERMISSION_REQUEST_CODE, null, grantResults);
+
         Button micBtn = (Button) subject.findViewById(R.id.mic_btn);
         micBtn.setVisibility(View.VISIBLE);
 
         micBtn.performClick();
 
-        assertThat(subject.findViewById(counting_scene)).isVisible();
+        assertThat(subject.findViewById(counting_scene).getVisibility()).isEqualTo(View.VISIBLE);
     }
 
     @Test
@@ -312,8 +317,11 @@ public class MakeCardActivityTest extends UITest{
 
         // when
         Button micBtn = (Button) subject.findViewById(R.id.mic_btn);
-        micBtn.setVisibility(View.VISIBLE);
         assertThat(subject.skipButton.getVisibility()).isEqualTo(View.GONE);
+
+        int[] grantResults = {PackageManager.PERMISSION_GRANTED};
+        subject.onRequestPermissionsResult(RECORDING_PERMISSION_REQUEST_CODE, null, grantResults);
+
         micBtn.performClick();
 
         // then
@@ -333,7 +341,6 @@ public class MakeCardActivityTest extends UITest{
 
         // when
         Button micBtn = (Button) subject.findViewById(R.id.mic_btn);
-        micBtn.setVisibility(View.VISIBLE);
         assertThat(subject.skipButton.getVisibility()).isEqualTo(View.GONE);
         micBtn.performClick();
         Robolectric.flushForegroundThreadScheduler();
@@ -348,6 +355,10 @@ public class MakeCardActivityTest extends UITest{
     public void givenPhotoCardAndShownSkipButtonWhileVoiceRecording_whenClickSkipButton_thenChangeLayoutToReplayAndPlayTts() throws Exception {
         // given
         setupPhotoCard();
+
+        int[] grantResults = {PackageManager.PERMISSION_GRANTED};
+        subject.onRequestPermissionsResult(RECORDING_PERMISSION_REQUEST_CODE, null, grantResults);
+
         subject.micButton.performClick();
         subject.playUtil = mock(PlayUtil.class);
 
@@ -405,6 +416,9 @@ public class MakeCardActivityTest extends UITest{
         subject.recordUtil = mock(RecordUtil.class);
         subject.playUtil = mock(PlayUtil.class);
 
+        int[] grantResults = {PackageManager.PERMISSION_GRANTED};
+        subject.onRequestPermissionsResult(RECORDING_PERMISSION_REQUEST_CODE, null, grantResults);
+
         Button micBtn = (Button) subject.findViewById(R.id.mic_btn);
         micBtn.setVisibility(View.VISIBLE);
         micBtn.performClick();
@@ -434,6 +448,9 @@ public class MakeCardActivityTest extends UITest{
         setupPhotoCard();
         subject.recordUtil = mock(RecordUtil.class);
         subject.playUtil = mock(PlayUtil.class);
+
+        int[] grantResults = {PackageManager.PERMISSION_GRANTED};
+        subject.onRequestPermissionsResult(RECORDING_PERMISSION_REQUEST_CODE, null, grantResults);
 
         Button micBtn = (Button) subject.findViewById(R.id.mic_btn);
         micBtn.setVisibility(View.VISIBLE);
@@ -537,18 +554,21 @@ public class MakeCardActivityTest extends UITest{
     }
 
     @Test
-    public void givenClickedMicButtonAndWhenStartedCountDown_whenClickedHardwareBackButton_then() throws Exception {
+    public void givenClickedMicButtonAndWhenStartedCountDown_whenClickedHardwareBackButton_thenHideCountingScene() throws Exception {
         setupPhotoCard();
         Button micBtn = (Button) subject.findViewById(R.id.mic_btn);
         micBtn.setVisibility(View.VISIBLE);
 
+        int[] grantResults = {PackageManager.PERMISSION_GRANTED};
+        subject.onRequestPermissionsResult(RECORDING_PERMISSION_REQUEST_CODE, null, grantResults);
+
         micBtn.performClick();
 
-        assertThat(subject.findViewById(counting_scene)).isVisible();
+        assertThat(subject.findViewById(counting_scene).getVisibility()).isEqualTo(View.VISIBLE);
 
         subject.onBackPressed();
 
-        assertThat(subject.findViewById(counting_scene)).isGone();
+        assertThat(subject.findViewById(counting_scene).getVisibility()).isEqualTo(View.GONE);
     }
 
     @Test
@@ -556,6 +576,9 @@ public class MakeCardActivityTest extends UITest{
         setupPhotoCard();
         subject.recordUtil = mock(RecordUtil.class);
         subject.playUtil = mock(PlayUtil.class);
+
+        int[] grantResults = {PackageManager.PERMISSION_GRANTED};
+        subject.onRequestPermissionsResult(RECORDING_PERMISSION_REQUEST_CODE, null, grantResults);
 
         Button micBtn = (Button) subject.findViewById(R.id.mic_btn);
         micBtn.setVisibility(View.VISIBLE);
@@ -572,7 +595,7 @@ public class MakeCardActivityTest extends UITest{
 
         subject.onBackPressed();
 
-        assertThat(subject.findViewById(counting_scene)).isGone();
+        assertThat(subject.findViewById(counting_scene).getVisibility()).isEqualTo(View.GONE);
         assertThat(subject.state).isEqualTo(STATE_RECORD_NOT_COMPLETE);
 
         assertThat(shadowOf((subject.findViewById(R.id.record_stop_button)).getBackground()).getCreatedFromResId()).isEqualTo(R.drawable.record_stop);
@@ -611,6 +634,9 @@ public class MakeCardActivityTest extends UITest{
         setupPhotoCard();
         subject.recordUtil = mock(RecordUtil.class);
         subject.playUtil = mock(PlayUtil.class);
+
+        int[] grantResults = {PackageManager.PERMISSION_GRANTED};
+        subject.onRequestPermissionsResult(RECORDING_PERMISSION_REQUEST_CODE, null, grantResults);
 
         Button micBtn = (Button) subject.findViewById(R.id.mic_btn);
         micBtn.setVisibility(View.VISIBLE);
@@ -664,6 +690,9 @@ public class MakeCardActivityTest extends UITest{
         setupPhotoCard();
         subject.recordUtil = mock(RecordUtil.class);
         subject.playUtil = mock(PlayUtil.class);
+
+        int[] grantResults = {PackageManager.PERMISSION_GRANTED};
+        subject.onRequestPermissionsResult(RECORDING_PERMISSION_REQUEST_CODE, null, grantResults);
 
         // when
         subject.micButton.performClick();

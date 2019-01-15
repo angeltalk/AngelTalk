@@ -12,7 +12,6 @@ import org.robolectric.annotation.Config;
 
 import javax.inject.Inject;
 
-import act.angelman.BuildConfig;
 import act.angelman.TestAngelmanApplication;
 import act.angelman.domain.model.CategoryModel;
 import act.angelman.presentation.activity.CameraGallerySelectionActivity;
@@ -28,7 +27,7 @@ import static org.mockito.Mockito.when;
 import static org.robolectric.Robolectric.setupActivity;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk=22)
+@Config(sdk=22)
 public class DatabaseHelperTest {
 
     @Inject

@@ -17,6 +17,7 @@ public class CardModel{
     public String thumbnailPath;
     public int categoryId;
     public int cardIndex;
+    @Builder.Default
     public CardType cardType = CardType.PHOTO_CARD;
     public boolean hide;
 

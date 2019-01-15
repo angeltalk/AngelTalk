@@ -2,11 +2,10 @@ package act.angelman.presentation.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.percent.PercentRelativeLayout;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.ImageButton;
@@ -51,8 +50,6 @@ import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 
 public class CardViewPagerActivity extends AbstractActivity {
 
-    public PackageManager pm;
-
     @Inject
     CardRepository cardRepository;
 
@@ -91,6 +88,9 @@ public class CardViewPagerActivity extends AbstractActivity {
 
     @BindView(R.id.image_angelee_gif)
     ImageView imageLoadingGif;
+
+    @BindView(R.id.category_item_container)
+    ConstraintLayout categoryItemContainer;
 
 
     @BindView(R.id.list_card_button)
@@ -246,8 +246,7 @@ public class CardViewPagerActivity extends AbstractActivity {
         initializeView();
 
         if (getIntent().getBooleanExtra(ApplicationConstants.INTENT_KEY_NEW_CARD, false)) {
-
-            showSnackBarMessage(getString(R.string.add_new_card_success));
+            showSnackBarMessage(getApplicationContext().getResources().getString(R.string.add_new_card_success));
             mViewPager.setCurrentItem(1);
 
         } else if (getIntent().getBooleanExtra(ApplicationConstants.INTENT_KEY_REFRESH_CARD, false)) {
@@ -261,15 +260,13 @@ public class CardViewPagerActivity extends AbstractActivity {
             }
 
         } else if (getIntent().getBooleanExtra(ApplicationConstants.INTENT_KEY_CARD_EDITED, false)) {
-
-            showSnackBarMessage(getString(R.string.card_edit_success_message));
+            showSnackBarMessage(getApplicationContext().getResources().getString(R.string.card_edit_success_message));
             if (!setViewPagerCurrentItem(applicationManager.getCurrentCardIndex())) {
                 mViewPager.setCurrentItem(1);
             }
         }
 
         applicationManager.setCurrentCardIndex(allCardListInSelectedCategory.get(mViewPager.getCurrentItem()).cardIndex);
-        pm = getPackageManager();
     }
 
     @Override
@@ -389,8 +386,7 @@ public class CardViewPagerActivity extends AbstractActivity {
     }
 
     private void showSnackBarMessage(String message) {
-        PercentRelativeLayout rootLayout = (PercentRelativeLayout) findViewById(R.id.category_item_container);
-        CustomSnackBar.styledSnackBarWithDuration(this, rootLayout, message, 2000);
+        CustomSnackBar.styledSnackBarWithDuration(context, findViewById(R.id.category_item_container), message, 2000);
     }
 
     private void showLoadingAnimation() {
