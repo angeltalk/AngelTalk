@@ -22,3 +22,5 @@ app/AngelTalk.apk
 caches/
 daemon/
 wrapper/
+app/java_*.hprof
+native/
