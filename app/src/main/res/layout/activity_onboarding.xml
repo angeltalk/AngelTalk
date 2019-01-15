@@ -27,7 +27,8 @@
             android:text="@string/onboarding_title"
             android:textAlignment="center"
             android:textColor="@color/white"
-            android:textSize="16dp"/>
+            android:textSize="16dp"
+            android:fontFamily="@font/noto_demilight"/>
 
         <ImageView
             android:id="@+id/onboaring_angelee"
