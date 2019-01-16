@@ -192,10 +192,10 @@ public class CategoryMenuActivity extends AbstractActivity  implements Navigatio
     private void changeCategoryMenuStatus(CategoryMenuStatus categoryMenuStatus) {
         switch (categoryMenuStatus) {
             case CATEGORY_DEFAULT:
-                categoryDeleteButton.setImageDrawable(getDrawable(R.drawable.btn_delete));
+                categoryDeleteButton.setImageDrawable(getDrawable(R.drawable.btn_delete_dark));
                 break;
             case CATEGORY_DELETABLE:
-                categoryDeleteButton.setImageDrawable(getDrawable(R.drawable.btn_confirm));
+                categoryDeleteButton.setImageDrawable(getDrawable(R.drawable.btn_confirm_dark));
                 break;
             default:
                 Log.e("error", "category is not set");

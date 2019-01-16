@@ -150,17 +150,18 @@ public class CategoryAdapter extends BaseAdapter {
         }
         newCategoryModel.index = -1;
         newCategoryModel.color = Color.TRANSPARENT;
-        newCategoryModel.icon = R.drawable.ic_add_category;
+        newCategoryModel.icon = R.drawable.ic_add_category_dark;
         newCategoryModel.title = context.getResources().getString(R.string.new_category_button_text);
 
         ImageView categoryIcon = (ImageView) cardViewItem.findViewById(R.id.category_icon);
         RelativeLayout categoryItemLayout = (RelativeLayout) cardViewItem.findViewById(R.id.category_item_layout);
         TextView categoryTitle = (TextView) cardViewItem.findViewById(R.id.category_title);
 
-        categoryItemLayout.setBackground(context.getResources().getDrawable(R.drawable.drop_shadow_dashgap));
+        categoryItemLayout.setBackground(context.getResources().getDrawable(R.drawable.drop_shadow_dashgap_dark, null));
         categoryItemLayout.setAlpha(0.7f);
-        categoryIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_add_category));
+        categoryIcon.setImageDrawable(context.getResources().getDrawable(newCategoryModel.icon, null));
         categoryTitle.setText(newCategoryModel.title);
+        categoryTitle.setTextColor(context.getColor(R.color.gray_75));
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             cardViewItem.setElevation(0f);

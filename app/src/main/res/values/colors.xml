@@ -24,12 +24,15 @@
     <color name="transparent">#00000000</color>
     <color name="pink_guide">#d3526d</color>
     <color name="long_press_guide">#70000000</color>
+    <color name="gray_75">#757575</color>
+    <color name="gray_75_opacity_57">#39757575</color>
 
     <color name="background_red">#e43939</color>
     <color name="background_orange">#f69b19</color>
     <color name="background_yellow">#ffe567</color>
     <color name="background_green">#16a085</color>
     <color name="background_blue">#412c82</color>
+    <color name="background_white">#eee</color>
 
     <color name="simple_background_red">#D41468</color>
     <color name="simple_background_orange">#FC7C42</color>

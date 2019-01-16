@@ -165,7 +165,7 @@ public class CategoryMenuActivityTest extends UITest {
         subject.categoryDeleteButton.performClick();
         subject.categoryDeleteButton.performClick();
         ShadowDrawable sd = shadowOf(subject.categoryDeleteButton.getDrawable());
-        assertThat(sd.getCreatedFromResId()).isEqualTo(R.drawable.btn_delete);
+        assertThat(sd.getCreatedFromResId()).isEqualTo(R.drawable.btn_delete_dark);
     }
 
     @Test
@@ -173,7 +173,7 @@ public class CategoryMenuActivityTest extends UITest {
         subject.categoryDeleteButton.performClick();
         subject.onBackPressed();
         ShadowDrawable sd = shadowOf(subject.categoryDeleteButton.getDrawable());
-        assertThat(sd.getCreatedFromResId()).isEqualTo(R.drawable.btn_delete);
+        assertThat(sd.getCreatedFromResId()).isEqualTo(R.drawable.btn_delete_dark);
     }
 
     @Test
