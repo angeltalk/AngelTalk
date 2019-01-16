@@ -6,7 +6,13 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:statusBarColor">@color/status_bar_color</item>
+        <item name="android:statusBarColor">@color/status_bar_color_white</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+
+    <style name="AppTheme.EditText">
+        <item name="colorControlActivated">@color/control_color</item>
+        <item name="colorControlNormal">@color/control_color</item>
     </style>
 
     <style name="AppTheme.Red" parent="AppTheme">
@@ -19,6 +25,8 @@
         <item name="themedShowHideItemBarDrawable">@drawable/show_red</item>
         <item name="themedShowHideIconDrawable">@drawable/ic_show_red</item>
         <item name="themedItemMoveIconDrawable">@drawable/ic_list_red</item>
+        <item name="android:statusBarColor">@color/status_bar_color_red</item>
+        <item name="android:windowLightStatusBar">false</item>
     </style>
 
     <style name="AppTheme.Orange" parent="AppTheme">
@@ -31,6 +39,8 @@
         <item name="themedShowHideItemBarDrawable">@drawable/show_orange</item>
         <item name="themedShowHideIconDrawable">@drawable/ic_show_orange</item>
         <item name="themedItemMoveIconDrawable">@drawable/ic_list_orange</item>
+        <item name="android:statusBarColor">@color/status_bar_color_orange</item>
+        <item name="android:windowLightStatusBar">false</item>
     </style>
 
     <style name="AppTheme.Yellow" parent="AppTheme">
@@ -43,6 +53,8 @@
         <item name="themedShowHideItemBarDrawable">@drawable/show_yellow</item>
         <item name="themedShowHideIconDrawable">@drawable/ic_show_yellow</item>
         <item name="themedItemMoveIconDrawable">@drawable/ic_list_yellow</item>
+        <item name="android:statusBarColor">@color/status_bar_color_yellow</item>
+        <item name="android:windowLightStatusBar">false</item>
     </style>
 
     <style name="AppTheme.Green" parent="AppTheme">
@@ -55,6 +67,8 @@
         <item name="themedShowHideItemBarDrawable">@drawable/show_green</item>
         <item name="themedShowHideIconDrawable">@drawable/ic_show_green</item>
         <item name="themedItemMoveIconDrawable">@drawable/ic_list_green</item>
+        <item name="android:statusBarColor">@color/status_bar_color_green</item>
+        <item name="android:windowLightStatusBar">false</item>
     </style>
 
     <style name="AppTheme.Blue" parent="AppTheme">
@@ -67,6 +81,8 @@
         <item name="themedShowHideItemBarDrawable">@drawable/show_blue</item>
         <item name="themedShowHideIconDrawable">@drawable/ic_show_blue</item>
         <item name="themedItemMoveIconDrawable">@drawable/ic_list_blue</item>
+        <item name="android:statusBarColor">@color/status_bar_color_blue</item>
+        <item name="android:windowLightStatusBar">false</item>
     </style>
 
     <style name="AppTheme.Purple" parent="AppTheme">
@@ -79,6 +95,8 @@
         <item name="themedShowHideItemBarDrawable">@drawable/show_purple</item>
         <item name="themedShowHideIconDrawable">@drawable/ic_show_purple</item>
         <item name="themedItemMoveIconDrawable">@drawable/ic_list_purple</item>
+        <item name="android:statusBarColor">@color/status_bar_color_purples</item>
+        <item name="android:windowLightStatusBar">false</item>
     </style>
 
     <style name="CategorySelectRadioButton" parent="Theme.AppCompat.Light.NoActionBar">

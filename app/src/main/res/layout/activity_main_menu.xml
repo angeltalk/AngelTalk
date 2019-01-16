@@ -18,9 +18,8 @@
             android:id="@+id/clock_layout"
             android:layout_alignParentTop="true"
             android:layout_alignStart="@+id/category_list"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="18dp"
             android:layout_height="51dp"
-            app:layout_marginBottomPercent="6%"
             app:layout_widthPercent="90%">
 
             <ImageView
@@ -55,6 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_below="@id/clock_layout"
+            android:layout_marginTop="15dp"
             android:gravity="center_horizontal"
             android:horizontalSpacing="0dp"
             android:listSelector="@drawable/gridview_selector"

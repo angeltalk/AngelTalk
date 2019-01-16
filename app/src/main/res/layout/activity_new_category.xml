@@ -3,16 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_gradient_black"
+    android:background="@color/background_white"
     android:gravity="center_horizontal">
 
     <RelativeLayout
         android:id="@+id/new_category_header"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp"
-        app:layout_heightPercent="6%"
-        app:layout_marginBottomPercent="6%"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="19dp"
+        android:layout_height="45dp"
         app:layout_widthPercent="90%"
         android:focusable="true"
         android:focusableInTouchMode="true">
@@ -26,14 +26,14 @@
             android:paddingBottom="8dp"
             android:paddingStart="5dp"
             android:paddingEnd="20dp"
-            android:src="@drawable/ic_back_arrow" />
+            android:src="@drawable/ic_back_arrow_dark" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="@string/new_category"
-            android:textColor="@color/white"
+            android:textColor="@color/text_color_dark"
             android:textSize="27dp" />
 
         <ImageView
@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:src="@drawable/btn_add_category_disabled"/>
+            android:src="@drawable/btn_confirm_dark"/>
 
     </RelativeLayout>
 
@@ -73,7 +73,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="32.5dp"
+            android:layout_marginTop="24dp"
             android:orientation="vertical">
 
             <TextView
@@ -82,13 +82,12 @@
                 android:layout_height="23.5dp"
                 android:layout_gravity="start"
                 android:text="@string/category_label"
-                android:textColor="@color/white"
+                android:textColor="@color/text_color_dark"
                 android:textSize="16dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="7.2dp"
                 android:layout_marginTop="11dp"
                 android:gravity="top"
                 android:orientation="horizontal"
@@ -96,7 +95,7 @@
 
                 <EditText
                     android:id="@+id/edit_category_title"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="99"
                     android:background="@android:color/transparent"
@@ -104,10 +103,11 @@
                     android:imeOptions="actionDone"
                     android:inputType="text"
                     android:maxLines="1"
-                    android:textColor="@color/white"
-                    android:textColorHint="@color/white_3A"
+                    android:textColor="@color/text_color_dark"
+                    android:textColorHint="@color/text_color_dark_opacity_40"
                     android:textCursorDrawable="@drawable/make_category_cursor_color"
-                    android:textSize="20dp" />
+                    android:textSize="20dp"
+                    style="@style/AppTheme.EditText"/>
 
                 <ImageView
                     android:id="@+id/category_title_cancel"
@@ -115,7 +115,7 @@
                     android:layout_height="wrap_content"
                     android:padding="5dp"
                     android:visibility="invisible"
-                    android:src="@drawable/ic_cancel" />
+                    android:src="@drawable/ic_cancel_dark" />
 
             </LinearLayout>
 
@@ -130,7 +130,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="32.5dp"
+            android:layout_marginTop="24dp"
             android:orientation="vertical">
 
             <TextView
@@ -138,7 +138,7 @@
                 android:layout_height="23.5dp"
                 android:layout_gravity="start"
                 android:text="@string/icon_label"
-                android:textColor="@color/white"
+                android:textColor="@color/text_color_dark"
                 android:textSize="16dp" />
 
             <android.support.v7.widget.RecyclerView
@@ -154,7 +154,7 @@
                 android:layout_gravity="start"
                 android:layout_marginTop="27dp"
                 android:text="@string/background_label"
-                android:textColor="@color/white"
+                android:textColor="@color/text_color_dark"
                 android:textSize="16dp" />
 
             <android.support.v7.widget.RecyclerView

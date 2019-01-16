@@ -91,7 +91,8 @@ public class MakeCategoryActivity extends AbstractActivity{
         setContentView(R.layout.activity_new_category);
         ButterKnife.bind(this);
         initListView();
-        newCategorySaveButton.setEnabled(false);
+
+        this.changeEnabledStatusOfNewCategorySaveButton(false);
     }
 
     @Override
@@ -156,8 +157,7 @@ public class MakeCategoryActivity extends AbstractActivity{
         if (editCategoryTitle.getText().length() > 0) {
             categoryTitleTextView.setText(editCategoryTitle.getText().toString());
 
-            newCategorySaveButton.setEnabled(true);
-            newCategorySaveButton.setImageDrawable(getDrawable(R.drawable.btn_add_category));
+            this.changeEnabledStatusOfNewCategorySaveButton(true);
             cancelButton.setVisibility(View.VISIBLE);
 
             try {
@@ -169,9 +169,7 @@ public class MakeCategoryActivity extends AbstractActivity{
             }
         } else {
             categoryTitleTextView.setText(R.string.new_category_name);
-
-            newCategorySaveButton.setEnabled(false);
-            newCategorySaveButton.setImageDrawable(getDrawable(R.drawable.btn_add_category_disabled));
+            this.changeEnabledStatusOfNewCategorySaveButton(false);
             cancelButton.setVisibility(View.INVISIBLE);
 
             ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(categoryHeader.getWindowToken(), 0);
@@ -230,5 +228,15 @@ public class MakeCategoryActivity extends AbstractActivity{
 
         return unusedItem;
 
+    }
+
+    private void changeEnabledStatusOfNewCategorySaveButton(boolean isEnabled) {
+        if (isEnabled) {
+            newCategorySaveButton.setEnabled(true);
+            newCategorySaveButton.setImageAlpha(255);
+        } else {
+            newCategorySaveButton.setEnabled(false);
+            newCategorySaveButton.setImageAlpha(77);
+        }
     }
 }
