@@ -47,6 +47,6 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:padding="22.5dp"
-        android:src="@drawable/btn_list" />
+        android:src="@drawable/ic_list" />
 
 </RelativeLayout>
