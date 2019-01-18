@@ -115,7 +115,7 @@ public class CategoryDataSqliteDataStoreTest {
                         + " as status from category)c on a.icon = c.icon", null);
         List<CategoryItemModel> list = dataStore.getCategoryAllIconList();
         // then
-        assertThat(list.size()).isEqualTo(c.getCount()).isEqualTo(12);
+        assertThat(list.size()).isEqualTo(c.getCount()).isEqualTo(10);
     }
 
     @Test

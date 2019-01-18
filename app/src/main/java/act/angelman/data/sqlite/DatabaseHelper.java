@@ -30,7 +30,7 @@ import lombok.Cleanup;
 import static act.angelman.presentation.util.ContentsUtil.getContentFolder;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 13;
+    private static final int DATABASE_VERSION = 14;
 
     private static final String DATABASE_NAME = "AngelmanDatabase";
 

@@ -180,10 +180,10 @@ public class MakeCategoryActivityTest extends UITest {
         assertThat(adapter.getItemCount()).isEqualTo(4);
 
         NewCategoryItemAdapter.NewCategoryItemViewHolder firstHolder = (NewCategoryItemAdapter.NewCategoryItemViewHolder) iconList.findViewHolderForAdapterPosition(0);
-        assertThat(shadowOf(firstHolder.categoryItem.getDrawable()).getCreatedFromResId()).isEqualTo(R.drawable.icon_hospital_select);
+        assertThat(shadowOf(firstHolder.categoryItem.getDrawable()).getCreatedFromResId()).isEqualTo(R.drawable.icon_hospital_select_dark);
 
         NewCategoryItemAdapter.NewCategoryItemViewHolder lastHolder = (NewCategoryItemAdapter.NewCategoryItemViewHolder) iconList.findViewHolderForAdapterPosition(3);
-        assertThat(shadowOf(lastHolder.categoryItem.getDrawable()).getCreatedFromResId()).isEqualTo(R.drawable.icon_puzzle_used);
+        assertThat(shadowOf(lastHolder.categoryItem.getDrawable()).getCreatedFromResId()).isEqualTo(R.drawable.icon_puzzle_used_dark);
 
         final ImageView previewIconImage = (ImageView) subject.findViewById(R.id.category_icon);
         assertThat(shadowOf(previewIconImage.getDrawable()).getCreatedFromResId()).isEqualTo(R.drawable.icon_hospital_menu);
@@ -200,7 +200,7 @@ public class MakeCategoryActivityTest extends UITest {
         iconList.getChildAt(selectIndex).performClick();
 
         NewCategoryItemAdapter.NewCategoryItemViewHolder firstHolder = (NewCategoryItemAdapter.NewCategoryItemViewHolder) iconList.findViewHolderForAdapterPosition(0);
-        assertThat(shadowOf(firstHolder.categoryItem.getDrawable()).getCreatedFromResId()).isEqualTo(R.drawable.icon_hospital_select);
+        assertThat(shadowOf(firstHolder.categoryItem.getDrawable()).getCreatedFromResId()).isEqualTo(R.drawable.icon_hospital_select_dark);
 
         final ImageView previewIconImage = (ImageView) subject.findViewById(R.id.category_icon);
         assertThat(shadowOf(previewIconImage.getDrawable()).getCreatedFromResId()).isEqualTo(R.drawable.icon_hospital_menu);
@@ -217,10 +217,10 @@ public class MakeCategoryActivityTest extends UITest {
         iconList.getChildAt(selectIndex).performClick();
 
         NewCategoryItemAdapter.NewCategoryItemViewHolder firstHolder = (NewCategoryItemAdapter.NewCategoryItemViewHolder) iconList.findViewHolderForAdapterPosition(0);
-        assertThat(shadowOf(firstHolder.categoryItem.getDrawable()).getCreatedFromResId()).isEqualTo(R.drawable.icon_hospital_select);
+        assertThat(shadowOf(firstHolder.categoryItem.getDrawable()).getCreatedFromResId()).isEqualTo(R.drawable.icon_hospital_select_dark);
 
         NewCategoryItemAdapter.NewCategoryItemViewHolder lastHolder = (NewCategoryItemAdapter.NewCategoryItemViewHolder) iconList.findViewHolderForAdapterPosition(3);
-        assertThat(shadowOf(lastHolder.categoryItem.getDrawable()).getCreatedFromResId()).isEqualTo(R.drawable.icon_puzzle_used);
+        assertThat(shadowOf(lastHolder.categoryItem.getDrawable()).getCreatedFromResId()).isEqualTo(R.drawable.icon_puzzle_used_dark);
     }
 
     @Test

@@ -10,8 +10,6 @@ public class ResourceMapper {
         DOG,
         TSHIRT,
         MOVIE,
-        STAR,
-        SMILE,
         PUZZLE,
         FOOD,
         BUS,
@@ -45,75 +43,63 @@ public class ResourceMapper {
     static int iconMappingTable[][] = {
             {
                     R.drawable.icon_hospital_menu,
-                    R.drawable.icon_hospital_unselect,
-                    R.drawable.icon_hospital_select,
-                    R.drawable.icon_hospital_used
+                    R.drawable.icon_hospital_unselect_dark,
+                    R.drawable.icon_hospital_select_dark,
+                    R.drawable.icon_hospital_used_dark
             },
             {
                     R.drawable.icon_hand_menu,
-                    R.drawable.icon_hand_unselect,
-                    R.drawable.icon_hand_select,
-                    R.drawable.icon_hand_used
+                    R.drawable.icon_hand_unselect_dark,
+                    R.drawable.icon_hand_select_dark,
+                    R.drawable.icon_hand_used_dark
             },
             {
                     R.drawable.icon_dog_menu,
-                    R.drawable.icon_dog_unselect,
-                    R.drawable.icon_dog_select,
-                    R.drawable.icon_dog_used
+                    R.drawable.icon_dog_unselect_dark,
+                    R.drawable.icon_dog_select_dark,
+                    R.drawable.icon_dog_used_dark
             },
             {
                     R.drawable.icon_tshirt_menu,
-                    R.drawable.icon_tshirt_unselect,
-                    R.drawable.icon_tshirt_select,
-                    R.drawable.icon_tshirt_used
+                    R.drawable.icon_tshirt_unselect_dark,
+                    R.drawable.icon_tshirt_select_dark,
+                    R.drawable.icon_tshirt_used_dark
             },
             {
                     R.drawable.icon_movie_menu,
-                    R.drawable.icon_movie_unselect,
-                    R.drawable.icon_movie_select,
-                    R.drawable.icon_movie_used
-            },
-            {
-                    R.drawable.icon_star_menu,
-                    R.drawable.icon_star_unselect,
-                    R.drawable.icon_star_select,
-                    R.drawable.icon_star_used
-            },
-            {
-                    R.drawable.icon_smile_menu,
-                    R.drawable.icon_smile_unselect,
-                    R.drawable.icon_smile_select,
-                    R.drawable.icon_smile_used
+                    R.drawable.icon_movie_unselect_dark,
+                    R.drawable.icon_movie_select_dark,
+                    R.drawable.icon_movie_used_dark
             },
             {
                     R.drawable.icon_puzzle_menu,
-                    R.drawable.icon_puzzle_unselect,
-                    R.drawable.icon_puzzle_select,
-                    R.drawable.icon_puzzle_used
+                    R.drawable.icon_puzzle_unselect_dark,
+                    R.drawable.icon_puzzle_select_dark,
+                    R.drawable.icon_puzzle_used_dark
             },
             {
                     R.drawable.icon_food_menu,
-                    R.drawable.icon_food_unselect,
-                    R.drawable.icon_food_select,
-                    R.drawable.icon_food_used
+                    R.drawable.icon_food_unselect_dark,
+                    R.drawable.icon_food_select_dark,
+                    R.drawable.icon_food_used_dark
             },
             {
                     R.drawable.icon_bus_menu,
-                    R.drawable.icon_bus_unselect,
-                    R.drawable.icon_bus_select,
-                    R.drawable.icon_bus_used
+                    R.drawable.icon_bus_unselect_dark,
+                    R.drawable.icon_bus_select_dark,
+                    R.drawable.icon_bus_used_dark
             },
             {
                     R.drawable.icon_school_menu,
-                    R.drawable.icon_school_unselect,
-                    R.drawable.icon_school_select,
-                    R.drawable.icon_school_used
+                    R.drawable.icon_school_unselect_dark,
+                    R.drawable.icon_school_select_dark,
+                    R.drawable.icon_school_used_dark
             },
             {
                     R.drawable.icon_friend_menu,
-                    R.drawable.icon_friend_unselect,
-                    R.drawable.icon_friend_select,
-                    R.drawable.icon_friend_used
+                    R.drawable.icon_friend_unselect_dark,
+                    R.drawable.icon_friend_select_dark,
+                    R.drawable.icon_friend_used_dark
             },
     };
 
