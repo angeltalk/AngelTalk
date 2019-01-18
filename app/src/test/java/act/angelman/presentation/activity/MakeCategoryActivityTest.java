@@ -42,7 +42,6 @@ import static org.mockito.Mockito.when;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(sdk=22)
 public class MakeCategoryActivityTest extends UITest {
 
     private MakeCategoryActivity subject;
@@ -201,13 +200,10 @@ public class MakeCategoryActivityTest extends UITest {
         iconList.getChildAt(selectIndex).performClick();
 
         NewCategoryItemAdapter.NewCategoryItemViewHolder firstHolder = (NewCategoryItemAdapter.NewCategoryItemViewHolder) iconList.findViewHolderForAdapterPosition(0);
-        assertThat(shadowOf(firstHolder.categoryItem.getDrawable()).getCreatedFromResId()).isEqualTo(R.drawable.icon_hospital_unselect);
-
-        NewCategoryItemAdapter.NewCategoryItemViewHolder selectHolder = (NewCategoryItemAdapter.NewCategoryItemViewHolder) iconList.findViewHolderForAdapterPosition(selectIndex);
-        assertThat(shadowOf(selectHolder.categoryItem.getDrawable()).getCreatedFromResId()).isEqualTo(R.drawable.icon_friend_select);
+        assertThat(shadowOf(firstHolder.categoryItem.getDrawable()).getCreatedFromResId()).isEqualTo(R.drawable.icon_hospital_select);
 
         final ImageView previewIconImage = (ImageView) subject.findViewById(R.id.category_icon);
-        assertThat(shadowOf(previewIconImage.getDrawable()).getCreatedFromResId()).isEqualTo(R.drawable.icon_friend_menu);
+        assertThat(shadowOf(previewIconImage.getDrawable()).getCreatedFromResId()).isEqualTo(R.drawable.icon_hospital_menu);
     }
 
     @Test
@@ -260,13 +256,10 @@ public class MakeCategoryActivityTest extends UITest {
         colorList.getChildAt(selectIndex).performClick();
 
         NewCategoryItemAdapter.NewCategoryItemViewHolder firstHolder = (NewCategoryItemAdapter.NewCategoryItemViewHolder) colorList.findViewHolderForAdapterPosition(0);
-        assertThat(shadowOf(firstHolder.categoryItem.getDrawable()).getCreatedFromResId()).isEqualTo(R.drawable.icon_color_red_unselect);
-
-        NewCategoryItemAdapter.NewCategoryItemViewHolder selectHolder = (NewCategoryItemAdapter.NewCategoryItemViewHolder) colorList.findViewHolderForAdapterPosition(selectIndex);
-        assertThat(shadowOf(selectHolder.categoryItem.getDrawable()).getCreatedFromResId()).isEqualTo(R.drawable.icon_color_blue_select);
+        assertThat(shadowOf(firstHolder.categoryItem.getDrawable()).getCreatedFromResId()).isEqualTo(R.drawable.icon_color_red_select);
 
         final RelativeLayout previewColorLayout = (RelativeLayout) subject.findViewById(R.id.new_category_color);
-        assertThat(shadowOf(previewColorLayout.getBackground()).getCreatedFromResId()).isEqualTo(R.drawable.background_gradient_blue);
+        assertThat(shadowOf(previewColorLayout.getBackground()).getCreatedFromResId()).isEqualTo(R.drawable.background_gradient_red);
     }
 
     @Test
@@ -312,13 +305,13 @@ public class MakeCategoryActivityTest extends UITest {
         iconList.measure(0, 0);
         iconList.layout(0, 0, 10000, 100);
 
+        editCategoryTitle.setText("test");
         final int selectIndex = 0;
         iconList.getChildAt(selectIndex).performClick();
 
         subject.onBackPressed();
 
-        ShadowAlertDialog.getLatestAlertDialog().findViewById(R.id.confirm_button).performClick();
-        assertThat(subject.isFinishing()).isTrue();
+        assertThat(ShadowAlertDialog.getLatestAlertDialog().isShowing()).isTrue();
     }
 
     @Test

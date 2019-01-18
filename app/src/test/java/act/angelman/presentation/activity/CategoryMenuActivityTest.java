@@ -17,7 +17,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
-import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowAbsListView;
 import org.robolectric.shadows.ShadowActivity;
 import org.robolectric.shadows.ShadowAlertDialog;
@@ -27,7 +26,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import act.angelman.BuildConfig;
 import act.angelman.R;
 import act.angelman.TestAngelmanApplication;
 import act.angelman.UITest;
@@ -48,7 +46,6 @@ import static org.mockito.Mockito.when;
 import static org.robolectric.Shadows.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(sdk=22)
 public class CategoryMenuActivityTest extends UITest {
 
     @Inject
@@ -109,7 +106,7 @@ public class CategoryMenuActivityTest extends UITest {
 
             itemLayout = (RelativeLayout) categoryList.getChildAt(5).findViewById(R.id.category_item_layout);
             sd = shadowOf(itemLayout.getBackground());
-            assertThat(sd.getCreatedFromResId()).isEqualTo(R.drawable.drop_shadow_dashgap);
+            assertThat(sd.getCreatedFromResId()).isEqualTo(R.drawable.drop_shadow_dashgap_dark);
             assertThat(itemLayout.getAlpha()).isEqualTo(0.7f);
         }
     }
@@ -119,7 +116,7 @@ public class CategoryMenuActivityTest extends UITest {
         if (categoryList.getChildCount() == 6) {
             assertThat(((TextView) categoryList.getChildAt(5).findViewById(R.id.category_title)).getText()).isEqualTo("새 카테고리");
             ShadowDrawable siv = shadowOf(((ImageView) categoryList.getChildAt(5).findViewById(R.id.category_icon)).getDrawable());
-            assertThat(siv.getCreatedFromResId()).isEqualTo(R.drawable.ic_add_category);
+            assertThat(siv.getCreatedFromResId()).isEqualTo(R.drawable.ic_add_category_dark);
         }
     }
 
@@ -130,7 +127,7 @@ public class CategoryMenuActivityTest extends UITest {
         assertThat(((TextView) categoryList.getChildAt(0).findViewById(R.id.category_title)).getText()).isEqualTo("새 카테고리");
         ShadowDrawable sd = shadowOf(((ImageView) categoryList.getChildAt(0).findViewById(R.id.category_icon)).getDrawable());
 
-        assertThat(sd.getCreatedFromResId()).isEqualTo(R.drawable.ic_add_category);
+        assertThat(sd.getCreatedFromResId()).isEqualTo(R.drawable.ic_add_category_dark);
     }
 
     @Test
@@ -157,7 +154,7 @@ public class CategoryMenuActivityTest extends UITest {
     public void givenDefaultMode_whenClickDeleteButton_thenCategoryMenuChangeToDeletable() throws Exception {
         subject.categoryDeleteButton.performClick();
         ShadowDrawable sd = shadowOf(subject.categoryDeleteButton.getDrawable());
-        assertThat(sd.getCreatedFromResId()).isEqualTo(R.drawable.btn_confirm);
+        assertThat(sd.getCreatedFromResId()).isEqualTo(R.drawable.btn_confirm_dark);
     }
 
     @Test

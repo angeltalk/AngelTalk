@@ -161,7 +161,7 @@ public class CategoryAdapter extends BaseAdapter {
         categoryItemLayout.setAlpha(0.7f);
         categoryIcon.setImageDrawable(context.getResources().getDrawable(newCategoryModel.icon, null));
         categoryTitle.setText(newCategoryModel.title);
-        categoryTitle.setTextColor(context.getColor(R.color.gray_75));
+        categoryTitle.setTextColor(context.getResources().getColor(R.color.gray_75, null));
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             cardViewItem.setElevation(0f);
