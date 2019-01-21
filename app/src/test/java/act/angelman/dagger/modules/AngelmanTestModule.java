@@ -8,6 +8,7 @@ import act.angelman.network.transfer.CardTransfer;
 import act.angelman.network.transfer.KaKaoTransfer;
 import act.angelman.network.transfer.MessageTransfer;
 import act.angelman.presentation.manager.ApplicationManager;
+import act.angelman.presentation.manager.NotificationActionManager;
 
 import static org.mockito.Mockito.mock;
 
@@ -47,4 +48,8 @@ public class AngelmanTestModule extends act.angelman.dagger.modules.AngelmanModu
         return mock(MessageTransfer.class);
     }
 
+    @Override
+    NotificationActionManager providesNotificationActionManager() {
+        return mock(NotificationActionManager.class);
+    }
 }

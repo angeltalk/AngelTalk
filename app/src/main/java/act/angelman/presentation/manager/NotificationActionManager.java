@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.service.notification.StatusBarNotification;
 import android.widget.RemoteViews;
 
 import javax.inject.Inject;
@@ -21,6 +22,7 @@ public class NotificationActionManager {
 
     private final RemoteViews notificationViewOfChildMode;
     private final RemoteViews notificationViewOfParentMode;
+    private final NotificationManager notificationManager;
     @Inject
     ApplicationManager applicationManager;
 
@@ -32,6 +34,7 @@ public class NotificationActionManager {
 
     public NotificationActionManager(Context context) {
         ((AngelmanApplication) context.getApplicationContext()).getAngelmanComponent().inject(this);
+        notificationManager = ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE));
         this.context = context;
         isChildMode = getChildMode();
         notificationViewOfChildMode = new RemoteViews(context.getPackageName(), R.layout.layout_notification_on);
@@ -80,7 +83,7 @@ public class NotificationActionManager {
 
     public Notification notify(RemoteViews notificationView, Intent intent) {
         Notification.Builder notificationBuilder = createNotificationBuilder(intent);
-        NotificationManager notificationManager = ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE));
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             notificationBuilder.setCustomContentView(notificationView);
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
@@ -94,6 +97,20 @@ public class NotificationActionManager {
         notificationManager.notify(NOTIFICATION_ID, notification);
 
         return notification;
+    }
+
+    public boolean isNotificationGenerated() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            return notificationManager.getNotificationChannel(CHANNEL_ID) != null;
+        } else {
+            StatusBarNotification[] activeNotifications = notificationManager.getActiveNotifications();
+            for(StatusBarNotification notification: activeNotifications) {
+                if(context.getString(R.string.package_name).equals(notification.getPackageName())) {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 
     private boolean getChildMode() {

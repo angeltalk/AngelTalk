@@ -116,6 +116,6 @@
     <string name="response_no">아니오</string>
     <string name="skip_button">건너뛰기</string>
     <string name="onboarding_privacy_guide">이 앱을 사용하는 것은 AngelTalk 개인정보취급방침에\n 동의하는 것으로 간주됩니다.</string>
-
+    <string name="package_name">act.angel</string>
 
 </resources>

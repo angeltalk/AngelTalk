@@ -24,7 +24,7 @@
     <string name="new_category">New Category</string>
     <string name="new_category_button_text">NEW</string>
     <string name="complete">Done</string>
-    <string name="delete_category">Do you really want to delete this category and all cards in it?</string>
+    <string name="delete_category">Do you really want to delete this category \'%s\' and all cards in it?</string>
     <string name="total_card">%1$d Cards</string>
     <string name="icon_label">Icon</string>
     <string name="background_label">Color</string>
@@ -117,7 +117,6 @@
     <string name="response_no">No</string>
     <string name="skip_button">SKIP</string>
     <string name="onboarding_privacy_guide">By starting the app,\n you agree to the AngelTalk Privacy Policy.</string>
-
-
+    <string name="package_name">act.angel</string>
 
 </resources>

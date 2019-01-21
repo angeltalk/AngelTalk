@@ -16,7 +16,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
-import org.robolectric.RuntimeEnvironment;
 import org.robolectric.shadows.ShadowAbsListView;
 import org.robolectric.shadows.ShadowActivity;
 import org.robolectric.shadows.ShadowAlertDialog;
@@ -33,7 +32,9 @@ import act.angelman.domain.model.CategoryModel;
 import act.angelman.domain.repository.CardRepository;
 import act.angelman.domain.repository.CategoryRepository;
 import act.angelman.network.transfer.CardTransfer;
+import act.angelman.presentation.manager.NotificationActionManager;
 import act.angelman.presentation.util.ResourcesUtil;
+import androidx.test.core.app.ApplicationProvider;
 
 import static act.angelman.presentation.util.ResourceMapper.IconType.BUS;
 import static act.angelman.presentation.util.ResourceMapper.IconType.FOOD;
@@ -41,6 +42,7 @@ import static act.angelman.presentation.util.ResourceMapper.IconType.FRIEND;
 import static act.angelman.presentation.util.ResourceMapper.IconType.PUZZLE;
 import static act.angelman.presentation.util.ResourceMapper.IconType.SCHOOL;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.robolectric.Shadows.shadowOf;
@@ -57,13 +59,17 @@ public class CategoryMenuActivityTest extends UITest {
     @Inject
     CardTransfer cardTransfer;
 
+    @Inject
+    NotificationActionManager notificationActionManager;
+
     private CategoryMenuActivity subject;
     private GridView categoryList;
     private ImageView categoryDeleteButton;
 
     @Before
     public void setUp() throws Exception {
-        ((TestAngelmanApplication) RuntimeEnvironment.application).getAngelmanTestComponent().inject(this);
+        ((TestAngelmanApplication) ApplicationProvider.getApplicationContext()).getAngelmanTestComponent().inject(this);
+        when(notificationActionManager.isNotificationGenerated()).thenReturn(false);
         setUpActivityWithCategoryList(5);
     }
 
@@ -257,6 +263,11 @@ public class CategoryMenuActivityTest extends UITest {
         subject.onResume();
         // then
         assertThat(categoryList.getChildCount()).isEqualTo(6);
+    }
+
+    @Test
+    public void givenWithoutNotification_whenLaunched_thenGenerateNotification() {
+        verify(notificationActionManager).generateNotification(any(Intent.class));
     }
 
     private void setUpActivityWithCategoryList(int listSize) {

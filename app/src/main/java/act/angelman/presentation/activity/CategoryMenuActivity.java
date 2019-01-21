@@ -275,6 +275,8 @@ public class CategoryMenuActivity extends AbstractActivity  implements Navigatio
     };
 
     private void launchNotification() {
-        notificationActionManager.generateNotification(new Intent(this, NotificationActionReceiver.class));
+        if(!notificationActionManager.isNotificationGenerated()) {
+            notificationActionManager.generateNotification(new Intent(this, NotificationActionReceiver.class));
+        }
     }
 }
