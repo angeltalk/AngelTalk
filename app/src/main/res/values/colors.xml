@@ -3,16 +3,11 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="default_border">#d7d7d7</color>
     <color name="gray_border">#efefef</color>
-    <color name="not_add_in_lockscreen">#66000000</color>
-    <color name="add_in_lockscreen">#da5e61</color>
     <color name="make_category_cursor_color">#979797</color>
     <color name="make_card_cursor_color">#D2D2D2</color>
-    <color name="grey">#cccccc</color>
     <color name="white">#FFFFFF</color>
     <color name="white_32">#32FFFFFF</color>
-    <color name="white_3A">#3AFFFFFF</color>
     <color name="white_B2">#B2FFFFFF</color>
     <color name="white_fa">#FAFAFA</color>
     <color name="black_99">#99000000</color>
@@ -26,7 +21,6 @@
     <color name="gray_75">#757575</color>
     <color name="gray_75_opacity_57">#39757575</color>
 
-    <color name="status_bar_color">#272727</color>
     <color name="status_bar_color_white">#eee</color>
     <color name="status_bar_color_red">#D41468</color>
     <color name="status_bar_color_orange">#FC7C42</color>
@@ -42,10 +36,6 @@
     <color name="control_color">#434343</color>
 
     <color name="background_red">#e43939</color>
-    <color name="background_orange">#f69b19</color>
-    <color name="background_yellow">#ffe567</color>
-    <color name="background_green">#16a085</color>
-    <color name="background_blue">#412c82</color>
     <color name="background_white">#eee</color>
 
     <color name="simple_background_red">#D41468</color>

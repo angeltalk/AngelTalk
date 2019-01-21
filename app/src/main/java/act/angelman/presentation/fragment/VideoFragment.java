@@ -16,10 +16,12 @@
 
 package act.angelman.presentation.fragment;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.Configuration;
 import android.graphics.Matrix;
@@ -41,6 +43,7 @@ import android.os.HandlerThread;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.v13.app.FragmentCompat;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
@@ -86,7 +89,7 @@ public class VideoFragment extends Fragment
     private String mNextVideoAbsolutePath;
     private CaptureRequest.Builder mPreviewBuilder;
     private Surface mRecorderSurface;
-    private Handler h ;
+    private Handler h;
     private Runnable timerThread;
     private boolean allowRefresh = false;
 
@@ -271,10 +274,10 @@ public class VideoFragment extends Fragment
         int w = aspectRatio.getWidth();
         int h = aspectRatio.getHeight();
         for (Size option : choices) {
-            if ( option.getHeight() == option.getWidth() * h / w ) {
+            if (option.getHeight() == option.getWidth() * h / w) {
                 bigEnough2.add(option);
-                if( option.getWidth() >= width && option.getHeight() >= height) {
-                   bigEnough.add(option);
+                if (option.getWidth() >= width && option.getHeight() >= height) {
+                    bigEnough.add(option);
                 }
             }
         }
@@ -282,7 +285,8 @@ public class VideoFragment extends Fragment
         // Pick the smallest of those, assuming we found any
         if (bigEnough.size() > 0) {
             return Collections.min(bigEnough, new CompareSizesByArea());
-        } if(bigEnough2.size() >0) {
+        }
+        if (bigEnough2.size() > 0) {
             return Collections.max(bigEnough2, new CompareSizesByArea());
         } else {
             Log.e(TAG, "Couldn't find any suitable preview size");
@@ -312,7 +316,7 @@ public class VideoFragment extends Fragment
         super.onResume();
         startBackgroundThread();
 
-        if (allowRefresh){
+        if (allowRefresh) {
             allowRefresh = false;
             getFragmentManager().beginTransaction().replace(R.id.container, this, ApplicationConstants.VIDEO_FRAGMENT_TAG).commit();
         }
@@ -345,7 +349,7 @@ public class VideoFragment extends Fragment
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.record_button: {
-                if (SystemClock.elapsedRealtime() - recordingButtonClickTime < DOUBLE_CLICK_PREVENTING_TIME){
+                if (SystemClock.elapsedRealtime() - recordingButtonClickTime < DOUBLE_CLICK_PREVENTING_TIME) {
                     return;
                 }
                 recordingButtonClickTime = SystemClock.elapsedRealtime();

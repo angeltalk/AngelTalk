@@ -13,7 +13,6 @@ import org.robolectric.annotation.Config;
 import java.io.File;
 import java.util.List;
 
-import act.angelman.BuildConfig;
 import act.angelman.data.repository.datastore.SingleCardDataStore;
 import act.angelman.data.sqlite.CardColumns;
 import act.angelman.domain.model.CardModel;

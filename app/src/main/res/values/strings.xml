@@ -15,7 +15,6 @@
     <string name="check_recorded_voice">Check the recording</string>
     <string name="add_new_card_success">New card is added</string>
     <string name="add_share_card_success">The shared card is added</string>
-    <string name="lock_guide">Drag the lock out of the circle</string>
     <string name="lock_long_press_guide">Long press</string>
     <string name="delete_alert_message">Do you really want to delete this \'%s\' Card?</string>
     <string name="confirm">OK</string>
@@ -23,7 +22,6 @@
     <string name="add_new_card">New Card</string>
     <string name="new_category">New Category</string>
     <string name="new_category_button_text">NEW</string>
-    <string name="complete">Done</string>
     <string name="delete_category">Do you really want to delete this category \'%s\' and all cards in it?</string>
     <string name="total_card">%1$d Cards</string>
     <string name="icon_label">Icon</string>
@@ -32,7 +30,6 @@
     <string name="category_label">Category Name</string>
     <string name="enter_new_category_name">Enter less than 12 characters</string>
     <string name="record_card_name">Record card name</string>
-    <string name="rerecord_card_name">Record new name</string>
     <string name="inform_show_child_mode">AngelTalk will appear on lock screen</string>
     <string name="inform_hide_child_mode">AngelTalk will disappear from lock screen</string>
     <string name="format_day">EEEE, dd MMMM, yyyy</string>

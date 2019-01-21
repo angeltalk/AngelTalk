@@ -13,7 +13,6 @@ import org.robolectric.annotation.Config;
 
 import java.util.List;
 
-import act.angelman.BuildConfig;
 import act.angelman.data.sqlite.CategoryColumns;
 import act.angelman.data.sqlite.DatabaseHelper;
 import act.angelman.domain.model.CategoryItemModel;

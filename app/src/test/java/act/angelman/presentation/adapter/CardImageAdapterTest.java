@@ -13,7 +13,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import act.angelman.BuildConfig;
 import act.angelman.TestAngelmanApplication;
 import act.angelman.UITest;
 import act.angelman.domain.model.CardModel;

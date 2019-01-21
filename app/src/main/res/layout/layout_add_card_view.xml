@@ -32,7 +32,6 @@
             android:textSize="22dp" />
 
         <ImageView
-            android:id="@+id/plus_icon"
             android:layout_width="29.5dp"
             android:layout_height="32dp"
             android:layout_above="@id/add_card_text"

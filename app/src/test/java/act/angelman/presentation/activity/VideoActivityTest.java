@@ -10,7 +10,6 @@ import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
-import act.angelman.BuildConfig;
 import act.angelman.UITest;
 import act.angelman.presentation.manager.ApplicationConstants;
 

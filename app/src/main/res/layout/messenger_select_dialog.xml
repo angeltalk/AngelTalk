@@ -65,7 +65,6 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="17dp"/>
                 <TextView
-                    android:id="@+id/text_kakaotalk"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -102,7 +101,6 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="17dp"/>
                 <TextView
-                    android:id="@+id/text_whatsapp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -140,7 +138,6 @@
                     android:layout_marginLeft="17dp"/>
 
                 <TextView
-                    android:id="@+id/text_message"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"

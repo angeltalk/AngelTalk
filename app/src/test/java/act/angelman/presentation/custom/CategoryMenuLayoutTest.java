@@ -2,12 +2,10 @@ package act.angelman.presentation.custom;
 
 import android.app.Activity;
 import android.support.constraint.ConstraintLayout;
-import android.support.percent.PercentRelativeLayout;
 import android.util.DisplayMetrics;
 import android.view.DragEvent;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextClock;
 import android.widget.TextView;
