@@ -29,7 +29,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginBottom="110dp"
             android:text="@string/add_new_card"
-            android:textSize="23dp" />
+            android:textSize="22dp" />
 
         <ImageView
             android:id="@+id/plus_icon"

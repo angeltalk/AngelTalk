@@ -33,7 +33,7 @@
             android:format24Hour="a"
             android:gravity="center_horizontal"
             android:textColor="@color/white"
-            android:textSize="15dp"
+            android:textSize="16dp"
             android:text="12"/>
         <TextClock
             android:id="@+id/clock_time"
@@ -55,7 +55,7 @@
             android:gravity="center_horizontal"
             android:layout_marginStart="5dp"
             android:textColor="@color/white"
-            android:textSize="15dp"
+            android:textSize="16dp"
             android:text="12"/>
     </LinearLayout>
 
@@ -81,31 +81,29 @@
         />
     <ImageView
         android:id="@+id/lock_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:src="@drawable/ic_lock_disabled"
-        android:layout_alignParentBottom="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="30.5dp"
-        />
+        android:layout_marginBottom="24dp"/>
 
-    <TextView
+    <android.support.v7.widget.AppCompatTextView
         android:id="@+id/lock_long_press_guide"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_marginStart="23dp"
         android:layout_marginEnd="23dp"
-        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="16dp"
         android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.97"
-        android:textSize="15.5dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textSize="16dp"
+        android:textAppearance="@style/DefaultFont"
         android:textColor="@color/white"
-        android:background="@color/long_press_guide"
+        android:background="@drawable/lock_guide_radius_shape"
         android:text="@string/lock_long_press_guide"
         android:visibility="gone"/>
 

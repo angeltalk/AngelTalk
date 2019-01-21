@@ -27,6 +27,6 @@
         android:layout_toEndOf="@+id/category_item_radio"
         android:text="동물"
         android:textColor="@color/black_cc"
-        android:textSize="15sp" />
+        android:textSize="16dp" />
 
 </RelativeLayout>

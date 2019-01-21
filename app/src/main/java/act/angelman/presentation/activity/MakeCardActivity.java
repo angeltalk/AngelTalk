@@ -284,12 +284,12 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
 
     private void changeCountingSceneForRecoding() {
         recordStopButton.setVisibility(View.VISIBLE);
-        waitCount.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 30);
+        waitCount.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 32);
     }
 
     private void showCountingScene() {
         countScene.setVisibility(View.VISIBLE);
-        waitCount.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 62);
+        waitCount.setTextSize(TypedValue.COMPLEX_UNIT_DIP, COUNT_TEXT_SIZE);
         micButton.setEnabled(false);
         skipButton.setVisibility(View.VISIBLE);
     }

@@ -24,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="52dp"
             android:textColor="@color/black_99"
-            android:textSize="16sp"
+            android:textSize="16dp"
             android:background="@color/white"
             android:gravity="center"
             android:layout_gravity="center"
@@ -61,7 +61,7 @@
             android:layout_alignParentRight="true"
             android:text="@string/confirm"
             android:textColor="@color/category_select_list_radiobutton_default"
-            android:textSize="16sp"
+            android:textSize="16dp"
             android:textStyle="bold"
             android:enabled="false" />
 
@@ -79,7 +79,7 @@
             android:layout_toLeftOf="@id/confirm_button"
             android:textStyle="bold"
             android:textColor="#d41468"
-            android:textSize="16sp" />
+            android:textSize="16dp" />
 
     </RelativeLayout>
 

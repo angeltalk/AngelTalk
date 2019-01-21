@@ -25,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="52dp"
             android:textColor="@color/black_99"
-            android:textSize="16sp"
+            android:textSize="16dp"
             android:background="@color/white"
             android:gravity="center"
             android:layout_gravity="center"
@@ -73,7 +73,7 @@
                     android:layout_marginLeft="9dp"
                     android:text="@string/kakaotalk"
                     android:textColor="@color/black_cc"
-                    android:textSize="15sp" />
+                    android:textSize="16dp" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -110,7 +110,7 @@
                     android:layout_marginLeft="9dp"
                     android:text="@string/whatsapp"
                     android:textColor="@color/black_cc"
-                    android:textSize="15sp" />
+                    android:textSize="16dp" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -148,7 +148,7 @@
                     android:layout_marginLeft="9dp"
                     android:text="@string/messages"
                     android:textColor="@color/black_cc"
-                    android:textSize="15sp" />
+                    android:textSize="16dp" />
             </RelativeLayout>
 
         </LinearLayout>
@@ -171,7 +171,7 @@
             android:text="@string/confirm"
             android:textStyle="bold"
             android:textColor="@color/category_select_list_radiobutton_default"
-            android:textSize="16sp"
+            android:textSize="16dp"
             android:enabled="false" />
 
         <View
@@ -188,7 +188,7 @@
             android:layout_toLeftOf="@id/confirm_button"
             android:textColor="#d41468"
             android:textStyle="bold"
-            android:textSize="16sp" />
+            android:textSize="16dp" />
 
     </RelativeLayout>
 

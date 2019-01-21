@@ -35,7 +35,7 @@
         android:layout_marginTop="77dp"
         android:text="@string/init_count_text"
         android:textColor="@color/white"
-        android:textSize="15sp" />
+        android:textSize="16dp" />
 
     <TextView
         android:id="@+id/video_guide"
@@ -46,7 +46,7 @@
         android:layout_marginBottom="160dp"
         android:text="@string/video_guide"
         android:textColor="@color/white"
-        android:textSize="17sp" />
+        android:textSize="16dp" />
 
     <FrameLayout
         android:id="@+id/video_shutter"
