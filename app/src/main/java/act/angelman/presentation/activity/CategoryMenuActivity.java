@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.List;
 
@@ -174,6 +175,7 @@ public class CategoryMenuActivity extends AbstractActivity  implements Navigatio
                 .load(R.drawable.angelee)
                 .asGif()
                 .crossFade()
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .into(((ImageView) navigationView.getHeaderView(0).findViewById(R.id.slide_menu_angel)));
 
         drawer.closeDrawer(GravityCompat.START);
