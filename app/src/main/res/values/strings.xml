@@ -118,5 +118,6 @@
     <string name="skip_button">SKIP</string>
     <string name="onboarding_privacy_guide">By starting the app,\n you agree to the AngelTalk Privacy Policy.</string>
     <string name="package_name">act.angel</string>
+    <string name="default_font_path">Roboto-Regular.otf</string>
 
 </resources>

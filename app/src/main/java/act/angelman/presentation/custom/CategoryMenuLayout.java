@@ -1,6 +1,7 @@
 package act.angelman.presentation.custom;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.os.Vibrator;
 import android.support.annotation.VisibleForTesting;
 import android.support.constraint.ConstraintLayout;
@@ -14,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextClock;
 import android.widget.TextView;
 
 import java.util.List;
@@ -56,6 +58,7 @@ public class CategoryMenuLayout extends LinearLayout {
         lockLongPressGuide = (TextView) subject.findViewById(R.id.lock_long_press_guide);
         lockButton = (ImageView) subject.findViewById(R.id.lock_image);
 
+        initClockTextStyle(context);
         getAllCategoryList(context);
         setLockView(context);
 
@@ -152,5 +155,16 @@ public class CategoryMenuLayout extends LinearLayout {
         double dmRatio = (double)dm.heightPixels/dm.widthPixels;
 
         return !hasMenuKey && !hasBackKey && (dmRatio < 1.72);
+    }
+
+    private void initClockTextStyle(Context context) {
+        TextClock clockDate = (TextClock) subject.findViewById(R.id.clock_date);
+        TextClock clockAmpm = (TextClock) subject.findViewById(R.id.clock_ampm);
+        TextClock clockTime = (TextClock) subject.findViewById(R.id.clock_time);
+
+        Typeface typeFaceBlack = Typeface.createFromAsset(context.getAssets(), getContext().getString(R.string.default_font_path));
+        clockDate.setTypeface(typeFaceBlack);
+        clockAmpm.setTypeface(typeFaceBlack);
+        clockTime.setTypeface(typeFaceBlack);
     }
 }

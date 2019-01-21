@@ -8,11 +8,11 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:statusBarColor">@color/status_bar_color_white</item>
         <item name="android:windowLightStatusBar">true</item>
-        <item name="android:fontFamily">@font/roboto_regular_font</item>
+        <item name="android:fontFamily">@font/noto_regular</item>
     </style>
 
     <style name="DefaultFont">
-        <item name="android:fontFamily">@font/roboto_regular_font</item>
+        <item name="android:fontFamily">@font/noto_regular</item>
     </style>
 
     <style name="AppTheme.EditText">

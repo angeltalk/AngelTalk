@@ -7,6 +7,7 @@
     android:background="@drawable/background_gradient_black"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    style="@style/AppTheme"
     android:fitsSystemWindows="true">
 
     <LinearLayout
@@ -94,7 +95,7 @@
         android:layout_marginBottom="30.5dp"
         />
 
-    <TextView
+    <android.support.v7.widget.AppCompatTextView
         android:id="@+id/lock_long_press_guide"
         android:layout_width="match_parent"
         android:layout_height="45dp"

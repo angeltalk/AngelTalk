@@ -19,7 +19,7 @@
             tools:src="@drawable/icon_bus_menu" />
     </RelativeLayout>
 
-    <TextView
+    <android.support.v7.widget.AppCompatTextView
         android:id="@+id/category_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -30,6 +30,7 @@
         android:textSize="18dp"
         android:textStyle="bold"
         android:fontFamily="@font/roboto_medium_font"
+        android:textAppearance="@style/DefaultFont"
         tools:text="TEST" />
 
 </LinearLayout>

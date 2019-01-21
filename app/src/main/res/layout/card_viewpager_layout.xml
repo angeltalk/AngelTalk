@@ -24,7 +24,7 @@
             android:paddingTop="20dp"
             android:src="@drawable/ic_back_arrow" />
 
-        <TextView
+        <android.support.v7.widget.AppCompatTextView
             android:id="@+id/category_item_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -63,7 +63,7 @@
             android:layout_centerHorizontal="true"
             android:src="@drawable/bg_yn_out" />
 
-        <TextView
+        <android.support.v7.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -132,13 +132,14 @@
                 android:layout_alignParentBottom="true"
                 android:background="@drawable/rectangle_bottom_radius_shape">
 
-                <TextView
+                <android.support.v7.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:text= "@string/response_yes"
                     android:textColor="#000000"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    style="@style/DefaultFont"/>
             </RelativeLayout>
         </LinearLayout>
 
@@ -175,13 +176,14 @@
                 android:layout_alignParentBottom="true"
                 android:background="@drawable/rectangle_bottom_radius_shape">
 
-                <TextView
+                <android.support.v7.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:text="@string/response_no"
                     android:textColor="#000000"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    style="@style/DefaultFont"/>
             </RelativeLayout>
 
         </LinearLayout>
