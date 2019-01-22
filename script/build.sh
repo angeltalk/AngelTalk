@@ -1,2 +1,2 @@
 #./gradlew clean createDebugCoverageReport jacocoTestReport sonarqube
-./gradlew clean build jacocoTestReport
+./gradlew clean build coverageReport
