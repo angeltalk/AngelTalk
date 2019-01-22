@@ -44,19 +44,16 @@ android {
         debug {
             testCoverageEnabled = true
             signingConfig signingConfigs.debug
-            applicationVariants.all { variant -> variant.outputs.all {
-                    outputFileName = "AngelTalk-${variant.versionName}-debug.apk"
-                }
-            }
         }
         release {
             testCoverageEnabled = false
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            applicationVariants.all { variant -> variant.outputs.all {
-                    outputFileName = "AngelTalk-${variant.versionName}-release.apk"
-                }
-            }
+        }
+    }
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = new File("AngelTalk-${variant.versionName}-${variant.name}.apk")
         }
     }
     lintOptions {

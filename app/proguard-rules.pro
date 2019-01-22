@@ -24,3 +24,19 @@
 -keepattributes Signature
 # Retain declared checked exceptions for use by a Proxy instance.
 -keepattributes Exceptions
+
+-keep class android.support.v7.app.** { *; }
+-keep interface android.support.v7.app.** { *; }
+
+-dontwarn afu.org.checkerframework.checker.nullness.NullnessUtils
+-dontwarn afu.org.checkerframework.checker.regex.RegexUtil
+-dontwarn afu.org.checkerframework.checker.units.UnitsTools
+-dontwarn com.google.common.util.concurrent.FuturesGetChecked$GetCheckedTypeValidatorHolder$ClassValueValidator
+-dontwarn com.google.common.util.concurrent.FuturesGetChecked$GetCheckedTypeValidatorHolder$ClassValueValidator$1
+-dontwarn afu.org.checkerframework.checker.formatter.FormatUtil
+-dontwarn afu.org.checkerframework.checker.formatter.FormatUtil$Conversion
+-dontwarn afu.org.checkerframework.checker.formatter.FormatUtil$IllegalFormatConversionCategoryException
+-dontwarn com.google.errorprone.annotations.ForOverride
+-dontwarn com.google.errorprone.annotations.IncompatibleModifiers
+-dontwarn com.google.errorprone.annotations.RequiredModifiers
+-dontwarn com.google.errorprone.annotations.Var
