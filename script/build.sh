@@ -7,7 +7,7 @@
 #-Pandroid.injected.signing.key.password=$KEY_PASSWORD
 
 file_date=$(date "+%m.%d-%H:%M")
-version_name=$(VERSION_NAME)
+version_name=$VERSION_NAME
 
 #debug
 file_name_debug="app/build/outputs/apk/debug/AngelTalk-$version_name-debug.apk"

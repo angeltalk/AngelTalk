@@ -72,7 +72,7 @@ task exportVersionName {
     doLast {
         exec {
             workingDir '.'
-            commandLine "export VERSION_NAME='$project.android.defaultConfig.versionName'"
+            commandLine "export VERSION_NAME=$project.android.defaultConfig.versionName"
         }
     }
 }
