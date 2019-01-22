@@ -19,7 +19,7 @@ echo $DEPLOY_COMMIT_MESSAGE
 #: <<'END'
 
 #debug
-filename="$(find . -name AngelTalk-debug-*.apk)"
+filename="$(find . -name AngelTalk-*-debug-*.apk)"
 
 SLACK_TEXT="[ *DEBUG* \`$DEPLOY_BRANCH\` | \`$DEPLOY_COMMIT\` ] ${DEPLOY_COMMIT_MESSAGE:-none} "
 curl \
@@ -30,7 +30,7 @@ curl \
   https://slack.com/api/files.upload
 
 #release
-filename="$(find . -name AngelTalk-release-*.apk)"
+filename="$(find . -name AngelTalk-*-release-*.apk)"
 
 SLACK_TEXT="[ *RELEASE* \`$DEPLOY_BRANCH\` | \`$DEPLOY_COMMIT\` ] ${DEPLOY_COMMIT_MESSAGE:-none} "
 curl \
