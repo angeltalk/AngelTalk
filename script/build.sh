@@ -1,5 +1,5 @@
 #./gradlew clean createDebugCoverageReport jacocoTestReport sonarqube
-./gradlew clean build coverageReport exportVersionName
+./gradlew clean build coverageReport
 
 #-Pandroid.injected.signing.store.file="travis-encrypt/calysigningkey.jks" \
 #-Pandroid.injected.signing.store.password=$STORE_PASSWORD \
@@ -7,7 +7,7 @@
 #-Pandroid.injected.signing.key.password=$KEY_PASSWORD
 
 file_date=$(date "+%m.%d-%H:%M")
-version_name=$VERSION_NAME
+version_name=2.4
 
 #debug
 file_name_debug="app/build/outputs/apk/debug/AngelTalk-$version_name-debug.apk"
