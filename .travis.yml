@@ -42,36 +42,14 @@ before_install:
 
 skip_cleanup: true
 
-before_deploy:
-- ./gradlew clean build coverageReport exportVersionName
-
-- file_date=$(date "+%m.%d-%H:%M")
-- version_name=$(VERSION_NAME)
-
-- file_name_debug="app/build/outputs/apk/debug/AngelTalk-$version_name-debug.apk"
-- file_location_debug="app/build/outputs/apk/debug/AngelTalk-$version_name-debug-$file_date.apk"
-- cp $file_location_debug $file_name_debug
-
-- file_name_release="app/build/outputs/apk/release/AngelTalk-$version_name-release.apk"
-- file_location_release="app/build/outputs/apk/release/AngelTalk-$version_name-release-$file_date.apk"
-- cp $file_location_release $file_name_release
+script:
+  - "sh script/build.sh"
 
 deploy:
-- DEPLOY_BRANCH=$(git symbolic-ref --short HEAD)
-- DEPLOY_COMMIT=$(git log --pretty=format:'%h' -n 1)
-- DEPLOY_COMMIT_MESSAGE=$(git log -1 --pretty=%B)
-
-- echo $DEPLOY_BRANCH
-- echo $DEPLOY_COMMIT
-- echo $DEPLOY_COMMIT_MESSAGE
-
-- version_name=$(VERSION_NAME)
-
-- filename="$(find . -name AngelTalk-$version_name-debug-*.apk)"
-- SLACK_TEXT="[ *DEBUG* \`$DEPLOY_BRANCH\` | \`$DEPLOY_COMMIT\` ] ${DEPLOY_COMMIT_MESSAGE:-none} "
-- curl -F "token=$SLACK_KEY" -F "channels=deploy-android" -F "initial_comment=$SLACK_TEXT" -F "file=@$filename" https://slack.com/api/files.upload
-
-- filename="$(find . -name AngelTalk-$version_name-release-*.apk)"
-- SLACK_TEXT="[ *RELEASE* \`$DEPLOY_BRANCH\` | \`$DEPLOY_COMMIT\` ] ${DEPLOY_COMMIT_MESSAGE:-none} "
-- curl -F "token=$SLACK_KEY" -F "channels=deploy-android" -F "initial_comment=$SLACK_TEXT" -F "file=@$filename" https://slack.com/api/files.upload
-
+  provider: script
+    skip_cleanup: true
+    script: "sh script/deploy.sh"
+    on:
+      branch:
+        - development
+        - master
