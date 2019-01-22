@@ -45,7 +45,7 @@ android {
             testCoverageEnabled = true
             signingConfig signingConfigs.debug
             applicationVariants.all { variant -> variant.outputs.all {
-                    outputFileName = "AngelTalk-${variant.versionName}.apk"
+                    outputFileName = "AngelTalk-${variant.versionName}-debug.apk"
                 }
             }
         }
@@ -54,7 +54,7 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             applicationVariants.all { variant -> variant.outputs.all {
-                    outputFileName = "AngelTalk-${variant.versionName}.apk"
+                    outputFileName = "AngelTalk-${variant.versionName}-release.apk"
                 }
             }
         }
@@ -67,6 +67,16 @@ android {
 jacoco {
     toolVersion = "0.8.2"
 }
+
+task exportVersionName {
+    doLast {
+        exec {
+            workingDir '.'
+            commandLine "export VERSION_NAME=$project.android.defaultConfig.versionName"
+        }
+    }
+}
+
 
 task coverageReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
     group = "Reporting"
