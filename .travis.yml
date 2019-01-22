@@ -47,9 +47,9 @@ script:
 
 deploy:
   provider: script
-    skip_cleanup: true
-    script: "sh script/deploy.sh"
-    on:
-      branch:
-        - development
-        - master
+  skip_cleanup: true
+  script: "sh script/deploy.sh"
+  on:
+    branch:
+      - development
+      - master
