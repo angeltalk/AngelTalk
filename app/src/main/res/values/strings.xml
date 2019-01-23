@@ -26,7 +26,7 @@
     <string name="total_card">%1$d Cards</string>
     <string name="icon_label">Icon</string>
     <string name="background_label">Color</string>
-    <string name="new_category_name">Category Name</string>
+    <string name="new_category_name">Name</string>
     <string name="category_label">Category Name</string>
     <string name="enter_new_category_name">Enter less than 12 characters</string>
     <string name="record_card_name">Record card name</string>

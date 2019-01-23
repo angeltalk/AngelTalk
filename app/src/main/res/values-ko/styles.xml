@@ -15,7 +15,7 @@
         <item name="android:fontFamily">@font/noto_regular</item>
     </style>
 
-    <style name="AppTheme.EditText">
+    <style name="AppTheme.EditText" parent="Widget.AppCompat.EditText">
         <item name="colorControlActivated">@color/control_color</item>
         <item name="colorControlNormal">@color/control_color</item>
     </style>

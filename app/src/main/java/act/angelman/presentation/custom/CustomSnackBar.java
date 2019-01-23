@@ -11,7 +11,7 @@ import act.angelman.presentation.util.ResolutionUtil;
 
 public class CustomSnackBar {
 
-    private final static double CUSTOM_SNACKBAR_HEIGHT = 73.5;
+    private final static double CUSTOM_SNACKBAR_HEIGHT = 72;
 
     public static void styledSnackBarWithDuration(Context context, View content, String message, int duration){
         final Snackbar snackbar = makeStyledSnackBar(context, content, message);
@@ -34,6 +34,7 @@ public class CustomSnackBar {
         ViewGroup.LayoutParams layoutParams = snackbarView.getLayoutParams();
         layoutParams.height = ResolutionUtil.getDpToPix(context, CUSTOM_SNACKBAR_HEIGHT);
         snackbarView.setLayoutParams(layoutParams);
+        snackbarView.setPadding(snackbarView.getPaddingLeft(), 24, snackbarView.getPaddingRight(), 34);
         return snackbar;
     }
 }

@@ -15,7 +15,7 @@
         <item name="android:fontFamily">@font/roboto_regular_font</item>
     </style>
 
-    <style name="AppTheme.EditText">
+    <style name="AppTheme.EditText" parent="Widget.AppCompat.EditText">
         <item name="colorControlActivated">@color/control_color</item>
         <item name="colorControlNormal">@color/control_color</item>
     </style>
