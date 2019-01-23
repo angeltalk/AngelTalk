@@ -69,7 +69,6 @@ public class CategoryMenuActivityTest extends UITest {
     @Before
     public void setUp() throws Exception {
         ((TestAngelmanApplication) ApplicationProvider.getApplicationContext()).getAngelmanTestComponent().inject(this);
-        when(notificationActionManager.isNotificationGenerated()).thenReturn(false);
         setUpActivityWithCategoryList(5);
     }
 

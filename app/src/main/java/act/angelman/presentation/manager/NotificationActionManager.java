@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
-import android.service.notification.StatusBarNotification;
 import android.widget.RemoteViews;
 
 import javax.inject.Inject;
@@ -88,6 +87,7 @@ public class NotificationActionManager {
             notificationBuilder.setCustomContentView(notificationView);
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
             channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+            channel.setVibrationPattern(new long[]{0, 0, 0, 0, 0, 0, 0, 0, 0});
             notificationBuilder.setChannelId(CHANNEL_ID);
             notificationManager.createNotificationChannel(channel);
         } else {
@@ -97,20 +97,6 @@ public class NotificationActionManager {
         notificationManager.notify(NOTIFICATION_ID, notification);
 
         return notification;
-    }
-
-    public boolean isNotificationGenerated() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            return notificationManager.getNotificationChannel(CHANNEL_ID) != null;
-        } else {
-            StatusBarNotification[] activeNotifications = notificationManager.getActiveNotifications();
-            for(StatusBarNotification notification: activeNotifications) {
-                if(context.getString(R.string.package_name).equals(notification.getPackageName())) {
-                    return true;
-                }
-            }
-            return false;
-        }
     }
 
     private boolean getChildMode() {

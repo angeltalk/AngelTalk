@@ -74,7 +74,7 @@ public class CardTransfer {
                                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                             Map<String, String> resultMap = Maps.newHashMap();
                                             resultMap.put("key", key);
-                                            resultMap.put("url", taskSnapshot.getMetadata().getReference().getDownloadUrl() == null ? "" : taskSnapshot.getMetadata().getReference().getDownloadUrl().toString());
+                                            resultMap.put("url", taskSnapshot.getDownloadUrl() == null ? "" : taskSnapshot.getDownloadUrl().toString());
                                             onSuccessListener.onSuccess(resultMap);
                                         }
                                     }).addOnFailureListener(new OnFailureListener() {
@@ -85,7 +85,7 @@ public class CardTransfer {
                             });
                             shareDataReference.child(key).child("cardType").setValue(cardModel.cardType.getValue());
                             shareDataReference.child(key).child("name").setValue(cardModel.name);
-                            shareDataReference.child(key).child("contentPath").setValue(taskSnapshot.getMetadata().getReference().getDownloadUrl() == null ? "" : taskSnapshot.getMetadata().getReference().getDownloadUrl().toString());
+                            shareDataReference.child(key).child("contentPath").setValue(taskSnapshot.getDownloadUrl() == null ? "" : taskSnapshot.getDownloadUrl().toString());
                         }
                     }).addOnFailureListener(new OnFailureListener() {
 
