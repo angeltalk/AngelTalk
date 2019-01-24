@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <act.angelman.presentation.custom.AutoFitTextureView
+    <angeltalk.plus.presentation.custom.AutoFitTextureView
         android:id="@+id/texture"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

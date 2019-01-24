@@ -2,7 +2,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <act.angelman.presentation.custom.CardPreviewLayout
+    <angeltalk.plus.presentation.custom.CardPreviewLayout
         android:id="@+id/card_preview_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

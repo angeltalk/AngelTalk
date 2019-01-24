@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="act.angelman">
+    package="angeltalk.plus">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
@@ -19,7 +19,7 @@
         android:required="false" />
 
     <application
-        android:name=".AngelmanApplication"
+        android:name="angeltalk.plus.AngelmanApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_angelman_logo"
         android:label="@string/app_name"
@@ -29,7 +29,7 @@
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_app_key" />
         <activity
-            android:name=".presentation.activity.OnboardingActivity"
+            android:name="angeltalk.plus.presentation.activity.OnboardingActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,30 +37,30 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".presentation.activity.CameraGallerySelectionActivity"
+            android:name="angeltalk.plus.presentation.activity.CameraGallerySelectionActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".presentation.activity.MakeCategoryActivity"
+            android:name="angeltalk.plus.presentation.activity.MakeCategoryActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
-            android:name=".presentation.activity.Camera2Activity"
+            android:name="angeltalk.plus.presentation.activity.Camera2Activity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".presentation.activity.CardListActivity"
+            android:name="angeltalk.plus.presentation.activity.CardListActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".presentation.activity.MakeCardActivity"
+            android:name="angeltalk.plus.presentation.activity.MakeCardActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
-            android:name=".presentation.activity.CardViewPagerActivity"
+            android:name="angeltalk.plus.presentation.activity.CardViewPagerActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".presentation.activity.PhotoEditorActivity"
+            android:name="angeltalk.plus.presentation.activity.PhotoEditorActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".presentation.activity.ShareCardActivity"
+            android:name="angeltalk.plus.presentation.activity.ShareCardActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -75,26 +75,26 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".presentation.activity.CategoryMenuActivity"
+            android:name="angeltalk.plus.presentation.activity.CategoryMenuActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".presentation.activity.VideoActivity"
+            android:name="angeltalk.plus.presentation.activity.VideoActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" />
-        <activity android:name=".presentation.activity.MakeCardPreviewActivity"
+        <activity android:name="angeltalk.plus.presentation.activity.MakeCardPreviewActivity"
             android:screenOrientation="portrait" />
 
-        <service android:name=".presentation.service.ScreenService" />
+        <service android:name="angeltalk.plus.presentation.service.ScreenService" />
 
-        <receiver android:name=".presentation.service.ScreenReceiver">
+        <receiver android:name="angeltalk.plus.presentation.service.ScreenReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.SCREEN_OFF" />
                 <action android:name="android.intent.action.PHONE_STATE" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".presentation.receiver.NotificationActionReceiver" />
+        <receiver android:name="angeltalk.plus.presentation.receiver.NotificationActionReceiver" />
         <receiver
-            android:name=".presentation.receiver.BootCompleteReceiver"
+            android:name="angeltalk.plus.presentation.receiver.BootCompleteReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>

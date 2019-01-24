@@ -22,7 +22,7 @@
             android:layout_height="match_parent"
             android:scaleType="fitXY" />
 
-        <act.angelman.presentation.custom.VideoCardTextureView
+        <angeltalk.plus.presentation.custom.VideoCardTextureView
             android:id="@+id/camera_recode_video"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>

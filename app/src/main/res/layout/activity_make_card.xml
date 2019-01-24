@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             app:layout_heightPercent="15%" />
 
-        <act.angelman.presentation.custom.CardView
+        <angeltalk.plus.presentation.custom.CardView
             android:id="@+id/card_view_layout"
             android:layout_width="match_parent"
             android:layout_below="@id/test"

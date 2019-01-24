@@ -6,13 +6,13 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg_basic_1">
 
-    <act.angelman.presentation.custom.CardTitleLayout
+    <angeltalk.plus.presentation.custom.CardTitleLayout
         android:id="@+id/title_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintHeight_percent="0.13" />
 
-    <act.angelman.presentation.custom.CardViewPager
+    <angeltalk.plus.presentation.custom.CardViewPager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="0dp"

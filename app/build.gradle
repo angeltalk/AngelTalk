@@ -11,8 +11,17 @@ android {
     buildToolsVersion '28.0.3'
     useLibrary 'org.apache.http.legacy'
 
+    signingConfigs {
+        debug {
+            storeFile file("../angelman.jks")
+            storePassword "angel123\$"
+            keyAlias "angelman"
+            keyPassword "angel123\$"
+        }
+    }
+
     defaultConfig {
-        applicationId "act.angelman"
+        applicationId "angeltalk.plus"
         minSdkVersion 23
         targetSdkVersion 26
         versionCode 15

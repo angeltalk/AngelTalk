@@ -1,27 +1,27 @@
 {
   "project_info": {
-    "project_number": "384579086621",
-    "firebase_url": "https://angeltalk-1995b.firebaseio.com",
-    "project_id": "angeltalk-1995b",
-    "storage_bucket": "angeltalk-1995b.appspot.com"
+    "project_number": "419456927705",
+    "firebase_url": "https://angeltalk-plus-dev.firebaseio.com",
+    "project_id": "angeltalk-plus-dev",
+    "storage_bucket": "angeltalk-plus-dev.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:384579086621:android:6cd89708b9dbd14c",
+        "mobilesdk_app_id": "1:419456927705:android:46d5c915269d5b39",
         "android_client_info": {
-          "package_name": "act.angelman"
+          "package_name": "angeltalk.plus"
         }
       },
       "oauth_client": [
         {
-          "client_id": "384579086621-2noa64b4dc3d32gefc6v1m9rrf4b1r5n.apps.googleusercontent.com",
+          "client_id": "419456927705-gbu31ksvtb37ehj60rlh19fsdoc9g4sg.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAe0E1Ii8QVEFcBnlpOayd-1XqNqxdJ1ys"
+          "current_key": "AIzaSyDISPuGi3m63QKc__V5KnUoJwVhEwixG-g"
         }
       ],
       "services": {

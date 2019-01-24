@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">AngelTalk</string>
-    <string name="share_functions_url">https://us-central1-angeltalk-app-a26d8.cloudfunctions.net/redirectApp/</string>
+    <string name="app_name">AngelTalk Plus</string>
+    <string name="share_functions_url">https://us-central1-angeltalk-plus-web.cloudfunctions.net/redirectApp/</string>
     <string name="shortener_api_key">AIzaSyAZQwhfKiXxAGMZx4aoKHv9A54YoFMLeBQ</string>
     <string name="web_url">https://www.angeltalk.info</string>
     <string name="add_picture">카드에 사진이나 영상을\n 추가해주세요</string>
@@ -102,8 +102,8 @@
     <string name="network_disconnected">‘설정’ 앱에서 모바일 데이터나\nWi-Fi를 켜주세요</string>
     <string name="card_download_fail">카드 불러오기에 실패했습니다.\n대화창으로 다시 돌아갈까요?</string>
 
-    <string name="kakao_app_key">79596264d79a5d8e3ada29bbd442abe0</string>
-    <string name="kakao_scheme">kakao79596264d79a5d8e3ada29bbd442abe0</string>
+    <string name="kakao_app_key">6a063bf4f945fa5a8e04af3039390057</string>
+    <string name="kakao_scheme">kakao6a063bf4f945fa5a8e04af3039390057</string>
     <string name="kakao_package_name">com.kakao.talk</string>
     <string name="whatsapp_package_name">com.whatsapp</string>
     <string name="kakaolink_host">kakaolink</string>

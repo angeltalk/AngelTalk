@@ -9,7 +9,7 @@
     android:background="@drawable/rectangle"
     tools:context=".presentation.activity.CameraGallerySelectionActivity">
 
-    <act.angelman.presentation.custom.CardTitleLayout
+    <angeltalk.plus.presentation.custom.CardTitleLayout
         android:id="@+id/title_container"
         android:layout_width="match_parent"
         app:layout_heightPercent="20%"
