@@ -24,9 +24,16 @@
 -keepattributes Signature
 # Retain declared checked exceptions for use by a Proxy instance.
 -keepattributes Exceptions
+-keepattributes Signature
 
 -keep class android.support.v7.app.** { *; }
 -keep interface android.support.v7.app.** { *; }
+-keep class com.kakao.** { *; }
+
+-keepclassmembers class * {
+  public static <fields>;
+  public *;
+}
 
 -dontwarn afu.org.checkerframework.checker.nullness.NullnessUtils
 -dontwarn afu.org.checkerframework.checker.regex.RegexUtil
@@ -35,8 +42,31 @@
 -dontwarn com.google.common.util.concurrent.FuturesGetChecked$GetCheckedTypeValidatorHolder$ClassValueValidator$1
 -dontwarn afu.org.checkerframework.checker.formatter.FormatUtil
 -dontwarn afu.org.checkerframework.checker.formatter.FormatUtil$Conversion
+-dontwarn org.checkerframework.checker.formatter.FormatUtil$Conversion
+-dontwarn org.checkerframework.checker.formatter.FormatUtil
+-dontwarn com.google.common.hash.Striped64$Cell
+-dontwarn com.google.common.hash.Striped64$1
+-dontwarn com.google.common.hash.Striped64
+-dontwarn com.google.common.cache.Striped64$Cell
+-dontwarn com.google.common.cache.Striped64$1
+-dontwarn com.google.common.cache.Striped64
+-dontwarn com.google.common.hash.LittleEndianByteArray$UnsafeByteArray
+-dontwarn com.google.common.hash.LittleEndianByteArray$UnsafeByteArray$3
+-dontwarn com.google.common.primitives.UnsignedBytes$LexicographicalComparatorHolder$UnsafeComparator$1
+-dontwarn com.google.common.primitives.UnsignedBytes$LexicographicalComparatorHolder$UnsafeComparator
+-dontwarn com.google.common.util.concurrent.AbstractFuture$UnsafeAtomicHelper$1
 -dontwarn afu.org.checkerframework.checker.formatter.FormatUtil$IllegalFormatConversionCategoryException
+-dontwarn org.checkerframework.checker.formatter.FormatUtil$IllegalFormatConversionCategoryException
+-dontwarn org.checkerframework.checker.units.UnitsTools
+-dontwarn org.checkerframework.checker.regex.RegexUtil$CheckedPatternSyntaxException
+-dontwarn org.checkerframework.checker.nullness.NullnessUtils
+-dontwarn org.checkerframework.checker.regex.RegexUtil
 -dontwarn com.google.errorprone.annotations.ForOverride
 -dontwarn com.google.errorprone.annotations.IncompatibleModifiers
 -dontwarn com.google.errorprone.annotations.RequiredModifiers
 -dontwarn com.google.errorprone.annotations.Var
+-dontwarn com.google.common.util.concurrent.AbstractFuture$UnsafeAtomicHelper
+-dontwarn com.google.common.hash.LittleEndianByteArray$UnsafeByteArray$2
+-dontwarn com.google.common.hash.LittleEndianByteArray$UnsafeByteArray$1
+-dontwarn android.support.v4.**,org.slf4j.**
+-dontwarn com.google.android.gms.**
