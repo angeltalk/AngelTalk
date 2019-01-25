@@ -68,7 +68,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data
                     android:host="kakaolink"
-                    android:scheme="kakao79596264d79a5d8e3ada29bbd442abe0" />
+                    android:scheme="kakao6a063bf4f945fa5a8e04af3039390057" />
                 <data
                     android:host="angeltalk"
                     android:scheme="app" />

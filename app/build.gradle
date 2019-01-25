@@ -13,10 +13,10 @@ android {
 
     signingConfigs {
         debug {
-            storeFile file("../angelman.jks")
-            storePassword "angel123\$"
-            keyAlias "angelman"
-            keyPassword "angel123\$"
+            storeFile file("../angeltalk.jks")
+            storePassword "Angel123\$"
+            keyAlias "debugkey"
+            keyPassword "Angel123\$"
         }
     }
 
