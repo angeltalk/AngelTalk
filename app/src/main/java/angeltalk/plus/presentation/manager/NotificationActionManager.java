@@ -88,6 +88,7 @@ public class NotificationActionManager {
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
             channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
             channel.setVibrationPattern(new long[]{0, 0, 0, 0, 0, 0, 0, 0, 0});
+            channel.setSound(null, null);
             notificationBuilder.setChannelId(CHANNEL_ID);
             notificationManager.createNotificationChannel(channel);
         } else {
