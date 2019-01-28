@@ -37,10 +37,6 @@ buildscript {
         }
     }
 
-    task wrapper( type: Wrapper ) {
-        gradleVersion = '2.2.3'
-    }
-
     allprojects {
         repositories {
             jcenter()
