@@ -1,5 +1,5 @@
 ![AngelIcon](github_title.png)
-<!-- 빌드 상태 travis [![Build Status](https://travis-ci.org/SonarSource/sonarqube.svg?branch=master)](https://travis-ci.org/SonarSource/sonarqube) -->
+[![Build Status](https://travis-ci.com/lab-act/AngelTalk.svg?branch=master)](https://travis-ci.com/lab-act/AngelTalk)
 
 AngelTalk Plus is built to help the children with complex communication needs talk with their parents and caregivers quickly and pleasantly. It is suitable for those who just decided to start using Augmentative and Alternative Communication Tools.
 
