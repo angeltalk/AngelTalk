@@ -2,7 +2,7 @@
     <string name="app_name">AngelTalk Plus</string>
     <string name="share_functions_url">https://us-central1-angeltalk-plus-web.cloudfunctions.net/redirectApp/</string>
     <string name="shortener_api_key">AIzaSyAZQwhfKiXxAGMZx4aoKHv9A54YoFMLeBQ</string>
-    <string name="web_url">https://www.angeltalk.info</string>
+    <string name="web_url">http://www.angeltalk.info</string>
     <string name="add_picture">카드에 사진이나 영상을\n 추가해주세요</string>
     <string name="take_picture">사진 찍기</string>
     <string name="select_gallery">사진 선택</string>

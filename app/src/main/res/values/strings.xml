@@ -2,7 +2,7 @@
     <string name="app_name">AngelTalk Plus</string>
     <string name="share_functions_url">https://us-central1-angeltalk-plus-web.cloudfunctions.net/redirectApp/</string>
     <string name="shortener_api_key">AIzaSyAZQwhfKiXxAGMZx4aoKHv9A54YoFMLeBQ</string>
-    <string name="web_url">https://www.angeltalk.info</string>
+    <string name="web_url">http://www.angeltalk.info</string>
     <string name="add_picture">Add a photo or\n a video clip</string>
     <string name="take_picture">Take a photo</string>
     <string name="select_gallery">Bring from gallery</string>
