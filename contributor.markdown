@@ -22,7 +22,7 @@ Slack _angeltalk-team_ 에는 다음 채널들이 있습니다.
 
 * **General** 채널에서는 엔젤톡을 위해 모인 분들과 자유롭게 의사소통 할 수 있습니다.
 
-  ![QR code](angeltalk_slack.png)
+  ![QR code](app/assets/angeltalk_slack.png)
 
   [Join Here!](https://angeltalk-team.slack.com)
 

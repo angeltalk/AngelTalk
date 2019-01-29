@@ -1,6 +1,6 @@
 # AngelTalk Plus - AAC for Beginners [![Build Status](https://travis-ci.com/lab-act/AngelTalk.svg?branch=master)](https://travis-ci.com/lab-act/AngelTalk)
 
-![AngelIcon](github_title.png)
+![AngelIcon](app/assets/github_title.png)
 
 AngelTalk Plus is built to help the children with complex communication needs talk with their parents and caregivers quickly and pleasantly. It is suitable for those who just decided to start using Augmentative and Alternative Communication Tools.
 
