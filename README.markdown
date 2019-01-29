@@ -1,5 +1,6 @@
+# AngelTalk Plus - AAC for Beginners [![Build Status](https://travis-ci.com/lab-act/AngelTalk.svg?branch=master)](https://travis-ci.com/lab-act/AngelTalk)
+
 ![AngelIcon](github_title.png)
-[![Build Status](https://travis-ci.com/lab-act/AngelTalk.svg?branch=master)](https://travis-ci.com/lab-act/AngelTalk)
 
 AngelTalk Plus is built to help the children with complex communication needs talk with their parents and caregivers quickly and pleasantly. It is suitable for those who just decided to start using Augmentative and Alternative Communication Tools.
 
@@ -8,7 +9,7 @@ AngelTalk Plus is built to help the children with complex communication needs ta
 [www.angeltalk.info](http://angeltalk.info)
 
 
-## Features 
+## Features
 
 ##### Real image and voice based AAC
 We use picture card as a communication tool. Please add a real image or short video clip to the card, and add your voice over it.
@@ -18,9 +19,6 @@ Parents and Caregivers, you don’t need to worry about handing your smartphone 
 
 #####  Instant share your cards with others
 Share your card with family members, school teachers or language pathologists. To share cards you don’t need to make an account or install other apps, just use existing messages app. It’s easy and simple.
-
-
-## 기능
 
 ##### 실제 사진과 음성으로 구성된 AAC
 엔젤톡 Plus는 의사소통 보완 도구로 그림 카드를 이용하도록 개발되었습니다. 실제 사진과 음성으로 카드를 만들어 보세요. 짧은 동영상으로 사진을 대체할 수도 있습니다.
@@ -35,8 +33,12 @@ Share your card with family members, school teachers or language pathologists. T
 The app is written entirely in Java and uses the Gradle build system.
 To build the app, use the gradlew build command or use "Import Project" in Android Studio.
 
+For more detail, join [angeltalk workspace in slack](angeltalk-team.slack.com)
+
 AngelTalk Plus 는 Java 로 작성되었고 Gradle 빌드 시스템을 사용하였습니다.
 gradlew build 명령어를 실행하거나 Android Studio 에서 Import Project 메뉴를 선택하여 앱을 빌드 할 수 있습니다.
+
+자세한 정보는 [엔젤톡 Slack 워크스페이스](angeltalk-team.slack.com)에서 확인할 수 있습니다.
 
 #### Dependency
 
@@ -49,3 +51,12 @@ gradlew build 명령어를 실행하거나 Android Studio 에서 Import Project 
 * We used [Robolectric](https://github.com/robolectric/robolectric), **jUnit4** and [Mockito](https://github.com/mockito/mockito) for unit testing.
 * We used [Espresso](https://github.com/espressomd/espresso) for basic instrumentation tests.
 * We used [Jacoco](https://github.com/jacoco/jacoco) and [sonarqube](https://github.com/SonarSource/sonarqube) for reporting test coverage.
+
+
+## Contribution
+
+AngelTalk welcomes the interest and participation of developers and designers!
+
+엔젤톡은 개발자, 디자이너 여러분의 관심과 참여를 환영합니다.
+
+[Check here!](contributor.markdown)
