@@ -49,8 +49,8 @@ deploy:
   provider: script
   skip_cleanup: true
   script: "sh script/deploy.sh"
-  api_key:
-    secure: "5777b5a680f36caa51973f262d96e24edabfa801"
+#  api_key:
+#    secure: "5777b5a680f36caa51973f262d96e24edabfa801"
   on:
     branch:
       - master

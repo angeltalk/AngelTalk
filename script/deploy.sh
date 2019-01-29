@@ -24,7 +24,7 @@ filename="$(find . -name AngelTalk-*-debug-*.apk)"
 SLACK_TEXT="[ *DEBUG* \`$DEPLOY_BRANCH\` | \`$DEPLOY_COMMIT\` ] ${DEPLOY_COMMIT_MESSAGE:-none} "
 curl \
   -F "token=$SLACK_KEY" \
-  -F "channels=deploy-android" \
+  -F "channels=apk_from_travis" \
   -F "initial_comment=$SLACK_TEXT" \
   -F "file=@$filename" \
   https://slack.com/api/files.upload
@@ -35,7 +35,7 @@ filename="$(find . -name AngelTalk-*-release-*.apk)"
 SLACK_TEXT="[ *RELEASE* \`$DEPLOY_BRANCH\` | \`$DEPLOY_COMMIT\` ] ${DEPLOY_COMMIT_MESSAGE:-none} "
 curl \
   -F "token=$SLACK_KEY" \
-  -F "channels=deploy-android" \
+  -F "channels=apk_from_travis" \
   -F "initial_comment=$SLACK_TEXT" \
   -F "file=@$filename" \
   https://slack.com/api/files.upload
