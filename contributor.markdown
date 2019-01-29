@@ -24,7 +24,7 @@ Slack _angeltalk-team_ 에는 다음 채널들이 있습니다.
 
   ![QR code](angeltalk_slack.png)
 
-  [Join Here!](angeltalk-team.slack.com)
+  [Join Here!](https://angeltalk-team.slack.com)
 
 ### For Developers
 

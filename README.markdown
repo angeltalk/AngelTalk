@@ -33,12 +33,12 @@ Share your card with family members, school teachers or language pathologists. T
 The app is written entirely in Java and uses the Gradle build system.
 To build the app, use the gradlew build command or use "Import Project" in Android Studio.
 
-For more detail, join [angeltalk workspace in slack](angeltalk-team.slack.com)
+For more detail, join [angeltalk workspace in slack](https://angeltalk-team.slack.com)
 
 AngelTalk Plus 는 Java 로 작성되었고 Gradle 빌드 시스템을 사용하였습니다.
 gradlew build 명령어를 실행하거나 Android Studio 에서 Import Project 메뉴를 선택하여 앱을 빌드 할 수 있습니다.
 
-자세한 정보는 [엔젤톡 Slack 워크스페이스](angeltalk-team.slack.com)에서 확인할 수 있습니다.
+자세한 정보는 [엔젤톡 Slack 워크스페이스](https://angeltalk-team.slack.com)에서 확인할 수 있습니다.
 
 #### Dependency
 
