@@ -22,9 +22,10 @@ Slack _angeltalk-team_ 에는 다음 채널들이 있습니다.
 
 * **General** 채널에서는 엔젤톡을 위해 모인 분들과 자유롭게 의사소통 할 수 있습니다.
 
-  ![QR code](app/assets/angeltalk_slack.png)
+Send e-mail to join the workspace for AngelTalk. [act.angeltalk@gmail.com](mailto:act.angeltalk@gmail.com)
 
-  [Join Here!](https://angeltalk-team.slack.com)
+Slack 가입 신청을 위해 메일을 보내주세요. [act.angeltalk@gmail.com](mailto:act.angeltalk@gmail.com)
+
 
 ### For Developers
 
@@ -49,4 +50,4 @@ Slack _angeltalk-team_ 에는 다음 채널들이 있습니다.
 
 ### For Designer
 
-* Send e-mail to us. (act.angeltalk@gmail.com)
+* Send e-mail to us. [act.angeltalk@gmail.com](mailto:act.angeltalk@gmail.com)
