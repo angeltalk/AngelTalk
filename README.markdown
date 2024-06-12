@@ -1,4 +1,10 @@
-# AngelTalk Plus - AAC for Beginners [![Build Status](https://travis-ci.com/lab-act/AngelTalk.svg?branch=master)](https://travis-ci.com/lab-act/AngelTalk)
+# AngelTalk Plus - AAC for Beginners
+
+## ⚠️ Project Status: Archived
+
+**Note:** This project is no longer actively maintained or supported. We appreciate the contributions and support from the community over the years. Feel free to fork the repository if you'd like to continue development on your own.
+
+---
 
 ![AngelIcon](app/assets/github_title.png)
 
