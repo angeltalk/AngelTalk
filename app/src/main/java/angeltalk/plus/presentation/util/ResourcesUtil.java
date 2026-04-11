@@ -2,8 +2,8 @@ package angeltalk.plus.presentation.util;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.IntDef;
-import android.support.v4.content.res.ResourcesCompat;
+import androidx.annotation.IntDef;
+import androidx.core.content.res.ResourcesCompat;
 import android.view.View;
 
 import angeltalk.plus.R;

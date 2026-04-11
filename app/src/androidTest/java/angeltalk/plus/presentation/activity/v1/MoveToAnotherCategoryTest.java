@@ -1,14 +1,12 @@
 package angeltalk.plus.presentation.activity.v1;
 
 
-import android.support.annotation.NonNull;
-import android.support.test.rule.ActivityTestRule;
-import android.support.test.runner.AndroidJUnit4;
-import android.test.suitebuilder.annotation.LargeTest;
-import android.view.View;
+import androidx.test.platform.app.InstrumentationRegistry;
+import androidx.test.rule.ActivityTestRule;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.filters.LargeTest;
 
-import org.hamcrest.Matcher;
-import org.hamcrest.Matchers;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,25 +15,33 @@ import angeltalk.plus.R;
 import angeltalk.plus.presentation.activity.CategoryMenuActivity;
 import angeltalk.plus.presentation.activity.TestUtil;
 
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.allOf;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
 public class MoveToAnotherCategoryTest {
 
     @Rule
-    public ActivityTestRule<CategoryMenuActivity> mActivityTestRule = new ActivityTestRule<>(CategoryMenuActivity.class);
+    public ActivityTestRule<CategoryMenuActivity> mActivityTestRule =
+            new ActivityTestRule<>(CategoryMenuActivity.class, true, false);
+
+    @Before
+    public void setUp() {
+        TestUtil.resetDatabaseToDefaults(
+                InstrumentationRegistry.getInstrumentation().getTargetContext());
+        mActivityTestRule.launchActivity(null);
+    }
 
     @Test
     public void moveToAnotherCategoryTest() {
-
-        onView(secondCategoryItemMatcher())
-                .check(matches(isDisplayed()))
+        // Open the "놀이" category by its title text (content-based, layout-independent).
+        onView(allOf(withId(R.id.category_title), withText("놀이"), isDisplayed()))
                 .perform(click());
 
         onView(withId(R.id.category_item_title))
@@ -45,30 +51,16 @@ public class MoveToAnotherCategoryTest {
                 .check(matches(isDisplayed()))
                 .perform(click());
 
+        // Back on CategoryMenuActivity — verify the menu is displayed by its logo.
         onView(withId(R.id.logo_angeltalk))
                 .check(matches(isDisplayed()));
-        onView(fourthCategoryItemMatcher())
-                .check(matches(isDisplayed()))
+
+        // Open the "가고 싶은 곳" category.
+        onView(allOf(withId(R.id.category_title), withText("가고 싶은 곳"), isDisplayed()))
                 .perform(click());
 
         onView(withId(R.id.category_item_title))
                 .check(matches(isDisplayed()))
                 .check(matches(withText("가고 싶은 곳")));
-    }
-
-    @NonNull
-    private Matcher<View> fourthCategoryItemMatcher() {
-        return Matchers.allOf(
-                withId(R.id.category_item_card),
-                TestUtil.childAtPosition(withId(R.id.category_list),3)
-        );
-    }
-
-    @NonNull
-    private Matcher<View> secondCategoryItemMatcher() {
-        return Matchers.allOf(
-                withId(R.id.category_item_card),
-                TestUtil.childAtPosition(withId(R.id.category_list), 1)
-        );
     }
 }

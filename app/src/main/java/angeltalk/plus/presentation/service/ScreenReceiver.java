@@ -1,5 +1,7 @@
 package angeltalk.plus.presentation.service;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
 import android.app.KeyguardManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -15,6 +17,7 @@ import angeltalk.plus.presentation.manager.ApplicationManager;
 import static android.os.Build.VERSION_CODES.M;
 
 
+@AndroidEntryPoint
 public class ScreenReceiver extends BroadcastReceiver {
 
     @Inject
@@ -24,7 +27,6 @@ public class ScreenReceiver extends BroadcastReceiver {
     protected KeyguardManager.KeyguardLock keyLock;
 
     public void onReceive(final Context context, Intent intent) {
-        ((AngelmanApplication) context.getApplicationContext()).getAngelmanComponent().inject(this);
 
         if (Build.VERSION.SDK_INT >= M && !Settings.canDrawOverlays(context)) {
             return;

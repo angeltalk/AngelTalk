@@ -4,18 +4,24 @@ import android.content.Context;
 
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import angeltalk.plus.data.repository.datastore.CategoryDataSqliteDataStore;
 import angeltalk.plus.data.repository.datastore.CategoryDataStore;
 import angeltalk.plus.domain.model.CategoryItemModel;
 import angeltalk.plus.domain.model.CategoryModel;
 import angeltalk.plus.domain.repository.CategoryRepository;
+import dagger.hilt.android.qualifiers.ApplicationContext;
 
+@Singleton
 public class CategoryDataRepository implements CategoryRepository {
 
     private Context context;
     CategoryDataStore dataStore;
 
-    public CategoryDataRepository(Context context) {
+    @Inject
+    public CategoryDataRepository(@ApplicationContext Context context) {
         this.context = context;
         this.dataStore = new CategoryDataSqliteDataStore(context);
     }

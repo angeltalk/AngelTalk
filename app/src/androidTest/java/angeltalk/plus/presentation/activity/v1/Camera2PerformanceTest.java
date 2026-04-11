@@ -1,16 +1,14 @@
 package angeltalk.plus.presentation.activity.v1;
 
 
-import android.support.annotation.NonNull;
-import android.support.test.espresso.ViewInteraction;
-import android.support.test.rule.ActivityTestRule;
-import android.support.test.runner.AndroidJUnit4;
-import android.test.suitebuilder.annotation.LargeTest;
+import androidx.test.espresso.ViewInteraction;
+import androidx.test.platform.app.InstrumentationRegistry;
+import androidx.test.rule.ActivityTestRule;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.filters.LargeTest;
 import android.util.Log;
-import android.view.View;
 
-import org.hamcrest.Matcher;
-import org.hamcrest.Matchers;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,16 +17,14 @@ import angeltalk.plus.R;
 import angeltalk.plus.presentation.activity.CategoryMenuActivity;
 import angeltalk.plus.presentation.activity.TestUtil;
 
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.Espresso.pressBack;
-import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.replaceText;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withParent;
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.Espresso.pressBack;
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.replaceText;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.is;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
@@ -37,60 +33,47 @@ public class Camera2PerformanceTest {
     final static int TEST_TIMES = 2;
 
     @Rule
-    public ActivityTestRule<CategoryMenuActivity> mActivityTestRule = new ActivityTestRule<>(CategoryMenuActivity.class);
+    public ActivityTestRule<CategoryMenuActivity> mActivityTestRule =
+            new ActivityTestRule<>(CategoryMenuActivity.class, true, false);
+
+    @Before
+    public void setUp() {
+        TestUtil.resetDatabaseToDefaults(
+                InstrumentationRegistry.getInstrumentation().getTargetContext());
+        mActivityTestRule.launchActivity(null);
+    }
 
     @Test
     public void camera2PerformanceTest() throws Exception {
-        onView(firstCategoryItemViewMatcher()).perform(click());
-        onView(addCareViewMatcher()).perform(click());
+        // Open the "음식" category (the first default category) by content.
+        onView(allOf(withId(R.id.category_title), withText("음식"), isDisplayed()))
+                .perform(click());
+        // On the card list screen, tap the "새 카드 만들기" cell to enter the camera flow.
+        onView(allOf(withId(R.id.add_card_text), withText("새 카드 만들기"), isDisplayed()))
+                .perform(click());
 
         for (int i = 0; i < TEST_TIMES; i++) {
             Log.d("camera2PerformanceTest", "camera2PerformanceTest (" + i + "/" + TEST_TIMES + ")");
-            onView(addPhotoCardButtonMatcher()).perform(click());
-            onView(cameraShutterMatcher()).perform(click());
-            Thread.sleep(2000);
+            onView(allOf(withId(R.id.layout_camera), isDisplayed())).perform(click());
+            // Camera2Activity needs time to initialise the fake emulator camera
+            // pipeline (Camera2 + HandlerThread + surface texture). Wait for the
+            // shutter button to be laid out and hittable.
+            TestUtil.uiAutomatorWaitForId("camera_shutter", 10_000);
+            onView(allOf(withId(R.id.camera_shutter), isDisplayed())).perform(click());
+            // Capture + ImageSaver + startActivity(MakeCardPreviewActivity) is async.
+            // Wait for the preview screen's confirm button to appear before clicking.
+            TestUtil.uiAutomatorWaitForId("confirm_button", 15_000);
+            onView(allOf(withId(R.id.confirm_button), isDisplayed())).perform(click());
+            // Next screen is the title entry flow.
+            TestUtil.uiAutomatorWaitForId("card_image_title_edit", 10_000);
 
-            ViewInteraction cardImageTitleEditView = onView(cardImageTitleEditMatcher());
+            ViewInteraction cardImageTitleEditView =
+                    onView(allOf(withId(R.id.card_image_title_edit), isDisplayed()));
             cardImageTitleEditView.perform(replaceText("pen"));
             Thread.sleep(1000);
-            pressBack(); // To hide softKey
-            pressBack(); // Go Back To CameraGallerySelection Activity
+            pressBack(); // hide soft keyboard
+            pressBack(); // back to CameraGallerySelectionActivity
             Thread.sleep(1000);
         }
-    }
-
-    @NonNull
-    private Matcher<View> cardImageTitleEditMatcher() {
-        return allOf(withId(R.id.card_image_title_edit),
-                withParent(allOf(withId(R.id.card_container),
-                        withParent(withId(R.id.card_view_layout)))),
-                isDisplayed());
-    }
-
-    @NonNull
-    private Matcher<View> cameraShutterMatcher() {
-        return allOf(withId(R.id.camera_shutter), isDisplayed());
-    }
-
-    @NonNull
-    private Matcher<View> addPhotoCardButtonMatcher() {
-        return allOf(withId(R.id.layout_camera), isDisplayed());
-    }
-
-    @NonNull
-    private Matcher<View> addCareViewMatcher() {
-        return allOf(withClassName(is("act.angelman.presentation.custom.AddCardView")),
-                withParent(allOf(withId(R.id.view_pager),
-                        withParent(withId(R.id.category_item_container)))),
-                isDisplayed());
-    }
-
-    @NonNull
-    private Matcher<View> firstCategoryItemViewMatcher() {
-        return Matchers.allOf(withId(R.id.category_item_card),
-                TestUtil.childAtPosition(
-                        withId(R.id.category_list),
-                        0),
-                isDisplayed());
     }
 }

@@ -11,22 +11,14 @@ import android.widget.TextView;
 
 import angeltalk.plus.R;
 import angeltalk.plus.domain.model.CardModel;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-
 public class CardPreviewLayout extends RelativeLayout{
 
-    @BindView(R.id.camera_recode_video)
     public VideoCardTextureView cameraRecodeVideo;
 
-    @BindView(R.id.preview_play_button)
     public ImageView previewPlayButton;
 
-    @BindView(R.id.camera_recode_image)
     public ImageView cameraRecodeImage;
 
-    @BindView(R.id.camera_recode_guide)
     public TextView cameraRecodeGuide;
 
     private Context context;
@@ -58,8 +50,7 @@ public class CardPreviewLayout extends RelativeLayout{
             cameraRecodeGuide.setText(context.getString(R.string.photo_content_check_guide));
         }
     }
-
-    @OnClick(R.id.preview_play_button)
+    // TODO(phase-6): @OnClick wiring removed — wire setOnClickListener in bindViews()
     public void onClickPreviewPlayButton (View v) {
         previewPlayButton.setVisibility(View.GONE);
         cameraRecodeVideo.play(new MediaPlayer.OnCompletionListener() {
@@ -74,7 +65,14 @@ public class CardPreviewLayout extends RelativeLayout{
     private void inflateLayout(Context context) {
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         layoutInflater.inflate(R.layout.layout_card_preview_view, this, true);
-        ButterKnife.bind(this);
+        bindViews();
     }
 
+    private void bindViews() {
+        cameraRecodeVideo = findViewById(R.id.camera_recode_video);
+        previewPlayButton = findViewById(R.id.preview_play_button);
+        cameraRecodeImage = findViewById(R.id.camera_recode_image);
+        cameraRecodeGuide = findViewById(R.id.camera_recode_guide);
+        findViewById(R.id.preview_play_button).setOnClickListener(v -> onClickPreviewPlayButton(v));
+    }
 }

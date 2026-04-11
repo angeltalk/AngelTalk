@@ -6,20 +6,24 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
-import android.support.annotation.VisibleForTesting;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
 
-import com.kakao.kakaolink.KakaoLink;
-import com.kakao.util.KakaoParameterException;
+import androidx.annotation.VisibleForTesting;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import angeltalk.plus.R;
 import angeltalk.plus.domain.model.CategoryModel;
+import angeltalk.plus.presentation.activity.LockScreenActivity;
 import angeltalk.plus.presentation.custom.ChildModeManager;
 import angeltalk.plus.presentation.service.ScreenService;
 import angeltalk.plus.presentation.util.ResourcesUtil;
+import dagger.hilt.android.qualifiers.ApplicationContext;
 
+@Singleton
 public class ApplicationManager {
 
     private static final String CATEGORY_MODEL_TITLE = "categoryModelTitle";
@@ -32,17 +36,12 @@ public class ApplicationManager {
     private SharedPreferences preferences;
     private ChildModeManager childModeManager;
     private Context context;
-    private KakaoLink kakaoLink;
 
-    public ApplicationManager(Context context) {
+    @Inject
+    public ApplicationManager(@ApplicationContext Context context) {
         this.context = context;
         this.preferences = context.getSharedPreferences(ApplicationConstants.PRIVATE_PREFERENCE_NAME, Context.MODE_PRIVATE);
         this.childModeManager = new ChildModeManager(context);
-        try {
-            this.kakaoLink = KakaoLink.getKakaoLink(context);
-        } catch (KakaoParameterException e) {
-            e.printStackTrace();
-        }
     }
 
     public void setCategoryModel(CategoryModel categoryModel){
@@ -86,7 +85,11 @@ public class ApplicationManager {
         edit.putBoolean(CHILD_MODE, true);
         if(!isServiceRunningCheck()) {
             Intent screenService = new Intent(context, ScreenService.class);
-            context.startService(screenService);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                context.startForegroundService(screenService);
+            } else {
+                context.startService(screenService);
+            }
         }
         edit.commit();
         Toast.makeText(context, R.string.inform_show_child_mode, Toast.LENGTH_LONG).show();
@@ -154,13 +157,15 @@ public class ApplicationManager {
         return childModeManager;
     }
 
-    public KakaoLink getKakaoLink() {
-        return kakaoLink;
-    }
-
     public void makeChildView(){
-        childModeManager.removeAllView();
-        childModeManager.createAndAddCategoryMenu();
+        // Android 12+ no longer lets TYPE_APPLICATION_OVERLAY draw above the keyguard,
+        // so child mode launches a dedicated Activity that opts into showWhenLocked /
+        // turnScreenOn instead of using the legacy ChildModeManager overlay.
+        Intent intent = new Intent(context, LockScreenActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                | Intent.FLAG_ACTIVITY_CLEAR_TOP
+                | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        context.startActivity(intent);
     }
 
     public void setNotFirstLaunched() {

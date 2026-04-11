@@ -1,12 +1,14 @@
 package angeltalk.plus.presentation.activity;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
-import android.support.v4.view.ViewPager;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.viewpager.widget.ViewPager;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -43,11 +45,7 @@ import angeltalk.plus.presentation.custom.ShareMessengerSelectDialog;
 import angeltalk.plus.presentation.manager.ApplicationConstants;
 import angeltalk.plus.presentation.manager.ApplicationManager;
 import angeltalk.plus.presentation.util.ResourcesUtil;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
-
+@AndroidEntryPoint
 public class CardViewPagerActivity extends AbstractActivity {
 
     @Inject
@@ -65,46 +63,34 @@ public class CardViewPagerActivity extends AbstractActivity {
     @Inject
     MessageTransfer messageTransfer;
 
-    @BindView(R.id.title_container)
     CardTitleLayout cardTitleLayout;
 
-    @BindView(R.id.button_container)
     LinearLayout buttonContainer;
 
-    @BindView(R.id.card_edit_button)
     ImageButton cardEditButton;
 
-    @BindView(R.id.card_delete_button)
     ImageButton cardDeleteButton;
 
-    @BindView(R.id.card_share_button)
     ImageButton cardShareButton;
 
-    @BindView(R.id.view_pager)
     CardViewPager mViewPager;
 
-    @BindView(R.id.on_loading_view)
     LinearLayout loadingViewLayout;
 
-    @BindView(R.id.image_angelee_gif)
     ImageView imageLoadingGif;
 
-    @BindView(R.id.category_item_container)
     ConstraintLayout categoryItemContainer;
 
 
-    @BindView(R.id.list_card_button)
     ImageView listCardButton;
-
-    @OnClick(R.id.list_card_button)
+    // TODO(phase-6): @OnClick wiring removed — wire setOnClickListener in bindViews()
     public void onClickListCardButtonText(View v) {
         stopPlayingCard();
         Intent intent = new Intent(this, CardListActivity.class);
         startActivity(intent);
         finish();
     }
-
-    @OnClick(R.id.card_delete_button)
+    // TODO(phase-6): @OnClick wiring removed — wire setOnClickListener in bindViews()
     public void deleteButtonOnClick() {
         stopPlayingCard();
         deleteCard();
@@ -123,8 +109,7 @@ public class CardViewPagerActivity extends AbstractActivity {
     }
 
     boolean isForegroundRunning = true;
-
-    @OnClick(R.id.card_share_button)
+    // TODO(phase-6): @OnClick wiring removed — wire setOnClickListener in bindViews()
     public void shareButtonOnClick() {
         stopPlayingCard();
 
@@ -178,8 +163,7 @@ public class CardViewPagerActivity extends AbstractActivity {
         isForegroundRunning = true;
         super.onResume();
     }
-
-    @OnClick(R.id.card_edit_button)
+    // TODO(phase-6): @OnClick wiring removed — wire setOnClickListener in bindViews()
     public void editButtonOnClick() {
         stopPlayingCard();
         new CardEditSelectDialog(context, new View.OnClickListener() {
@@ -237,10 +221,9 @@ public class CardViewPagerActivity extends AbstractActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ((AngelmanApplication) getApplication()).getAngelmanComponent().inject(this);
         ResourcesUtil.setColorTheme(this, applicationManager.getCategoryModelColor());
         setContentView(R.layout.activity_card_view);
-        ButterKnife.bind(this);
+        bindViews();
         glide = Glide.with(this);
         context = this;
         initializeView();
@@ -290,7 +273,6 @@ public class CardViewPagerActivity extends AbstractActivity {
         cardImageAdapter = new CardImageAdapter(this, allCardListInSelectedCategory, glide);
         cardImageAdapter.addNewCardViewAtFirst();
         mViewPager.setAdapter(cardImageAdapter);
-        OverScrollDecoratorHelper.setUpOverScroll(mViewPager);
         mViewPager.addOnPageChangeListener(viewPagerOnPageChangeListener);
 
         cardTitleLayout.refreshCardCountText(0, allCardListInSelectedCategory.size());
@@ -393,8 +375,8 @@ public class CardViewPagerActivity extends AbstractActivity {
         loadingViewLayout.setVisibility(View.VISIBLE);
         Glide.with(CardViewPagerActivity.this)
                 .load(R.drawable.angelee)
-                .asGif()
-                .crossFade()
+
+
                 .into(imageLoadingGif);
     }
 
@@ -407,5 +389,21 @@ public class CardViewPagerActivity extends AbstractActivity {
             }
         }
         return false;
+    }
+    private void bindViews() {
+        cardTitleLayout = findViewById(R.id.title_container);
+        buttonContainer = findViewById(R.id.button_container);
+        cardEditButton = findViewById(R.id.card_edit_button);
+        cardDeleteButton = findViewById(R.id.card_delete_button);
+        cardShareButton = findViewById(R.id.card_share_button);
+        mViewPager = findViewById(R.id.view_pager);
+        loadingViewLayout = findViewById(R.id.on_loading_view);
+        imageLoadingGif = findViewById(R.id.image_angelee_gif);
+        categoryItemContainer = findViewById(R.id.category_item_container);
+        listCardButton = findViewById(R.id.list_card_button);
+        findViewById(R.id.list_card_button).setOnClickListener(v -> onClickListCardButtonText(v));
+        findViewById(R.id.card_delete_button).setOnClickListener(v -> deleteButtonOnClick());
+        findViewById(R.id.card_share_button).setOnClickListener(v -> shareButtonOnClick());
+        findViewById(R.id.card_edit_button).setOnClickListener(v -> editButtonOnClick());
     }
 }

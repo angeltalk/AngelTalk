@@ -1,44 +1,84 @@
-apply plugin: 'com.android.application'
-apply plugin: 'org.sonarqube'
-apply plugin: 'com.google.gms.google-services'
+plugins {
+    id 'com.android.application'
+    id 'com.google.dagger.hilt.android'
+    id 'com.google.gms.google-services'
+    id 'org.sonarqube'
+    id 'jacoco'
+}
 
 apply from: 'sonarqube.gradle'
-apply plugin: 'jacoco'
-
 
 android {
-    compileSdkVersion 28
-    buildToolsVersion '28.0.3'
-    useLibrary 'org.apache.http.legacy'
+    namespace 'angeltalk.plus'
+    compileSdk 35
+
+    // TODO(phase-9): Restore the unit-test sourceSet once the legacy 45 files under
+    // src/test/java are ported from the hand-built TestAngelmanApplication to Hilt test
+    // rules. Ported unit tests live under src/test-hilt/. The androidTest sourceSet is
+    // back on its default location (src/androidTest/java) — instrumentation tests run
+    // against the real @HiltAndroidApp Application and need no Hilt-specific port.
+    sourceSets {
+        main {
+            res.srcDirs = ['src/main/res', 'src/main/res-onboarding']
+        }
+        test {
+            // Ported-to-Hilt test files live under src/test-hilt/ so they stay isolated
+            // from the 45 un-ported legacy test files still under src/test/java.
+            java.srcDirs = ['src/test-hilt/java']
+            resources.srcDirs = ['src/test-hilt/resources']
+        }
+    }
 
     signingConfigs {
         debug {
-            storeFile file("../angeltalk.jks")
-            storePassword "Angel123\$"
-            keyAlias "debugkey"
-            keyPassword "Angel123\$"
+            storeFile file('../angeltalk.jks')
+            storePassword 'Angel123$'
+            keyAlias 'debugkey'
+            keyPassword 'Angel123$'
         }
     }
 
     defaultConfig {
-        applicationId "angeltalk.plus"
-        minSdkVersion 23
-        targetSdkVersion 26
-        versionCode 17
-        versionName "2.4.2"
+        applicationId 'angeltalk.plus'
+        minSdk 23
+        targetSdk 35
+        versionCode 18
+        versionName '2.5.0'
         multiDexEnabled true
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+        // Hilt test runner wiring happens via @HiltAndroidTest + HiltTestApplication.
     }
+
+    buildFeatures {
+        viewBinding true
+        buildConfig true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
     testOptions {
-        unitTests.returnDefaultValues = true
-        unitTests.includeAndroidResources = true
-        unitTests.all {
-            jvmArgs '-Xmx2g', '-XX:MaxPermSize=1024m', '-XX:+HeapDumpOnOutOfMemoryError'
-            jacoco {
-                includeNoLocationClasses = true
+        unitTests {
+            returnDefaultValues = true
+            includeAndroidResources = true
+            all {
+                jvmArgs '-Xmx2g', '-XX:+HeapDumpOnOutOfMemoryError'
+                jacoco {
+                    includeNoLocationClasses = true
+                    excludes = ['jdk.internal.*']
+                }
+                forkEvery = 10
             }
-            forkEvery = 10
         }
+    }
+
+    // -g grants every runtime permission listed in the manifest at install time so
+    // connectedDebugAndroidTest doesn't hang on permission dialogs (camera, mic,
+    // READ_PHONE_STATE, media, POST_NOTIFICATIONS, etc.).
+    installation {
+        installOptions '-g'
     }
 
     buildTypes {
@@ -49,143 +89,167 @@ android {
         release {
             testCoverageEnabled = false
             minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-    applicationVariants.all { variant ->
-        variant.outputs.all {
-            outputFileName = new File("AngelTalk-${variant.versionName}-${variant.name}-" + getDate() + ".apk")
+
+    applicationVariants.configureEach { variant ->
+        variant.outputs.configureEach { output ->
+            output.outputFileName = "AngelTalk-${variant.versionName}-${variant.name}-" + new Date().format('yyyyMMddHHmmss') + '.apk'
         }
     }
-    lintOptions {
+
+    lint {
         abortOnError false
     }
-}
 
-def getDate() {
-    def date = new Date()
-    def formattedDate = date.format('yyyyMMddHHmmss')
-    return formattedDate
+    packaging {
+        resources {
+            excludes += [
+                'META-INF/AL2.0',
+                'META-INF/LGPL2.1',
+                'META-INF/licenses/**',
+                'META-INF/*.kotlin_module',
+                'META-INF/DEPENDENCIES',
+                'META-INF/NOTICE*',
+                'META-INF/LICENSE*'
+            ]
+        }
+    }
 }
 
 jacoco {
-    toolVersion = "0.8.2"
+    toolVersion '0.8.14'
 }
 
-task exportVersionName {
-    doLast {
-        exec {
-            workingDir '.'
-            commandLine "export VERSION_NAME=$project.android.defaultConfig.versionName"
-        }
-    }
-}
+tasks.register('coverageReport', JacocoReport) {
+    dependsOn 'testDebugUnitTest'
+    group = 'Reporting'
+    description = 'Generate Jacoco coverage reports'
 
+    def excludeList = [
+        '**/R.class',
+        '**/R$*.class',
+        '**/BuildConfig.*',
+        '**/Manifest*.*',
+        'com/android/**/*.class',
+        '**/AngelmanApplication.class',
+        '**/Hilt_*.class',
+        '**/*_HiltModules*.class',
+        '**/*_Factory*.class',
+        '**/*_MembersInjector*.class',
+        '**/*_GeneratedInjector*.class',
+        '**/Dagger*.class',
+        '**/*Test*.class',
+        '**/*ViewBinding*.class',
+        '**/*Binding.class',
+        '**/*Builder.class',
+        '**/Camera2Activity*.class',
+        '**/VideoFragment*.class',
+        '**/VideoCardTextureView*.class',
+        '**/*Transfer*.class',
+        '**/DatabaseHelper.class',
+        '**/AbstractActivity.class'
+    ]
 
-task coverageReport(type: JacocoReport, dependsOn: 'testDebugUnitTest') {
-    group = "Reporting"
-    description = "Generate Jacoco coverage reports"
-
-    classDirectories = fileTree(
-            dir: "${project.buildDir}/intermediates/classes/debug",
-            includes: [
-                    '**/**/*',
-            ],
-            excludes: ['**/R.class',
-                       '**/R$*.class',
-                       '**/BuildConfig.*',
-                       '**/Manifest*.*',
-                       'com/android/**/*.class',
-                       '**/AngelmanApplication.class',
-                       '**/TestAngelmanApplication.class',
-                       '**/UITest.class',
-                       '**/Dagger*.class',
-                       '**/*Test*.class',
-                       '**/*ViewBinding*.class',
-                       '**/*Builder.class',
-                       '**/AngelmanComponent.class',
-                       '**/AngelmanModule*.class',
-                       '**/*$ViewInjector*.*',
-                       '**/*_MembersInjector*.*',
-                       '**/*$ModuleAdapter*.*',
-                       '**/*$InjectAdapter*.*',
-                       '**/*$ViewBinder*.*',
-                       '**/*Shadow*.class',
-                       '**/Camera2Activity*.class',
-                       '**/VideoFragment*.class',
-                       '**/VideoCardTextureView*.class',
-                       '**/*Transfer*.class',
-                       '**/DatabaseHelper.class',
-                       '**/AbstractActivity.class'
-
-            ]
+    classDirectories.from = fileTree(
+        dir: layout.buildDirectory.dir('intermediates/javac/debug/classes').get(),
+        excludes: excludeList
     )
-
-    def coverageSourceDirs = ["../app/src/main/java"]
-    additionalSourceDirs = files(coverageSourceDirs)
-    sourceDirectories = files(coverageSourceDirs)
-    executionData = files("${project.buildDir}/jacoco/testDebugUnitTest.exec")
+    sourceDirectories.from = files(['src/main/java'])
+    executionData.from = files(layout.buildDirectory.file('jacoco/testDebugUnitTest.exec').get())
 
     reports {
-        xml {
-            enabled = true
-            destination "${project.buildDir}/reports/jacoco/jacoco.xml"
-        }
-        csv.enabled false
-        html {
-            enabled = true
-            destination "${project.buildDir}/reports/jacoco/html"
-        }
+        xml.required = true
+        xml.outputLocation = layout.buildDirectory.file('reports/jacoco/jacoco.xml')
+        csv.required = false
+        html.required = true
+        html.outputLocation = layout.buildDirectory.dir('reports/jacoco/html')
     }
 }
 
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    testImplementation('com.squareup.assertj:assertj-android:1.2.0') {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    }
+    // --- AndroidX core ---
+    implementation 'androidx.core:core:1.13.1'
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'androidx.annotation:annotation:1.8.1'
+    implementation 'androidx.activity:activity:1.9.1'
+    implementation 'androidx.fragment:fragment:1.8.2'
+    implementation 'androidx.multidex:multidex:2.0.1'
+    implementation 'androidx.legacy:legacy-support-v13:1.0.0'
 
-    testImplementation "org.robolectric:robolectric:4.1"
-    testImplementation "androidx.test:core:1.1.0"
-    testImplementation 'junit:junit:4.12'
-    testImplementation 'com.google.dagger:dagger-compiler:2.20'
-    testImplementation 'org.mockito:mockito-core:1.10.19'
-    testImplementation 'org.jacoco:org.jacoco.agent:0.8.2'
-    testImplementation 'org.projectlombok:lombok:1.16.18'
+    // --- Material + layout ---
+    implementation 'com.google.android.material:material:1.12.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.recyclerview:recyclerview:1.3.2'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'androidx.viewpager:viewpager:1.1.0'
+    implementation 'androidx.drawerlayout:drawerlayout:1.2.0'
+    implementation 'androidx.coordinatorlayout:coordinatorlayout:1.2.0'
+    implementation 'androidx.percentlayout:percentlayout:1.0.0'
 
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    }
+    // --- Hilt ---
+    implementation 'com.google.dagger:hilt-android:2.52'
+    annotationProcessor 'com.google.dagger:hilt-android-compiler:2.52'
 
-    implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'com.android.support:design:28.0.0'
-    implementation 'com.android.support:recyclerview-v7:28.0.0'
-    implementation 'com.android.support:cardview-v7:28.0.0'
-    implementation 'com.android.support:support-v13:28.0.0'
-    implementation 'com.android.support:percent:28.0.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    // --- Firebase BoM ---
+    implementation platform('com.google.firebase:firebase-bom:33.1.2')
+    implementation 'com.google.firebase:firebase-database'
+    implementation 'com.google.firebase:firebase-storage'
+    implementation 'com.google.firebase:firebase-auth'
 
+    // --- Kakao SDK v2 ---
+    // TODO(phase-8): add 'com.kakao.sdk:v2-share:<version>' from the Kakao Maven repo
+    // (https://devrepo.kakao.com/nexus/content/groups/public/) once ShareClient wiring
+    // lands in KaKaoTransfer. Currently stubbed → no runtime dep needed.
 
-    implementation 'com.google.guava:guava:24.1.1-android'
-    implementation 'me.everything:overscroll-decor-android:1.0.4'
-    implementation 'jp.wasabeef:blurry:2.0.3'
-    implementation 'com.github.bumptech.glide:glide:3.7.0'
-    implementation 'com.romandanylyk:pageindicatorview:0.0.7'
-    implementation 'ch.acra:acra:4.11'
-    implementation 'com.google.dagger:dagger:2.20'
-    compileOnly 'org.projectlombok:lombok:1.16.18'
-    implementation 'com.jakewharton:butterknife:8.4.0'
-    implementation 'com.google.firebase:firebase-database:10.2.0'
-    implementation 'com.google.firebase:firebase-storage:10.2.0'
-    implementation 'com.google.firebase:firebase-auth:10.2.0'
-    implementation 'com.kakao.sdk:kakaolink:1.1.36'
-    implementation 'com.squareup.retrofit2:retrofit:2.2.0'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.20'
-    annotationProcessor "org.projectlombok:lombok:1.16.18"
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
+    // --- Networking ---
+    implementation 'com.squareup.retrofit2:retrofit:2.11.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.11.0'
+    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
 
-    testAnnotationProcessor  "org.projectlombok:lombok:1.16.18"
-    testAnnotationProcessor 'com.google.dagger:dagger-compiler:2.20'
-    compileOnly 'javax.annotation:jsr250-api:1.0'
+    // --- UI utilities ---
+    implementation 'com.google.guava:guava:33.2.1-android'
+    // me.everything:overscroll-decor-android removed — source is on dead jcenter mirror.
+    // Visual-polish only (rubber-band ViewPager); OverScrollDecoratorHelper call sites
+    // were stubbed out. TODO: port to androidx.core.view.OverScroller if desired.
+    implementation 'jp.wasabeef:blurry:4.0.1'
+    implementation 'com.github.bumptech.glide:glide:4.16.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.16.0'
+
+    // --- Crash reporting ---
+    // TODO(phase-9): re-enable ACRA 5 once annotation-based config is wired.
+    // implementation 'ch.acra:acra-mail:5.11.4'
+    // implementation 'ch.acra:acra-dialog:5.11.4'
+
+    // --- Lombok ---
+    compileOnly 'org.projectlombok:lombok:1.18.42'
+    annotationProcessor 'org.projectlombok:lombok:1.18.42'
+
+    // --- Unit tests ---
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.robolectric:robolectric:4.16.1'
+    testImplementation 'androidx.test:core:1.6.1'
+    testImplementation 'androidx.test.ext:junit:1.2.1'
+    testImplementation 'org.mockito:mockito-core:5.12.0'
+    testImplementation 'org.assertj:assertj-core:3.26.3'
+    testImplementation 'com.google.dagger:hilt-android-testing:2.52'
+    testAnnotationProcessor 'com.google.dagger:hilt-android-compiler:2.52'
+    testCompileOnly 'org.projectlombok:lombok:1.18.42'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.42'
+
+    // --- Instrumentation tests ---
+    androidTestImplementation 'androidx.test:runner:1.6.2'
+    androidTestImplementation 'androidx.test:rules:1.6.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
+    // UiAutomator is used for clicks that would otherwise fail Espresso's
+    // main-looper-idle wait (e.g. category_delete_button which toggles an
+    // infinite shake animation on the grid cells). UiAutomator operates at the
+    // OS accessibility level and doesn't care about idle state.
+    androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.3.0'
+    androidTestImplementation 'com.google.dagger:hilt-android-testing:2.52'
+    androidTestAnnotationProcessor 'com.google.dagger:hilt-android-compiler:2.52'
 }

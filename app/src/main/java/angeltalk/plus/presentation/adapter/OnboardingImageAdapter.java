@@ -3,7 +3,7 @@ package angeltalk.plus.presentation.adapter;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Build;
-import android.support.v4.view.PagerAdapter;
+import androidx.viewpager.widget.PagerAdapter;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.StyleSpan;
@@ -75,8 +75,8 @@ public class OnboardingImageAdapter extends PagerAdapter{
                 onBoardingFinishAngelee.setVisibility(View.VISIBLE);
                 Glide.with(context)
                         .load(R.drawable.angelee)
-                        .asGif()
-                        .crossFade()
+
+
                         .into(onBoardingFinishAngelee);
                 onBoardingImage.setImageDrawable(context.getResources().getDrawable(R.drawable.img_onboarding_5_low_version));
                 finishButton.setImageDrawable(context.getResources().getDrawable(R.drawable.btn_appstart_low_version));

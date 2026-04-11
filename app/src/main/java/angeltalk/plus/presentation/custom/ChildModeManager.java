@@ -1,10 +1,19 @@
 package angeltalk.plus.presentation.custom;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.PixelFormat;
+import android.os.Build;
 import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyCallback;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.WindowManager;
+
+import androidx.annotation.RequiresApi;
+import androidx.core.content.ContextCompat;
 
 import angeltalk.plus.domain.model.CategoryModel;
 
@@ -16,6 +25,7 @@ public class ChildModeManager {
 
     private TelephonyManager telephonyManager;
     private static MyPhoneStateListener phoneListener;
+    private static TelephonyCallback telephonyCallback;
 
     private CategoryMenuLayout categoryMenuLayout;
     private CardViewPagerLayout cardViewPagerLayout;
@@ -77,33 +87,68 @@ public class ChildModeManager {
     }
 
     private void setTelephonyManager(Context context) {
-        if(telephonyManager == null) {
-            telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-            if(phoneListener == null) {
-                phoneListener = new MyPhoneStateListener();
-                telephonyManager.listen(phoneListener, PhoneStateListener.LISTEN_CALL_STATE);
+        if (telephonyManager != null) return;
+        telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        // READ_PHONE_STATE is a dangerous permission on API 23+. On API 31+ the
+        // listen() / registerTelephonyCallback() call throws SecurityException without it.
+        // Defer registration if it's not granted — call-state handling degrades to a
+        // no-op instead of crashing on first launch.
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE)
+                != PackageManager.PERMISSION_GRANTED) {
+            Log.w("ChildModeManager", "READ_PHONE_STATE not granted — skipping phone state listener");
+            return;
+        }
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                if (telephonyCallback == null) {
+                    telephonyCallback = new MyTelephonyCallback();
+                    telephonyManager.registerTelephonyCallback(
+                            context.getMainExecutor(), telephonyCallback);
+                }
+            } else {
+                if (phoneListener == null) {
+                    phoneListener = new MyPhoneStateListener();
+                    telephonyManager.listen(phoneListener, PhoneStateListener.LISTEN_CALL_STATE);
+                }
+            }
+        } catch (SecurityException e) {
+            Log.w("ChildModeManager", "Failed to register phone state listener", e);
+            phoneListener = null;
+            telephonyCallback = null;
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private synchronized void processByPhoneStatus(int state) {
+        if (context.getSharedPreferences(PRIVATE_PREFERENCE_NAME, Context.MODE_PRIVATE).getBoolean("childMode", true)) {
+            if (state == TelephonyManager.CALL_STATE_RINGING) {
+                wasCalled = true;
+                removeAllView();
+            } else if (state == TelephonyManager.CALL_STATE_IDLE) {
+                if (wasCalled) {
+                    wasCalled = false;
+                    createAndAddCategoryMenu();
+                }
             }
         }
     }
 
+    private boolean wasCalled = false;
+
+    @SuppressWarnings("deprecation")
     private class MyPhoneStateListener extends PhoneStateListener {
-        private boolean isCalled = false;
+        @Override
         public void onCallStateChanged(int state, String incomingNumber) {
             processByPhoneStatus(state);
         }
+    }
 
-        private synchronized void processByPhoneStatus(int state) {
-            if(context.getSharedPreferences(PRIVATE_PREFERENCE_NAME, Context.MODE_PRIVATE).getBoolean("childMode", true)) {
-                if (state == TelephonyManager.CALL_STATE_RINGING) {
-                    isCalled = true;
-                    removeAllView();
-                } else if (state == TelephonyManager.CALL_STATE_IDLE) {
-                    if (isCalled) {
-                        isCalled = false;
-                        createAndAddCategoryMenu();
-                    }
-                }
-            }
+    @RequiresApi(Build.VERSION_CODES.S)
+    private class MyTelephonyCallback extends TelephonyCallback
+            implements TelephonyCallback.CallStateListener {
+        @Override
+        public void onCallStateChanged(int state) {
+            processByPhoneStatus(state);
         }
     }
 

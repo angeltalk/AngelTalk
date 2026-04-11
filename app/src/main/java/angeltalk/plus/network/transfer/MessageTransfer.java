@@ -8,22 +8,29 @@ import org.json.JSONObject;
 
 import java.util.Map;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import angeltalk.plus.R;
 import angeltalk.plus.domain.model.CardModel;
 import angeltalk.plus.network.service.UrlShortenerService;
 import angeltalk.plus.presentation.manager.ApplicationConstants;
+import dagger.hilt.android.qualifiers.ApplicationContext;
+import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
 
+@Singleton
 public class MessageTransfer {
 
     public static final String HTTPS_WWW_GOOGLEAPIS_COM = "https://www.googleapis.com/";
     private Context context;
 
-    public MessageTransfer(Context context) {
+    @Inject
+    public MessageTransfer(@ApplicationContext Context context) {
         this.context = context;
     }
 
@@ -32,7 +39,7 @@ public class MessageTransfer {
         UrlShortenerService urlShortenerService = retrofit.create(UrlShortenerService.class);
         Map<String, Object> requestBodyMap = new ArrayMap<>();
         requestBodyMap.put("longUrl", context.getResources().getString(R.string.share_functions_url) + key);
-        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), (new JSONObject(requestBodyMap)).toString());
+        RequestBody body = RequestBody.create((new JSONObject(requestBodyMap)).toString(), MediaType.parse("application/json; charset=utf-8"));
         Call<ResponseBody> response = urlShortenerService.getShortenerUrl(context.getString(R.string.shortener_api_key), body);
         response.enqueue(new Callback<ResponseBody>() {
             @Override

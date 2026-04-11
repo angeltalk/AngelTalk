@@ -11,17 +11,23 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import angeltalk.plus.data.sqlite.DatabaseHelper;
 import angeltalk.plus.presentation.util.ContentsUtil;
 import angeltalk.plus.presentation.util.FileUtil;
+import dagger.hilt.android.qualifiers.ApplicationContext;
 
 import static angeltalk.plus.presentation.util.ContentsUtil.getContentFolder;
 
+@Singleton
 public class ApplicationInitializer {
 
     private Context context;
 
-    public ApplicationInitializer(Context context) {
+    @Inject
+    public ApplicationInitializer(@ApplicationContext Context context) {
         this.context = context;
     }
 

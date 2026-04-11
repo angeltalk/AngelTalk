@@ -1,8 +1,8 @@
 package angeltalk.plus.presentation.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -46,7 +46,7 @@ public class ChangeOrderRecyclerViewAdapter extends RecyclerView.Adapter<ChangeO
         CardModel cardModel = cardModelList.get(position);
         glide.load(ContentsUtil.getContentFile(getThumbnailPath(cardModel)))
                 .override(60, 60)
-                .bitmapTransform(new AngelManGlideTransform(context
+                .transform(new AngelManGlideTransform(context
                         , 10, 0, AngelManGlideTransform.CornerType.ALL))
                 .into(holder.cardThumbnail);
         holder.cardName.setText(cardModel.name);

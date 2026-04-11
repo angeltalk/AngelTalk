@@ -1,9 +1,9 @@
 package angeltalk.plus.presentation.activity;
 
-import android.support.annotation.NonNull;
-import android.support.test.rule.ActivityTestRule;
-import android.support.test.runner.AndroidJUnit4;
-import android.test.suitebuilder.annotation.LargeTest;
+import androidx.annotation.NonNull;
+import androidx.test.rule.ActivityTestRule;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.filters.LargeTest;
 import android.view.View;
 
 import org.hamcrest.Matcher;
@@ -19,13 +19,13 @@ import static angeltalk.plus.presentation.activity.TestUtil.checkIsDisplayed;
 import static angeltalk.plus.presentation.activity.TestUtil.checkWithText;
 import static angeltalk.plus.presentation.activity.TestUtil.performClick;
 import static angeltalk.plus.presentation.activity.TestUtil.withDrawable;
-import static android.support.test.espresso.Espresso.closeSoftKeyboard;
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.Espresso.pressBack;
-import static android.support.test.espresso.action.ViewActions.pressImeActionButton;
-import static android.support.test.espresso.action.ViewActions.replaceText;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.Espresso.closeSoftKeyboard;
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.Espresso.pressBack;
+import static androidx.test.espresso.action.ViewActions.pressImeActionButton;
+import static androidx.test.espresso.action.ViewActions.replaceText;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
@@ -155,7 +155,7 @@ public class CreateNewCard {
 
         // → 방금 생성한 카드가 해당 카테고리의 제일 처음 순서로 추가됨: 카테고리 제목 밑에 카드 수가 1개 증가하여 표시되고, ‘새로운 카드가 추가되었습니다.’ 메시지가 표시되었다가 사라짐
         checkWithText(R.id.category_item_count, "1 / 6");
-        checkWithText(android.support.design.R.id.snackbar_text, "새로운 카드가 추가되었습니다");
+        checkWithText(com.google.android.material.R.id.snackbar_text, "새로운 카드가 추가되었습니다");
     }
 
     @Test

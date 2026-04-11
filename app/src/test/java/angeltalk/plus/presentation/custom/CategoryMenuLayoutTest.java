@@ -1,7 +1,7 @@
 package angeltalk.plus.presentation.custom;
 
 import android.app.Activity;
-import android.support.constraint.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import android.util.DisplayMetrics;
 import android.view.DragEvent;
 import android.widget.GridView;

@@ -1,5 +1,7 @@
 package angeltalk.plus.presentation.activity;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -22,6 +24,7 @@ import angeltalk.plus.presentation.manager.ApplicationConstants;
 import angeltalk.plus.presentation.util.ContentsUtil;
 import angeltalk.plus.presentation.util.ResolutionUtil;
 
+@AndroidEntryPoint
 public class PhotoEditorActivity extends AbstractActivity {
 
     RequestManager glide;
@@ -91,7 +94,6 @@ public class PhotoEditorActivity extends AbstractActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ((AngelmanApplication) getApplication()).getAngelmanComponent().inject(this);
         setContentView(R.layout.activity_photo_editor);
         editCardId = getIntent().getStringExtra(ApplicationConstants.EDIT_CARD_ID);
 
@@ -130,7 +132,7 @@ public class PhotoEditorActivity extends AbstractActivity {
         int loadingImageSize = ResolutionUtil.getDpToPix(getApplicationContext(), 360);
 
         glide.load(imagePath)
-                .asBitmap()
+
                 .override(loadingImageSize, loadingImageSize)
                 .into(imageCapture);
     }

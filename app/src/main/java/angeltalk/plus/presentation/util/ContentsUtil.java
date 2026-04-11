@@ -175,7 +175,7 @@ public class ContentsUtil {
         }  finally {
             try {
                 retriever.release();
-            } catch (RuntimeException ex) {
+            } catch (RuntimeException | java.io.IOException ex) {
             }
         }
 

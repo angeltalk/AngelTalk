@@ -9,16 +9,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import angeltalk.plus.R;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public class CardListTabButton extends RelativeLayout {
     private Context context;
 
-    @BindView(R.id.button_text_view)
     public TextView buttonTextView;
 
-    @BindView(R.id.tab_indicator)
     public View tabIndicator;
 
     private boolean selected;
@@ -33,8 +28,7 @@ public class CardListTabButton extends RelativeLayout {
     private void initUI(AttributeSet attrs) {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         inflater.inflate(R.layout.card_list_tab_button, this);
-        ButterKnife.bind(this);
-
+        bindViews();
         TypedArray attributeArray = context.obtainStyledAttributes(
                 attrs,
                 R.styleable.CardListTabButton
@@ -59,5 +53,9 @@ public class CardListTabButton extends RelativeLayout {
 
     public boolean isSelected() {
         return selected;
+    }
+    private void bindViews() {
+        buttonTextView = findViewById(R.id.button_text_view);
+        tabIndicator = findViewById(R.id.tab_indicator);
     }
 }

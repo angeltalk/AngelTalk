@@ -1,10 +1,12 @@
 package angeltalk.plus.presentation.activity;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.VisibleForTesting;
+import androidx.annotation.VisibleForTesting;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -42,10 +44,7 @@ import angeltalk.plus.presentation.manager.ApplicationConstants;
 import angeltalk.plus.presentation.manager.ApplicationManager;
 import angeltalk.plus.presentation.util.ContentsUtil;
 import angeltalk.plus.presentation.util.FileUtil;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-
+@AndroidEntryPoint
 public class ShareCardActivity extends AbstractActivity {
 
     @Inject
@@ -60,22 +59,16 @@ public class ShareCardActivity extends AbstractActivity {
     @Inject
     ApplicationManager applicationManager;
 
-    @BindView(R.id.title_container)
     CardTitleLayout titleLayout;
 
-    @BindView(R.id.view_pager)
     CardViewPager mViewPager;
 
-    @BindView(R.id.category_item_title)
     TextView categoryTitle;
 
-    @BindView(R.id.image_angelee_gif)
     ImageView imageLoadingGif;
 
-    @BindView(R.id.on_loading_view)
     LinearLayout loadingViewLayout;
 
-    @BindView(R.id.on_loading_view_text)
     TextView loadingViewText;
 
     private CategorySelectDialog categorySelectDialog;
@@ -89,9 +82,7 @@ public class ShareCardActivity extends AbstractActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_share_card);
-        ButterKnife.bind(this);
-        ((AngelmanApplication) getApplication()).getAngelmanComponent().inject(this);
-
+        bindViews();
         this.glide = Glide.with(this);
         this.context = getApplicationContext();
 
@@ -134,8 +125,8 @@ public class ShareCardActivity extends AbstractActivity {
     private void showLoadingAnimation() {
         Glide.with(ShareCardActivity.this)
                 .load(R.drawable.angelee)
-                .asGif()
-                .crossFade()
+
+
                 .into(imageLoadingGif);
     }
 
@@ -190,9 +181,7 @@ public class ShareCardActivity extends AbstractActivity {
             loadingViewText.setText(getString(R.string.card_loading_message));
         }
     }
-
-
-    @OnClick(R.id.card_save_button)
+    // TODO(phase-6): @OnClick wiring removed — wire setOnClickListener in bindViews()
     public void onClickCardSaveButton(View view) {
         categorySelectDialog = new CategorySelectDialog(ShareCardActivity.this, categoryRepository.getCategoryAllList(), new View.OnClickListener() {
             @Override
@@ -282,4 +271,13 @@ public class ShareCardActivity extends AbstractActivity {
 
     @VisibleForTesting List<String> getReceiveKeys() { return receiveKeys; }
     @VisibleForTesting List<CardTransferModel> getShareCardModelList() { return shareCardModelList; }
+    private void bindViews() {
+        titleLayout = findViewById(R.id.title_container);
+        mViewPager = findViewById(R.id.view_pager);
+        categoryTitle = findViewById(R.id.category_item_title);
+        imageLoadingGif = findViewById(R.id.image_angelee_gif);
+        loadingViewLayout = findViewById(R.id.on_loading_view);
+        loadingViewText = findViewById(R.id.on_loading_view_text);
+        findViewById(R.id.card_save_button).setOnClickListener(v -> onClickCardSaveButton(v));
+    }
 }

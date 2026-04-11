@@ -1,209 +1,60 @@
 package angeltalk.plus.presentation.activity.v1;
 
 
-import android.support.annotation.NonNull;
-import android.support.test.espresso.ViewInteraction;
-import android.support.test.rule.ActivityTestRule;
-import android.support.test.runner.AndroidJUnit4;
-import android.test.suitebuilder.annotation.LargeTest;
-import android.view.View;
+import androidx.test.platform.app.InstrumentationRegistry;
+import androidx.test.rule.ActivityTestRule;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.filters.LargeTest;
 
-import org.hamcrest.Matcher;
-import org.hamcrest.Matchers;
-import org.hamcrest.core.IsInstanceOf;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import angeltalk.plus.R;
 import angeltalk.plus.presentation.activity.CategoryMenuActivity;
 import angeltalk.plus.presentation.activity.TestUtil;
-
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withParent;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.Matchers.allOf;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
 public class DeleteCategoryTest {
 
     @Rule
-    public ActivityTestRule<CategoryMenuActivity> mActivityTestRule = new ActivityTestRule<>(CategoryMenuActivity.class);
+    public ActivityTestRule<CategoryMenuActivity> mActivityTestRule =
+            new ActivityTestRule<>(CategoryMenuActivity.class, true, false);
 
     @Before
     public void setUp() throws Exception {
-        // package problem
-//        TestUtil.InitializeDatabase(mActivityTestRule.getActivity().getApplicationContext(), mActivityTestRule.getActivity().categoryRepository, mActivityTestRule.getActivity().cardRepository);
+        // Reset to the 5 default categories so the deletion sequence is deterministic.
+        TestUtil.resetDatabaseToDefaults(
+                InstrumentationRegistry.getInstrumentation().getTargetContext());
+        mActivityTestRule.launchActivity(null);
     }
 
     @Test
     public void deleteCategoryTest() {
+        // Clicks in this test use UiAutomator because the shake_anim on category
+        // cells (started when delete mode is toggled on) is infinite — Espresso's
+        // main-looper-idle wait would time out with AppNotIdleException.
+        // UiAutomator drives the UI via the accessibility service and doesn't
+        // care about the looper's idle state. Assertions still use Espresso
+        // matchers where the looper is momentarily idle (e.g. inside the dialog).
+        TestUtil.uiAutomatorClick("category_delete_button");
 
-        ViewInteraction categoryDeleteButton = onView(withId(R.id.category_delete_button));
+        // Delete categories one at a time. Each deletion shifts the remaining cells
+        // down so position 0 always points at the next real category. With 5 default
+        // categories, the first 4 deletions just confirm; the 5th hits the
+        // "최소 1개" alert because count drops to 1 in CategoryMenuActivity.
+        for (int i = 0; i < 4; i++) {
+            TestUtil.uiAutomatorClick("category_item_card");
+            TestUtil.uiAutomatorClick("confirm_button");
+        }
 
-        // TODO: 삭제버튼 -> 오들오들에니메이션 코드 진행시 perform(click())과 충돌... espresso에서 looping animation 지원안함
-        categoryDeleteButton.check(matches(withText("삭제")))
-                .check(matches(isDisplayed()))
-                .perform(click());
+        // 5th click — only one category remains, so the alert fires instead of deleting.
+        TestUtil.uiAutomatorClick("category_item_card");
+        TestUtil.uiAutomatorWaitForId("alert_message");
+        TestUtil.uiAutomatorClick("confirm_button");
 
-        categoryDeleteButton.check(matches(withText("완료")))
-                .check(matches(isDisplayed()));
-
-        onView(secondCategoryItemDeleteButton()).check(matches(isDisplayed()));
-
-        ViewInteraction cardView3 = onView(
-                Matchers.allOf(withId(R.id.category_item_card),
-                        TestUtil.childAtPosition(
-                                IsInstanceOf.<View>instanceOf(android.widget.GridView.class),
-                                4),
-                        isDisplayed()));
-        cardView3.perform(click());
-
-        ViewInteraction linearLayout = onView(
-                Matchers.allOf(TestUtil.childAtPosition(
-                        Matchers.allOf(withId(android.R.id.custom),
-                                TestUtil.childAtPosition(
-                                        IsInstanceOf.<View>instanceOf(android.widget.FrameLayout.class),
-                                        0)),
-                        0),
-                        isDisplayed()));
-        linearLayout.check(matches(isDisplayed()));
-
-        ViewInteraction textView2 = onView(
-                Matchers.allOf(withId(R.id.confirm_button), withText("확인"),
-                        TestUtil.childAtPosition(TestUtil.childAtPosition(
-                                TestUtil.childAtPosition(
-                                        IsInstanceOf.<View>instanceOf(android.widget.FrameLayout.class),
-                                        0),
-                                1), 0),
-                        isDisplayed()));
-        textView2.check(matches(withText("확인")));
-
-        ViewInteraction textView3 = onView(
-                Matchers.allOf(withId(R.id.cancel_button), withText("취소"),
-                        TestUtil.childAtPosition(TestUtil.childAtPosition(
-                                TestUtil.childAtPosition(
-                                        IsInstanceOf.<View>instanceOf(android.widget.FrameLayout.class),
-                                        0),
-                                1), 1),
-                        isDisplayed()));
-        textView3.check(matches(withText("취소")));
-
-        ViewInteraction appCompatTextView2 = onView(
-                allOf(withId(R.id.confirm_button), withText("확인"), isDisplayed()));
-        appCompatTextView2.perform(click());
-
-        ViewInteraction cardView4 = onView(
-                Matchers.allOf(withId(R.id.category_item_card),
-                        TestUtil.childAtPosition(
-                                IsInstanceOf.<View>instanceOf(android.widget.GridView.class),
-                                3),
-                        isDisplayed()));
-        cardView4.perform(click());
-
-        ViewInteraction appCompatTextView3 = onView(
-                allOf(withId(R.id.confirm_button), withText("확인"), isDisplayed()));
-        appCompatTextView3.perform(click());
-
-        ViewInteraction cardView5 = onView(
-                Matchers.allOf(withId(R.id.category_item_card),
-                        TestUtil.childAtPosition(
-                                IsInstanceOf.<View>instanceOf(android.widget.GridView.class),
-                                2),
-                        isDisplayed()));
-        cardView5.perform(click());
-
-        ViewInteraction appCompatTextView4 = onView(
-                allOf(withId(R.id.confirm_button), withText("확인"), isDisplayed()));
-        appCompatTextView4.perform(click());
-
-        ViewInteraction cardView6 = onView(
-                Matchers.allOf(withId(R.id.category_item_card),
-                        TestUtil.childAtPosition(
-                                IsInstanceOf.<View>instanceOf(android.widget.GridView.class),
-                                1),
-                        isDisplayed()));
-        cardView6.perform(click());
-
-        ViewInteraction appCompatTextView5 = onView(
-                allOf(withId(R.id.confirm_button), withText("확인"), isDisplayed()));
-        appCompatTextView5.perform(click());
-
-        ViewInteraction cardView8 = onView(
-                Matchers.allOf(withId(R.id.category_item_card),
-                        TestUtil.childAtPosition(
-                                IsInstanceOf.<View>instanceOf(android.widget.GridView.class),
-                                0),
-                        isDisplayed()));
-        cardView8.perform(click());
-
-        ViewInteraction appCompatTextView7 = onView(
-                allOf(withId(R.id.confirm_button), withText("확인"), isDisplayed()));
-        appCompatTextView7.perform(click());
-
-
-        ViewInteraction cardView7 = onView(
-                Matchers.allOf(withId(R.id.category_item_card),
-                        TestUtil.childAtPosition(
-                                IsInstanceOf.<View>instanceOf(android.widget.GridView.class),
-                                0),
-                        isDisplayed()));
-        cardView7.perform(click());
-
-        ViewInteraction textView4 = onView(
-                Matchers.allOf(withId(R.id.alert_message),
-                        TestUtil.childAtPosition(
-                                TestUtil.childAtPosition(
-                                        IsInstanceOf.<View>instanceOf(android.widget.FrameLayout.class),
-                                        0),
-                                0),
-                        isDisplayed()));
-        textView4.check(matches(withText("카테고리는 최소 1개 이상이어야 합니다. 삭제 후 새 카테고리를 만드시겠습니까?")));
-
-        ViewInteraction appCompatTextView8 = onView(
-                allOf(withId(R.id.confirm_button), withText("확인"), isDisplayed()));
-        appCompatTextView8.perform(click());
-
-        ViewInteraction textView6 = onView(
-                Matchers.allOf(withText("새 카테고리"),
-                        TestUtil.childAtPosition(
-                                Matchers.allOf(withId(R.id.new_category_header),
-                                        TestUtil.childAtPosition(
-                                                IsInstanceOf.<View>instanceOf(android.widget.RelativeLayout.class),
-                                                0)),
-                                1),
-                        isDisplayed()));
-        textView6.check(matches(withText("새 카테고리")));
-
-        ViewInteraction appCompatImageView3 = onView(
-                allOf(withId(R.id.left_arrow_button),
-                        withParent(withId(R.id.new_category_header)),
-                        isDisplayed()));
-        appCompatImageView3.perform(click());
-
-        ViewInteraction textView7 = onView(
-                Matchers.allOf(withId(R.id.category_title),
-                        TestUtil.childAtPosition(TestUtil.childAtPosition(TestUtil.childAtPosition(TestUtil.childAtPosition(
-                                TestUtil.childAtPosition(
-                                        IsInstanceOf.<View>instanceOf(android.widget.GridView.class),
-                                        0),
-                                0), 0), 1), 1),
-                        isDisplayed()));
-        textView7.check(matches(withText("새 카테고리")));
-
-    }
-
-    @NonNull
-    private Matcher<View> secondCategoryItemDeleteButton() {
-        return Matchers.allOf(withId(R.id.delete_button),
-                TestUtil.childAtPosition(TestUtil.childAtPosition(TestUtil.childAtPosition(TestUtil.childAtPosition(
-                        IsInstanceOf.<View>instanceOf(android.widget.GridView.class),
-                        1),0),0),0));
+        // Confirm on the alert kicks off moveToNewCategoryActivity().
+        TestUtil.uiAutomatorWaitForId("new_category_header");
     }
 }

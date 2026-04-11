@@ -1,12 +1,15 @@
 package angeltalk.plus.presentation.activity;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -34,16 +37,9 @@ import angeltalk.plus.presentation.adapter.NewCategoryItemIconAdapter;
 import angeltalk.plus.presentation.custom.CustomConfirmDialog;
 import angeltalk.plus.presentation.manager.ApplicationConstants;
 import angeltalk.plus.presentation.manager.ApplicationManager;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.OnEditorAction;
-import butterknife.OnTextChanged;
-
 import static angeltalk.plus.presentation.util.ResourceMapper.ColorState;
 import static angeltalk.plus.presentation.util.ResourceMapper.IconState;
-import static butterknife.OnTextChanged.Callback.AFTER_TEXT_CHANGED;
-
+@AndroidEntryPoint
 public class MakeCategoryActivity extends AbstractActivity{
 
     @Inject
@@ -52,31 +48,22 @@ public class MakeCategoryActivity extends AbstractActivity{
     @Inject
     ApplicationManager applicationManager;
 
-    @BindView(R.id.category_title_cancel)
     public ImageView cancelButton;
 
-    @BindView(R.id.icon_list)
     public RecyclerView iconListView;
 
-    @BindView(R.id.color_list)
     public RecyclerView backgroundListView;
 
-    @BindView(R.id.category_icon)
     public ImageView categoryImage;
 
-    @BindView(R.id.new_category_color)
     public RelativeLayout categoryColor;
 
-    @BindView(R.id.new_category_header)
     public RelativeLayout categoryHeader;
 
-    @BindView(R.id.category_title)
     public TextView categoryTitleTextView;
 
-    @BindView(R.id.new_category_save_button)
     public ImageView newCategorySaveButton;
 
-    @BindView(R.id.edit_category_title)
     public EditText editCategoryTitle;
 
     private boolean dataChanged = false;
@@ -87,9 +74,8 @@ public class MakeCategoryActivity extends AbstractActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ((AngelmanApplication) getApplication()).getAngelmanComponent().inject(this);
         setContentView(R.layout.activity_new_category);
-        ButterKnife.bind(this);
+        bindViews();
         initListView();
 
         this.changeEnabledStatusOfNewCategorySaveButton(false);
@@ -114,13 +100,11 @@ public class MakeCategoryActivity extends AbstractActivity{
             finish();
         }
     }
-
-    @OnClick(R.id.left_arrow_button)
+    // TODO(phase-6): @OnClick wiring removed — wire setOnClickListener in bindViews()
     public void onClickLeftArrowButton(View v) {
         onBackPressed();
     }
-
-    @OnClick(R.id.new_category_save_button)
+    // TODO(phase-6): @OnClick wiring removed — wire setOnClickListener in bindViews()
     public void onClickNewCategorySaveButton(View v) {
         CategoryModel model = new CategoryModel();
         model.title = categoryTitleTextView.getText().toString();
@@ -130,14 +114,12 @@ public class MakeCategoryActivity extends AbstractActivity{
         moveToNextActivity(model);
         finish();
     }
-
-    @OnClick(R.id.category_title_cancel)
+    // TODO(phase-6): @OnClick wiring removed — wire setOnClickListener in bindViews()
     public void onClickCategoryTitleCancel(View v) {
         editCategoryTitle.setText("");
         categoryTitleTextView.setText(R.string.new_category_name);
     }
-
-    @OnEditorAction(R.id.edit_category_title)
+    // TODO(phase-6): @OnEditorAction removed — wire EditorActionListener in bindViews()
     public boolean onEditorActionCategoryTitle(TextView view, int actionId, KeyEvent event) {
         if(actionId == EditorInfo.IME_ACTION_DONE){
             categoryHeader.requestFocus();
@@ -146,13 +128,11 @@ public class MakeCategoryActivity extends AbstractActivity{
         }
         return false;
     }
-
-    @OnTextChanged(R.id.edit_category_title)
+    // TODO(phase-6): @OnTextChanged removed — wire TextWatcher in bindViews()
     public void onTextChangedCategoryTitle(CharSequence s, int start, int before, int count) {
         dataChanged = true;
     }
-
-    @OnTextChanged(value = R.id.edit_category_title, callback = AFTER_TEXT_CHANGED)
+    // TODO(phase-6): @OnTextChanged removed — wire TextWatcher in bindViews()
     public void afterTextChangedCategoryTitle(Editable s) {
         if (editCategoryTitle.getText().length() > 0) {
             categoryTitleTextView.setText(editCategoryTitle.getText().toString());
@@ -238,5 +218,31 @@ public class MakeCategoryActivity extends AbstractActivity{
             newCategorySaveButton.setEnabled(false);
             newCategorySaveButton.setImageAlpha(77);
         }
+    }
+    private void bindViews() {
+        cancelButton = findViewById(R.id.category_title_cancel);
+        iconListView = findViewById(R.id.icon_list);
+        backgroundListView = findViewById(R.id.color_list);
+        categoryImage = findViewById(R.id.category_icon);
+        categoryColor = findViewById(R.id.new_category_color);
+        categoryHeader = findViewById(R.id.new_category_header);
+        categoryTitleTextView = findViewById(R.id.category_title);
+        newCategorySaveButton = findViewById(R.id.new_category_save_button);
+        editCategoryTitle = findViewById(R.id.edit_category_title);
+        findViewById(R.id.left_arrow_button).setOnClickListener(v -> onClickLeftArrowButton(v));
+        findViewById(R.id.new_category_save_button).setOnClickListener(v -> onClickNewCategorySaveButton(v));
+        findViewById(R.id.category_title_cancel).setOnClickListener(v -> onClickCategoryTitleCancel(v));
+
+        editCategoryTitle.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+                onTextChangedCategoryTitle(s, start, before, count);
+            }
+            @Override public void afterTextChanged(Editable s) {
+                afterTextChangedCategoryTitle(s);
+            }
+        });
+        editCategoryTitle.setOnEditorActionListener((view, actionId, event) ->
+                onEditorActionCategoryTitle(view, actionId, event));
     }
 }

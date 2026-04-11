@@ -1,10 +1,12 @@
 package angeltalk.plus.presentation.custom;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
 
 import android.content.Context;
-import android.support.constraint.ConstraintLayout;
-import android.support.v4.content.res.ResourcesCompat;
-import android.support.v4.view.ViewPager;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.viewpager.widget.ViewPager;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.Animation;
@@ -28,24 +30,17 @@ import angeltalk.plus.domain.repository.CardRepository;
 import angeltalk.plus.presentation.adapter.CardImageAdapter;
 import angeltalk.plus.presentation.util.PlayUtil;
 import angeltalk.plus.presentation.util.ResourcesUtil;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
-
+@AndroidEntryPoint
 public class CardViewPagerLayout extends RelativeLayout {
 
     @Inject
     CardRepository cardRepository;
 
-    @BindView(R.id.yes_no_pannel)
     ConstraintLayout yesNoPannel;
 
 
-    @BindView(R.id.yes_layout)
     LinearLayout yesCardLayout;
 
-    @BindView(R.id.no_layout)
     LinearLayout noCardLayout;
 
 
@@ -74,12 +69,9 @@ public class CardViewPagerLayout extends RelativeLayout {
     }
 
     private void init() {
-        ((AngelmanApplication) context.getApplicationContext()).getAngelmanComponent().inject(this);
 
         subject = inflate(context, R.layout.card_viewpager_layout, this);
-
-        ButterKnife.bind(this);
-
+        bindViews();
         findViewById(R.id.back_button).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,8 +88,7 @@ public class CardViewPagerLayout extends RelativeLayout {
         playUtil = PlayUtil.getInstance();
 
     }
-
-    @OnClick(R.id.yes_no_btn)
+    // TODO(phase-6): @OnClick wiring removed — wire setOnClickListener in bindViews()
     public void slideUpYesNoLayout(View v){
         if(cardImageAdapter != null) {
             cardImageAdapter.releaseSpeakHandler();
@@ -108,24 +99,20 @@ public class CardViewPagerLayout extends RelativeLayout {
         yesNoPannel.setVisibility(View.VISIBLE);
         yesNoPannel.setClickable(true);
     }
-
-
-    @OnClick(R.id.yes_no_close_btn)
+    // TODO(phase-6): @OnClick wiring removed — wire setOnClickListener in bindViews()
     public void slideDownYesNoLayout(View v){
         Animation slide_down = AnimationUtils.loadAnimation(context, R.anim.slide_down);
         yesNoPannel.startAnimation(slide_down);
         yesNoPannel.setVisibility(View.GONE);
     }
-
-    @OnClick(R.id.yes_layout)
+    // TODO(phase-6): @OnClick wiring removed — wire setOnClickListener in bindViews()
     public void onClickYesLayout(View v){
         Animation scaleUp = AnimationUtils.loadAnimation(context, R.anim.zoom_out);
         v.startAnimation(scaleUp);
         playUtil.ttsSpeak(getResources().getString(R.string.response_yes));
 
     }
-
-    @OnClick(R.id.no_layout)
+    // TODO(phase-6): @OnClick wiring removed — wire setOnClickListener in bindViews()
     public void onClickNoLayout(View v){
         Animation scaleUp = AnimationUtils.loadAnimation(context, R.anim.zoom_out);
         v.startAnimation(scaleUp);
@@ -152,8 +139,6 @@ public class CardViewPagerLayout extends RelativeLayout {
 
         cardImageAdapter = new CardImageAdapter(context, allCardListInSelectedCategory, glide);
         mViewPager.setAdapter(cardImageAdapter);
-        OverScrollDecoratorHelper.setUpOverScroll(mViewPager);
-
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -181,4 +166,13 @@ public class CardViewPagerLayout extends RelativeLayout {
     public interface OnClickBackButtonListener {
         void clickBackButton();
      }
+    private void bindViews() {
+        yesNoPannel = findViewById(R.id.yes_no_pannel);
+        yesCardLayout = findViewById(R.id.yes_layout);
+        noCardLayout = findViewById(R.id.no_layout);
+        findViewById(R.id.yes_no_btn).setOnClickListener(v -> slideUpYesNoLayout(v));
+        findViewById(R.id.yes_no_close_btn).setOnClickListener(v -> slideDownYesNoLayout(v));
+        findViewById(R.id.yes_layout).setOnClickListener(v -> onClickYesLayout(v));
+        findViewById(R.id.no_layout).setOnClickListener(v -> onClickNoLayout(v));
+    }
 }

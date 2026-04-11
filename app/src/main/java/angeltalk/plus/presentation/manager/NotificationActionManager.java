@@ -11,19 +11,20 @@ import android.os.Build;
 import android.widget.RemoteViews;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
-import angeltalk.plus.AngelmanApplication;
 import angeltalk.plus.R;
+import dagger.hilt.android.qualifiers.ApplicationContext;
 
 import static angeltalk.plus.presentation.manager.ApplicationConstants.PRIVATE_PREFERENCE_NAME;
 
+@Singleton
 public class NotificationActionManager {
 
     private final RemoteViews notificationViewOfChildMode;
     private final RemoteViews notificationViewOfParentMode;
     private final NotificationManager notificationManager;
-    @Inject
-    ApplicationManager applicationManager;
+    private final ApplicationManager applicationManager;
 
     private Context context;
     private boolean isChildMode;
@@ -31,10 +32,11 @@ public class NotificationActionManager {
     private static String CHANNEL_ID = "ANGELTALK";
     private static String CHANNEL_NAME = "Angel Talk";
 
-    public NotificationActionManager(Context context) {
-        ((AngelmanApplication) context.getApplicationContext()).getAngelmanComponent().inject(this);
-        notificationManager = ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE));
+    @Inject
+    public NotificationActionManager(@ApplicationContext Context context, ApplicationManager applicationManager) {
         this.context = context;
+        this.applicationManager = applicationManager;
+        notificationManager = ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE));
         isChildMode = getChildMode();
         notificationViewOfChildMode = new RemoteViews(context.getPackageName(), R.layout.layout_notification_on);
         notificationViewOfParentMode = new RemoteViews(context.getPackageName(), R.layout.layout_notification_off);
@@ -62,12 +64,18 @@ public class NotificationActionManager {
     }
 
     public Notification.Builder createNotificationBuilder(Intent intent) {
-        Notification.Builder builder = new Notification.Builder(context);
+        int pendingFlags = PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE;
+        Notification.Builder builder;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            builder = new Notification.Builder(context, CHANNEL_ID);
+        } else {
+            builder = new Notification.Builder(context);
+        }
         return builder.setSmallIcon(R.drawable.angelee)
                 .setOngoing(true)
                 .setContentTitle("Angel talk")
                 .setContentText("Angel talk")
-                .setContentIntent(PendingIntent.getBroadcast(context, 0, intent, 0));
+                .setContentIntent(PendingIntent.getBroadcast(context, 0, intent, pendingFlags));
     }
 
     private void changeChildMode() {
@@ -76,7 +84,8 @@ public class NotificationActionManager {
     }
 
     public void setOnClickListener(RemoteViews notificationView, Intent intent) {
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+        int pendingFlags = PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE;
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, pendingFlags);
         notificationView.setOnClickPendingIntent(isChildMode ? R.id.btn_off : R.id.btn_on, pendingIntent);
     }
 

@@ -1,7 +1,7 @@
 package angeltalk.plus.presentation.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +44,7 @@ public class ShowHideRecyclerViewAdapter extends RecyclerView.Adapter<ShowHideRe
         CardModel cardModel = cardModelList.get(position);
         glide.load(ContentsUtil.getContentFile(getThumbnailPath(cardModel)))
                 .override(60, 60)
-                .bitmapTransform(new AngelManGlideTransform(context
+                .transform(new AngelManGlideTransform(context
                         , 10, 0, AngelManGlideTransform.CornerType.ALL))
                 .into(holder.cardThumbnail);
         holder.cardName.setText(cardModel.name);

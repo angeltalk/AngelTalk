@@ -2,56 +2,25 @@ package angeltalk.plus;
 
 
 import android.app.Application;
-import android.content.Context;
-import android.support.annotation.VisibleForTesting;
 
-import org.acra.ACRA;
-import org.acra.ReportingInteractionMode;
-import org.acra.annotation.ReportsCrashes;
+import javax.inject.Inject;
 
-import angeltalk.plus.dagger.components.AngelmanComponent;
-import angeltalk.plus.dagger.components.DaggerAngelmanComponent;
-import angeltalk.plus.dagger.modules.AngelmanModule;
 import angeltalk.plus.presentation.manager.ApplicationInitializer;
+import dagger.hilt.android.HiltAndroidApp;
 
-@ReportsCrashes(
-        mailTo = "act.angeltalk@gmail.com",
-        mode = ReportingInteractionMode.DIALOG,
-        resDialogTitle= R.string.bug_report_title,
-        resDialogText= R.string.bug_report
-)
+// TODO(phase-9): restore ACRA 5 crash reporting. The ACRA builder API changed in 5.x and
+// the annotation-based path needs `ch.acra:annotationprocessor` wired. Removed for now so
+// the Hilt/AGP 8 migration can build. Manifest `kakao_app_key` meta-data and deps
+// (acra-mail, acra-dialog) remain in place for easy re-enable.
+@HiltAndroidApp
 public class AngelmanApplication extends Application {
 
-    private AngelmanComponent angelmanComponent;
-    private ApplicationInitializer applicationInitializer;
+    @Inject
+    ApplicationInitializer applicationInitializer;
 
     @Override
     public void onCreate() {
         super.onCreate();
-
-        angelmanComponent = DaggerAngelmanComponent.builder()
-                .angelmanModule(new AngelmanModule(this))
-                .build();
-
-        applicationInitializer = new ApplicationInitializer(getApplicationContext());
         applicationInitializer.initializeApplication();
     }
-
-    @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(base);
-
-        ACRA.init(this);
-    }
-
-    public AngelmanComponent getAngelmanComponent() {
-        return this.angelmanComponent;
-    }
-
-    @VisibleForTesting
-    public void setComponent(AngelmanComponent angelmanComponent) {
-        this.angelmanComponent = angelmanComponent;
-    }
-
-
 }

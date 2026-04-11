@@ -10,18 +10,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import angeltalk.plus.R;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public class CardTitleLayout extends RelativeLayout {
 
-    @BindView(R.id.list_card_button)
     public ImageView listCardButton;
 
-    @BindView(R.id.category_item_count)
     public TextView cardCount;
 
-    @BindView(R.id.category_item_title)
     public TextView categoryTitle;
 
     private String categoryModelTitle;
@@ -39,8 +33,7 @@ public class CardTitleLayout extends RelativeLayout {
     private void initUI() {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         inflater.inflate(R.layout.layout_cardcategory_title, this);
-        ButterKnife.bind(this);
-
+        bindViews();
         String title = "";
         if ( !isInEditMode() ) {
             title = this.categoryModelTitle;
@@ -77,4 +70,9 @@ public class CardTitleLayout extends RelativeLayout {
         listCardButton.setVisibility(View.GONE);
     }
 
+    private void bindViews() {
+        listCardButton = findViewById(R.id.list_card_button);
+        cardCount = findViewById(R.id.category_item_count);
+        categoryTitle = findViewById(R.id.category_item_title);
+    }
 }

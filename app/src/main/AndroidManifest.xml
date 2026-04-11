@@ -1,18 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="angeltalk.plus">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
 
     <uses-feature
         android:name="android.hardware.camera2.full"
@@ -28,8 +37,10 @@
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_app_key" />
+
         <activity
             android:name="angeltalk.plus.presentation.activity.OnboardingActivity"
+            android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,29 +49,37 @@
         </activity>
         <activity
             android:name="angeltalk.plus.presentation.activity.CameraGallerySelectionActivity"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name="angeltalk.plus.presentation.activity.MakeCategoryActivity"
+            android:exported="false"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
             android:name="angeltalk.plus.presentation.activity.Camera2Activity"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name="angeltalk.plus.presentation.activity.CardListActivity"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name="angeltalk.plus.presentation.activity.MakeCardActivity"
+            android:exported="false"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
             android:name="angeltalk.plus.presentation.activity.CardViewPagerActivity"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name="angeltalk.plus.presentation.activity.PhotoEditorActivity"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name="angeltalk.plus.presentation.activity.ShareCardActivity"
+            android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -76,23 +95,46 @@
         </activity>
         <activity
             android:name="angeltalk.plus.presentation.activity.CategoryMenuActivity"
+            android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name="angeltalk.plus.presentation.activity.VideoActivity"
+            android:exported="false"
             android:label="@string/app_name"
             android:screenOrientation="portrait" />
-        <activity android:name="angeltalk.plus.presentation.activity.MakeCardPreviewActivity"
+        <activity
+            android:name="angeltalk.plus.presentation.activity.MakeCardPreviewActivity"
+            android:exported="false"
             android:screenOrientation="portrait" />
+        <activity
+            android:name="angeltalk.plus.presentation.activity.LockScreenActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait"
+            android:showWhenLocked="true"
+            android:theme="@style/AppTheme"
+            android:turnScreenOn="true" />
 
-        <service android:name="angeltalk.plus.presentation.service.ScreenService" />
+        <service
+            android:name="angeltalk.plus.presentation.service.ScreenService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="child_mode_lock_screen_overlay" />
+        </service>
 
-        <receiver android:name="angeltalk.plus.presentation.service.ScreenReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.SCREEN_OFF" />
-                <action android:name="android.intent.action.PHONE_STATE" />
-            </intent-filter>
-        </receiver>
-        <receiver android:name="angeltalk.plus.presentation.receiver.NotificationActionReceiver" />
+        <!-- ScreenReceiver is registered at runtime by ScreenService because
+             ACTION_SCREEN_OFF is not delivered to manifest-declared receivers
+             since Android 8.0. Keeping the manifest entry exported=false so Hilt
+             can still inject into it without exposing it to other apps. -->
+        <receiver
+            android:name="angeltalk.plus.presentation.service.ScreenReceiver"
+            android:exported="false" />
+        <receiver
+            android:name="angeltalk.plus.presentation.receiver.NotificationActionReceiver"
+            android:exported="false" />
         <receiver
             android:name="angeltalk.plus.presentation.receiver.BootCompleteReceiver"
             android:enabled="true"
@@ -104,4 +146,3 @@
     </application>
 
 </manifest>
-

@@ -5,7 +5,6 @@ gen/
 build/
 captures/
 
-
 local.properties
 
 proguard/
@@ -24,3 +23,7 @@ daemon/
 wrapper/
 app/java_*.hprof
 native/
+
+.claude/settings.local.json
+.claude/memory.local.json
+.claude/history/

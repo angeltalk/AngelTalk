@@ -1,11 +1,13 @@
 package angeltalk.plus.presentation.activity;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -30,10 +32,7 @@ import angeltalk.plus.presentation.manager.ApplicationConstants;
 import angeltalk.plus.presentation.manager.ApplicationManager;
 import angeltalk.plus.presentation.util.ResolutionUtil;
 import angeltalk.plus.presentation.util.ResourcesUtil;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-
+@AndroidEntryPoint
 public class CardListActivity extends AbstractActivity {
 
     @Inject
@@ -42,25 +41,18 @@ public class CardListActivity extends AbstractActivity {
     @Inject
     CardRepository cardRepository;
 
-    @BindView(R.id.category_item_title)
     TextView categoryItemTitle;
 
-    @BindView(R.id.title_layout)
     RelativeLayout titleLayout;
 
-    @BindView(R.id.show_hide_recycler_view)
     RecyclerView showHideRecyclerView;
 
-    @BindView(R.id.change_order_recycler_view)
     RecyclerView changeOrderRecyclerView;
 
-    @BindView(R.id.add_card_button)
     ImageView addCardButton;
 
-    @BindView(R.id.show_hide_tab_button)
     CardListTabButton showHideTabButton;
 
-    @BindView(R.id.change_order_tab_button)
     CardListTabButton changeOrderTabButton;
 
     private List<CardModel> cardList;
@@ -160,11 +152,10 @@ public class CardListActivity extends AbstractActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ((AngelmanApplication) getApplication()).getAngelmanComponent().inject(this);
 
         ResourcesUtil.setColorTheme(this, applicationManager.getCategoryModelColor());
         setContentView(R.layout.activity_card_list);
-        ButterKnife.bind(this);
+        bindViews();
         cardList = cardRepository.getSingleCardListWithCategoryId(applicationManager.getCategoryModel().index);
         initView();
 
@@ -180,20 +171,17 @@ public class CardListActivity extends AbstractActivity {
         moveToCardViewPagerActivity();
         finish();
     }
-
-    @OnClick(R.id.back_button)
+    // TODO(phase-6): @OnClick wiring removed — wire setOnClickListener in bindViews()
     public void onClickBackButton(View v) {
         moveToCardViewPagerActivity();
         finish();
     }
-
-    @OnClick(R.id.add_card_button)
+    // TODO(phase-6): @OnClick wiring removed — wire setOnClickListener in bindViews()
     public void onClickAddCardButton(View view) {
         Intent intent = new Intent(this, CameraGallerySelectionActivity.class);
         startActivity(intent);
     }
-
-    @OnClick(R.id.show_hide_tab_button)
+    // TODO(phase-6): @OnClick wiring removed — wire setOnClickListener in bindViews()
     public void onClickShowHideTabButton(View view) {
         if (!showHideTabButton.isSelected()) {
             showHideTabButton.setSelected(true);
@@ -204,8 +192,7 @@ public class CardListActivity extends AbstractActivity {
             showHideRecyclerView.setVisibility(View.VISIBLE);
         }
     }
-
-    @OnClick(R.id.change_order_tab_button)
+    // TODO(phase-6): @OnClick wiring removed — wire setOnClickListener in bindViews()
     public void onClickChangeOrderTabButton(View view) {
         if (!changeOrderTabButton.isSelected()) {
             showHideTabButton.setSelected(false);
@@ -236,5 +223,18 @@ public class CardListActivity extends AbstractActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(ApplicationConstants.INTENT_KEY_LIST_BACK, true);
         getApplicationContext().startActivity(intent);
+    }
+    private void bindViews() {
+        categoryItemTitle = findViewById(R.id.category_item_title);
+        titleLayout = findViewById(R.id.title_layout);
+        showHideRecyclerView = findViewById(R.id.show_hide_recycler_view);
+        changeOrderRecyclerView = findViewById(R.id.change_order_recycler_view);
+        addCardButton = findViewById(R.id.add_card_button);
+        showHideTabButton = findViewById(R.id.show_hide_tab_button);
+        changeOrderTabButton = findViewById(R.id.change_order_tab_button);
+        findViewById(R.id.back_button).setOnClickListener(v -> onClickBackButton(v));
+        findViewById(R.id.add_card_button).setOnClickListener(v -> onClickAddCardButton(v));
+        findViewById(R.id.show_hide_tab_button).setOnClickListener(v -> onClickShowHideTabButton(v));
+        findViewById(R.id.change_order_tab_button).setOnClickListener(v -> onClickChangeOrderTabButton(v));
     }
 }

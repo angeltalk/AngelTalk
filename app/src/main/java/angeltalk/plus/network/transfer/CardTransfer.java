@@ -6,8 +6,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -22,20 +23,23 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import angeltalk.plus.AngelmanApplication;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import angeltalk.plus.domain.model.CardModel;
 import angeltalk.plus.domain.model.CardTransferModel;
 import angeltalk.plus.presentation.listener.OnDownloadCompleteListener;
 import angeltalk.plus.presentation.util.ContentsUtil;
 import angeltalk.plus.presentation.util.FileUtil;
+import dagger.hilt.android.qualifiers.ApplicationContext;
 
+@Singleton
 public class CardTransfer {
 
 
@@ -47,9 +51,9 @@ public class CardTransfer {
     private FirebaseStorage storage;
     private Context context;
 
-    public CardTransfer(Context context) {
+    @Inject
+    public CardTransfer(@ApplicationContext Context context) {
         this.context = context;
-        ((AngelmanApplication) context).getAngelmanComponent().inject(this);
         storage = FirebaseStorage.getInstance();
         shareDataReference = FirebaseDatabase.getInstance().getReference(DEFAULT_SHARE_REFERENCE);
         storageReference = storage.getReference(DEFAULT_SHARE_REFERENCE);
@@ -59,52 +63,44 @@ public class CardTransfer {
 
         final String key = generateShareKey();
         final String zipFilePath = makeShareZipFile(cardModel, key);
+        final StorageReference zipRef = storageReference.child(key).child(key + ".zip");
+        final StorageReference imageRef = storageReference.child(key).child(key + IMAGE_FILE_EXTENSION);
 
         try {
-            storageReference.child(key).child(key + ".zip").putFile(Uri.fromFile(new File(zipFilePath))) // Zip File upload
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-                            Uri uploadFileUri = getUploadFileUri(cardModel);
-
-                            storageReference.child(key).child(key + IMAGE_FILE_EXTENSION).putFile(uploadFileUri)
-                                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                        @Override
-                                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                            Map<String, String> resultMap = Maps.newHashMap();
-                                            resultMap.put("key", key);
-                                            resultMap.put("url", taskSnapshot.getDownloadUrl() == null ? "" : taskSnapshot.getDownloadUrl().toString());
-                                            onSuccessListener.onSuccess(resultMap);
-                                        }
-                                    }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    onFailureListener.onFailure(e);
-                                }
-                            });
-                            shareDataReference.child(key).child("cardType").setValue(cardModel.cardType.getValue());
-                            shareDataReference.child(key).child("name").setValue(cardModel.name);
-                            shareDataReference.child(key).child("contentPath").setValue(taskSnapshot.getDownloadUrl() == null ? "" : taskSnapshot.getDownloadUrl().toString());
+            zipRef.putFile(Uri.fromFile(new File(zipFilePath)))
+                    .addOnSuccessListener(zipSnapshot -> {
+                        final Uri uploadFileUri = getUploadFileUri(cardModel);
+                        if (uploadFileUri == null) {
+                            onFailureListener.onFailure(new IllegalArgumentException("Upload file URI is null"));
+                            return;
                         }
-                    }).addOnFailureListener(new OnFailureListener() {
-
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    onFailureListener.onFailure(e);
-                }
-            });
-        } catch(IllegalArgumentException e) {
+                        imageRef.putFile(uploadFileUri)
+                                .addOnSuccessListener(imageSnapshot ->
+                                        imageRef.getDownloadUrl()
+                                                .addOnSuccessListener(downloadUri -> {
+                                                    String downloadUrl = downloadUri == null ? "" : downloadUri.toString();
+                                                    Map<String, String> resultMap = Maps.newHashMap();
+                                                    resultMap.put("key", key);
+                                                    resultMap.put("url", downloadUrl);
+                                                    shareDataReference.child(key).child("cardType").setValue(cardModel.cardType.getValue());
+                                                    shareDataReference.child(key).child("name").setValue(cardModel.name);
+                                                    shareDataReference.child(key).child("contentPath").setValue(downloadUrl);
+                                                    onSuccessListener.onSuccess(resultMap);
+                                                })
+                                                .addOnFailureListener(onFailureListener::onFailure))
+                                .addOnFailureListener(onFailureListener::onFailure);
+                    })
+                    .addOnFailureListener(onFailureListener::onFailure);
+        } catch (IllegalArgumentException e) {
             onFailureListener.onFailure(e);
         }
-
     }
 
     public void downloadCard(final String receiveKey, final OnDownloadCompleteListener downloadCompleteListener) {
         shareDataReference.child(receiveKey).addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         final CardTransferModel cardTransferModel = new CardTransferModel();
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                             setCardModealData(cardTransferModel, snapshot);
@@ -114,18 +110,11 @@ public class CardTransfer {
                         try {
                             storage.getReferenceFromUrl(cardTransferModel.contentPath)
                                     .getFile(localFile)
-                                    .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                                        @Override
-                                        public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                                            downloadCompleteListener.onSuccess(cardTransferModel, localFile.getAbsolutePath());
-                                        }
-                                    })
-                                    .addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            Log.d("DOWNLOAD FAIL ", "download fail.");
-                                            downloadCompleteListener.onFail();
-                                        }
+                                    .addOnSuccessListener((OnSuccessListener<FileDownloadTask.TaskSnapshot>) taskSnapshot ->
+                                            downloadCompleteListener.onSuccess(cardTransferModel, localFile.getAbsolutePath()))
+                                    .addOnFailureListener(e -> {
+                                        Log.d("DOWNLOAD FAIL ", "download fail.");
+                                        downloadCompleteListener.onFail();
                                     });
                         } catch (IllegalArgumentException e) {
                             Log.d("DOWNLOAD FAIL", "IllegalArgumentException : " + e.getMessage());
@@ -134,7 +123,7 @@ public class CardTransfer {
                     }
 
                     @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
                         Log.d("onCancelled", databaseError.getMessage());
                         downloadCompleteListener.onFail();
                     }

@@ -1,5 +1,7 @@
 package angeltalk.plus.presentation.activity;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -17,16 +19,12 @@ import angeltalk.plus.presentation.custom.VideoCardTextureView;
 import angeltalk.plus.presentation.manager.ApplicationConstants;
 import angeltalk.plus.presentation.util.ContentsUtil;
 import angeltalk.plus.presentation.util.FileUtil;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-
+@AndroidEntryPoint
 public class MakeCardPreviewActivity extends AbstractActivity {
 
     @Inject
     public CardRepository cardRepository;
 
-    @BindView(R.id.card_preview_layout)
     public CardPreviewLayout cardPreviewLayout;
 
     private String previewContentPath;
@@ -36,10 +34,8 @@ public class MakeCardPreviewActivity extends AbstractActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ((AngelmanApplication) getApplication()).getAngelmanComponent().inject(this);
         setContentView(R.layout.activity_make_card_preview);
-        ButterKnife.bind(this);
-
+        bindViews();
         Intent intent = getIntent();
         previewContentPath = intent.getStringExtra(ContentsUtil.CONTENT_PATH);
         previewCardType = CardModel.CardType.valueOf(intent.getStringExtra(ContentsUtil.CARD_TYPE));
@@ -92,13 +88,11 @@ public class MakeCardPreviewActivity extends AbstractActivity {
         ContentsUtil.deleteContentAndThumbnail(previewContentPath);
         finish();
     }
-
-    @OnClick(R.id.rerecord_button)
+    // TODO(phase-6): @OnClick wiring removed — wire setOnClickListener in bindViews()
     public void onClickRetakeButton (View v) {
         onBackPressed();
     }
-
-    @OnClick(R.id.confirm_button)
+    // TODO(phase-6): @OnClick wiring removed — wire setOnClickListener in bindViews()
     public void onClickConfirmButton (View v) {
         if (editCardId == null) {
             Intent intent = new Intent(this, MakeCardActivity.class);
@@ -121,4 +115,9 @@ public class MakeCardPreviewActivity extends AbstractActivity {
     }
 
 
+    private void bindViews() {
+        cardPreviewLayout = findViewById(R.id.card_preview_layout);
+        findViewById(R.id.rerecord_button).setOnClickListener(v -> onClickRetakeButton(v));
+        findViewById(R.id.confirm_button).setOnClickListener(v -> onClickConfirmButton(v));
+    }
 }

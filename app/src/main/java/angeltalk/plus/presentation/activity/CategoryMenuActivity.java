@@ -1,11 +1,13 @@
 package angeltalk.plus.presentation.activity;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
+import com.google.android.material.navigation.NavigationView;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,13 +38,9 @@ import angeltalk.plus.presentation.manager.ApplicationManager;
 import angeltalk.plus.presentation.manager.NotificationActionManager;
 import angeltalk.plus.presentation.receiver.NotificationActionReceiver;
 import angeltalk.plus.presentation.util.FileUtil;
-import butterknife.BindString;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-
 import static angeltalk.plus.R.string.delete_category;
 
+@AndroidEntryPoint
 public class CategoryMenuActivity extends AbstractActivity  implements NavigationView.OnNavigationItemSelectedListener{
 
     @Inject
@@ -60,28 +58,20 @@ public class CategoryMenuActivity extends AbstractActivity  implements Navigatio
     @Inject
     NotificationActionManager notificationActionManager;
 
-    @BindView(R.id.category_list)
     public GridView categoryGridView;
 
-    @BindView(R.id.logo_angeltalk)
     public ImageView logoButton;
 
-    @BindView(R.id.category_delete_button)
     public ImageView categoryDeleteButton;
 
-    @BindView(R.id.nav_view)
     NavigationView navigationView;
 
-    @BindString(R.string.voc_web_url)
     public String vocWebUrl;
 
-    @BindString(R.string.new_category_button_text)
     public String newCategoryString;
 
-    @BindString(R.string.one_left_delete_category)
     public String oneLeftDeleteCategory;
 
-    @BindView(R.id.drawer_layout)
     public DrawerLayout drawer;
 
     public enum CategoryMenuStatus {
@@ -97,9 +87,7 @@ public class CategoryMenuActivity extends AbstractActivity  implements Navigatio
         super.onCreate(savedInstanceState);
         getWindow().getDecorView().setLayoutParams(new WindowManager.LayoutParams(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN));
         setContentView(R.layout.activity_main_menu);
-        ButterKnife.bind(this);
-        ((AngelmanApplication) getApplication()).getAngelmanComponent().inject(this);
-
+        bindViews();
         initNavigationView();
         setCategoryGridView();
         launchNotification();
@@ -155,13 +143,11 @@ public class CategoryMenuActivity extends AbstractActivity  implements Navigatio
 
         return false;
     }
-
-    @OnClick(R.id.drawer_meun)
+    // TODO(phase-6): @OnClick wiring removed — wire setOnClickListener in bindViews()
     public void onClickDrawerMenu(View v) {
         drawer.openDrawer(GravityCompat.START);
     }
-
-    @OnClick(R.id.category_delete_button)
+    // TODO(phase-6): @OnClick wiring removed — wire setOnClickListener in bindViews()
     public void onClickCategoryDeleteButton(View v) {
         if (categoryAdapter.getCategoryMenuStatus().equals(CategoryMenuStatus.CATEGORY_DEFAULT)) {
             changeCategoryMenuStatus(CategoryMenuStatus.CATEGORY_DELETABLE);
@@ -173,9 +159,9 @@ public class CategoryMenuActivity extends AbstractActivity  implements Navigatio
     private void initNavigationView() {
         Glide.with(CategoryMenuActivity.this)
                 .load(R.drawable.angelee)
-                .asGif()
-                .crossFade()
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+
+
+                .diskCacheStrategy(DiskCacheStrategy.DATA)
                 .into(((ImageView) navigationView.getHeaderView(0).findViewById(R.id.slide_menu_angel)));
 
         drawer.closeDrawer(GravityCompat.START);
@@ -278,5 +264,17 @@ public class CategoryMenuActivity extends AbstractActivity  implements Navigatio
 
     private void launchNotification() {
         notificationActionManager.generateNotification(new Intent(this, NotificationActionReceiver.class));
+    }
+    private void bindViews() {
+        vocWebUrl = getString(R.string.voc_web_url);
+        newCategoryString = getString(R.string.new_category_button_text);
+        oneLeftDeleteCategory = getString(R.string.one_left_delete_category);
+        categoryGridView = findViewById(R.id.category_list);
+        logoButton = findViewById(R.id.logo_angeltalk);
+        categoryDeleteButton = findViewById(R.id.category_delete_button);
+        navigationView = findViewById(R.id.nav_view);
+        drawer = findViewById(R.id.drawer_layout);
+        findViewById(R.id.drawer_meun).setOnClickListener(v -> onClickDrawerMenu(v));
+        findViewById(R.id.category_delete_button).setOnClickListener(v -> onClickCategoryDeleteButton(v));
     }
 }

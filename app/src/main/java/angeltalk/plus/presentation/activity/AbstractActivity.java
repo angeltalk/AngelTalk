@@ -1,8 +1,10 @@
 package angeltalk.plus.presentation.activity;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -11,6 +13,7 @@ import javax.inject.Inject;
 
 import angeltalk.plus.presentation.manager.ApplicationManager;
 
+@AndroidEntryPoint
 public class AbstractActivity extends AppCompatActivity {
 
     protected static Hashtable<String, String> restoreObject = new Hashtable<>();

@@ -1,5 +1,7 @@
 package angeltalk.plus.presentation.activity;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.Intent;
@@ -9,11 +11,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewPager;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.viewpager.widget.ViewPager;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -29,27 +31,22 @@ import angeltalk.plus.AngelmanApplication;
 import angeltalk.plus.R;
 import angeltalk.plus.presentation.adapter.OnboardingImageAdapter;
 import angeltalk.plus.presentation.manager.ApplicationManager;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 import static angeltalk.plus.presentation.manager.ApplicationConstants.ONBOARDING_PERMISSION_REQUEST_CODE;
 import static angeltalk.plus.presentation.manager.ApplicationConstants.OVERLAY_PERMISSION_REQUEST_CODE;
 import static android.os.Build.VERSION_CODES.M;
 
+@AndroidEntryPoint
 public class OnboardingActivity extends AbstractActivity {
 
     @Inject
     ApplicationManager applicationManager;
 
-    @BindView(R.id.onboarding_view_pager)
     public ViewPager onboardingViewPager;
 
 
-    @BindView(R.id.onboarding_first_page)
     public RelativeLayout onboardingFirstPageLayout;
 
 
-    @BindView(R.id.onboaring_angelee)
     ImageView onboardingAngeleeImageView;
 
     private WeakReference<OnboardingActivity> onboardingActivityReference;
@@ -57,7 +54,6 @@ public class OnboardingActivity extends AbstractActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ((AngelmanApplication) getApplication()).getAngelmanComponent().inject(this);
 
         onboardingActivityReference = new WeakReference<>(this);
 
@@ -75,21 +71,21 @@ public class OnboardingActivity extends AbstractActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case ONBOARDING_PERMISSION_REQUEST_CODE:
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED
-                        && grantResults[1] == PackageManager.PERMISSION_GRANTED
-                        && grantResults[2] == PackageManager.PERMISSION_GRANTED) {
-                    if (Build.VERSION.SDK_INT >= M) {
-                        checkDrawOverlayPermission();
-                    } else {
-                        moveToCategoryMenuActivity();
-                    }
+        if (requestCode == ONBOARDING_PERMISSION_REQUEST_CODE) {
+            boolean allGranted = grantResults.length > 0;
+            for (int result : grantResults) {
+                if (result != PackageManager.PERMISSION_GRANTED) {
+                    allGranted = false;
+                    break;
                 }
-                break;
-            default:
-                break;
+            }
+            if (allGranted) {
+                if (Build.VERSION.SDK_INT >= M) {
+                    checkDrawOverlayPermission();
+                } else {
+                    moveToCategoryMenuActivity();
+                }
+            }
         }
     }
 
@@ -119,8 +115,7 @@ public class OnboardingActivity extends AbstractActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_onboarding);
-        ButterKnife.bind(this);
-
+        bindViews();
         if(applicationManager.isFirstLaunched()) {
             initContentView();
         } else {
@@ -140,8 +135,8 @@ public class OnboardingActivity extends AbstractActivity {
 
         Glide.with(OnboardingActivity.this)
                 .load(R.drawable.angelee)
-                .asGif()
-                .crossFade()
+
+
                 .into(onboardingAngeleeImageView);
 
         Handler handler = new Handler();
@@ -163,14 +158,49 @@ public class OnboardingActivity extends AbstractActivity {
     private View.OnClickListener onPermissionButtonOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            ActivityCompat.requestPermissions(onboardingActivityReference.get(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE}, ONBOARDING_PERMISSION_REQUEST_CODE);
+            ActivityCompat.requestPermissions(
+                    onboardingActivityReference.get(),
+                    requiredDangerousPermissions(),
+                    ONBOARDING_PERMISSION_REQUEST_CODE);
         }
     };
 
+    /**
+     * The storage model changed twice since this app was written:
+     *   - API 29 (Q): scoped storage deprecates WRITE_EXTERNAL_STORAGE
+     *   - API 33 (Tiramisu): READ_EXTERNAL_STORAGE replaced by READ_MEDIA_IMAGES/VIDEO/AUDIO
+     * Returns true when any dangerous permission the app still needs is missing,
+     * or when the SYSTEM_ALERT_WINDOW overlay isn't granted.
+     */
     private boolean hasAllPermissions() {
-        return ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-                || ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-                || ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED
-                || (Build.VERSION.SDK_INT >= M && !Settings.canDrawOverlays(this));
+        for (String perm : requiredDangerousPermissions()) {
+            if (ContextCompat.checkSelfPermission(this, perm) != PackageManager.PERMISSION_GRANTED) {
+                return true;
+            }
+        }
+        return Build.VERSION.SDK_INT >= M && !Settings.canDrawOverlays(this);
+    }
+
+    private String[] requiredDangerousPermissions() {
+        java.util.List<String> perms = new java.util.ArrayList<>();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            perms.add(Manifest.permission.READ_MEDIA_IMAGES);
+            perms.add(Manifest.permission.READ_MEDIA_VIDEO);
+            perms.add(Manifest.permission.READ_MEDIA_AUDIO);
+            perms.add(Manifest.permission.POST_NOTIFICATIONS);
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            perms.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+        } else {
+            perms.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+            perms.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
+        perms.add(Manifest.permission.READ_PHONE_STATE);
+        perms.add(Manifest.permission.RECORD_AUDIO);
+        return perms.toArray(new String[0]);
+    }
+    private void bindViews() {
+        onboardingViewPager = findViewById(R.id.onboarding_view_pager);
+        onboardingFirstPageLayout = findViewById(R.id.onboarding_first_page);
+        onboardingAngeleeImageView = findViewById(R.id.onboaring_angelee);
     }
 }

@@ -1,5 +1,7 @@
 package angeltalk.plus.presentation.activity;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
@@ -8,11 +10,11 @@ import android.graphics.Rect;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.annotation.VisibleForTesting;
-import android.support.percent.PercentRelativeLayout;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
+import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
+import androidx.percentlayout.widget.PercentRelativeLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.TypedValue;
@@ -55,12 +57,9 @@ import angeltalk.plus.presentation.util.PlayUtil;
 import angeltalk.plus.presentation.util.RecordUtil;
 import angeltalk.plus.presentation.util.ResolutionUtil;
 import angeltalk.plus.presentation.util.ResourcesUtil;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-
 import static angeltalk.plus.presentation.manager.ApplicationConstants.RECORDING_PERMISSION_REQUEST_CODE;
 
+@AndroidEntryPoint
 public class MakeCardActivity extends AbstractActivity implements RecordUtil.RecordCallback {
 
     private static final int STATE_RECORD_NOT_COMPLETE = 0;
@@ -95,52 +94,37 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
     @Inject
     ApplicationManager applicationManager;
 
-    @BindView(R.id.root_layout)
     ViewGroup rootLayout;
 
-    @BindView(R.id.show_card_layout)
     ViewGroup showCardLayout;
 
-    @BindView(R.id.record_stop_button)
     Button recordStopButton;
 
-    @BindView(R.id.mic_btn)
     Button micButton;
 
-    @BindView(R.id.waiting_count)
     TextView waitCount;
 
-    @BindView(R.id.counting_scene)
     PercentRelativeLayout countScene;
 
-    @BindView(R.id.rerecord_button)
     Button rerecordButton;
 
-    @BindView(R.id.replay_button)
     Button replayButton;
 
-    @BindView(R.id.card_view_layout)
     CardView cardView;
 
-    @BindView(R.id.confirm_button)
     Button confirmButton;
 
-    @BindView(R.id.card_image_title_edit)
     EditText cardTitleEditText;
 
-    @BindView(R.id.card_image_title)
     TextView cardTitle;
 
-    @BindView(R.id.skip_button)
     Button skipButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ((AngelmanApplication) getApplication()).getAngelmanComponent().inject(this);
         setContentView(R.layout.activity_make_card);
-        ButterKnife.bind(this);
-
+        bindViews();
         glide = Glide.with(this);
         playUtil = PlayUtil.getInstance();
         imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -217,8 +201,7 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
             }
         }
     }
-
-    @OnClick(R.id.record_stop_button)
+    // TODO(phase-6): @OnClick wiring removed — wire setOnClickListener in bindViews()
     public void onClickRecStopButton(View view){
         if (state == STATE_RECORD_NOT_COMPLETE) {
             recordUtil.stopRecord();
@@ -236,8 +219,7 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
             }
         }
     }
-
-    @OnClick(R.id.skip_button)
+    // TODO(phase-6): @OnClick wiring removed — wire setOnClickListener in bindViews()
     public void onClickSkipButton(View view) {
         skipButton.setVisibility(View.GONE);
         countHandler.removeCallbacks(countAction);
@@ -246,8 +228,7 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
         changeCountingSceneForPlay();
         playCardTitle();
     }
-
-    @OnClick(R.id.mic_btn)
+    // TODO(phase-6): @OnClick wiring removed — wire setOnClickListener in bindViews()
     public void onClickMicButton(View view){
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, RECORDING_PERMISSION_REQUEST_CODE);
@@ -255,18 +236,15 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
             startRecording();
         }
     }
-
-    @OnClick(R.id.replay_button)
+    // TODO(phase-6): @OnClick wiring removed — wire setOnClickListener in bindViews()
     public void onClickReplayButton(View view){
         playCardTitle();
     }
-
-    @OnClick(R.id.rerecord_button)
+    // TODO(phase-6): @OnClick wiring removed — wire setOnClickListener in bindViews()
     public void onClickRetakeButton(View view) {
         onBackPressed();
     }
-
-    @OnClick(R.id.confirm_button)
+    // TODO(phase-6): @OnClick wiring removed — wire setOnClickListener in bindViews()
     public void onClickConfirmButton(View view) {
         editCardModel.name = cardView.cardTitleEdit.getText().toString();
         cardRepository.updateSingleCardName(editCardModel._id, editCardModel.name);
@@ -302,7 +280,7 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
             cardView.playButton.setVisibility(View.GONE);
             cardView.cardImage.setScaleType(ImageView.ScaleType.FIT_XY);
             glide.load(ContentsUtil.getContentFile(contentPath))
-                    .bitmapTransform(new AngelManGlideTransform(this, 10, 0, AngelManGlideTransform.CornerType.TOP))
+                    .transform(new AngelManGlideTransform(this, 10, 0, AngelManGlideTransform.CornerType.TOP))
                     .into(cardView.cardImage);
 
         } else if (cardType.equals(CardModel.CardType.VIDEO_CARD)) {
@@ -602,5 +580,25 @@ public class MakeCardActivity extends AbstractActivity implements RecordUtil.Rec
         showCountingScene();
         countHandler.postDelayed(countAction, COUNT_INTERVAL);
     }
+    private void bindViews() {
+        rootLayout = findViewById(R.id.root_layout);
+        showCardLayout = findViewById(R.id.show_card_layout);
+        recordStopButton = findViewById(R.id.record_stop_button);
+        micButton = findViewById(R.id.mic_btn);
+        waitCount = findViewById(R.id.waiting_count);
+        countScene = findViewById(R.id.counting_scene);
+        rerecordButton = findViewById(R.id.rerecord_button);
+        replayButton = findViewById(R.id.replay_button);
+        cardView = findViewById(R.id.card_view_layout);
+        confirmButton = findViewById(R.id.confirm_button);
+        cardTitleEditText = findViewById(R.id.card_image_title_edit);
+        cardTitle = findViewById(R.id.card_image_title);
+        skipButton = findViewById(R.id.skip_button);
+        findViewById(R.id.record_stop_button).setOnClickListener(v -> onClickRecStopButton(v));
+        findViewById(R.id.skip_button).setOnClickListener(v -> onClickSkipButton(v));
+        findViewById(R.id.mic_btn).setOnClickListener(v -> onClickMicButton(v));
+        findViewById(R.id.replay_button).setOnClickListener(v -> onClickReplayButton(v));
+        findViewById(R.id.rerecord_button).setOnClickListener(v -> onClickRetakeButton(v));
+        findViewById(R.id.confirm_button).setOnClickListener(v -> onClickConfirmButton(v));
+    }
 }
-

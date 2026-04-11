@@ -1,10 +1,12 @@
 package angeltalk.plus.presentation.custom;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Vibrator;
-import android.support.annotation.VisibleForTesting;
-import android.support.constraint.ConstraintLayout;
+import androidx.annotation.VisibleForTesting;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.KeyCharacterMap;
@@ -32,6 +34,7 @@ import static angeltalk.plus.R.id.category_list;
 import static android.content.Context.VIBRATOR_SERVICE;
 
 
+@AndroidEntryPoint
 public class CategoryMenuLayout extends LinearLayout {
 
     @Inject
@@ -52,7 +55,6 @@ public class CategoryMenuLayout extends LinearLayout {
     }
 
     private void init(final Context context) {
-        ((AngelmanApplication) context.getApplicationContext()).getAngelmanComponent().inject(this);
 
         subject = inflate(context, R.layout.category_menu_layout, this);
         lockLongPressGuide = (TextView) subject.findViewById(R.id.lock_long_press_guide);

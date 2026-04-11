@@ -2,24 +2,30 @@ package angeltalk.plus.data.repository;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.google.common.collect.Lists;
 
 import java.util.List;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import angeltalk.plus.data.repository.datastore.SingleCardDataStore;
 import angeltalk.plus.data.repository.datastore.SingleCardSqliteDataStore;
 import angeltalk.plus.data.sqlite.CardColumns;
 import angeltalk.plus.domain.model.CardModel;
 import angeltalk.plus.domain.repository.CardRepository;
+import dagger.hilt.android.qualifiers.ApplicationContext;
 
+@Singleton
 public class CardDataRepository implements CardRepository {
 
     private Context context;
     SingleCardDataStore dataStore;
 
-    public CardDataRepository(Context context) {
+    @Inject
+    public CardDataRepository(@ApplicationContext Context context) {
         this.context = context;
         this.dataStore = new SingleCardSqliteDataStore(context);
     }

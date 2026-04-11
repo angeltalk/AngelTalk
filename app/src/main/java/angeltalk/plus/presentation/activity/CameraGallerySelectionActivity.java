@@ -1,12 +1,14 @@
 package angeltalk.plus.presentation.activity;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -19,28 +21,21 @@ import angeltalk.plus.presentation.custom.CardTitleLayout;
 import angeltalk.plus.presentation.manager.ApplicationConstants;
 import angeltalk.plus.presentation.manager.ApplicationManager;
 import angeltalk.plus.presentation.util.ResourcesUtil;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-
 import static angeltalk.plus.presentation.manager.ApplicationConstants.CAMERA_PERMISSION_FOR_PHOTO_REQUEST_CODE;
 import static angeltalk.plus.presentation.manager.ApplicationConstants.CAMERA_PERMISSION_FOR_VIDEO_REQUEST_CODE;
 
+@AndroidEntryPoint
 public class CameraGallerySelectionActivity extends AbstractActivity {
 
     @Inject
     ApplicationManager applicationManager;
 
-    @BindView(R.id.layout_camera)
     public RelativeLayout cameraCard;
 
-    @BindView(R.id.layout_gallery)
     public RelativeLayout galleryCard;
 
-    @BindView(R.id.layout_video)
     public RelativeLayout videoCard;
 
-    @BindView(R.id.title_container)
     CardTitleLayout titleLayout;
 
     private static final int SELECT_PICTURE = 1;
@@ -49,11 +44,9 @@ public class CameraGallerySelectionActivity extends AbstractActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ((AngelmanApplication) getApplication()).getAngelmanComponent().inject(this);
         ResourcesUtil.setColorTheme(this, applicationManager.getCategoryModelColor());
         setContentView(R.layout.activity_camera_gallery_selection);
-        ButterKnife.bind(this);
-
+        bindViews();
         applicationManager.setCategoryBackground(
                 findViewById(R.id.camera_gallery_selection_container),
                 applicationManager.getCategoryModelColor()
@@ -69,8 +62,7 @@ public class CameraGallerySelectionActivity extends AbstractActivity {
             ((TextView) findViewById(R.id.camera_start_text)).setText(R.string.edit_content_guide_text);
         }
     }
-
-    @OnClick({R.id.layout_camera})
+    // TODO(phase-6): @OnClick wiring removed — wire setOnClickListener in bindViews()
     public void onClickCamera(View view){
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_FOR_PHOTO_REQUEST_CODE);
@@ -78,16 +70,14 @@ public class CameraGallerySelectionActivity extends AbstractActivity {
             moveToCamera2Activity();
         }
     }
-
-    @OnClick({R.id.layout_gallery})
+    // TODO(phase-6): @OnClick wiring removed — wire setOnClickListener in bindViews()
     public void onClickGallery(View view){
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, getString(R.string.choose_picture)), SELECT_PICTURE);
     }
-
-    @OnClick({R.id.layout_video})
+    // TODO(phase-6): @OnClick wiring removed — wire setOnClickListener in bindViews()
     public void onClickVideo(View view){
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
                 || ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
@@ -142,5 +132,14 @@ public class CameraGallerySelectionActivity extends AbstractActivity {
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.putExtra(ApplicationConstants.EDIT_CARD_ID, editCardId);
         startActivity(intent);
+    }
+    private void bindViews() {
+        cameraCard = findViewById(R.id.layout_camera);
+        galleryCard = findViewById(R.id.layout_gallery);
+        videoCard = findViewById(R.id.layout_video);
+        titleLayout = findViewById(R.id.title_container);
+        findViewById(R.id.layout_camera).setOnClickListener(v -> onClickCamera(v));
+        findViewById(R.id.layout_gallery).setOnClickListener(v -> onClickGallery(v));
+        findViewById(R.id.layout_video).setOnClickListener(v -> onClickVideo(v));
     }
 }

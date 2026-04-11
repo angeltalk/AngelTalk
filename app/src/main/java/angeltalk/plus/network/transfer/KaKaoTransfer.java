@@ -2,72 +2,33 @@ package angeltalk.plus.network.transfer;
 
 
 import android.content.Context;
-import android.widget.Toast;
-
-import com.kakao.kakaolink.v2.KakaoLinkResponse;
-import com.kakao.kakaolink.v2.KakaoLinkService;
-import com.kakao.kakaolink.v2.model.ButtonObject;
-import com.kakao.kakaolink.v2.model.ContentObject;
-import com.kakao.kakaolink.v2.model.FeedTemplate;
-import com.kakao.kakaolink.v2.model.LinkObject;
-import com.kakao.network.ErrorResult;
-import com.kakao.network.callback.ResponseCallback;
+import android.util.Log;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
-import angeltalk.plus.AngelmanApplication;
-import angeltalk.plus.R;
 import angeltalk.plus.domain.model.CardModel;
 import angeltalk.plus.presentation.manager.ApplicationManager;
+import dagger.hilt.android.qualifiers.ApplicationContext;
 
+// TODO(phase-8): Rewrite on top of Kakao SDK v2 (com.kakao.sdk.share.ShareClient).
+// The legacy v1 KakaoLink API (com.kakao.kakaolink.v2.*) is unavailable because the
+// devrepo.kakao.com Maven server is dead. All methods are no-ops until the rewrite.
+@Singleton
 public class KaKaoTransfer {
 
+    private static final String TAG = "KaKaoTransfer";
+
+    private final Context context;
+    private final ApplicationManager applicationManager;
+
     @Inject
-    ApplicationManager applicationManager;
-
-    private Context context;
-
-    public KaKaoTransfer(Context context){
+    public KaKaoTransfer(@ApplicationContext Context context, ApplicationManager applicationManager) {
         this.context = context;
-        ((AngelmanApplication) context).getAngelmanComponent().inject(this);
+        this.applicationManager = applicationManager;
     }
 
     public void sendKakaoLinkMessage(Context activityContext, String key, String thumbnailImageUrl, CardModel card) {
-        makeTemplate(activityContext, key, thumbnailImageUrl, card);
-    }
-
-    private void makeTemplate(Context activityContext, String key, String thumbnailImageUrl, CardModel card) {
-        String kakaoNewCardMessage = activityContext.getString(R.string.kakao_add_new_card_text, card.name);
-
-        FeedTemplate params = getFeedTemplate(activityContext, key, thumbnailImageUrl, kakaoNewCardMessage);
-
-        sendKakaoLink(activityContext, params);
-    }
-
-    private FeedTemplate getFeedTemplate(Context activityContext, String key, String thumbnailImageUrl, String kakaoNewCardMessage) {
-        return FeedTemplate
-                    .newBuilder(ContentObject.newBuilder(kakaoNewCardMessage,
-                            thumbnailImageUrl,
-                            LinkObject.newBuilder().setWebUrl(activityContext.getString(R.string.web_url))
-                                    .setMobileWebUrl(activityContext.getString(R.string.web_url)).build())
-                            .setDescrption(kakaoNewCardMessage)
-                            .build())
-                    .addButton(new ButtonObject(activityContext.getString(R.string.kakao_button_go_to_app), LinkObject.newBuilder()
-                            .setWebUrl(activityContext.getString(R.string.web_url))
-                            .setMobileWebUrl(activityContext.getString(R.string.web_url))
-                            .setAndroidExecutionParams("key="+key).build()))
-                    .build();
-    }
-
-    private void sendKakaoLink(Context activityContext, FeedTemplate params) {
-        KakaoLinkService.getInstance().sendDefault(activityContext, params, new ResponseCallback<KakaoLinkResponse>() {
-            @Override
-            public void onFailure(ErrorResult errorResult) {
-                Toast.makeText(context, errorResult.getErrorMessage(), Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onSuccess(KakaoLinkResponse result) {}
-        });
+        Log.w(TAG, "sendKakaoLinkMessage is stubbed — Kakao SDK v2 migration pending (phase 8).");
     }
 }

@@ -9,6 +9,14 @@
         <item name="android:statusBarColor">@color/status_bar_color_white</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:fontFamily">@font/roboto_regular_font</item>
+        <!-- Default (Red) themed drawables so layouts can inflate before setColorTheme() runs. -->
+        <item name="themedBackgroundDrawable">@drawable/background_gradient_red</item>
+        <item name="themedPlusIconDrawable">@drawable/plus_red</item>
+        <item name="themedCameraIconDrawable">@drawable/ic_camera_red</item>
+        <item name="themedGalleryIconDrawable">@drawable/ic_gallery_red</item>
+        <item name="themedVideoIconDrawable">@drawable/ic_video_red</item>
+        <item name="themedTitleBackgroundColor">@color/simple_background_red</item>
+        <item name="themedShowHideItemBarDrawable">@drawable/show_red</item>
     </style>
 
     <style name="DefaultFont">
