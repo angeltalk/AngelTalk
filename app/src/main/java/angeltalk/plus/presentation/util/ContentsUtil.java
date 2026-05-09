@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import angeltalk.plus.domain.model.CardModel;
-import angeltalk.plus.domain.model.CardTransferModel;
 import angeltalk.plus.presentation.manager.ApplicationManager;
 
 import static angeltalk.plus.presentation.util.FileUtil.copyFile;
@@ -175,7 +174,7 @@ public class ContentsUtil {
         }  finally {
             try {
                 retriever.release();
-            } catch (RuntimeException ex) {
+            } catch (Exception ex) {
             }
         }
 
@@ -261,49 +260,6 @@ public class ContentsUtil {
             return null;
         }
         return file;
-    }
-
-    public static CardModel getTempCardModel(String folderPath, CardTransferModel cardTransferModel) {
-        CardModel cardModel = new CardModel();
-        cardModel.name = cardTransferModel.name;
-        cardModel.cardType = CardModel.CardType.valueOf(cardTransferModel.cardType);
-
-        File[] files = new File(folderPath).listFiles();
-        for (File file : files) {
-            if (isVideoFile(file)) {
-                cardModel.contentPath = file.getAbsolutePath();
-            } else if (isImageFile(file)) {
-                if (CardModel.CardType.valueOf(cardTransferModel.cardType) == CardModel.CardType.VIDEO_CARD) {
-                    cardModel.thumbnailPath = file.getAbsolutePath();
-                } else {
-                    cardModel.contentPath = file.getAbsolutePath();
-                }
-            } else if (isVoiceFile(file)) {
-                cardModel.voicePath = file.getAbsolutePath();
-            }
-        }
-        return  cardModel;
-    }
-
-    public static void copySharedFiles(Context context, CardModel cardModel, String orginPath) {
-        File[] files = new File(orginPath).listFiles();
-        for (File file : files) {
-            try {
-                if (isVideoFile(file)) {
-                    copyFile(file, new File(cardModel.contentPath));
-                } else if (isImageFile(file)) {
-                    if (cardModel.cardType == CardModel.CardType.VIDEO_CARD) {
-                        copyFile(file, new File(cardModel.thumbnailPath));
-                    } else {
-                        copyFile(file, new File(cardModel.contentPath));
-                    }
-                } else if (isVoiceFile(file)) {
-                    copyFile(file, new File(cardModel.voicePath));
-                }
-            } catch (IOException e) {
-                Log.e("error", "copyShardFile error : " + e.getStackTrace().toString());
-            }
-        }
     }
 
     private static boolean isVideoFile(File file) {

@@ -2,7 +2,7 @@ package angeltalk.plus.presentation.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;

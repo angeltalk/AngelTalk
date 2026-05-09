@@ -39,8 +39,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.SystemClock;
-import android.support.annotation.NonNull;
-import android.support.v13.app.FragmentCompat;
+import androidx.annotation.NonNull;
 import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
@@ -72,7 +71,7 @@ import angeltalk.plus.presentation.manager.ApplicationManager;
 import angeltalk.plus.presentation.util.ContentsUtil;
 
 public class VideoFragment extends Fragment
-        implements View.OnClickListener, FragmentCompat.OnRequestPermissionsResultCallback {
+        implements View.OnClickListener {
 
     private static final int SENSOR_ORIENTATION_DEFAULT_DEGREES = 90;
     private static final int SENSOR_ORIENTATION_INVERSE_DEGREES = 270;

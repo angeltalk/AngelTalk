@@ -2,7 +2,7 @@ package angeltalk.plus.presentation.shadow;
 
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
-import android.support.v4.content.res.ResourcesCompat;
+import androidx.core.content.res.ResourcesCompat;
 
 import org.robolectric.annotation.Implementation;
 import org.robolectric.annotation.Implements;

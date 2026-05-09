@@ -13,6 +13,19 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="https" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="http" />
+        </intent>
+    </queries>
 
     <uses-feature
         android:name="android.hardware.camera2.full"
@@ -25,11 +38,9 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <meta-data
-            android:name="com.kakao.sdk.AppKey"
-            android:value="@string/kakao_app_key" />
         <activity
             android:name="angeltalk.plus.presentation.activity.OnboardingActivity"
+            android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -60,21 +71,6 @@
             android:name="angeltalk.plus.presentation.activity.PhotoEditorActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="angeltalk.plus.presentation.activity.ShareCardActivity"
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data
-                    android:host="kakaolink"
-                    android:scheme="kakao6a063bf4f945fa5a8e04af3039390057" />
-                <data
-                    android:host="angeltalk"
-                    android:scheme="app" />
-            </intent-filter>
-        </activity>
-        <activity
             android:name="angeltalk.plus.presentation.activity.CategoryMenuActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -84,9 +80,13 @@
         <activity android:name="angeltalk.plus.presentation.activity.MakeCardPreviewActivity"
             android:screenOrientation="portrait" />
 
-        <service android:name="angeltalk.plus.presentation.service.ScreenService" />
+        <service
+            android:name="angeltalk.plus.presentation.service.ScreenService"
+            android:foregroundServiceType="specialUse" />
 
-        <receiver android:name="angeltalk.plus.presentation.service.ScreenReceiver">
+        <receiver
+            android:name="angeltalk.plus.presentation.service.ScreenReceiver"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.SCREEN_OFF" />
                 <action android:name="android.intent.action.PHONE_STATE" />

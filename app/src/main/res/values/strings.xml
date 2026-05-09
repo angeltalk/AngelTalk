@@ -1,8 +1,6 @@
 <resources>
     <string name="app_name">AngelTalk Plus</string>
-    <string name="share_functions_url">https://us-central1-angeltalk-plus-web.cloudfunctions.net/redirectApp/</string>
-    <string name="shortener_api_key">AIzaSyAZQwhfKiXxAGMZx4aoKHv9A54YoFMLeBQ</string>
-    <string name="web_url">http://www.angeltalk.info</string>
+    <string name="web_url">act.angeltalk@gmail.com</string>
     <string name="add_picture">Add a photo or\n a video clip</string>
     <string name="take_picture">Take a photo</string>
     <string name="select_gallery">Bring from gallery</string>
@@ -14,7 +12,6 @@
     <string name="talk_now">Speak Now!</string>
     <string name="check_recorded_voice">Check the recording</string>
     <string name="add_new_card_success">New card is added</string>
-    <string name="add_share_card_success">The shared card is added</string>
     <string name="lock_long_press_guide">Long press</string>
     <string name="delete_alert_message">Do you really want to delete this \'%s\' Card?</string>
     <string name="confirm">OK</string>
@@ -39,31 +36,21 @@
     <string name="noti_voc">Send feedback</string>
     <string name="video_guide">Shoot a three-second video clip</string>
     <string name="init_count_text">00:00</string>
-    <string name="kakao_add_new_card_text">Check out this \'%s\' card on your AngelTalk</string>
-    <string name="kakao_button_go_to_app">Go to AngelTalk</string>
     <string name="show_hide_text">Show/Hide</string>
     <string name="change_order_text">Change sort order</string>
-    <string name="share_card_message">Save this card to your AngelTalk</string>
     <string name="new_card_title">New Card</string>
     <string name="select_category_to_save_new_card">Choose a category for this card</string>
     <string name="video_content_check_guide">Check the video clip captured</string>
-    <string name="msg_select_messenger">Choose an app to send this card</string>
     <string name="photo_content_check_guide">Check the photo taken</string>
-    <string name="share_message">AngelTalk \'%s\' card is shared\n</string>
     <string name="card_edit_select_guide">Which one do you want change?</string>
     <string name="card_edit_content">Photo / Video</string>
     <string name="card_edit_name">Card Name</string>
     <string name="card_edit_voice">Voice</string>
     <string name="edit_content_guide_text">Edit the photo /\nvideo clip</string>
     <string name="card_edit_success_message">This card is edited</string>
-    <string name="kakaotalk">KakaoTalk</string>
-    <string name="messages">Messages</string>
-    <string name="card_share_preparing_message">Your card is being prepared to be shared!</string>
-    <string name="card_loading_message">Please wait until the card is ready to show</string>
     <string name="inform_not_saved">The category you are creating will be aborted. Proceed?</string>
     <string name="one_left_delete_category">It should have at least a item. Make a new one after this?</string>
     <string name="share_fail_message">Oops! We encountered an unexpected problem. \nPlease try again!</string>
-    <string name="cannot_share_card_save_message">Cannot save the card. Please try again!</string>
     <string name="card_edit_title">Edit Card</string>
     <string name="category_eat_drink">EAT &amp; DRINK</string>
     <string name="category_play">PLAY</string>
@@ -90,25 +77,17 @@
     <string name="sample_card_daddy">Daddy</string>
     <string name="sample_card_mommy">Mommy</string>
 
-    <string name="privacy_web_url">https://angeltalk-app-a26d8.firebaseapp.com/en/popup/privacy_policy.html</string>
-    <string name="terms_web_url">https://angeltalk-app-a26d8.firebaseapp.com/en/popup/terms_of_service.html</string>
-    <string name="oss_web_url">https://angeltalk-app-a26d8.firebaseapp.com/en/popup/open_source.html</string>
+    <string name="privacy_web_url">https://angeltalk.github.io/AngelTalk/en/popup/privacy_policy.html</string>
+    <string name="terms_web_url">https://angeltalk.github.io/AngelTalk/en/popup/terms_of_service.html</string>
+    <string name="oss_web_url">https://angeltalk.github.io/AngelTalk/en/popup/open_source.html</string>
     <string name="voc_web_url">https://docs.google.com/forms/d/1jaWhUQse_1RmqOCG2vQ_oW3QNCGv4AYowrhS6BOqNnU/edit</string>
     <string name="change_order_toast_message">Press a little longer to move a card</string>
 
     <!-- onboarding -->
     <string name="onboarding_title">Application for children \nwith complex communication needs</string>
-    <string name="bug_report_title">버그 리포트를 보내시겠습니까?</string>
-    <string name="bug_report">사용성 개선에 많은 도움이 됩니다</string>
     <string name="network_disconnected">Please turn on mobile data or wifi\nat the ‘setting’</string>
     <string name="card_download_fail">Oops! We encountered an unexpected problem.\nGo back to the ‘Message’ app?</string>
 
-    <string name="kakao_app_key">6a063bf4f945fa5a8e04af3039390057</string>
-    <string name="kakao_scheme">kakao6a063bf4f945fa5a8e04af3039390057</string>
-    <string name="kakaolink_host">kakaolink</string>
-    <string name="kakao_package_name">com.kakao.talk</string>
-    <string name="whatsapp_package_name">com.whatsapp</string>
-    <string name="whatsapp">WhatsApp</string>
     <string name="o_x">O / X</string>
     <string name="response_yes">Yes</string>
     <string name="response_no">No</string>

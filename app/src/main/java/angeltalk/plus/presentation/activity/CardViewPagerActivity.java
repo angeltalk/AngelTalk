@@ -3,24 +3,19 @@ package angeltalk.plus.presentation.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
-import android.support.v4.view.ViewPager;
+import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.viewpager.widget.ViewPager;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -29,9 +24,6 @@ import angeltalk.plus.R;
 import angeltalk.plus.domain.model.CardModel;
 import angeltalk.plus.domain.model.CategoryModel;
 import angeltalk.plus.domain.repository.CardRepository;
-import angeltalk.plus.network.transfer.CardTransfer;
-import angeltalk.plus.network.transfer.KaKaoTransfer;
-import angeltalk.plus.network.transfer.MessageTransfer;
 import angeltalk.plus.presentation.adapter.CardImageAdapter;
 import angeltalk.plus.presentation.custom.CardEditSelectDialog;
 import angeltalk.plus.presentation.custom.CardTitleLayout;
@@ -39,7 +31,6 @@ import angeltalk.plus.presentation.custom.CardView;
 import angeltalk.plus.presentation.custom.CardViewPager;
 import angeltalk.plus.presentation.custom.CustomConfirmDialog;
 import angeltalk.plus.presentation.custom.CustomSnackBar;
-import angeltalk.plus.presentation.custom.ShareMessengerSelectDialog;
 import angeltalk.plus.presentation.manager.ApplicationConstants;
 import angeltalk.plus.presentation.manager.ApplicationManager;
 import angeltalk.plus.presentation.util.ResourcesUtil;
@@ -56,15 +47,6 @@ public class CardViewPagerActivity extends AbstractActivity {
     @Inject
     ApplicationManager applicationManager;
 
-    @Inject
-    CardTransfer cardTransfer;
-
-    @Inject
-    KaKaoTransfer kaKaoTransfer;
-
-    @Inject
-    MessageTransfer messageTransfer;
-
     @BindView(R.id.title_container)
     CardTitleLayout cardTitleLayout;
 
@@ -77,17 +59,8 @@ public class CardViewPagerActivity extends AbstractActivity {
     @BindView(R.id.card_delete_button)
     ImageButton cardDeleteButton;
 
-    @BindView(R.id.card_share_button)
-    ImageButton cardShareButton;
-
     @BindView(R.id.view_pager)
     CardViewPager mViewPager;
-
-    @BindView(R.id.on_loading_view)
-    LinearLayout loadingViewLayout;
-
-    @BindView(R.id.image_angelee_gif)
-    ImageView imageLoadingGif;
 
     @BindView(R.id.category_item_container)
     ConstraintLayout categoryItemContainer;
@@ -123,55 +96,6 @@ public class CardViewPagerActivity extends AbstractActivity {
     }
 
     boolean isForegroundRunning = true;
-
-    @OnClick(R.id.card_share_button)
-    public void shareButtonOnClick() {
-        stopPlayingCard();
-
-        if (!cardTransfer.isConnectedToNetwork()) {
-            Toast.makeText(context, R.string.network_disconnected, Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        new ShareMessengerSelectDialog(context, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final ApplicationConstants.SHARE_MESSENGER_TYPE selectType = ((ApplicationConstants.SHARE_MESSENGER_TYPE) v.getTag());
-                final CardModel cardModel = getCardModel(mViewPager.getCurrentItem());
-                showLoadingAnimation();
-
-                cardTransfer.uploadCard(cardModel, new OnSuccessListener<Map<String, String>>() {
-                    @Override
-                    public void onSuccess(Map<String, String> resultMap) {
-                        String thumbnailUrl = resultMap.get("url");
-                        final String key = resultMap.get("key");
-                        if (!isForegroundRunning) {
-                            loadingViewLayout.setVisibility(View.GONE);
-                            return;
-                        }
-
-                        if (selectType == ApplicationConstants.SHARE_MESSENGER_TYPE.KAKAOTALK) {
-                            loadingViewLayout.setVisibility(View.GONE);
-                            kaKaoTransfer.sendKakaoLinkMessage(context, key, thumbnailUrl, cardModel);
-                        } else {
-                            messageTransfer.sendMessage(selectType, key, cardModel, new MessageTransfer.OnCompleteListener() {
-                                @Override
-                                public void onComplete() {
-                                    loadingViewLayout.setVisibility(View.GONE);
-                                }
-                            });
-                        }
-                    }
-                }, new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        loadingViewLayout.setVisibility(View.GONE);
-                        Toast.makeText(context, R.string.share_fail_message, Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        }).show();
-    }
 
     @Override
     protected void onResume() {
@@ -388,16 +312,6 @@ public class CardViewPagerActivity extends AbstractActivity {
     private void showSnackBarMessage(String message) {
         CustomSnackBar.styledSnackBarWithDuration(context, findViewById(R.id.category_item_container), message, 2000);
     }
-
-    private void showLoadingAnimation() {
-        loadingViewLayout.setVisibility(View.VISIBLE);
-        Glide.with(CardViewPagerActivity.this)
-                .load(R.drawable.angelee)
-                .asGif()
-                .crossFade()
-                .into(imageLoadingGif);
-    }
-
 
     private boolean setViewPagerCurrentItem(int beforeCardIndex) {
         for (int i = 0; i < allCardListInSelectedCategory.size(); i++) {

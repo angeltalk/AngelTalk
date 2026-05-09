@@ -3,7 +3,7 @@ package angeltalk.plus.presentation.adapter;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Build;
-import android.support.v4.view.PagerAdapter;
+import androidx.viewpager.widget.PagerAdapter;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.StyleSpan;

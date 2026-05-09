@@ -2,7 +2,7 @@ package angeltalk.plus.presentation.custom;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.support.constraint.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;

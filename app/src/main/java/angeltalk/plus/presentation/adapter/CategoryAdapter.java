@@ -6,7 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.v7.widget.CardView;
+import androidx.cardview.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +34,7 @@ public class CategoryAdapter extends BaseAdapter {
     private Context context;
     private CategoryMenuActivity.CategoryMenuStatus categoryMenuStatus;
 
-    private static final int CARD_MAX_SIZE = 6;
+    private static final int CARD_MAX_SIZE = 20;
 
     private boolean isMotherMode = false;
 

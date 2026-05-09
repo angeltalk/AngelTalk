@@ -3,9 +3,9 @@ package angeltalk.plus.presentation.activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -168,10 +168,6 @@ public class CardListActivity extends AbstractActivity {
         cardList = cardRepository.getSingleCardListWithCategoryId(applicationManager.getCategoryModel().index);
         initView();
 
-        if (getIntent().getBooleanExtra(ApplicationConstants.INTENT_KEY_SHARE_CARD, false)) {
-            CustomSnackBar.styledSnackBarWithDuration(this, findViewById(R.id.activity_card_list),
-                    getApplicationContext().getResources().getString(R.string.add_share_card_success), 2000);
-        }
     }
 
 

@@ -1,6 +1,7 @@
 package angeltalk.plus.presentation.custom;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.PixelFormat;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
@@ -77,9 +78,11 @@ public class ChildModeManager {
     }
 
     private void setTelephonyManager(Context context) {
-        if(telephonyManager == null) {
+        if (telephonyManager == null) {
             telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-            if(phoneListener == null) {
+            if (phoneListener == null &&
+                    context.checkSelfPermission(android.Manifest.permission.READ_PHONE_STATE)
+                            == PackageManager.PERMISSION_GRANTED) {
                 phoneListener = new MyPhoneStateListener();
                 telephonyManager.listen(phoneListener, PhoneStateListener.LISTEN_CALL_STATE);
             }

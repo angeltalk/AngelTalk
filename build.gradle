@@ -1,54 +1,21 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
-
 buildscript {
     repositories {
+        google()
         mavenCentral()
-        jcenter {
-            url "http://jcenter.bintray.com/"
-        }
-        maven {
-            url 'https://maven.google.com'
-        }
-        maven {
-            url "https://repox.sonarsource.com/sonarsource"
-        }
     }
-    subprojects {
-        repositories {
-            mavenCentral()
-            maven {
-                url 'https://maven.google.com'
-            }
-            maven {
-                url 'http://devrepo.kakao.com:8088/nexus/content/groups/public/'
-            }
-            maven {
-                url 'http://devrepo.kakao.com:8088/nexus/content/groups/public/'
-            }
-        }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.4.2'
     }
-        dependencies {
-            // NOTE: Do not place your application dependencies here; they belong
-            // in the individual module build.gradle files
-            classpath 'com.android.tools.build:gradle:3.0.0'
-            classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
-            classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.5"
-            classpath 'com.google.gms:google-services:4.2.0'
-        }
-    }
+}
 
-    allprojects {
-        repositories {
-            jcenter()
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
         maven { url "https://jitpack.io" }
-    }
-
-    apply plugin: 'jacoco'
-
-    jacoco {
-        toolVersion = "0.8.2"
-        reportsDir = file("$buildDir/jacoco/report")
+        maven { url "https://dl.bintray.com/wasabeef/maven" }
+        maven { url "https://dl.bintray.com/everything-android/maven" }
     }
 }
 

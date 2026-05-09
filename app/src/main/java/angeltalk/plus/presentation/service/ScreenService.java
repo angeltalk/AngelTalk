@@ -3,9 +3,10 @@ package angeltalk.plus.presentation.service;
 import android.app.Service;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ServiceInfo;
 import android.os.Build;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import javax.inject.Inject;
 
@@ -50,7 +51,14 @@ public class ScreenService extends Service{
                 }
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    startForeground(NOTIFICATION_ID, notificationActionManager.notify(notificationActionManager.getNotificationView(), new Intent(this, NotificationActionReceiver.class)));
+                    android.app.Notification notification = notificationActionManager.notify(
+                            notificationActionManager.getNotificationView(),
+                            new Intent(this, NotificationActionReceiver.class));
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                        startForeground(NOTIFICATION_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE);
+                    } else {
+                        startForeground(NOTIFICATION_ID, notification);
+                    }
                 }
 
             }

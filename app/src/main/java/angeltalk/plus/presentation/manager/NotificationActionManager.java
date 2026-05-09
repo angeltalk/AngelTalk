@@ -67,7 +67,7 @@ public class NotificationActionManager {
                 .setOngoing(true)
                 .setContentTitle("Angel talk")
                 .setContentText("Angel talk")
-                .setContentIntent(PendingIntent.getBroadcast(context, 0, intent, 0));
+                .setContentIntent(PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE));
     }
 
     private void changeChildMode() {
@@ -76,7 +76,7 @@ public class NotificationActionManager {
     }
 
     public void setOnClickListener(RemoteViews notificationView, Intent intent) {
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
         notificationView.setOnClickPendingIntent(isChildMode ? R.id.btn_off : R.id.btn_on, pendingIntent);
     }
 

@@ -1,11 +1,14 @@
 package angeltalk.plus.presentation.activity;
 
+import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -21,6 +24,15 @@ public class AbstractActivity extends AppCompatActivity {
     @Inject
     ApplicationManager applicationManager;
 
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        Locale locale = new Locale("ko");
+        Locale.setDefault(locale);
+        Configuration config = new Configuration(base.getResources().getConfiguration());
+        config.setLocale(locale);
+        super.attachBaseContext(base.createConfigurationContext(config));
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

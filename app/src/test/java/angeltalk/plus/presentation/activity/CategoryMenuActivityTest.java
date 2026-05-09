@@ -4,7 +4,7 @@ import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Build;
-import android.support.v7.widget.CardView;
+import androidx.cardview.widget.CardView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;

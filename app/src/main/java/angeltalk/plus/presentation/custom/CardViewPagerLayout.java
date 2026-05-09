@@ -2,9 +2,9 @@ package angeltalk.plus.presentation.custom;
 
 
 import android.content.Context;
-import android.support.constraint.ConstraintLayout;
-import android.support.v4.content.res.ResourcesCompat;
-import android.support.v4.view.ViewPager;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.viewpager.widget.ViewPager;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.Animation;

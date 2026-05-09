@@ -1,11 +1,11 @@
 package angeltalk.plus.presentation.shadow;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.StringRes;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
-import android.support.design.widget.SnackbarContentLayout;
+import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.snackbar.SnackbarContentLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,7 +47,7 @@ public class ShadowSnackbar {
         Constructor<Snackbar> constructor = null;
         Method hasSnackbarButtonStyleAttrMethod = null;
         try {
-            constructor = Snackbar.class.getDeclaredConstructor(ViewGroup.class, View.class, android.support.design.snackbar.ContentViewCallback.class);
+            constructor = Snackbar.class.getDeclaredConstructor(ViewGroup.class, View.class, com.google.android.material.snackbar.ContentViewCallback.class);
 
             if (null == constructor)
                 throw new IllegalArgumentException("Seems like the constructor was not found!");
@@ -65,7 +65,7 @@ public class ShadowSnackbar {
             }
 
             boolean isSnackbarButtonStyleAttr = (boolean) hasSnackbarButtonStyleAttrMethod.invoke(ShadowSnackbar.self, parent.getContext());
-            SnackbarContentLayout content = (SnackbarContentLayout)inflater.inflate(isSnackbarButtonStyleAttr ? android.support.design.R.layout.mtrl_layout_snackbar_include : android.support.design.R.layout.design_layout_snackbar_include, parent, false);
+            SnackbarContentLayout content = (SnackbarContentLayout)inflater.inflate(isSnackbarButtonStyleAttr ? com.google.android.material.R.layout.mtrl_layout_snackbar_include : com.google.android.material.R.layout.design_layout_snackbar_include, parent, false);
             snackbar = constructor.newInstance(parent, content, content);
             snackbar.setText(text);
             snackbar.setDuration(duration);

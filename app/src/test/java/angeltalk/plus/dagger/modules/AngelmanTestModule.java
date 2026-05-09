@@ -5,7 +5,6 @@ import android.content.Context;
 import angeltalk.plus.domain.repository.CardRepository;
 import angeltalk.plus.domain.repository.CategoryRepository;
 import angeltalk.plus.network.transfer.CardTransfer;
-import angeltalk.plus.network.transfer.KaKaoTransfer;
 import angeltalk.plus.network.transfer.MessageTransfer;
 import angeltalk.plus.presentation.manager.ApplicationManager;
 import angeltalk.plus.presentation.manager.NotificationActionManager;
@@ -36,11 +35,6 @@ public class AngelmanTestModule extends angeltalk.plus.dagger.modules.AngelmanMo
     @Override
     CardTransfer providesCardTransfer()  {
         return mock(CardTransfer.class);
-    }
-
-    @Override
-    KaKaoTransfer providesKaKaoTransfer()  {
-        return mock(KaKaoTransfer.class);
     }
 
     @Override

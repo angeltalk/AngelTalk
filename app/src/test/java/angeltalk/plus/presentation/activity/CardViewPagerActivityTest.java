@@ -9,7 +9,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Vibrator;
-import android.support.v7.widget.AppCompatRadioButton;
+import androidx.appcompat.widget.AppCompatRadioButton;
 import android.view.View;
 import android.widget.TextView;
 
@@ -578,15 +578,6 @@ public class CardViewPagerActivityTest extends UITest {
         ResolveInfo info = new ResolveInfo();
         info.isDefault = true;
 
-        ApplicationInfo applicationKakaoInfo = new ApplicationInfo();
-        applicationKakaoInfo.packageName = "com.kakao.talk";
-
-        info.activityInfo = new ActivityInfo();
-        info.activityInfo.applicationInfo = applicationKakaoInfo;
-        info.activityInfo.name = "kakaotalk";
-
-        shadowPackageManager.addResolveInfoForIntent(new Intent(), info);
-
         ApplicationInfo applicationWhatsappInfo = new ApplicationInfo();
         applicationWhatsappInfo.packageName = "com.whatsapp";
 
@@ -602,14 +593,9 @@ public class CardViewPagerActivityTest extends UITest {
         ShadowAlertDialog shadowDialog = shadowOf(alert);
 
         View innerView = shadowDialog.getView();
-        innerView.findViewById(R.id.item_kakaotalk).performClick();
-        assertThat(innerView.findViewById(R.id.confirm_button).isEnabled()).isTrue();
-        assertThat(((AppCompatRadioButton) innerView.findViewById(R.id.radio_kakaotalk)).isChecked()).isTrue();
-        assertThat(((AppCompatRadioButton) innerView.findViewById(R.id.radio_message)).isChecked()).isFalse();
-        assertThat(((AppCompatRadioButton) innerView.findViewById(R.id.radio_whatsapp)).isChecked()).isFalse();
-
 
         innerView.findViewById(R.id.item_message).performClick();
+        assertThat(innerView.findViewById(R.id.confirm_button).isEnabled()).isTrue();
         assertThat(((AppCompatRadioButton) innerView.findViewById(R.id.radio_whatsapp)).isChecked()).isFalse();
         assertThat(((AppCompatRadioButton) innerView.findViewById(R.id.radio_kakaotalk)).isChecked()).isFalse();
         assertThat(((AppCompatRadioButton) innerView.findViewById(R.id.radio_message)).isChecked()).isTrue();
@@ -618,37 +604,6 @@ public class CardViewPagerActivityTest extends UITest {
         assertThat(((AppCompatRadioButton) innerView.findViewById(R.id.radio_whatsapp)).isChecked()).isTrue();
         assertThat(((AppCompatRadioButton) innerView.findViewById(R.id.radio_kakaotalk)).isChecked()).isFalse();
         assertThat(((AppCompatRadioButton) innerView.findViewById(R.id.radio_message)).isChecked()).isFalse();
-    }
-
-    @Test
-    public void whenClickShareButtonAndSelectKakaotalkAndUploadSuccess_thenSendKakaoLinkMessage() throws Exception {
-        subject.mViewPager.setCurrentItem(1);
-        CardModel cardModel = subject.getCardModel(1);
-
-        final Map<String, String> resultMap = new HashMap<>();
-        resultMap.put("url", "url string");
-        resultMap.put("key", "key string");
-
-        doAnswer(new Answer() {
-            @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-
-                OnSuccessListener<Map<String,String>> onSuccessListener = ((OnSuccessListener<Map<String, String>>) invocation.getArguments()[1]);
-                onSuccessListener.onSuccess(resultMap);
-                return null;
-            }
-        }).when(subject.cardTransfer).uploadCard(any(CardModel.class), any(OnSuccessListener.class), any(OnFailureListener.class));
-
-        // when
-        subject.cardShareButton.performClick();
-        AlertDialog alert = ShadowAlertDialog.getLatestAlertDialog();
-        ShadowAlertDialog shadowDialog = shadowOf(alert);
-        View innerView = shadowDialog.getView();
-        innerView.findViewById(R.id.item_kakaotalk).performClick();
-        innerView.findViewById(R.id.confirm_button).performClick();
-
-        // then
-        verify(subject.kaKaoTransfer).sendKakaoLinkMessage(subject.context, "key string", "url string", cardModel);
     }
 
     @Test
@@ -738,7 +693,7 @@ public class CardViewPagerActivityTest extends UITest {
         AlertDialog alert = ShadowAlertDialog.getLatestAlertDialog();
         ShadowAlertDialog shadowDialog = shadowOf(alert);
         View innerView = shadowDialog.getView();
-        innerView.findViewById(R.id.item_kakaotalk).performClick();
+        innerView.findViewById(R.id.item_message).performClick();
         innerView.findViewById(R.id.confirm_button).performClick();
 
         // then

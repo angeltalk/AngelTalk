@@ -5,9 +5,9 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.support.test.espresso.ViewInteraction;
-import android.support.test.espresso.matcher.BoundedMatcher;
-import android.support.test.internal.util.Checks;
+import androidx.test.espresso.ViewInteraction;
+import androidx.test.espresso.matcher.BoundedMatcher;
+import androidx.test.internal.util.Checks;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -27,12 +27,12 @@ import angeltalk.plus.domain.model.CategoryModel;
 import angeltalk.plus.domain.repository.CardRepository;
 import angeltalk.plus.domain.repository.CategoryRepository;
 
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 public class TestUtil {
 

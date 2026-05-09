@@ -6,13 +6,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
-import android.support.annotation.VisibleForTesting;
+import androidx.annotation.VisibleForTesting;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
-
-import com.kakao.kakaolink.KakaoLink;
-import com.kakao.util.KakaoParameterException;
 
 import angeltalk.plus.R;
 import angeltalk.plus.domain.model.CategoryModel;
@@ -32,17 +29,11 @@ public class ApplicationManager {
     private SharedPreferences preferences;
     private ChildModeManager childModeManager;
     private Context context;
-    private KakaoLink kakaoLink;
 
     public ApplicationManager(Context context) {
         this.context = context;
         this.preferences = context.getSharedPreferences(ApplicationConstants.PRIVATE_PREFERENCE_NAME, Context.MODE_PRIVATE);
         this.childModeManager = new ChildModeManager(context);
-        try {
-            this.kakaoLink = KakaoLink.getKakaoLink(context);
-        } catch (KakaoParameterException e) {
-            e.printStackTrace();
-        }
     }
 
     public void setCategoryModel(CategoryModel categoryModel){
@@ -152,10 +143,6 @@ public class ApplicationManager {
     @VisibleForTesting
     public ChildModeManager getChildModeManager() {
         return childModeManager;
-    }
-
-    public KakaoLink getKakaoLink() {
-        return kakaoLink;
     }
 
     public void makeChildView(){

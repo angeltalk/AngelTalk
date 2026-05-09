@@ -1,11 +1,12 @@
 package angeltalk.plus.presentation.activity;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
+import com.google.android.material.navigation.NavigationView;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,7 +29,6 @@ import angeltalk.plus.domain.model.CardModel;
 import angeltalk.plus.domain.model.CategoryModel;
 import angeltalk.plus.domain.repository.CardRepository;
 import angeltalk.plus.domain.repository.CategoryRepository;
-import angeltalk.plus.network.transfer.CardTransfer;
 import angeltalk.plus.presentation.adapter.CategoryAdapter;
 import angeltalk.plus.presentation.custom.CustomConfirmDialog;
 import angeltalk.plus.presentation.manager.ApplicationConstants;
@@ -50,9 +50,6 @@ public class CategoryMenuActivity extends AbstractActivity  implements Navigatio
 
     @Inject
     CardRepository cardRepository;
-
-    @Inject
-    CardTransfer cardTransfer;
 
     @Inject
     ApplicationManager applicationManager;
@@ -146,8 +143,10 @@ public class CategoryMenuActivity extends AbstractActivity  implements Navigatio
         }
 
         Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
-        if (intent.resolveActivity(getPackageManager()) != null) {
+        try {
             startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            Log.e("CategoryMenuActivity", "No browser found to open URL: " + webpage);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

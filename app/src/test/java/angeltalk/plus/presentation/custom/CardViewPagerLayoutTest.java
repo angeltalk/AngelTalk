@@ -2,8 +2,8 @@ package angeltalk.plus.presentation.custom;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.support.annotation.NonNull;
-import android.support.constraint.ConstraintLayout;
+import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import android.view.View;
 import android.view.animation.Animation;
 import android.widget.ImageView;
