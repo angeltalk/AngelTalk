@@ -78,9 +78,7 @@ public class OnboardingActivity extends AbstractActivity {
         switch (requestCode) {
             case ONBOARDING_PERMISSION_REQUEST_CODE:
                 if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED
-                        && grantResults[1] == PackageManager.PERMISSION_GRANTED
-                        && grantResults[2] == PackageManager.PERMISSION_GRANTED) {
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     if (Build.VERSION.SDK_INT >= M) {
                         checkDrawOverlayPermission();
                     } else {
@@ -163,14 +161,12 @@ public class OnboardingActivity extends AbstractActivity {
     private View.OnClickListener onPermissionButtonOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            ActivityCompat.requestPermissions(onboardingActivityReference.get(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE}, ONBOARDING_PERMISSION_REQUEST_CODE);
+            ActivityCompat.requestPermissions(onboardingActivityReference.get(), new String[]{Manifest.permission.READ_PHONE_STATE}, ONBOARDING_PERMISSION_REQUEST_CODE);
         }
     };
 
     private boolean hasAllPermissions() {
-        return ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-                || ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-                || ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED
+        return ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED
                 || (Build.VERSION.SDK_INT >= M && !Settings.canDrawOverlays(this));
     }
 }
